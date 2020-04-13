@@ -1,0 +1,15 @@
+<!-- 导航栏 -->
+<van-nav-bar title="选择部位"/>
+<view class="container">
+<!-- column-num设置每列两个图标，gutter设置格子间距 -->
+ <van-grid column-num="2" gutter="{{ 10 }}">  
+  <van-grid-item icon="/image/icon_breast.png" text="胸部"/>
+  <van-grid-item icon="/image/icon_shoulder.png" text="肩部" />
+  <van-grid-item icon="/image/icon_back.png" text="背部" />
+  <van-grid-item icon="/image/icon_thigh.png" text="腿部" />
+  <van-grid-item icon="/image/icon_arm.png" text="手臂" />
+  <van-grid-item icon="/image/icon_core.png" text="核心" />
+  <van-grid-item icon="/image/icon_car.png" text="有氧" />
+  <van-grid-item icon="/image/icon_ball.png" text="球类" />
+ </van-grid>
+</view>

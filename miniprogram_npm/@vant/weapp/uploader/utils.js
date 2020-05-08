@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var IMAGE_EXT = ['jpeg', 'jpg', 'gif', 'png', 'svg'];
+var IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
 function isImageUrl(url) {
-    return IMAGE_EXT.some(function (ext) { return url.indexOf("." + ext) !== -1; });
+    return IMAGE_REGEXP.test(url);
 }
-exports.isImageUrl = isImageUrl;
 function isImageFile(item) {
     if (item.type) {
         return item.type.indexOf('image') === 0;

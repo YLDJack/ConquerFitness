@@ -1,0 +1,78 @@
+<!--index.wxml-->
+<view class="top">
+  <navigator hover-class='none' url="../index/index" class="calendar-navigator">
+    <image src="../../image/jianshen-.png" class="calendar-image"></image>
+  </navigator>
+  <view class="startbutton">
+    <van-button type="primary">开始训练</van-button>
+  </view>
+  <view class="statetext">
+    <text>当前状态：</text>
+    <text>增肌</text>
+  </view>
+</view>
+
+<view class="data-group">
+  <view class="data-top">
+    <navigator url="" class="daytext">
+      <view class="numday">52</view>
+      <view class="textday">练习（天）></view>
+    </navigator>
+  </view>
+  <view class="data-bottom">
+    <view class="maindata">
+      <navigator url="" class="navidata">
+        <view class="numsize">2020</view>
+        <view class="textsize">消耗（千卡）</view>
+      </navigator>
+    </view>
+    <view class="maindata"> 
+      <navigator url="" class="navidata">
+        <view class="numsize">20</view>
+        <view class="textsize">平均（分钟）</view>
+      </navigator>
+    </view>
+    <view class="mainrightdata">
+      <image src="../../image/dongtai.png" class="dongtai"></image>
+      <navigator url="" class="navidongtai">
+      好友动态
+      </navigator>
+    </view>
+  </view>
+</view>
+
+<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+  <swiper-item><image src=""></image></swiper-item>
+  <swiper-item><image src=""></image></swiper-item>
+  <swiper-item><image src=""></image></swiper-item>
+</swiper>
+
+<view class="quickitems">
+  <view class="text">练习推荐</view>
+  <scroll-view class="module-scroll" scroll-x="{{true}}">
+    <navigator class="item-navigator">
+      <view class="item-group">
+        <image class="practise-background" src="../../image/quick1.jpg"></image>
+        <view class="item-title">斩妹腹肌</view>
+        <view class="item-discription">每天坚持练习20分钟，只需29天</view>
+      </view>
+    </navigator>
+    <navigator class="item-navigator">
+      <view class="item-group">
+        <image class="practise-background" src="../../image/quick1.jpg"></image>
+        <view class="item-title">斩妹腹肌</view>
+        <view class="item-discription">每天坚持练习20分钟，只需29天</view>
+      </view>
+    </navigator>
+    <navigator class="item-navigator">
+      <view class="item-group">
+        <image class="practise-background" src="../../image/quick1.jpg"></image>
+        <view class="item-title">斩妹腹肌</view>
+        <view class="item-discription">每天坚持练习20分钟，只需29天</view>
+      </view>
+    </navigator>
+  </scroll-view>
+</view>
+ 
+
+

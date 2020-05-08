@@ -89,14 +89,18 @@ component_1.VantComponent({
             this.$emit('keyboardheightchange', event.detail);
         },
         emitChange: function () {
-            this.$emit('input', this.value);
-            this.$emit('change', this.value);
+            var _this = this;
+            this.setData({ value: this.value });
+            wx.nextTick(function () {
+                _this.$emit('input', _this.value);
+                _this.$emit('change', _this.value);
+            });
         },
         setShowClear: function () {
             var _a = this.data, clearable = _a.clearable, readonly = _a.readonly;
             var _b = this, focused = _b.focused, value = _b.value;
             this.setData({
-                showClear: clearable && focused && !!value && !readonly
+                showClear: !!clearable && !!focused && !!value && !readonly
             });
         },
         noop: function () { }

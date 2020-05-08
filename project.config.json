@@ -6,6 +6,7 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
+		"enhance": true,
 		"postcss": true,
 		"preloadBackgroundData": false,
 		"minified": true,
@@ -28,7 +29,7 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.10.4",
 	"appid": "wx773cae64284e5337",
-	"projectname": "ConquerCheck",
+	"projectname": "ConquerFitness",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},

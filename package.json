@@ -1,14 +1,22 @@
 {
-  "name": "conquercheck",
+  "name": "conquerfitness",
   "version": "1.0.0",
-  "description": "",
+  "description": "2020中国高校计算机大赛——微信小程序应用开发赛，ConquerFitness小程序。",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lzy1996carey/ConquerFitness.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lzy1996carey/ConquerFitness/issues"
+  },
+  "homepage": "https://github.com/lzy1996carey/ConquerFitness#readme",
   "dependencies": {
-    "@vant/weapp": "^1.2.0"
+    "@vant/weapp": "^1.2.2"
   }
 }

@@ -217,8 +217,9 @@ component_1.VantComponent({
                     return equal;
                 });
                 if (selected) {
-                    currentDate.splice(selectedIndex_1, 1);
+                    var cancelDate = currentDate.splice(selectedIndex_1, 1);
                     this.setData({ currentDate: currentDate });
+                    this.unselect(cancelDate);
                 }
                 else {
                     this.select(__spreadArrays(currentDate, [date]));
@@ -228,7 +229,32 @@ component_1.VantComponent({
                 this.select(date, true);
             }
         },
+        unselect: function (dateArray) {
+            var date = dateArray[0];
+            if (date) {
+                this.$emit('unselect', utils_1.copyDates(date));
+            }
+        },
         select: function (date, complete) {
+            if (complete && this.data.type === 'range') {
+                var valid = this.checkRange(date);
+                if (!valid) {
+                    // auto selected to max range if showConfirm
+                    if (this.data.showConfirm) {
+                        this.emit([date[0], utils_1.getDayByOffset(date[0], this.data.maxRange - 1)]);
+                    }
+                    else {
+                        this.emit(date);
+                    }
+                    return;
+                }
+            }
+            this.emit(date);
+            if (complete && !this.data.showConfirm) {
+                this.onConfirm();
+            }
+        },
+        emit: function (date) {
             var getTime = function (date) {
                 return (date instanceof Date ? date.getTime() : date);
             };
@@ -236,20 +262,14 @@ component_1.VantComponent({
                 currentDate: Array.isArray(date) ? date.map(getTime) : getTime(date)
             });
             this.$emit('select', utils_1.copyDates(date));
-            if (complete && this.data.type === 'range') {
-                var valid = this.checkRange();
-                if (!valid) {
-                    return;
-                }
-            }
-            if (complete && !this.data.showConfirm) {
-                this.onConfirm();
-            }
         },
-        checkRange: function () {
-            var _a = this.data, maxRange = _a.maxRange, currentDate = _a.currentDate, rangePrompt = _a.rangePrompt;
-            if (maxRange && utils_1.calcDateNum(currentDate) > maxRange) {
-                toast_1.default(rangePrompt || "\u9009\u62E9\u5929\u6570\u4E0D\u80FD\u8D85\u8FC7 " + maxRange + " \u5929");
+        checkRange: function (date) {
+            var _a = this.data, maxRange = _a.maxRange, rangePrompt = _a.rangePrompt;
+            if (maxRange && utils_1.calcDateNum(date) > maxRange) {
+                toast_1.default({
+                    context: this,
+                    message: rangePrompt || "\u9009\u62E9\u5929\u6570\u4E0D\u80FD\u8D85\u8FC7 " + maxRange + " \u5929"
+                });
                 return false;
             }
             return true;

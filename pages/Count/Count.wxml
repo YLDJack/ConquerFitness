@@ -1,3 +1,10 @@
-<!--pages/Count.wxml-->
+<!--pages/Count.wxml  统计页面-->
+   <van-tabs active="{{ active }}" bind:change="onChange">
 
+   <van-tab title="周">历史</van-tab>
+
+   <van-tab title="月">趋势</van-tab>
+
+   <van-tab title="年">备注</van-tab>
+   </van-tabs>
 

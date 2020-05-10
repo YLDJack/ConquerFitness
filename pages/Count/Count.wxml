@@ -1,10 +1,169 @@
 <!--pages/Count.wxml  统计页面-->
-   <van-tabs active="{{ active }}" bind:change="onChange">
 
-   <van-tab title="周">历史</van-tab>
+<!-- 图标类型选项卡  active默认值为0当前选中标签的标识符-->
+<van-tabs animated color="black">
+	<van-tab title="部位分布">
+		<!-- 顶级时间选项卡 -->
+		<van-tabs type="card" animated>
+			<!-- 第二级时间选项卡 swipeable可滑动的-->
+			<van-tab title="周">
+				<van-tabs swipeable animated color="black" border="true">
+					<van-tab title="本周">
+						<view>总计训练：7次
+						</view>
+						<view>
+							<canvas canvas-id="pieCanvas" class="canvas" style="height:400rpx; width:100%" bindtouchstart="pietouchHandler"></canvas>
+						</view>
+						<view>
+							<van-cell-group>
+								<van-cell title="胸部" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+								<van-cell title="背部" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+								<van-cell title="肩部" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+								<van-cell title="腿部" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+								<van-cell title="手臂" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+							</van-cell-group>
+						</view>
+					</van-tab>
+					<van-tab title="上周">
+					</van-tab>
+					<van-tab title="16">
+					</van-tab>
+					<van-tab title="15">
+					</van-tab>
+					<van-tab title="14">
+					</van-tab>
+					<van-tab title="13">
+					</van-tab>
+					<van-tab title="12">
+					</van-tab>
+					<van-tab title="11">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
 
-   <van-tab title="月">趋势</van-tab>
+			<van-tab title="月">
+				<van-tabs active="{{ active }}" swipeable animated>
+					<van-tab title="本月">
+					</van-tab>
+					<van-tab title="上月">
+					</van-tab>
+					<van-tab title="3月">
+					</van-tab>
+					<van-tab title="2月">
+					</van-tab>
+					<van-tab title="1月">
+					</van-tab>
+					<van-tab title="">
+					</van-tab>
+					<van-tab title="去年12月">
+					</van-tab>
+					<van-tab title="去年11月">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
 
-   <van-tab title="年">备注</van-tab>
-   </van-tabs>
+			<van-tab title="年">
+				<van-tabs active="{{ active }}" swipeable animated>
+					<van-tab title="今年">
+					</van-tab>
+					<van-tab title="去年">
+					</van-tab>
+					<van-tab title="2018年">
+					</van-tab>
+					<van-tab title="2017年">
+					</van-tab>
+					<van-tab title="2016年">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
+		</van-tabs>
 
+	</van-tab>
+
+	<van-tab title="训练量趋势" animated>
+		<!-- 顶级时间选项卡 swipeable可滑动的-->
+		<van-tabs type="card" animated>
+			<!-- 第二级时间选项卡 swipeable可滑动的-->
+			<van-tab title="周">
+				<van-tabs swipeable animated color="black" border="true">
+					<van-tab title="本周">
+						<view>总计训练：7次
+						</view>
+						<view>
+							<canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx; width:100%" bindtouchstart="linetouchHandler"></canvas>
+						</view>
+						<view>
+							<van-cell-group>
+								<van-cell title="胸部" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+								<van-cell title="背部" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+								<van-cell title="肩部" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+								<van-cell title="腿部" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+								<van-cell title="手臂" is-link value="本周1次" arrow-direction="down">
+								</van-cell>
+							</van-cell-group>
+						</view>
+					</van-tab>
+					<van-tab title="上周">
+					</van-tab>
+					<van-tab title="16">
+					</van-tab>
+					<van-tab title="15">
+					</van-tab>
+					<van-tab title="14">
+					</van-tab>
+					<van-tab title="13">
+					</van-tab>
+					<van-tab title="12">
+					</van-tab>
+					<van-tab title="11">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
+
+			<van-tab title="月">
+				<van-tabs active="{{ active }}" swipeable animated>
+					<van-tab title="本月">
+					</van-tab>
+					<van-tab title="上月">
+					</van-tab>
+					<van-tab title="3月">
+					</van-tab>
+					<van-tab title="2月">
+					</van-tab>
+					<van-tab title="1月">
+					</van-tab>
+					<van-tab title="">
+					</van-tab>
+					<van-tab title="去年12月">
+					</van-tab>
+					<van-tab title="去年11月">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
+
+			<van-tab title="年">
+				<van-tabs active="{{ active }}" swipeable animated>
+					<van-tab title="今年">
+					</van-tab>
+					<van-tab title="去年">
+					</van-tab>
+					<van-tab title="2018年">
+					</van-tab>
+					<van-tab title="2017年">
+					</van-tab>
+					<van-tab title="2016年">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
+		</van-tabs>
+	</van-tab>
+</van-tabs>

@@ -9,6 +9,8 @@
     "pages/logs/logs",
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences"
+    "pages/logs/logs",
+    "pages/ActionDesc/ActionDesc"
   ],
   "tabBar": {
     "custom": true,

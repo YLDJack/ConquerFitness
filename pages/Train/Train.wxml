@@ -1,86 +1,105 @@
 <!-- 动作库、搜索栏 -->
-<view class="top"> 
-  <view class="title">动作库</view>
-  <view class="select-search">
-    <van-dropdown-menu overlay="false">
-      <van-dropdown-item popup-style="with=180rpx" value="{{ catevalue }}"  options="{{ cateOption }}"/>
-    </van-dropdown-menu>
-    <van-search value="{{ searchText }}" placeholder="请输入搜索关键词" />
-  </view>
+<view class="top">
+	<view class="title">动作库</view>
+	<view class="select-search">
+		<van-dropdown-menu overlay="false">
+			<van-dropdown-item popup-style="with=180rpx" value="{{ catevalue }}" options="{{ cateOption }}" />
+		</van-dropdown-menu>
+		<van-search value="{{ searchText }}" placeholder="请输入搜索关键词" />
+	</view>
 </view>
 
 <!-- 侧边导航 -->
 <view class="slideBar">
-<van-sidebar active-key="{{ slideKey }}" bind:change="onSlideChange">
-  <van-sidebar-item title="胸部" />
-  <van-sidebar-item title="肩部" />
-  <van-sidebar-item title="背部" />
-   <van-sidebar-item title="二头" />
-  <van-sidebar-item title="三头" />
-  <van-sidebar-item title="核心" />
-  <van-sidebar-item title="大腿" />
-   <van-sidebar-item title="小腿" />
-  <van-sidebar-item title="臀部" />
-   <van-sidebar-item title="有氧" />
-</van-sidebar>
+	<van-sidebar active-key="{{ slideKey }}" bind:change="onSlideChange">
+		<van-sidebar-item title="胸部" />
+		<van-sidebar-item title="肩部" />
+		<van-sidebar-item title="背部" />
+		<van-sidebar-item title="二头" />
+		<van-sidebar-item title="三头" />
+		<van-sidebar-item title="核心" />
+		<van-sidebar-item title="大腿" />
+		<van-sidebar-item title="小腿" />
+		<van-sidebar-item title="臀部" />
+		<van-sidebar-item title="有氧" />
+	</van-sidebar>
 </view>
 
 <!-- 中间显示动作部分 -->
 <view class="mid">
-<!-- 动作卡片 -->
-<van-card thumb="{{ imageURL }}" title="杠铃卧推" desc="从器械架上抓取杠铃，屈肘，使杠铃下降至上胸部，向下推举杠铃至手臂伸直，还原。重复上述动作。">
-  
-  <!-- 卡片底部标签和展示按钮部分 -->
-  <view slot="footer">
-  <van-tag type="danger" size="large">部位</van-tag>
-  <van-tag type="primary" size="large">器材</van-tag>
-  <!-- 弹出层部分 -->
-   <van-cell title="展示动作详情" is-link bind:click="showPopup" />
-   <van-popup show="{{ showText }}" bind:close="onClose">
-   <!-- 详情通过弹出层tabs展示 -->
-   <!-- 弹出层Tabs -->
-   <van-tabs active="{{ active }}" bind:change="onChange">
-   <!-- 详情tabs -->
-   <van-tab title="详情"> 
-     <van-card thumb="{{ imageURL }}">
-     <!-- 详情页的图片部分 -->
-     <view slot="thumb">
-       
-     </view>
-    <!-- 详情页的训练部位 -->
-     <view slot="desc">
-       <van-tag type="danger" size="large">部位</van-tag>
-       <van-tag type="primary" size="large">器材</van-tag>
-     </view>
+	<van-grid gutter="{{ 10 }}" column-num="2">
+		<van-grid-item icon="{{ imageURL }}" text="杠铃卧推" wx:for="{{ 10 }}" info="1次" bind:click="showPopup">
+		</van-grid-item>
+		<!-- 弹出层部分 必须放在点击按钮的下方-->
+		<van-popup show="{{ showText }}" bind:close="onClose">
+			<!-- 详情通过弹出层tabs展示 -->
+			<view style="margin-down:20rpx">杠铃卧推</view>
+			<!-- 弹出层Tabs -->
+			<van-tabs type="card" style="margin-up:20rpx">
+				<!-- 详情tab -->
+				<van-tab title="详情">
+					<!-- 动作卡片 -->
+					<van-card>
+						<!-- 图片部分 -->
+						<view slot="title">
+							<image src="{{ imageURL }}"></image>
+						</view>
+						<!-- 描述部分 -->
+						<view slot="desc" style="margin-top:20rpx">
+							<view>动作描述：</view>
+							<text>从器械架上抓取杠铃，屈肘，使杠铃下降至上胸部，向下推举杠铃至手臂伸直，还原。重复上述动作。</text>
+						</view>
+						<!-- 卡片底部标签和展示按钮部分 -->
+						<view slot="bottom">
+							<view style="margin-top:20rpx">
+								<text>训练部位：</text>
+								<van-tag type="danger" size="large" style="margin-right:20rpx">胸</van-tag>
+								<van-tag type="danger" size="large" style="margin-right:20rpx">三头</van-tag>
+								<van-tag type="danger" size="large" style="margin-right:20rpx">三角肌前束</van-tag>
+							</view>
 
-     <!-- 详情页的描述部分 -->
-     <view slot="footer">
-       <h1>动作描述：</h1>
-       <p>从器械架上抓取杠铃，屈肘，将杠铃下降至上胸部水平，向上推举杠铃至手臂伸直，还原，重复上述动作。</p>
-       <!-- <h1>保持姿势的技巧：</h1>
-        <ul>
-          <li>1.在增加重量之前保持正确的体位。</li>
-          <li>2.避免强力运动，缓慢地进行可控制运动。</li>
-          <li>3.上推杠铃时呼气。</li>
-        </ul>
-       <h1>运动肌群：</h1>
-       <p>1.肘关节：肱三关肌、肘肌。2.肩关节：主要是胸大肌的锁骨部和胸骨部、喙肱肌、三角肌前部。3.肩胛骨：前锯肌。</p>
-       <h1>稳定肌群：</h1>
-       <p>1.肩胛骨：前锯肌、胸小肌、斜方肌下部。2.肩关节：肌腱袖、肱二头肌。3.固定躯干中部：腹肌和臀肌、菱形肌、斜方肌下部、背阔肌。</p> -->
-     </view>
-     </van-card>
-   </van-tab>
+							<view style="margin-top:20rpx">
+								<text>训练器材：</text>
+								<van-tag type="primary" size="large">杠铃</van-tag>
+							</view>
 
-   <van-tab title="历史">历史</van-tab>
+							<view style="margin-top:20rpx">
+								<view>要点：</view>
+								<text>1.在增加重量之前保持正确的体位。
+								2.避免强力运动，缓慢地进行可控制运动。
+								3.上推杠铃时呼气。</text>
+							</view>
 
-   <van-tab title="趋势">趋势</van-tab>
+						</view>
 
-   <van-tab title="备注">备注</van-tab>
-   </van-tabs>
-  
-  </van-popup>
-  </view>
+					</van-card>
+				</van-tab>
 
-</van-card>
+				<!-- 历史记录 -->
+				<van-tab title="历史">
+					<van-card num="2" price="2.00" desc="描述信息" title="商品标题" thumb="{{ imageURL }}" />
+				</van-tab>
+
+				<!-- 趋势折线图 -->
+				<van-tab title="趋势">
+					<canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx;" bindtouchstart="linetouchHandler"></canvas>
+				</van-tab>
+
+				<van-tab title="备注">
+					<!-- 打分 -->
+					<view>
+						<view>对动作进行打分：</view>
+						<van-rate value="{{ starvalue }}" size="{{ 25 }}" allow-half color="#ee0a24" void-color="#eee" void-icon="star" bind:change="onStarChange" />
+					</view>
+
+					<!-- 备注框 -->
+					<van-cell-group>
+						<van-field value="{{ message }}" label="备注" type="textarea" placeholder="请输入备注" autosize border="{{ false }}" />
+					</van-cell-group>
+				</van-tab>
+			</van-tabs>
+		</van-popup>
+	</van-grid>
+
 
 </view>

@@ -11,6 +11,16 @@ Page({
   data: {
     //tabs的初始选中状态
     active: 0,
+    // coll初始选中状态
+    activeNames: ['1'],
+    imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
+    url:  "pages/ActionDesc/ActionDesc",
+  },
+  //跳转动作详情页面
+  showDesc() {
+    wx.navigateTo({
+      url:  "../ActionDesc/ActionDesc",
+    })
   },
   //获取扇形图表中的索引方法
   pietouchHandler: function (e) {
@@ -24,6 +34,11 @@ Page({
       format: function (item, category) {
         return category + ' ' + item.name + ':' + item.data
       }
+    });
+  },
+  onCollChange(event) {
+    this.setData({
+      activeNames: event.detail
     });
   },
   /**
@@ -69,25 +84,25 @@ Page({
       categories: ['2020-08', '2020-09', '2020-10', '2020-11', '2020-12', '2021'],
 
       series: [{
-        name: '胸部肌容量',
-        data: [5500, 5800, 6000, 6400, 6500, 6600],
-      }, {
-        name: '背部肌容量',
-        data: [6500, 7600, 8000, 8400, 8500, 8600],
-      },
-      {
-        name: '腿部肌容量',
-        data: [8000, 9000, 9500, 9800, 10000, 10005],
-      },
-      {
-        name: '手臂肌容量',
-        data: [4500, 4800, 5000, 5400, 6500, 6600],
-      },
-      {
-        name: '肩膀肌容量',
-        data: [5200, 5900, 6000, 6400, 7500,7600],
-      }
-    ],
+          name: '胸部肌容量',
+          data: [5500, 5800, 6000, 6400, 6500, 6600],
+        }, {
+          name: '背部肌容量',
+          data: [6500, 7600, 8000, 8400, 8500, 8600],
+        },
+        {
+          name: '腿部肌容量',
+          data: [8000, 9000, 9500, 9800, 10000, 10005],
+        },
+        {
+          name: '手臂肌容量',
+          data: [4500, 4800, 5000, 5400, 6500, 6600],
+        },
+        {
+          name: '肩膀肌容量',
+          data: [5200, 5900, 6000, 6400, 7500, 7600],
+        }
+      ],
       yAxis: {
         format: function (val) {
           return val;

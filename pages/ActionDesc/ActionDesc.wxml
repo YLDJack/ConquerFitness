@@ -1,0 +1,20 @@
+<!--pages/ActionDesc/ActionDesc.wxml-->
+<!-- 标题 -->
+<van-nav-bar title="杠铃卧推" />
+<!-- 弹出层Tabs -->
+<van-tabs type="card" style="margin-up:20rpx">
+	<!-- 详情tab -->
+	<van-tab title="肌容量">
+		<canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx;" bindtouchstart="linetouchHandler"></canvas>
+		<view>
+			<text>
+      肌容量在健身中，是用来衡量你的力量训练的强度的。肌容量=训练次数*训练组数*重量
+      </text>
+		</view>
+	</van-tab>
+
+	<!-- 详情tab -->
+	<van-tab title="最大重量">
+
+	</van-tab>
+</van-tabs>

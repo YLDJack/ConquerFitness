@@ -40,6 +40,3 @@
 .mid {
   margin-left: 175rpx;
 }
-.mid van-card{
-  width: 50rpx;
-}

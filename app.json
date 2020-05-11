@@ -4,7 +4,8 @@
     "pages/Main/Main",
     "pages/Personal/Personal",
     "pages/Count/Count",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/ActionDesc/ActionDesc"
   ],
   "tabBar": {
     "custom": true,

@@ -1,4 +1,6 @@
-// pages/Train/Train.js
+// pages/Train/Train.js'
+// import toast from '../../node_modules/@vant/weapp/dist/toast/toast';
+
 Page({
 
   /**
@@ -14,17 +16,14 @@ Page({
     slideKey: 0,
     imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
     showText: false,
-    active: 0
   },
   //显示弹出动作详细框
   showPopup() {
     this.setData({ showText: true });
-    console.log(this.showText.value)
   },
 
   onClose() {
     this.setData({ showText: false });
-    console.log(this.showText.value)
   },
   // 侧边栏点击监听事件
   onSlideChange(event) {

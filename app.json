@@ -8,8 +8,7 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/Feedback/Feedback",
-    "pages/setPreferences/setPreferences"
-    "pages/logs/logs",
+    "pages/setPreferences/setPreferences",
     "pages/ActionDesc/ActionDesc"
   ],
   "tabBar": {

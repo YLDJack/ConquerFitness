@@ -1,4 +1,6 @@
 <!--pages/ActionDesc/ActionDesc.wxml-->
+<!-- 标题 -->
+<van-nav-bar title="杠铃卧推" />
 <!-- 弹出层Tabs -->
 <van-tabs type="card" style="margin-up:20rpx">
 	<!-- 详情tab -->

@@ -33,10 +33,10 @@
 		<!-- 弹出层部分 必须放在点击按钮的下方-->
 		<van-popup show="{{ showText }}" bind:close="onClose">
 			<!-- 详情通过弹出层tabs展示 -->
-			<view>杠铃卧推</view>
+			<view style="margin-down:20rpx">杠铃卧推</view>
 			<!-- 弹出层Tabs -->
-			<van-tabs type="card">
-				<!-- 详情tabs -->
+			<van-tabs type="card" style="margin-up:20rpx">
+				<!-- 详情tab -->
 				<van-tab title="详情">
 					<!-- 动作卡片 -->
 					<van-card>
@@ -73,14 +73,30 @@
 						</view>
 
 					</van-card>
-
 				</van-tab>
 
-				<van-tab title="历史">历史</van-tab>
+				<!-- 历史记录 -->
+				<van-tab title="历史">
+					<van-card num="2" price="2.00" desc="描述信息" title="商品标题" thumb="{{ imageURL }}" />
+				</van-tab>
 
-				<van-tab title="趋势">趋势</van-tab>
+				<!-- 趋势折线图 -->
+				<van-tab title="趋势">
+					<canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx;" bindtouchstart="linetouchHandler"></canvas>
+				</van-tab>
 
-				<van-tab title="备注">备注</van-tab>
+				<van-tab title="备注">
+					<!-- 打分 -->
+					<view>
+						<view>对动作进行打分：</view>
+						<van-rate value="{{ starvalue }}" size="{{ 25 }}" allow-half color="#ee0a24" void-color="#eee" void-icon="star" bind:change="onStarChange" />
+					</view>
+
+					<!-- 备注框 -->
+					<van-cell-group>
+						<van-field value="{{ message }}" label="备注" type="textarea" placeholder="请输入备注" autosize border="{{ false }}" />
+					</van-cell-group>
+				</van-tab>
 			</van-tabs>
 		</van-popup>
 	</van-grid>

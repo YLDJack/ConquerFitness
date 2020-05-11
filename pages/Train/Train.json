@@ -14,6 +14,8 @@
     "van-tabs": "@vant/weapp/tabs/index",
     "van-toast": "@vant/weapp/toast/index",
     "van-grid": "@vant/weapp/grid/index",
-    "van-grid-item": "@vant/weapp/grid-item/index"
+    "van-grid-item": "@vant/weapp/grid-item/index",
+    "van-rate": "@vant/weapp/rate/index",
+    "van-field": "@vant/weapp/field/index"
   }
 }

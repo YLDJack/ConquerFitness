@@ -1,6 +1,9 @@
+import Toast from '@vant/weapp/toast/toast';
+//import Toast from 'path/to/@vant/weapp/dist/toast/toast';
 //获取应用实例
 var app = getApp()
 var Bmob = require("../../utils/bmob.js");
+var util = require("../../utils/util.js");
 
 Page({
   /**
@@ -10,31 +13,55 @@ Page({
     tempFilePaths: '',
     nickName: '',
     userInfoAvatar: '',
-    sex: '',
-    height1: 0,
-    weight1: 0,
-    heightRange: ['140', '150','155', '160','165', '170','175','180','185'],
-    weightRange: ['40', '50', '60', '70'],
-    items: [
-      { name: 'man', value: '男' },
-      { name: 'femail', value: '女', checked: 'true' },
-      { name: 'bm', value: '保密' }
-    ]
+    showhipline: false,
+    showweight: false,
+    showtizhi: false,
+    showlegs: false,
+    showstatu: false,
+    columns: ['增肌', '减脂', '塑形']
+    
   },
-  heightPickerBindchange: function (e) {
-    this.setData({
-      height1: e.detail.value
-    })
+  showPopup_hip() {
+    this.setData({ showhipline: true });
   },
-  weightPickerBindchange: function (e) {
-    this.setData({
-      weight1: e.detail.value
-    })
+  showPopup_weight() {
+    this.setData({ showweight: true });
   },
-  datePickerBindchange: function (e) {
-    this.setData({
-      dateValue: e.detail.value
-    })
+  showPopup_tizhi() {
+    this.setData({ showtizhi: true });
+  },
+  showPopup_legs() {
+    this.setData({ showlegs: true });
+  },
+  showPopup_statu() {
+    this.setData({ showstatu: true });
+  },
+  onClose_hip() {
+    this.setData({ showhipline: false });
+  },
+  onClose_weight() {
+    this.setData({ showweight: false });
+  },
+  onClose_tizhi() {
+    this.setData({ showtizhi: false });
+  },
+  onClose_legs() {
+    this.setData({ showlegs: false });
+  },
+  onClose_statu() {
+    this.setData({ showstatu: false });
+  },
+  onChange(event) {
+    const { picker, value, index } = event.detail;
+    Toast(`当前值：${value}, 当前索引：${index}`);
+  },
+  onConfirm(event) {
+    const { picker, value, index } = event.detail;
+    Toast(`当前值：${value}, 当前索引：${index}`);
+  },
+
+  onCancel() {
+    Toast('取消');
   },
 
   chooseimage: function () {
@@ -55,6 +82,13 @@ Page({
     })
   },
   onLoad: function () {
+    // 获取时间值
+    var DATE = util.formatDate(new Date());
+    this.setData({
+      date: DATE,
+    });
+
+    // 获取个人信息
     var that = this;
     wx.getUserInfo({
       success: function (res) {
@@ -62,27 +96,8 @@ Page({
         that.setData({
           nickName: res.userInfo.nickName,
           userInfoAvatar: res.userInfo.avatarUrl,
-          // province: res.userInfo.province,
-          // city: res.userInfo.city
+          
         })
-
-        switch (res.userInfo.gender) {
-          case 0:
-            that.setData({
-              sex: '未知'
-            })
-            break;
-          case 1:
-            that.setData({
-              sex: '男'
-            })
-            break;
-          case 2:
-            that.setData({
-              sex: '女'
-            })
-            break;
-        }
       },
       fail: function () {
         // fail
@@ -91,7 +106,7 @@ Page({
       complete: function () {
         // complete
         console.log("获取用户信息完成！")
-        console.log(this.province)
+    
       }
     })
   },
@@ -103,3 +118,8 @@ Page({
     var endtime = this.data.data;
   }
 })
+// Component({
+//   options: {
+//     styleIsolation: 'shared'
+//   }
+// });

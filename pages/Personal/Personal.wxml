@@ -1,39 +1,83 @@
-<!--编辑个人信息-->
+<!--头像-->
 <view class="container">
   <view class="avatar">
     <image class="a" src="{{userInfoAvatar}}"/>
     <view class="nickName">{{nickName}}</view>
   </view>
-  <view class="sex">
-    <text>性别</text>
-    <view class="real">
-    <radio-group class="radio-group" bindchange="radioChange">
-      <label class="radio" wx:for="{{items}}">
-        <radio value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
-      </label>
-    </radio-group>
-    </view>
-  </view>
-  <!-- <view class="area">
-    <text>地址</text>
-    <view class="real">{{province}}省{{city}}市</view>
-  </view> -->
-  <view class="height">
-    <text>身高</text>
-    <picker value="{{height1}}" range="{{heightRange}}" bindchange="heightPickerBindchange">  
-      <view class="real">{{heightRange[height1]}}厘米</view>
-  </picker>  
-  </view>
-  <view class="weight">
-    <text>体重</text>
-    <picker value="{{weight1}}" range="{{weightRange}}" bindchange="weightPickerBindchange">  
-      <view class="real">{{weightRange[weight1]}}公斤</view>
-  </picker>  
-  </view>
-  <view class="weight">
-    <text>生日</text>
-    <picker mode="date" value="{{dateValue}}" start="1999-01-01" end="2999-12-12" bindchange="datePickerBindchange">  
-      <view class="real">{{dateValue}} 选择</view> 
-  </picker>
-  </view>
 </view>
+
+<!-- 身体数据图表页面跳转 -->
+<van-cell
+  is-link
+  title="查看身体数据图表"
+  link-type="navigateTo"
+  url="/pages/Personal_data/Personal_data"
+/>
+
+<!-- 弹出层 -->
+<van-cell title="臀围" is-link bind:click="showPopup_hip" />
+<van-popup show="{{ showhipline }}" round closeable custom-style="height: 30%;" bind:close="onClose_hip">
+  <view class="obtaindate">{{date}}</view>
+  <view class="items">
+    <view>臀围(cm)：</view>
+    <van-stepper value="{{ 5 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="confirm" bindtap="onConfirm">确定</view>
+</van-popup>
+
+<van-cell title="体重" is-link bind:click="showPopup_weight" />
+<van-popup show="{{ showweight }}" round closeable custom-style="height: 30%;" bind:close="onClose_weight">
+  <view class="obtaindate">{{date}}</view>
+  <view class="items">
+    <view>体重(kg)：</view>
+    <van-stepper value="{{ 20 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="confirm" bindtap="onConfirm">确定</view>
+</van-popup>
+
+<van-cell title="体脂" is-link bind:click="showPopup_tizhi" />
+<van-popup show="{{ showtizhi }}" round closeable custom-style="height: 30%;" bind:close="onClose_tizhi">
+  <view class="obtaindate">{{date}}</view>
+  <view class="items">
+    <view>体脂(%)：</view>
+    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="confirm" bindtap="onConfirm">确定</view>
+</van-popup>
+
+<van-cell title="腿围" is-link bind:click="showPopup_legs" />
+<van-popup show="{{ showlegs }}" round closeable custom-style="height: 40%;" bind:close="onClose_legs">
+  <view class="obtaindate">{{date}}</view>
+  <view class="items_leg">
+    <view>大腿(cm)：</view>
+    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="items_leg">
+    <view>小腿(cm)：</view>
+    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="confirm" bindtap="onConfirm">确定</view>
+</van-popup>
+
+<van-cell title="锻炼状态" is-link value="增肌" bind:click="showPopup_statu" />
+<van-popup show="{{ showstatu }}" position="bottom" custom-style="height: 40%;" bind:close="onClose_statu">
+  <van-picker columns="{{ columns }}" show-toolbar title="锻炼状态" bind:change="onChange" bind:cancel="onCancel"
+  bind:confirm="onConfirm" />
+  <van-toast id="van-toast" />
+</van-popup>
+
+<van-cell
+  is-link
+  title="偏好设置"
+  link-type="navigateTo"
+  url="/pages/Feedback/Feedback"
+/>
+
+<van-cell
+  is-link
+  title="意见反馈"
+  link-type="navigateTo"
+  url="/pages/Feedback/Feedback"
+/>
+
+<van-cell title="分享" is-link bind:click="showPopup" />

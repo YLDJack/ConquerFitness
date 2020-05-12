@@ -1,1 +1,34 @@
-/* pages/setPreferences/setPreferences.wxss */
+
+.settingbox{
+  padding: 10rpx;
+  margin: 10rpx;
+  width: 95%;
+  height: 1150rpx;
+  background-color:rgba(42, 44, 46, 0.597);
+  border-radius: 10px;
+}
+.settingbox .title{
+  margin: 20rpx;
+  color: white;
+  font-weight: bold;
+  font-size: 36rpx;
+}
+
+.van-cell{
+  background-color: rgb(243, 239, 239);
+  filter: opacity(0.8);
+  border-radius: 5px;
+}
+.switchgroup{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.van-cell-text{
+  font-size: 34rpx;
+}
+
+.van-switch{
+  margin-top: 15rpx;
+}

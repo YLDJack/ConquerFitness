@@ -9,7 +9,7 @@
 <!-- 身体数据图表页面跳转 -->
 <van-cell
   is-link
-  title="查看身体数据图表"
+  title="查看健康数据图表"
   link-type="navigateTo"
   url="/pages/Personal_data/Personal_data"
 />
@@ -68,9 +68,9 @@
 
 <van-cell
   is-link
-  title="偏好设置"
+  title="训练设置"
   link-type="navigateTo"
-  url="/pages/Feedback/Feedback"
+  url="/pages/setPreferences/setPreferences"
 />
 
 <van-cell

@@ -9,7 +9,7 @@
 	</view>
 </view>
 
-<!-- 侧边导航 -->
+<!-- 侧边导航 （切换改为TreeSelec 参考文档：https://vant-contrib.gitee.io/vant-weapp/#/tree-select）-->
 <view class="slideBar">
 	<van-sidebar active-key="{{ slideKey }}" bind:change="onSlideChange">
 		<van-sidebar-item title="胸部" />

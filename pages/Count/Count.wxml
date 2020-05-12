@@ -11,7 +11,7 @@
 					<van-tab title="本周">
 						<view>总计训练：7次
 						</view>
-						<!-- 图标显示区域 -->
+						<!-- 图表显示区域 -->
 						<view>
 							<canvas canvas-id="pieCanvas" class="canvas" style="height:400rpx; width:100%" bindtouchstart="pietouchHandler"></canvas>
 							<!-- 下方动作详情页 -->
@@ -117,6 +117,7 @@
 						<view>总计训练：7次
 						</view>
 						<view>
+						<!-- 线性表 -->
 							<canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx; width:100%" bindtouchstart="linetouchHandler"></canvas>
 						</view>
 						<view>

@@ -1,15 +1,16 @@
 {
   "pages": [
-    "pages/Personal/Personal",
-    "pages/Personal_data/Personal_data",
     "pages/Main/Main",
-    "pages/Train/Train",
-    "pages/Count/Count",
-    "pages/index/index",
-    "pages/logs/logs",
+    "pages/Personal/Personal",
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences",
-    "pages/ActionDesc/ActionDesc"
+    "pages/Calendar/Calendar",
+    "pages/Personal_data/Personal_data",
+    "pages/Train/Train",
+    "pages/Count/Count",
+    "pages/logs/logs",
+    "pages/ActionDesc/ActionDesc",
+    "pages/TrainTemplate/TrainTemplate"
   ],
   "tabBar": {
     "custom": true,

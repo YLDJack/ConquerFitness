@@ -1,16 +1,11 @@
-// pages/setPreferences/setPreferences.js
+// pages/TrainTemplate/TrainTemplate.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    checked: true
-  },
-  
-  onChange({ detail }) {
-    // 需要手动对 checked 状态进行更新
-    this.setData({ checked: detail });
+
   },
 
   /**
@@ -67,10 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
 
-  }
-}),
-Component({
-  options: {
-    styleIsolation: 'shared'
   }
 })

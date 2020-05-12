@@ -1,2 +1,45 @@
 <!--pages/Feedback/Feedback.wxml-->
-<text>pages/Feedback/Feedback.wxml</text>
+<!-- 下拉列表选择反馈类型 -->
+<view class="dropdownmenu">
+  <van-dropdown-menu>
+    <van-dropdown-item value="{{ value1 }}" options="{{ option1 }}" />
+  </van-dropdown-menu>
+</view>
+
+<!-- 反馈信息输入框 -->
+<view class="fieldbox">
+  <van-cell-group>
+    <van-field
+      value="{{ messagevalue }}"
+      placeholder="请输入反馈信息"
+      border="{{ false }}"
+      bind:change="onChange"
+    />
+  </van-cell-group>
+</view>
+
+<!-- 联系方式 -->
+<view class="contact">
+  <van-cell-group>
+    <van-field
+      value="{{ messagevalue }}"
+      placeholder="手机/邮箱/QQ(选填)"
+      border="{{ false }}"
+      bind:change="onChange"
+    />
+  </van-cell-group>
+</view>
+
+<!-- 上传图片 -->
+<view class="uploader">
+  <view class="text">上传图片 (最多6张)</view>
+  <van-uploader
+  file-list="{{ fileList }}"
+  max-count="6"
+  bind:after-read="afterRead"
+/>
+</view>
+
+<view class="submit">
+  <van-button type="primary" size="large">提交</van-button>
+</view>

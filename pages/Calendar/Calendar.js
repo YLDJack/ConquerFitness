@@ -1,16 +1,29 @@
-// pages/setPreferences/setPreferences.js
+// pages/Calendar/Calendar.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    checked: true
+    date: '',
+    show: true
   },
-  
-  onChange({ detail }) {
-    // 需要手动对 checked 状态进行更新
-    this.setData({ checked: detail });
+
+  onDisplay() {
+    this.setData({ show: true });
+  },
+  onClose() {
+    this.setData({ show: false });
+  },
+  formatDate(date) {
+    date = new Date(date);
+    return `${date.getMonth() + 1}/${date.getDate()}`;
+  },
+  onConfirm(event) {
+    this.setData({
+      show: false,
+      date: this.formatDate(event.detail)
+    });
   },
 
   /**
@@ -67,10 +80,5 @@ Page({
    */
   onShareAppMessage: function () {
 
-  }
-}),
-Component({
-  options: {
-    styleIsolation: 'shared'
   }
 })

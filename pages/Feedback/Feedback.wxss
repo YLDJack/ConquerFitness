@@ -1,1 +1,37 @@
-/* pages/Feedback/Feedback.wxss */
+.fieldbox{
+  border: solid;
+  border-bottom: solid;
+  border-color: rgb(216, 214, 214);
+  border-width: 1px;
+  height: 350rpx;
+  width: 90%;
+  margin-left: 35rpx;
+}
+
+.contact{
+  border: solid;
+  border-color: rgb(216, 214, 214);
+  border-width: 1px;
+  width: 90%;
+  margin-left: 35rpx;
+  margin-top: 20rpx;
+}
+
+.uploader{
+  width: 90%;
+  margin-left: 35rpx;
+  margin-top: 30rpx;
+  height: 450rpx;
+}
+
+.uploader .text{
+  font-size: 28rpx;
+  color: gainsboro;
+  margin-bottom: 20rpx;
+}
+
+.submit{
+  width: 90%;
+  margin-left: 35rpx;
+  margin-top: 30rpx;
+}

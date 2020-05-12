@@ -9,10 +9,8 @@
     "pages/Train/Train",
     "pages/Count/Count",
     "pages/logs/logs",
-    "pages/Feedback/Feedback",
-    "pages/setPreferences/setPreferences",
     "pages/ActionDesc/ActionDesc",
-    "pages/Training/Training"
+    "pages/Training/Training",
     "pages/TrainTemplate/TrainTemplate"
   ],
   "tabBar": {

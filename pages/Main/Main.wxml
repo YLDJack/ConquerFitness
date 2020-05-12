@@ -5,7 +5,7 @@
 		<image src="../../image/jianshen-.png" class="calendar-image"></image>
 	</navigator>
 	<view class="startbutton">
-		<van-button icon="../../../../image/icon_train_selected.png" type="info">开始训练</van-button>
+		<van-button icon="../../../../image/icon_train_selected.png" type="info" bind:click="beginTraining">开始训练</van-button>
 	</view>
 	<view class="statetext">
 		<text>当前状态：</text>

@@ -9,7 +9,8 @@
     "pages/logs/logs",
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences",
-    "pages/ActionDesc/ActionDesc"
+    "pages/ActionDesc/ActionDesc",
+    "pages/Training/Training"
   ],
   "tabBar": {
     "custom": true,

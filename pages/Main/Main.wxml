@@ -1,42 +1,55 @@
 <!--index.wxml-->
 <!-- 开始按钮一栏 -->
 <view class="top">
-	<navigator hover-class='none' url="../index/index" class="calendar-navigator">
-		<image src="../../image/jianshen-.png" class="calendar-image"></image>
-	</navigator>
+	<view hover-class='none' class="calendar-navigator">
+		<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
+	</view>
+	<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" />
+	<!-- <van-tag type="danger" plain size="large">当前日期</van-tag> -->
+	<van-tag type="danger" size="large">{{date}}</van-tag>
+	<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
+	<van-tag type="primary" size="large">增肌</van-tag>
+
+</view>
+
+<view>
+	<!-- <calendar is-calendar-show="{{isCalendarShow}}" mark="{{calendarMark}}" format="1" /> -->
 	<view class="startbutton">
-		<van-button icon="../../../../image/icon_train_selected.png" type="info" bind:click="beginTraining">开始训练</van-button>
+		<van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain square size="large" block>开始训练</van-button>
 	</view>
 	<view class="statetext">
-		<text>当前状态：</text>
-		<text>增肌</text>
+
 	</view>
 </view>
 
 <!-- 数据展示 -->
-<van-notice-bar left-icon="https://img.yzcdn.cn/1.png" text="来康康本周的成果吧！" />
+<van-notice-bar left-icon="bullhorn-o" text="来康康本周的成果吧！" mode="closeable" />
 <view class="data-group">
 	<view class="scrollwenzi">
-		<scroll-view class="scrollwenzi" scroll-x="true" scroll-with-animation="true">
-			<view class="wenziframe" style="opacity:0.5">
-				<view class="wenzi">有氧运动时长(分钟)</view>
-				<view class="wenzi">300</view>
-			</view>
-			<view class="wenziframe" style="opacity:0.5">
-				<view class="wenzi">肌肉容量</view>
-				<view class="wenzi">3000</view>
-			</view>
-			<view class="wenziframe" style="opacity:0.5">
-				<view class="wenzi">消耗(千卡)</view>
-				<view class="wenzi">1500</view>
-			</view>
-			<view class="wenziframe" style="opacity:0.5">
-				<view class="wenzi">体重增长(KG)</view>
-				<view class="wenzi">-1</view>
-			</view>
-		</scroll-view>
-	</view>
+		<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+			<swiper-item>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">有氧运动时长(分钟)</view>
+					<view class="wenzi">300</view>
+				</view>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">肌肉容量</view>
+					<view class="wenzi">3000</view>
+				</view>
+			</swiper-item>
 
+			<swiper-item>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">消耗(千卡)</view>
+					<view class="wenzi">1500</view>
+				</view>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">体重增长(KG)</view>
+					<view class="wenzi">-1</view>
+				</view>
+			</swiper-item>
+		</swiper>
+	</view>
 </view>
 
 <!-- 数据表轮播 -->

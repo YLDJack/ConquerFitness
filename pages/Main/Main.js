@@ -1,4 +1,5 @@
 // pages/Main/Main.js
+var utils = require('../../utils/util')
 const wxCharts = require('../../utils/wxcharts'); // 引入wx-charts.js文件
 var app = getApp();
 var pieChart = null;
@@ -6,6 +7,12 @@ var lineChart = null;
 
 Page({
   data: {
+    // 当前选中日期
+    date: '日期',
+    // 日历是否显示
+    isCalendarShow: false,
+    // 日历显示的最小日期
+    minDate: new Date(2020, 0, 1).getTime(),
     toView: 'yellow',
     scrollLeft: 0,
     //滚动的数组
@@ -34,7 +41,33 @@ Page({
         tag: 'red',
       },
     ],
+    formatter(day) {
+      const month = day.date.getMonth() + 1;
+      const date = day.date.getDate();
 
+      if (month === 5) {
+        if (date === 12) {
+          day.topInfo = "胸";
+          day.bottomInfo = '4786';
+          // day.bottomInfo = document.write("<van-tag type='danger' plain >胸</van-tag>");
+        }
+      }
+      return day;
+    }
+  },
+  //日期确认方法
+  onConfirm(event) {
+    this.setData({
+      isCalendarShow: false,
+      date: utils.formatDate(event.detail)
+    });
+  },
+  // 显示日历方法
+  showCalendar() {
+    this.setData({
+      isCalendarShow: !this.data.isCalendarShow
+    });
+    console.log(this.data.isCalendarShow);
   },
   //获取扇形图表中的索引方法
   pietouchHandler: function (e) {
@@ -50,16 +83,21 @@ Page({
       }
     });
   },
-    //跳转训练界面
-    beginTraining() {
-      wx.navigateTo({
-        url: "../Training/Training",
-      })
-    },
+  //跳转训练界面
+  beginTraining() {
+    wx.navigateTo({
+      url: "../Training/Training",
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var currentdate = utils.formatDate(new Date());
+    console.log(currentdate);
+    this.setData({
+      date: currentdate
+    });
     var windowWidth = 320;
     try {
       var res = wx.getSystemInfoSync();

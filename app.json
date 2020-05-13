@@ -4,7 +4,6 @@
     "pages/Personal/Personal",
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences",
-    "pages/Calendar/Calendar",
     "pages/Personal_data/Personal_data",
     "pages/Train/Train",
     "pages/Count/Count",
@@ -53,11 +52,6 @@
     "navigationBarTextStyle": "black"
   },
   "usingComponents": {
-    "van-grid": "@vant/weapp/grid/index",
-    "van-grid-item": "@vant/weapp/grid-item/index",
-    "van-nav-bar": "@vant/weapp/nav-bar/index",
-    "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
-    "van-dropdown-item": "@vant/weapp/dropdown-item/index"
   },
   "sitemapLocation": "sitemap.json"
 }

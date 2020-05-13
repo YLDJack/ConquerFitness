@@ -41,5 +41,5 @@
 </view>
 
 <view class="submit">
-  <van-button type="primary" size="large">提交</van-button>
+  <van-button type="primary" size="large" color="#0079FE">提交</van-button>
 </view>

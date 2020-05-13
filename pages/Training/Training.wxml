@@ -13,6 +13,7 @@
 
 <van-collapse value="{{ activeNames }}" bind:change="onCollChange">
 	<van-collapse-item name="1" label="1组 80/400 容量">
+	<!-- 名字和最大重量区域 -->
 		<view slot="title">
 			<text>杠铃卧推</text>
 			<view>

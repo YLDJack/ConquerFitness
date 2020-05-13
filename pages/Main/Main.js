@@ -47,7 +47,8 @@ Page({
 
       if (month === 5) {
         if (date === 12) {
-          day.bottomInfo = '胸\n4786';
+          day.topInfo = "胸";
+          day.bottomInfo = '4786';
           // day.bottomInfo = document.write("<van-tag type='danger' plain >胸</van-tag>");
         }
       }

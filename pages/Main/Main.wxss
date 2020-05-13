@@ -12,13 +12,13 @@ background-color: #E8F4FB;
   display: flex;
 }
 
-.top .calendar-navigator{
+.calendar-navigator{
   padding: 20rpx;
   width: 10%;
   height: 100rpx;
 }
 
-.top .calendar-navigator .calendar-image{
+.calendar-navigator .calendar-image{
   margin-left: 10rpx;
   width: 80%;
   height: 60rpx;

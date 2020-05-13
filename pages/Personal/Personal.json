@@ -1,5 +1,4 @@
 {
-  
   "navigationBarTitleText": "个人中心",
   "usingComponents": {
     "van-popup": "@vant/weapp/popup/index",

@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/Main/Main",
     "pages/Personal/Personal",
+    "pages/Main/Main",
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences",
     "pages/Personal_data/Personal_data",

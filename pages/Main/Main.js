@@ -69,6 +69,18 @@ Page({
     });
     console.log(this.data.isCalendarShow);
   },
+  // 右上角转发
+  onShareAppMessage:function(e){
+    console.log(e)    //点击分享按钮时的一些信息，可以判断分享操作是由右上角菜单触发还是页面button触发
+    if(e.from=='button'){
+        let id=e.target.dataset.id;    //分享内容的id
+        return {
+            title:'xxx',
+            path:'url?id='+id
+        }
+    }
+},
+
   //获取扇形图表中的索引方法
   pietouchHandler: function (e) {
     console.log(pieChart.getCurrentDataIndex(e));

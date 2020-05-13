@@ -1,9 +1,11 @@
-.container{
-  width: 95%;
+/* .container{
+  width: 100%;
   height: 100%;
   margin: 0 auto;
   overflow-y: scroll;
-}
+  background-color: #E8F4FB;
+} */
+
 .avatar{
   width: 100%;
   height: 300rpx;
@@ -64,3 +66,7 @@
   align-items: center;
 }
 
+/* .share{
+  background-color: white;
+  border-radius: ;
+} */

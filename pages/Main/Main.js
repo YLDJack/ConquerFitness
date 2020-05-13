@@ -41,7 +41,18 @@ Page({
         tag: 'red',
       },
     ],
+    formatter(day) {
+      const month = day.date.getMonth() + 1;
+      const date = day.date.getDate();
 
+      if (month === 5) {
+        if (date === 12) {
+          day.bottomInfo = '胸\n4786';
+          // day.bottomInfo = document.write("<van-tag type='danger' plain >胸</van-tag>");
+        }
+      }
+      return day;
+    }
   },
   //日期确认方法
   onConfirm(event) {

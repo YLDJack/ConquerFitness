@@ -1,7 +1,7 @@
 <!--index.wxml-->
 <!-- 开始按钮一栏 -->
 <view class="top">
-	<navigator hover-class='none' url="../index/index" class="calendar-navigator">
+	<navigator hover-class='none' url="../Calendar/Calendar" class="calendar-navigator">
 		<image src="../../image/jianshen-.png" class="calendar-image"></image>
 	</navigator>
 	<view class="startbutton">
@@ -17,26 +17,30 @@
 <van-notice-bar left-icon="https://img.yzcdn.cn/1.png" text="来康康本周的成果吧！" />
 <view class="data-group">
 	<view class="scrollwenzi">
-		<scroll-view class="scrollwenzi" scroll-x="true" scroll-with-animation="true">
-			<view class="wenziframe" style="opacity:0.5">
-				<view class="wenzi">有氧运动时长(分钟)</view>
-				<view class="wenzi">300</view>
-			</view>
-			<view class="wenziframe" style="opacity:0.5">
-				<view class="wenzi">肌肉容量</view>
-				<view class="wenzi">3000</view>
-			</view>
-			<view class="wenziframe" style="opacity:0.5">
-				<view class="wenzi">消耗(千卡)</view>
-				<view class="wenzi">1500</view>
-			</view>
-			<view class="wenziframe" style="opacity:0.5">
-				<view class="wenzi">体重增长(KG)</view>
-				<view class="wenzi">-1</view>
-			</view>
-		</scroll-view>
-	</view>
+		<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+			<swiper-item>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">有氧运动时长(分钟)</view>
+					<view class="wenzi">300</view>
+				</view>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">肌肉容量</view>
+					<view class="wenzi">3000</view>
+				</view>
+			</swiper-item>
 
+			<swiper-item>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">消耗(千卡)</view>
+					<view class="wenzi">1500</view>
+				</view>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">体重增长(KG)</view>
+					<view class="wenzi">-1</view>
+				</view>
+			</swiper-item>
+		</swiper>
+	</view>
 </view>
 
 <!-- 数据表轮播 -->

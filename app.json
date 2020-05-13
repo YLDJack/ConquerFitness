@@ -53,11 +53,6 @@
     "navigationBarTextStyle": "black"
   },
   "usingComponents": {
-    "van-grid": "@vant/weapp/grid/index",
-    "van-grid-item": "@vant/weapp/grid-item/index",
-    "van-nav-bar": "@vant/weapp/nav-bar/index",
-    "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
-    "van-dropdown-item": "@vant/weapp/dropdown-item/index"
   },
   "sitemapLocation": "sitemap.json"
 }

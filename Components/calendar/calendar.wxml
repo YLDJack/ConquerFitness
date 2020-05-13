@@ -1,58 +1,73 @@
-<view class="header space-between">
-  <text class="iconfont" data-id="0" bindtap='dataBefor'>
-    <text class='left color'></text>
-  </text>
-  <view class="btn flex-center" bindtap="dateSelection">
-    <view class="text">{{selectDay}}</view>
-    <text class=""></text>
-  </view>
-  <text class="iconfont" data-id="1" bindtap='dataBefor'>
-    <text class='right color'></text>
-  </text>
-</view>
-<view wx:if='{{!calShow}}' class="{{isOpen?'':'calendar-box'}} {{dateShow?'active':''}}">
-  <view class="calendar-wrapper {{dateShow?'active':''}}">
+<view
+    wx:if='{{isCalShow}}'
+    bind:tap="onCloseCalendar"
+    class="{{isInsert?'':'calendar-box'}} {{isCalShowPlay?'active':''}}"
+    data-id="calendarBox"
+>
+  <view class="calendar-wrapper {{isCalShowPlay?'active':''}}">
+    
     <view class="calendar-panel">
-      <view class="date-befor" data-id="0" data-type="month" bindtap='dataBefor'>
-        <text class="iconfont">
-        <text class='left color'></text>
+      <view class="date-prev" data-arrow="0" data-type="month" bind:tap='onCalChange'>
+        <text class="icon">
+          <text class='prev theme-color'></text>
         </text>
       </view>
-      <view class="calendar-panel-box">
-        <view>{{canlender.year}}年</view>
-        <view>{{canlender.month}}月</view>
+      
+      <view class="calendar-panel-indicator">
+        <view>{{calendar.year}}年</view>
+        <view>{{calendar.month+1}}月</view>
       </view>
-      <view class="date-after" data-id="1" data-type="month" bindtap='dataBefor'>
-        <text class="iconfont">
-        <text class='right color'></text>
+      
+      <view class="date-next" data-arrow="1" data-type="month" bind:tap='onCalChange'>
+        <text class="icon">
+          <text class='next theme-color'></text>
         </text>
       </view>
-      <view class='backtoday' bindtap='backtoday'>
-        回到今天
+      
+      <view class='backtoday theme-color' bind:tap='onBackToToday'>
+        <view class="bg theme-color"></view>
+        <text>回到今天</text>
       </view>
     </view>
-    <view class="calendar-header">
-      <view>日</view>
+    
+    <view class="calendar-header theme-color">
+      <view wx:if="{{format==0}}">日</view>
       <view>一</view>
       <view>二</view>
       <view>三</view>
       <view>四</view>
       <view>五</view>
       <view>六</view>
+      <view wx:if="{{format==1}}">日</view>
     </view>
+    
+    
     <view class="calendar-body">
-      <block wx:for="{{canlender.weeks}}" wx:for-item="weeks" wx:for-index="week" wx:key="weeks">
-        <view class="calender-body-date-week">
-          <block wx:for="{{weeks}}" wx:for-item="day" wx:key="day">
-            <view class="date {{canlender.month === day.month? '' : 'placeholder'}} {{(day.date==canlender.date||day.checked) && canlender.month == day.month?'date-current': ''}} " data-week="{{week}}" data-index="{{index}}" data-ischeck="{{canlender.month === day.month}}"
-              bindtap='selectDay'>
-              {{day.date}}
-              <view wx:if="{{day.have}}" class="data-circle"></view>
-            </view>
-          </block>
+      <view
+          wx:for="{{calendar.weeks}}"
+          wx:for-item="week"
+          wx:for-index="weekIdx"
+          wx:key="{{weekIdx}}"
+          class="calender-body-date-week"
+      >
+        <view
+            wx:for="{{week}}"
+            wx:for-item="day"
+            wx:key="{{day.ymd}}"
+            bind:tap='onSelectDate'
+            class="date {{day.m!=calendar.m ? 'placeholder':''}} {{(day.ymd<begin||day.ymd>deadline) ? 'unavailable':''}} {{day.ymd==selectedYmd ? 'active':''}}"
+            data-week-idx="{{weekIdx}}"
+            data-index="{{index}}"
+            data-ymd="{{day.ymd}}"
+            data-is-available="{{day.ymd>=begin && day.ymd<=deadline}}"
+        >
+          <view class="bg theme-color"></view>
+          <text>{{day.date}}</text>
+          <view wx:if="{{!!markObj[day.ymd]}}" class="data-circle"></view>
         </view>
-      </block>
-    </view>
-    <view class="packup" bindtap='packup'>确定</view>
+      </view>
+    </view> <!-- calendar-body -->
+    
+    <!--<view class="pick" bind:tap='onPick'>确定</view>-->
   </view>
 </view>

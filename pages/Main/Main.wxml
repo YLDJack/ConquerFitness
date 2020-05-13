@@ -1,9 +1,12 @@
 <!--index.wxml-->
 <!-- 开始按钮一栏 -->
+<van-tag type="danger" plain size="large">当前日期</van-tag><van-tag type="danger" size="large">{{date}}</van-tag>
 <view class="top">
-	<navigator hover-class='none' url="../Calendar/Calendar" class="calendar-navigator">
-		<image src="../../image/jianshen-.png" class="calendar-image"></image>
-	</navigator>
+	<view hover-class='none' class="calendar-navigator">
+		<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
+	</view>
+	<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}"/>
+	<!-- <calendar is-calendar-show="{{isCalendarShow}}" mark="{{calendarMark}}" format="1" /> -->
 	<view class="startbutton">
 		<van-button icon="../../../../image/icon_train_selected.png" type="info" bind:click="beginTraining">开始训练</van-button>
 	</view>

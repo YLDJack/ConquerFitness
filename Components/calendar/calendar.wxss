@@ -3,7 +3,7 @@
 .theme-color {
   /* todo 更换主题颜色*/
   /*color: deepskyblue;*/
-  color: #ea4c3c;
+  color: red;
 }
 
 /* 背景遮罩层,当设置为插入模式后不显示遮罩 */

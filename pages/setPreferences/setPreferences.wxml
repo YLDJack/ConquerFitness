@@ -5,7 +5,7 @@
   <van-cell>
     <view slot="title" class="switchgroup">
       <view class="van-cell-text">开启倒计时</view>
-      <van-switch checked="{{ checked }}" bind:change="onChange" />
+      <van-switch checked="{{ checked_countdown }}" bind:change="onChange_countdown" />
     </view>
   </van-cell>
   <!-- 设置重量单位 -->
@@ -13,11 +13,11 @@
   <van-cell>
     <view slot="title" class="switchgroup">
       <view class="van-cell-text">英镑 (lbs)</view>
-      <van-switch checked="{{ checked }}" bind:change="onChange" />
+      <van-switch checked="{{ checked_weightlbs }}" bind:change="onChange_weightlbs" />
     </view>
     <view slot="title" class="switchgroup">
       <view class="van-cell-text">公斤 (kg)</view>
-      <van-switch checked="{{ checked }}" bind:change="onChange" />
+      <van-switch checked="{{ checked_weightkg }}" bind:change="onChange_weightkg" />
     </view>
   </van-cell>
   <!-- 是否自动开始下一个动作 -->
@@ -25,7 +25,7 @@
   <van-cell>
     <view slot="title" class="switchgroup">
       <view class="van-cell-text">是否自动跳转下一个动作</view>
-      <van-switch checked="{{ checked }}" bind:change="onChange" />
+      <van-switch checked="{{ checked_selfnext }}" bind:change="onChange_selfnext" />
     </view>
   </van-cell>
 </view>

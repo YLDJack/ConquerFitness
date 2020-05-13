@@ -5,12 +5,32 @@ Page({
    * 页面的初始数据
    */
   data: {
-    checked: true
+    checked: true,
+    checked_countdown: true,
+    checked_weightlbs: true,
+    checked_selfnext: true
   },
   
-  onChange({ detail }) {
+  // 设置倒计时
+  onChange_countdown({ detail }) {
     // 需要手动对 checked 状态进行更新
-    this.setData({ checked: detail });
+    this.setData({ checked_countdown: detail });
+  },
+  
+  // 设置默认重量单位
+  onChange_weightlbs({ detail }) {
+    // 需要手动对 checked 状态进行更新
+    this.setData({ checked_weightlbs: detail });
+  },
+  onChange_weightkg({ detail }) {
+    // 需要手动对 checked 状态进行更新
+    this.setData({ checked_weightkg: detail });
+  },
+
+  // 设置自动跳转
+  onChange_selfnext({ detail }) {
+    // 需要手动对 checked 状态进行更新
+    this.setData({ checked_selfnext: detail });
   },
 
   /**
@@ -67,10 +87,5 @@ Page({
    */
   onShareAppMessage: function () {
 
-  }
-}),
-Component({
-  options: {
-    styleIsolation: 'shared'
   }
 })

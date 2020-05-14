@@ -87,11 +87,11 @@
   <van-cell title="分享" icon="../../../../image/share.png" is-link bind:click="showPopup" />
 </label>
 
-<van-cell
-  icon="../../../../image/feedback.png"
+<!-- <van-cell
+  icon="../../../../image/about.png"
   is-link
-  title="关于"
+  title="关于ConquerFitness"
   link-type="navigateTo"
-  url="/pages/Feedback/Feedback"
-/>
+  url="/pages/About/about"
+/> -->
 

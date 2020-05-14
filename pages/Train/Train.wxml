@@ -6,6 +6,58 @@
 			<van-dropdown-item popup-style="with=180rpx" value="{{ catevalue }}" options="{{ cateOption }}" />
 		</van-dropdown-menu>
 		<van-search value="{{ searchText }}" placeholder="请输入搜索关键词" />
+		<van-icon name="add" color="red" size="50rpx" bind:click="showAdd" />
+		<!-- 添加动作弹出层部分 必须放在点击按钮的下方-->
+		<van-popup show="{{ showAddPop }}" bind:close="onAddClose" custom-class="addpop" position="bottom">
+			<!-- 添加动作弹出层首部按钮界面 -->
+			<view>
+				<van-icon name="cross" />
+				<text>保存</text>
+			</view>
+			<!-- 添加动作弹出层中间输入界面 -->
+			<van-field icon="../../image/icon_train_selected.png" placeholder="请输入动作名称" required clickable="false" />
+			<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange" clickable="true">
+
+				<!-- 动作类型 -->
+				<van-collapse-item title="动作类型" name="1" right-icon="arrow" value="力量训练">
+					<van-cell title="力量训练" value="重量+次数" label="常规" />
+					<van-cell title="力量训练" value="重量（减去体重）+次数" label="辅助" />
+					<van-cell title="有氧训练" value="时间+距离+卡路里" />
+				</van-collapse-item>
+
+				<!-- 训练部位细分 -->
+				<van-collapse-item title="训练部位" name="2" right-icon="arrow" value="胸-上胸">
+					<van-collapse value="{{ collactiveNames1 }}" bind:change="onCollChange1" clickable="true">
+						<van-collapse-item title="胸部" name="1" right-icon="arrow">
+							<van-cell title="上胸" />
+							<van-cell title="中胸" />
+							<van-cell title="下胸" />
+						</van-collapse-item>
+						<van-collapse-item title="背部" name="2" right-icon="arrow">
+
+						</van-collapse-item>
+						<van-collapse-item title="肩部" name="3" right-icon="arrow">
+
+						</van-collapse-item>
+						<van-collapse-item title="腿部" name="4" right-icon="arrow">
+
+						</van-collapse-item>
+					</van-collapse>
+				</van-collapse-item>
+
+				<!-- 训练器材 -->
+				<van-collapse-item title="训练器材" name="3" right-icon="arrow" value="杠铃">
+					<van-cell title="哑铃" />
+					<van-cell title="杠铃"/>
+					<van-cell title="史密斯机" />
+					<van-cell title="绳索" />
+					<van-cell title="TRX/&弹力带" />
+					<van-cell title="器械"/>
+					<van-cell title="自重"/>
+				</van-collapse-item>
+			</van-collapse>
+		</van-popup>
+
 	</view>
 </view>
 
@@ -27,7 +79,12 @@
 
 <!-- 中间显示动作部分 -->
 <view class="mid">
+	<!-- 自定义动作<van-grid column-num="1">
+		<van-grid-item icon="{{ imageURL }}" text="杠铃卧推" info="1次">
+		</van-grid-item>
+	</van-grid> -->
 	<van-grid gutter="{{ 10 }}" column-num="2">
+		<view>杠铃</view>
 		<van-grid-item icon="{{ imageURL }}" text="杠铃卧推" wx:for="{{ 10 }}" info="1次" bind:click="showPopup">
 		</van-grid-item>
 		<!-- 弹出层部分 必须放在点击按钮的下方-->

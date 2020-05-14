@@ -25,12 +25,39 @@ Page({
     catevalue: 0,
     slideKey: 0,
     imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
+    //展示动作界面
     showText: false,
+    //展示添加动作界面
+    showAddPop: false,
+    // 添加动作界面弹出层coll默认选中数值
+    collactiveNames: ['0'],
+    collactiveNames1: ['1']
+  },
+  // 添加动作跳转事件
+  showAdd() {
+    this.setData({
+      showAddPop: true
+    });
+  },
+  onAddClose() {
+    this.setData({
+      showAddPop: false
+    });
+  },
+  onCollChange(event) {
+    this.setData({
+      collactiveNames: event.detail
+    });
+  },
+  onCollChange1(event) {
+    this.setData({
+      collactiveNames1: event.detail
+    });
   },
   //星星评分的点击事件
   onStarChange(event) {
     this.setData({
-      starvalue: event.detail
+      collactiveNames: event.detail
     });
   },
   // linechart 的点击事件
@@ -79,10 +106,9 @@ Page({
       categories: ['2020-08', '2020-09', '2020-10', '2020-11', '2020-12', '2021'],
 
       series: [{
-          name: '杠铃卧推肌容量',
-          data: [5500, 5800, 6000, 6400, 6500, 6600],
-        }
-      ],
+        name: '杠铃卧推肌容量',
+        data: [5500, 5800, 6000, 6400, 6500, 6600],
+      }],
       yAxis: {
         format: function (val) {
           return val;

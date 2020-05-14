@@ -1,12 +1,15 @@
 // pages/Main/Main.js
 var utils = require('../../utils/util')
 const wxCharts = require('../../utils/wxcharts'); // 引入wx-charts.js文件
+var WxParse = require('../../wxParse/wxParse.js');
 var app = getApp();
 var pieChart = null;
 var lineChart = null;
 
 Page({
   data: {
+    pieImg: [],
+    lineImg: [],
     // 当前选中日期
     date: '日期',
     // 日历是否显示
@@ -49,12 +52,15 @@ Page({
         if (date === 12) {
           day.topInfo = "胸";
           day.bottomInfo = '4786';
+          // var info = "<van-tag type='danger' plain >胸</van-tag>";
           // day.bottomInfo = document.write("<van-tag type='danger' plain >胸</van-tag>");
+
         }
       }
       return day;
     }
   },
+
   //日期确认方法
   onConfirm(event) {
     this.setData({
@@ -70,16 +76,16 @@ Page({
     console.log(this.data.isCalendarShow);
   },
   // 右上角转发
-  onShareAppMessage:function(e){
-    console.log(e)    //点击分享按钮时的一些信息，可以判断分享操作是由右上角菜单触发还是页面button触发
-    if(e.from=='button'){
-        let id=e.target.dataset.id;    //分享内容的id
-        return {
-            title:'xxx',
-            path:'url?id='+id
-        }
+  onShareAppMessage: function (e) {
+    console.log(e) //点击分享按钮时的一些信息，可以判断分享操作是由右上角菜单触发还是页面button触发
+    if (e.from == 'button') {
+      let id = e.target.dataset.id; //分享内容的id
+      return {
+        title: 'xxx',
+        path: 'url?id=' + id
+      }
     }
-},
+  },
 
   //获取扇形图表中的索引方法
   pietouchHandler: function (e) {
@@ -100,6 +106,36 @@ Page({
     wx.navigateTo({
       url: "../Training/Training",
     })
+  },
+  // 将canvas转换为图片
+  handleCanvarToImg(that) {
+    wx.canvasToTempFilePath({
+      x: 0,
+      y: 0,
+      width: 260,
+      height: 550,
+      canvasId: 'pieCanvas',
+      success: function (res) {
+        that.setData({
+          pieImg: res.tempFilePath
+        });
+      }
+    });
+  },
+  // 将canvas转换为图片
+  handleCanvarToImg1(that) {
+    wx.canvasToTempFilePath({
+      x: 0,
+      y: 0,
+      width: 260,
+      height: 550,
+      canvasId: 'lineCanvas',
+      success: function (res) {
+        that.setData({
+          lineImg: res.tempFilePath
+        });
+      }
+    });
   },
   /**
    * 生命周期函数--监听页面加载
@@ -141,6 +177,8 @@ Page({
       height: 200,
       dataLabel: true
     });
+    
+    
 
     //绘制折线图
     lineChart = new wxCharts({
@@ -174,9 +212,10 @@ Page({
         }
       },
       width: 320,
-      height: 200
-
+      height: 200,
     });
+
+
   },
   onClick() {
     wx.navigateTo({

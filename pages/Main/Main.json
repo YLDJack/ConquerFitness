@@ -2,7 +2,6 @@
   "usingComponents": {
     "van-button": "@vant/weapp/button/index",
     "van-notice-bar": "@vant/weapp/notice-bar/index",
-    "calendar":"/Components/calendar/calendar",
     "van-calendar": "@vant/weapp/calendar/index",
     "van-tag": "@vant/weapp/tag/index"
   }

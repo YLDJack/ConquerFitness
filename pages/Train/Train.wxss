@@ -26,7 +26,7 @@
 }
 
 .van-search{
-  width: 550rpx;
+  width: 500rpx;
 }
 
 /* slide部分 */
@@ -39,4 +39,9 @@
 /* mid部分 */
 .mid {
   margin-left: 175rpx;
+}
+/* 添加动作的弹出层 */
+.addpop {
+  width: 100%;
+  height: 90%;
 }

@@ -4,7 +4,8 @@
 	<view hover-class='none' class="calendar-navigator">
 		<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
 	</view>
-	<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" />
+	<!-- 弹出日历 -->
+	<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" class="calendar" />
 	<!-- <van-tag type="danger" plain size="large">当前日期</van-tag> -->
 	<van-tag type="danger" size="large">{{date}}</van-tag>
 	<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
@@ -54,10 +55,12 @@
 
 <!-- 数据表轮播 -->
 <swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
-	<swiper-item><canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx; width:100%" bindtouchstart="linetouchHandler"></canvas>
+	<swiper-item>
+		<canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx; width:100%;" bindtouchstart="linetouchHandler"></canvas>
 	</swiper-item>
 	<swiper-item>
-		<canvas canvas-id="pieCanvas" class="canvas" style="height:400rpx; width:100%" bindtouchstart="pietouchHandler"></canvas>
+		<canvas canvas-id="pieCanvas" class="canvas" style="height:400rpx; width:100%;" bindtouchstart="pietouchHandler" wx:if="{{!isCalendarShow}}"></canvas>
+		<image wx:else src="{{radarImg}}" style="height:400rpx; width:100%" />
 	</swiper-item>
 </swiper>
 

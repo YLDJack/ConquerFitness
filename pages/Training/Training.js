@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    time:  60 * 1000,
+    time: 60 * 1000,
     value: 5,
     //下拉列表的初始状态
     activeNames: ['1'],
@@ -20,6 +20,31 @@ Page({
       activeNames: event.detail
     });
   },
+  // 添加动作跳转
+  addTrain() {
+    wx.navigateTo({
+      url: '../TrainTemplate/TrainTemplate',
+    })
+  },
+  //模板训练跳转
+  showTem() {
+    wx.navigateTo({
+      url: '../TrainTemplate/TrainTemplate',
+    })
+  },
+  // // 标签切换函数
+  // onTabChange(event) {
+  //   if (event.detail === "添加动作") {
+  //     console.log(event.detail);
+  //     wx.navigateTo({
+  //       url: '../Train/Train',
+  //     })
+  //   } else if (event.detail === "模板训练") {
+  //     wx.navigateTo({
+  //       url: '../TrainTemplate/TrainTemplate',
+  //     })
+  //   }
+  // },
   // 评价的点击函数
   onChange(event) {
     this.setData({

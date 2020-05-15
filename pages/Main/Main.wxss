@@ -12,24 +12,11 @@ background-color: #E8F4FB;
   align-items: center;
 }
 
-.sayhello{
-  margin-left: 35rpx;
-  margin-right: 20rpx;
-  font-weight: bold;
-  font-size: 36rpx;
-  color: rgb(107, 105, 105);
-  align-items: center;
-}
-.sayhello image{
-  width: 60rpx;
-  height: 50rpx;
-  margin-right: 10rpx;
-}
-
 .calendar-navigator{
   /* padding: 20rpx; */
   width: 10%;
   height: 70rpx;
+  margin-left: 35rpx;
 }
 
 .calendar-navigator .calendar-image{
@@ -37,26 +24,49 @@ background-color: #E8F4FB;
   height: 60rpx;
 }
 
-.top .startbutton{
-  padding: 10rpx;
-}
-
-.startbutton .van-button--danger {
-  margin-top: 20rpx;
-  font-size: 40rpx;
-  /* background-color: #A0CFE5;
-  border-color: #A0CFE5; */
-  font-weight: bold;
-  width: 90%;
-  /* margin-right: 10rpx; */
-}
-
 .top .statetext{
   display: flex;
   align-items: center;
   height: 100%;
-  /* margin-left: 10rpx; */
+  margin-left: 120rpx;
 
+}
+
+.coltwo{
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.coltwo .sayhello{
+  margin-left: 35rpx;
+  margin-right: 10rpx;
+  display: flex;
+  align-items: center;
+  width: 40%;
+}
+.sayhello .sayhellotext{
+  margin-left: 30rpx;
+  font-weight: bold;
+  font-size: 36rpx;
+  color: rgb(107, 105, 105);
+}
+.sayhello image{
+  width: 70rpx;
+  height: 60rpx;
+  margin-right: 10rpx;
+}
+
+.coltwo .startbutton{
+  padding-left: 10rpx;
+  padding-right: 30rpx;
+  width: 60%;
+}
+
+.startbutton .van-button--danger {
+  font-size: 40rpx;
+  font-weight: bold;
+  /* width: 85%; */
 }
 
 .van-notice-bar{

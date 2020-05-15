@@ -1,11 +1,6 @@
 <!--index.wxml-->
 <!-- 开始按钮一栏 -->
 <view class="top">
-	<!-- 问好 -->
-	<view class="sayhello">
-		<image src="../../image/smile.png"></image>
-		<text>早上好~</text>
-	</view>
 	<!-- 日历 -->
 	<view hover-class='none' class="calendar-navigator">
 		<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
@@ -19,14 +14,18 @@
 		<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
 		<van-tag type="primary" size="large">增肌</van-tag>
 	</view>
-
-
 </view>
 
-<view class="startbutton">
-	<van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large" block>开始训练</van-button>
+<view class="coltwo">
+	<!-- 问好 -->
+	<view class="sayhello">
+		<image src="../../image/smile.png"></image>
+		<text class="sayhellotext">早上好~</text>
+	</view>
+	<view class="startbutton">
+		<van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large" block>开始训练</van-button>
+	</view>
 </view>
-
 <!-- <calendar is-calendar-show="{{isCalendarShow}}" mark="{{calendarMark}}" format="1" /> -->
 
 

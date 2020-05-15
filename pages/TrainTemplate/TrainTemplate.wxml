@@ -14,7 +14,7 @@
 <view>
 	<van-grid gutter="{{ 10 }}" column-num="1">
 		<view>已有模板</view>
-		<van-grid-item wx:for="{{ 3 }}" info="1次"  use-slot>
+		<van-grid-item wx:for="{{ 2 }}" info="1次"  use-slot>
 			<!-- 模板卡片 -->
       <van-card thumb="{{ imageURL }}" title="胸与三头" desc="系统地训练全身">
 				<!-- 卡片底部标签和展示按钮部分 -->

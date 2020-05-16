@@ -48,12 +48,12 @@
 				<!-- 训练器材 -->
 				<van-collapse-item title="训练器材" name="3" right-icon="arrow" value="杠铃">
 					<van-cell title="哑铃" />
-					<van-cell title="杠铃"/>
+					<van-cell title="杠铃" />
 					<van-cell title="史密斯机" />
 					<van-cell title="绳索" />
 					<van-cell title="TRX/&弹力带" />
-					<van-cell title="器械"/>
-					<van-cell title="自重"/>
+					<van-cell title="器械" />
+					<van-cell title="自重" />
 				</van-collapse-item>
 			</van-collapse>
 		</van-popup>
@@ -139,7 +139,11 @@
 
 				<!-- 趋势折线图 -->
 				<van-tab title="趋势">
-					<canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx;" bindtouchstart="linetouchHandler"></canvas>
+					<cover-view class="container">
+					<!-- 线性表 -->
+						<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
+						</ec-canvas>
+					</cover-view>
 				</van-tab>
 
 				<van-tab title="备注">

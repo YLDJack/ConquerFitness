@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
   },
 
   /**

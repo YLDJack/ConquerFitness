@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "ec-canvas": "../../ec-canvas/ec-canvas",
     "van-button": "@vant/weapp/button/index",
     "van-notice-bar": "@vant/weapp/notice-bar/index",
     "van-calendar": "@vant/weapp/calendar/index",

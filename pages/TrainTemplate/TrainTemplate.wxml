@@ -1,2 +1,59 @@
 <!--pages/TrainTemplate/TrainTemplate.wxml-->
-<text>pages/TrainTemplate/TrainTemplate.wxml</text>
+<!-- <text>pages/TrainTemplate/TrainTemplate.wxml</text> -->
+
+<!-- 页面顶部 -->
+<view>
+	<van-cell title="我的模板" label="共6套模板" border="{{ false }}">
+		<view slot="right-icon">
+			<van-icon name="more" color="red" type="200rpx" />
+		</view>
+	</van-cell>
+</view>
+
+<!-- 中间模板显示页面 -->
+<view>
+	<van-grid gutter="{{ 10 }}" column-num="1">
+		<view>已有模板</view>
+		<van-grid-item wx:for="{{ 2 }}" info="1次"  use-slot>
+			<!-- 模板卡片 -->
+      <van-card thumb="{{ imageURL }}" title="胸与三头" desc="系统地训练全身">
+				<!-- 卡片底部标签和展示按钮部分 -->
+				<view slot="footer">
+					<van-tag type="danger" size="large">胸部</van-tag>
+					<van-tag type="danger" size="large">三头</van-tag>
+					<van-cell title="展示模板详情" is-link bind:click="showPopup" />
+				</view>
+			</van-card>
+		</van-grid-item>
+	</van-grid>
+</view>
+
+
+
+<!-- 推荐模板 -->
+<view class="quickitems">
+	<view class="text">模板推荐</view>
+	<scroll-view class="module-scroll" scroll-x="{{true}}">
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+	</scroll-view>
+</view>

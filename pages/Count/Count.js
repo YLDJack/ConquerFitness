@@ -1,40 +1,139 @@
 // pages/Count.js
-const wxCharts = require('../../utils/wxcharts'); // 引入wx-charts.js文件
-var app = getApp();
-var pieChart = null;
-var lineChart = null;
+import * as echarts from '../../ec-canvas/echarts';
+const app = getApp();
+
+
+// 初始化饼图的方法
+function initPieChart(canvas, width, height, dpr) {
+  const chart = echarts.init(canvas, null, {
+    width: width,
+    height: height,
+    devicePixelRatio: dpr // new
+  });
+  canvas.setChart(chart);
+
+  var option = {
+    backgroundColor: "#ffffff",
+    color: ["#37A2DA", "#32C5E9", "#67E0E3", "#91F2DE", "#FFDB5C", "#FF9F7F"],
+    series: [{
+      label: {
+        normal: {
+          fontSize: 14
+        }
+      },
+      type: 'pie',
+      center: ['50%', '50%'],
+      radius: ['40%', '60%'],
+      data: [{
+        value: 55,
+        name: '胸部'
+      }, {
+        value: 20,
+        name: '背部'
+      }, {
+        value: 10,
+        name: '手臂'
+      }, {
+        value: 20,
+        name: '腿部'
+      }, {
+        value: 38,
+        name: '肩部'
+      }]
+    }]
+  };
+
+  chart.setOption(option);
+  return chart;
+};
+
+//初始化折线图的方法
+function initlineChart(canvas, width, height, dpr) {
+  const chart = echarts.init(canvas, null, {
+    width: width,
+    height: height,
+    devicePixelRatio: dpr // new
+  });
+  canvas.setChart(chart);
+
+  var option = {
+    color: ["#37A2DA", "#67E0E3", "#9FE6B8"],
+    legend: {
+      data: ['胸部', '背部', '腿部'],
+      top: 50,
+      left: 'center',
+      backgroundColor: 'red',
+      z: 100
+    },
+    grid: {
+      containLabel: true
+    },
+    tooltip: {
+      show: true,
+      trigger: 'axis'
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+      // show: false
+    },
+    yAxis: {
+      x: 'center',
+      type: 'value',
+      splitLine: {
+        lineStyle: {
+          type: 'dashed'
+        }
+      }
+      // show: false
+    },
+    series: [{
+      name: '胸部',
+      type: 'line',
+      smooth: true,
+      data: [18, 36, 65, 30, 78, 40, 33]
+    }, {
+      name: '背部',
+      type: 'line',
+      smooth: true,
+      data: [12, 50, 51, 35, 70, 30, 20]
+    }, {
+      name: '腿部',
+      type: 'line',
+      smooth: true,
+      data: [10, 30, 31, 50, 40, 20, 10]
+    }]
+  };
+
+  chart.setOption(option);
+  return chart;
+};
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    pieec: {
+      onInit: initPieChart
+    },
+    lineec: {
+      onInit: initlineChart
+    },
     //tabs的初始选中状态
     active: 0,
     // coll初始选中状态
     activeNames: ['1'],
     imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
-    url:  "pages/ActionDesc/ActionDesc",
+    url: "pages/ActionDesc/ActionDesc",
   },
   //跳转动作详情页面
   showDesc() {
     wx.navigateTo({
-      url:  "../ActionDesc/ActionDesc",
+      url: "../ActionDesc/ActionDesc",
     })
-  },
-  //获取扇形图表中的索引方法
-  pietouchHandler: function (e) {
-    console.log(pieChart.getCurrentDataIndex(e));
-  },
-  // linechart 的点击事件
-  linetouchHandler: function (e) {
-    console.log(lineChart.getCurrentDataIndex(e));
-    lineChart.showToolTip(e, {
-      // background: '#7cb5ec',
-      format: function (item, category) {
-        return category + ' ' + item.name + ':' + item.data
-      }
-    });
   },
   onCollChange(event) {
     this.setData({
@@ -45,75 +144,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var windowWidth = 320;
-    try {
-      var res = wx.getSystemInfoSync();
-      windowWidth = res.windowWidth;
-    } catch (e) {
-      console.error('getSystemInfoSync failed!');
-    }
-    // 绘制饼图
-    pieChart = new wxCharts({
-      canvasId: 'pieCanvas',
-      type: 'pie',
-      series: [{
-        name: '胸部',
-        data: 50,
-      }, {
-        name: '背部',
-        data: 30,
-      }, {
-        name: '腿部',
-        data: 50,
-      }, {
-        name: '肩部',
-        data: 50,
-      }, {
-        name: '手臂',
-        data: 46,
-      }],
-      width: windowWidth,
-      height: 200,
-      dataLabel: true
-    });
-
-    //绘制折线图
-    lineChart = new wxCharts({
-      canvasId: 'lineCanvas',
-      type: 'line',
-      categories: ['2020-08', '2020-09', '2020-10', '2020-11', '2020-12', '2021'],
-
-      series: [{
-          name: '胸部肌容量',
-          data: [5500, 5800, 6000, 6400, 6500, 6600],
-        }, {
-          name: '背部肌容量',
-          data: [6500, 7600, 8000, 8400, 8500, 8600],
-        },
-        {
-          name: '腿部肌容量',
-          data: [8000, 9000, 9500, 9800, 10000, 10005],
-        },
-        {
-          name: '手臂肌容量',
-          data: [4500, 4800, 5000, 5400, 6500, 6600],
-        },
-        {
-          name: '肩膀肌容量',
-          data: [5200, 5900, 6000, 6400, 7500, 7600],
-        }
-      ],
-      yAxis: {
-        format: function (val) {
-          return val;
-        }
-      },
-      width: 320,
-      height: 200
-
-    });
-
-
+  
   },
 
   /**

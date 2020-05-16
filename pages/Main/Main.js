@@ -1,15 +1,126 @@
 // pages/Main/Main.js
-var utils = require('../../utils/util')
-const wxCharts = require('../../utils/wxcharts'); // 引入wx-charts.js文件
-var WxParse = require('../../wxParse/wxParse.js');
-var app = getApp();
-var pieChart = null;
-var lineChart = null;
+import * as echarts from '../../ec-canvas/echarts';
+var utils = require('../../utils/util');
+const app = getApp();
+
+// 初始化饼图的方法
+function initPieChart(canvas, width, height, dpr) {
+  const chart = echarts.init(canvas, null, {
+    width: width,
+    height: height,
+    devicePixelRatio: dpr // new
+  });
+  canvas.setChart(chart);
+
+  var option = {
+    backgroundColor: "#ffffff",
+    color: ["#37A2DA", "#32C5E9", "#67E0E3", "#91F2DE", "#FFDB5C", "#FF9F7F"],
+    series: [{
+      label: {
+        normal: {
+          fontSize: 14
+        }
+      },
+      type: 'pie',
+      center: ['50%', '50%'],
+      radius: ['40%', '60%'],
+      data: [{
+        value: 55,
+        name: '胸部'
+      }, {
+        value: 20,
+        name: '背部'
+      }, {
+        value: 10,
+        name: '手臂'
+      }, {
+        value: 20,
+        name: '腿部'
+      }, {
+        value: 38,
+        name: '肩部'
+      }]
+    }]
+  };
+
+  chart.setOption(option);
+  return chart;
+};
+
+//初始化折线图的方法
+function initlineChart(canvas, width, height, dpr) {
+  const chart = echarts.init(canvas, null, {
+    width: width,
+    height: height,
+    devicePixelRatio: dpr // new
+  });
+  canvas.setChart(chart);
+
+  var option = {
+    color: ["#37A2DA", "#67E0E3", "#9FE6B8"],
+    legend: {
+      data: ['胸部', '背部', '腿部'],
+      top: 50,
+      left: 'center',
+      backgroundColor: 'red',
+      z: 100
+    },
+    grid: {
+      containLabel: true
+    },
+    tooltip: {
+      show: true,
+      trigger: 'axis'
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+      // show: false
+    },
+    yAxis: {
+      x: 'center',
+      type: 'value',
+      splitLine: {
+        lineStyle: {
+          type: 'dashed'
+        }
+      }
+      // show: false
+    },
+    series: [{
+      name: '胸部',
+      type: 'line',
+      smooth: true,
+      data: [18, 36, 65, 30, 78, 40, 33]
+    }, {
+      name: '背部',
+      type: 'line',
+      smooth: true,
+      data: [12, 50, 51, 35, 70, 30, 20]
+    }, {
+      name: '腿部',
+      type: 'line',
+      smooth: true,
+      data: [10, 30, 31, 50, 40, 20, 10]
+    }]
+  };
+
+  chart.setOption(option);
+  return chart;
+};
 
 Page({
   data: {
-    pieImg: [],
-    lineImg: [],
+    // 问候语
+    hello: "早上好",
+    // 当前时期
+    pieec: {
+      onInit: initPieChart
+    },
+    lineec: {
+      onInit: initlineChart
+    },
     // 当前选中日期
     date: '日期',
     // 日历是否显示
@@ -44,6 +155,7 @@ Page({
         tag: 'red',
       },
     ],
+    // 日历的日期format方法
     formatter(day) {
       const month = day.date.getMonth() + 1;
       const date = day.date.getDate();
@@ -86,135 +198,56 @@ Page({
       }
     }
   },
-
-  //获取扇形图表中的索引方法
-  pietouchHandler: function (e) {
-    console.log(pieChart.getCurrentDataIndex(e));
-  },
-  // linechart 的点击事件
-  linetouchHandler: function (e) {
-    console.log(lineChart.getCurrentDataIndex(e));
-    lineChart.showToolTip(e, {
-      // background: '#7cb5ec',
-      format: function (item, category) {
-        return category + ' ' + item.name + ':' + item.data
-      }
-    });
-  },
   //跳转训练界面
   beginTraining() {
     wx.navigateTo({
       url: "../Training/Training",
     })
   },
-  // 将canvas转换为图片
-  handleCanvarToImg(that) {
-    wx.canvasToTempFilePath({
-      x: 0,
-      y: 0,
-      width: 260,
-      height: 550,
-      canvasId: 'pieCanvas',
-      success: function (res) {
-        that.setData({
-          pieImg: res.tempFilePath
-        });
-      }
-    });
-  },
-  // 将canvas转换为图片
-  handleCanvarToImg1(that) {
-    wx.canvasToTempFilePath({
-      x: 0,
-      y: 0,
-      width: 260,
-      height: 550,
-      canvasId: 'lineCanvas',
-      success: function (res) {
-        that.setData({
-          lineImg: res.tempFilePath
-        });
-      }
-    });
-  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var currentdate = utils.formatDate(new Date());
-    console.log(currentdate);
+    //获取当前时间
     this.setData({
-      date: currentdate
+      date: utils.formatDate(new Date())
     });
-    var windowWidth = 320;
-    try {
-      var res = wx.getSystemInfoSync();
-      windowWidth = res.windowWidth;
-    } catch (e) {
-      console.error('getSystemInfoSync failed!');
+    // 根据当前时间判断早上下午
+    const now = new Date();
+    const hour = now.getHours();
+    if (hour < 6) {
+     this.setData({
+       hello:"凌晨好！"
+     });
+    } else if (hour < 9) {
+     this.setData({
+       hello:"早上好！"
+     });
+    } else if (hour < 12) {
+     this.setData({
+       hello:"上午好！"
+     });
+    } else if (hour < 14) {
+     this.setData({
+       hello:"中午好！"
+     });
+    } else if (hour < 17) {
+     this.setData({
+       hello:"下午好！"
+     });
+    } else if (hour < 19) {
+     this.setData({
+       hello:"傍晚好！"
+     });
+    } else if (hour < 22) {
+     this.setData({
+       hello:"晚上好！"
+     });
+    } else {
+     this.setData({
+       hello:"夜里好！"
+     });
     }
-    // 绘制饼图
-    pieChart = new wxCharts({
-      canvasId: 'pieCanvas',
-      type: 'pie',
-      series: [{
-        name: '胸部',
-        data: 50,
-      }, {
-        name: '背部',
-        data: 30,
-      }, {
-        name: '腿部',
-        data: 50,
-      }, {
-        name: '肩部',
-        data: 50,
-      }, {
-        name: '手臂',
-        data: 46,
-      }],
-      width: windowWidth,
-      height: 200,
-      dataLabel: true
-    });
-    
-    
-
-    //绘制折线图
-    lineChart = new wxCharts({
-      canvasId: 'lineCanvas',
-      type: 'line',
-      categories: ['2020-08', '2020-09', '2020-10', '2020-11', '2020-12', '2021'],
-
-      series: [{
-          name: '胸部肌容量',
-          data: [5500, 5800, 6000, 6400, 6500, 6600],
-        }, {
-          name: '背部肌容量',
-          data: [6500, 7600, 8000, 8400, 8500, 8600],
-        },
-        {
-          name: '腿部肌容量',
-          data: [8000, 9000, 9500, 9800, 10000, 10005],
-        },
-        {
-          name: '手臂肌容量',
-          data: [4500, 4800, 5000, 5400, 6500, 6600],
-        },
-        {
-          name: '肩膀肌容量',
-          data: [5200, 5900, 6000, 6400, 7500, 7600],
-        }
-      ],
-      yAxis: {
-        format: function (val) {
-          return val;
-        }
-      },
-      width: 320,
-      height: 200,
-    });
-
 
   },
   onClick() {

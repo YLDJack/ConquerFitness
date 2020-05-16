@@ -51,6 +51,5 @@
     "navigationBarTitleText": "ConquerFitness",
     "navigationBarTextStyle": "black"
   },
-  "usingComponents": {},
   "sitemapLocation": "sitemap.json"
 }

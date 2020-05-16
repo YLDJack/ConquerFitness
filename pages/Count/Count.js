@@ -45,7 +45,7 @@ function initPieChart(canvas, width, height, dpr) {
 
   chart.setOption(option);
   return chart;
-}
+};
 
 //初始化折线图的方法
 function initlineChart(canvas, width, height, dpr) {
@@ -108,7 +108,7 @@ function initlineChart(canvas, width, height, dpr) {
 
   chart.setOption(option);
   return chart;
-}
+};
 
 Page({
 

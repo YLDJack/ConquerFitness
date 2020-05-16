@@ -115,11 +115,11 @@
 					<van-tab title="本周">
 						<view>总计训练：7次
 						</view>
-						<view class="container">
+						<cover-view class="container">
 							<!-- 线性表 -->
 							<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
 							</ec-canvas>
-						</view>
+						</cover-view>
 						<view>
 							<van-cell-group>
 								<van-cell title="胸部" is-link value="本周1次" arrow-direction="down">

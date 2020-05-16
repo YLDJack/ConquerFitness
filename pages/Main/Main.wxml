@@ -4,16 +4,16 @@
 	<!-- 问好 -->
 	<view class="sayhello">
 		<image src="../../image/smile.png"></image>
-		<text>早上好~</text>
+		<text>{{hello}}</text>
 	</view>
 	<!-- 日历 -->
 	<view hover-class='none' class="calendar-navigator">
 		<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
 	</view>
-	<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" />
+	<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" />
 	<!-- 当前日期 -->
 	<!-- <van-tag type="danger" plain size="large">当前日期</van-tag> -->
-	<van-tag type="danger" size="large">{{date}}</van-tag>
+	<van-tag type="danger" size="large" bindtap="showCalendar">{{date}}</van-tag>
 	<!-- 状态 -->
 	<view class="statetext">
 		<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
@@ -33,7 +33,9 @@
 
 
 <!-- 数据展示 -->
+<!-- 通告栏 -->
 <van-notice-bar left-icon="bullhorn-o" text="来康康本周的成果吧！" mode="closeable" />
+<!-- 数据展示区域 -->
 <view class="data-group">
 	<view class="scrollwenzi">
 		<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
@@ -69,22 +71,28 @@
 <view class="eccontainer line">
 	<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" type="2d" style="height:800rpx; width:100%;"></ec-canvas>
 </view> -->
+<view class="eccontainer">
+	<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
+</view>
+<view class="eccontainer line">
+	<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
+	</ec-canvas>
+</view>
 
 <!-- 数据表轮播 -->
 <swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
 	<swiper-item>
-		<!-- <canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx; width:100%;" bindtouchstart="linetouchHandler"></canvas> wxCharts画的图-->
 		<!-- echarts画的饼图 -->
-		<view class="eccontainer">
+		<!-- <view class="eccontainer">
 			<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
-		</view>
+		</view> -->
 	</swiper-item>
 
 	<swiper-item>
-		<view class="eccontainer line">
+		<!-- <view class="eccontainer line">
 			<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
 			</ec-canvas>
-		</view>
+		</view> -->
 	</swiper-item>
 </swiper>
 

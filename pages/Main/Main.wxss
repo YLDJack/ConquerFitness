@@ -155,6 +155,7 @@ background-color: #E8F4FB;
 .eccontainer {
   height: 400rpx;
   width: 100%;
+  z-index: -999;
 }
 .eccontainer line{
   height: 800rpx;

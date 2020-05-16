@@ -45,7 +45,7 @@ function initPieChart(canvas, width, height, dpr) {
 
   chart.setOption(option);
   return chart;
-}
+};
 
 //初始化折线图的方法
 function initlineChart(canvas, width, height, dpr) {
@@ -108,10 +108,13 @@ function initlineChart(canvas, width, height, dpr) {
 
   chart.setOption(option);
   return chart;
-}
+};
 
 Page({
   data: {
+    // 问候语
+    hello: "早上好",
+    // 当前时期
     pieec: {
       onInit: initPieChart
     },
@@ -204,7 +207,49 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {},
+  onLoad: function (options) {
+    //获取当前时间
+    this.setData({
+      date: utils.formatDate(new Date())
+    });
+    // 根据当前时间判断早上下午
+    const now = new Date();
+    const hour = now.getHours();
+    if (hour < 6) {
+     this.setData({
+       hello:"凌晨好！"
+     });
+    } else if (hour < 9) {
+     this.setData({
+       hello:"早上好！"
+     });
+    } else if (hour < 12) {
+     this.setData({
+       hello:"上午好！"
+     });
+    } else if (hour < 14) {
+     this.setData({
+       hello:"中午好！"
+     });
+    } else if (hour < 17) {
+     this.setData({
+       hello:"下午好！"
+     });
+    } else if (hour < 19) {
+     this.setData({
+       hello:"傍晚好！"
+     });
+    } else if (hour < 22) {
+     this.setData({
+       hello:"晚上好！"
+     });
+    } else {
+     this.setData({
+       hello:"夜里好！"
+     });
+    }
+
+  },
   onClick() {
     wx.navigateTo({
       url: '../TrainTemplate/TrainTemplate',

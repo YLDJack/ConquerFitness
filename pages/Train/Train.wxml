@@ -139,11 +139,11 @@
 
 				<!-- 趋势折线图 -->
 				<van-tab title="趋势">
-					<view class="container">
+					<cover-view class="container">
 					<!-- 线性表 -->
 						<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
 						</ec-canvas>
-					</view>
+					</cover-view>
 				</van-tab>
 
 				<van-tab title="备注">

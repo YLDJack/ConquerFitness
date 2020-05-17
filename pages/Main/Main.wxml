@@ -71,28 +71,22 @@
 <view class="eccontainer line">
 	<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" type="2d" style="height:800rpx; width:100%;"></ec-canvas>
 </view> -->
-<view class="eccontainer">
-	<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
-</view>
-<view class="eccontainer line">
-	<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
-	</ec-canvas>
-</view>
 
 <!-- 数据表轮播 -->
 <swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
 	<swiper-item>
 		<!-- echarts画的饼图 -->
-		<!-- <view class="eccontainer">
+		<view class="eccontainer">
 			<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
-		</view> -->
+		</view>
 	</swiper-item>
 
 	<swiper-item>
-		<!-- <view class="eccontainer line">
+	<!-- echarts线图 -->
+		<view class="eccontainer line">
 			<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
 			</ec-canvas>
-		</view> -->
+		</view>
 	</swiper-item>
 </swiper>
 

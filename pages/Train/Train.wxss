@@ -30,19 +30,19 @@
   width: 500rpx;
 }
 
-/* slide部分 */
+/* slide部分
 .slideBar {
   float: left;
 }
 
 .slideBar .van-sidebar-item {
   height: 95rpx;
-}
+} */
 
-/* mid部分 */
+/* mid部分
 .mid {
   margin-left: 175rpx;
-}
+} */
 
 /* 添加动作的弹出层 */
 .addpop {
@@ -65,4 +65,7 @@ ec-canvas {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
+}
+.mid {
+  height: 1000rpx;
 }

@@ -73,6 +73,73 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // treeselect--左侧选中项的索引属性
+    mainActiveIndex: 0,
+    // treeselect--右侧选中项的 id，支持传入数组
+    activeId: [],
+    // items 数据结构
+    items: [{
+        // 导航名称
+        text: '胸部',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '背部',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '肩部',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '二头',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '三头',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '大腿',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '小腿',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '核心',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '臀部',
+        // 禁用选项
+        disabled: false,
+      },
+      {
+        // 导航名称
+        text: '有氧',
+        // 禁用选项
+        disabled: false,
+      }
+    ],
+    // 分类类型
     cateOption: [{
         text: '按部位',
         value: 0
@@ -87,6 +154,7 @@ Page({
     catevalue: 0,
     slideKey: 0,
     imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
+    imageURL1: "http://img.mp.itc.cn/upload/20170614/bc0dfeca1f694952bd35859136227b98_th.jpg",
     //展示动作界面
     showText: false,
     //展示添加动作界面
@@ -97,6 +165,33 @@ Page({
     lineec: {
       onInit: initlineChart
     }
+  },
+  //treeselect 左侧导航点击方法 
+  onClickNav({
+    detail = {}
+  }) {
+    this.setData({
+      mainActiveIndex: detail.index || 0
+    });
+  },
+  //treeselect 右侧item点击方法（具体行为完全基于事件 click-item 的实现逻辑如何为属性 active-id 赋值，当 active-id 为数组时即为多选状态。）
+  onClickItem({
+    detail = {}
+  }) {
+    const {
+      activeId
+    } = this.data;
+
+    const index = activeId.indexOf(detail.id);
+    if (index > -1) {
+      activeId.splice(index, 1);
+    } else {
+      activeId.push(detail.id);
+    }
+
+    this.setData({
+      activeId
+    });
   },
   // 添加动作跳转事件
   showAdd() {

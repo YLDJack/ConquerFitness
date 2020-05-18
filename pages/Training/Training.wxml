@@ -67,6 +67,6 @@
 </van-collapse>
 
 <van-tabbar>
-	<van-tabbar-item icon="add">添加动作</van-tabbar-item>
-	<van-tabbar-item icon="bars">模板训练</van-tabbar-item>
+	<van-tabbar-item icon="add" bind:click="addTrain">添加动作</van-tabbar-item>
+	<van-tabbar-item icon="bars" bind:click="showTem">模板训练</van-tabbar-item>
 </van-tabbar>

@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "动作统计",
   "usingComponents": {
+    "ec-canvas": "../../ec-canvas/ec-canvas",
     "van-tab": "@vant/weapp/tab/index",
     "van-tabs": "@vant/weapp/tabs/index",
     "van-collapse": "@vant/weapp/collapse/index",

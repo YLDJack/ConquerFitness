@@ -60,6 +60,7 @@ background-color: #E8F4FB;
 .sayhello{
   margin-left: 35rpx;
   margin-right: 20rpx;
+}
 .top .statetext {
   display: flex;
   align-items: center;

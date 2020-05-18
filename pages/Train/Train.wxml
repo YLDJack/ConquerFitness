@@ -15,7 +15,7 @@
 				<text>保存</text>
 			</view>
 			<!-- 添加动作弹出层中间输入界面 -->
-			<van-field icon="../../image/icon_train_selected.png" placeholder="请输入动作名称" required clickable="false" />
+			<van-field icon="../../../../image/icon_train_selected.png" placeholder="请输入动作名称" required clickable="false" />
 			<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange" clickable="true">
 
 				<!-- 动作类型 -->

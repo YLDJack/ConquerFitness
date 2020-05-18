@@ -16,7 +16,7 @@ background-color: #E8F4FB;
   /* padding: 20rpx; */
   width: 10%;
   height: 70rpx;
-  margin-left: 35rpx;
+  margin-left: 50rpx;
 }
 
 .calendar-navigator .calendar-image{
@@ -24,12 +24,17 @@ background-color: #E8F4FB;
   height: 60rpx;
 }
 
-.top .statetext{
+.statetext{
   display: flex;
   align-items: center;
   height: 100%;
-  margin-left: 120rpx;
+  margin-left: 15rpx;
+  margin-right: 20rpx;
 
+}
+
+.van-tag--primary{
+  width: 90rpx;
 }
 
 .coltwo{
@@ -38,9 +43,9 @@ background-color: #E8F4FB;
   align-items: center;
 }
 
-.coltwo .sayhello{
+.sayhello{
   margin-left: 35rpx;
-  margin-right: 10rpx;
+  margin-right: 20rpx;
   display: flex;
   align-items: center;
   width: 40%;
@@ -58,9 +63,10 @@ background-color: #E8F4FB;
 }
 
 .coltwo .startbutton{
-  padding-left: 10rpx;
-  padding-right: 30rpx;
-  width: 60%;
+  /* padding-left: 10rpx;
+  padding-right: 30rpx; */
+  width: 50%;
+  margin-left: 50rpx;
 }
 
 .startbutton .van-button--danger {

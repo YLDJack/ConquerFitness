@@ -9,11 +9,11 @@
 		<van-search value="{{ searchText }}" placeholder="请输入搜索关键词" />
 		<van-icon name="add" color="red" size="50rpx" bind:click="showAdd" />
 		<!-- 添加动作弹出层部分 必须放在点击按钮的下方-->
-		<van-popup show="{{ showAddPop }}" bind:close="onAddClose" custom-class="addpop" position="bottom">
+		<van-popup show="{{ showAddPop }}" closeable bind:close="onAddClose" custom-class="addpop" position="bottom">
 			<!-- 添加动作弹出层首部按钮界面 -->
-			<view>
-				<van-icon name="cross" />
-				<text>保存</text>
+			<view class="closeandsave">
+				<!-- <van-icon name="cross" /> -->
+				<text class="savetext">保存</text>
 			</view>
 			<!-- 添加动作弹出层中间输入界面 -->
 			<van-field icon="../../../../image/icon_train_selected.png" placeholder="请输入动作名称" required clickable="false" />

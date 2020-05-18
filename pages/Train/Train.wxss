@@ -69,3 +69,9 @@ ec-canvas {
 .mid {
   height: 1000rpx;
 }
+
+.closeandsave{
+  padding: 25rpx;
+  /* display: flex;
+  justify-content: space-between; */
+}

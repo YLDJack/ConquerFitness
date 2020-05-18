@@ -1,1 +1,35 @@
-/* pages/Training/Training.wxss */
+.van-count-down{
+  margin-left: 20rpx;
+}
+
+.text_progress{
+  margin-left: 20rpx;
+}
+
+.titleandweight{
+  margin-left: 20rpx;
+}
+.titleandweight .label{
+  font-size: 24rpx;
+  color: rgb(146, 144, 144);
+}
+
+.drop2{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drop2 .van-count-down{
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+
+.drop2 .van-button{
+  margin-left: 25rpx;
+  margin-top: 10rpx;
+}
+
+.edit{
+  margin-left: 30rpx;
+}

@@ -4,7 +4,7 @@
 	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit">
 		<text slot="right-icon" >8个动作 5000容量</text>
 	</van-field>
-	<view>本次训练进度:
+	<view class="text_progress">本次训练进度:
 		<van-progress percentage="50" stroke-width="8" />
 	</view>
 	<!-- <van-rate value="{{ value }}" size="{{ 25 }}" allow-half color="#ee0a24" void-color="#eee" void-icon="star" bind:change="onChange" /> -->
@@ -12,9 +12,11 @@
 <van-divider />
 
 <van-collapse value="{{ activeNames }}" bind:change="onCollChange">
-	<van-collapse-item name="1" label="1组 80/400 容量">
+	<van-collapse-item name="1">
+		<!-- label="1组 80/400 容量" -->
+
 		<!-- 名字和最大重量区域 -->
-		<view slot="title">
+		<view slot="title" class="titleandweight">
 			<text>杠铃卧推</text>
 			<view>
 				<van-tag plain type="primary"> 最大容量：</van-tag>
@@ -24,10 +26,11 @@
 				<van-tag type="danger">20KG</van-tag>
 				<van-circle value="{{ 125 }}" color="{{ gradientColor }}" size="20" layer-color="#eee" />
 			</view>
+			<label class="label">1组 80/400 容量</label>
 		</view>
 
 		<!-- 使用slot插槽显示图片 -->
-		<view slot="icon">
+		<view slot="icon" class="icon">
 			<image src="http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif" style="width:100rpx;height:100rpx;border-radius:50rpx"></image>
 		</view>
 		<view slot="value">
@@ -45,12 +48,17 @@
 			</van-field>
 			<van-field label="组数（次）:">
 			</van-field>
-			<van-count-down time="{{ time }}" format="mm 分 ss 秒" />
-			<van-button icon="success" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" />
-			<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" />
+			<view class="drop2">
+				<van-count-down time="{{ time }}" format="mm 分 ss 秒" />
+				<view>
+					<van-button icon="success" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" />
+					<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" />
+				</view>
+			</view>
+
 		</view>
 
-		<view>
+		<view class="edit">
 			<text>+</text>
 			<text>编辑</text>
 		</view>

@@ -8,6 +8,7 @@ Page({
     checked: true,
     checked_countdown: true,
     checked_weightlbs: true,
+    checked_weightkg: false,
     checked_selfnext: true
   },
   

@@ -113,7 +113,7 @@
 			<van-tab title="周">
 				<van-tabs swipeable animated color="black" border="true">
 					<van-tab title="本周">
-						<view>总计训练：7次
+						<view class="totaltrain">总计训练：7次
 						</view>
 						<cover-view class="container">
 							<!-- 线性表 -->

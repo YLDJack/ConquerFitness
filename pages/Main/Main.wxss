@@ -12,22 +12,7 @@ background-color: #E8F4FB;
   align-items: center;
 }
 
-.sayhello {
-  margin-left: 35rpx;
-  margin-right: 20rpx;
-  font-weight: bold;
-  font-size: 36rpx;
-  color: rgb(107, 105, 105);
-  align-items: center;
-}
-
-.sayhello image {
-  width: 60rpx;
-  height: 50rpx;
-  margin-right: 10rpx;
-}
-
-.calendar-navigator {
+.calendar-navigator{
   /* padding: 20rpx; */
   width: 10%;
   height: 70rpx;
@@ -45,6 +30,7 @@ background-color: #E8F4FB;
   height: 100%;
   margin-left: 15rpx;
   margin-right: 20rpx;
+
 }
 
 .van-tag--primary{
@@ -60,8 +46,6 @@ background-color: #E8F4FB;
 .sayhello{
   margin-left: 35rpx;
   margin-right: 20rpx;
-}
-.top .statetext {
   display: flex;
   align-items: center;
   width: 40%;

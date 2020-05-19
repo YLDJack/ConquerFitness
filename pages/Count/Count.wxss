@@ -26,3 +26,7 @@ ec-canvas {
   margin-left: 150rpx;
   color: blueviolet;
 }
+
+.totaltrain{
+  margin: 30rpx;
+}

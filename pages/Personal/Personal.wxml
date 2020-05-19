@@ -1,7 +1,13 @@
 <!--头像-->
-<view class="avatar">
+<!-- <view class="avatar">
   <image class="a" src="{{userInfoAvatar}}"/>
   <view class="nickName">{{nickName}}</view>
+</view> -->
+<view class="userinfo">
+  <view class="userinfo-avatar">
+    <open-data  type="userAvatarUrl"></open-data>
+  </view>
+    <open-data type="userNickName"></open-data>
 </view>
 
 <!-- 身体数据图表页面跳转 -->

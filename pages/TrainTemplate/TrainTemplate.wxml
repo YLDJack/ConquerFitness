@@ -3,9 +3,41 @@
 
 <!-- 页面顶部 -->
 <view>
-	<van-cell title="我的模板" label="共6套模板" border="{{ false }}">
+	<van-cell title="我的计划" label="共6套计划" border="{{ false }}">
 		<view slot="right-icon">
-			<van-icon name="more" color="red" type="200rpx" />
+			<van-icon name="more" color="red" size="50rpx" bind:click="showPopup" />
+			<van-popup show="{{ showPop }}" bind:close="onClose" position="bottom">
+				<van-cell-group>
+					<van-cell title="添加计划" center="true" clickable="true" bind:click="addPlan" />
+					<van-popup show="{{ addPlanshow }}" bind:close="addPlanonClose" position="bottom" custom-class="addpop" closeable="true">
+						<!-- 添加动作弹出层首部按钮界面 -->
+						<view class="closeandsave">
+							<!-- <van-icon name="cross" /> -->
+							<text class="savetext">保存</text>
+						</view>
+						<!-- 添加动作弹出层中间输入界面 -->
+						<van-field icon="../../../../image/icon_train_selected.png" placeholder="请输入计划名称" required clickable="false" />
+						<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange" clickable="true">
+							<!-- 训练类型类型 -->
+							<van-collapse-item title="训练类型" name="1" right-icon="arrow" value="力量训练+有氧训练">
+								<van-cell title="力量训练" />
+								<van-cell title="有氧训练" />
+								<van-cell title="HIIT" />
+							</van-collapse-item>
+
+							<!-- 训练器材 -->
+							<van-collapse-item title="涉及部位" name="2" right-icon="arrow" value="胸部+背部">
+								<van-cell title="胸部" />
+								<van-cell title="背部" />
+								<van-cell title="腿部" />
+							</van-collapse-item>
+						</van-collapse>
+					</van-popup>
+					<van-cell title="删除计划" center="true" clickable="true" />
+					<van-cell title="搜索计划" center="true" clickable="true" />
+					<van-cell title="分享计划" center="true" clickable="true" />
+				</van-cell-group>
+			</van-popup>
 		</view>
 	</van-cell>
 </view>
@@ -14,9 +46,9 @@
 <view>
 	<van-grid gutter="{{ 10 }}" column-num="1">
 		<view>已有模板</view>
-		<van-grid-item wx:for="{{ 2 }}" info="1次"  use-slot>
+		<van-grid-item wx:for="{{ 2 }}" info="1次" use-slot>
 			<!-- 模板卡片 -->
-      <van-card thumb="{{ imageURL }}" title="胸与三头" desc="系统地训练全身">
+			<van-card thumb="{{ imageURL }}" title="胸与三头" desc="系统地训练全身">
 				<!-- 卡片底部标签和展示按钮部分 -->
 				<view slot="footer">
 					<van-tag type="danger" size="large">胸部</van-tag>

@@ -6,8 +6,38 @@ Page({
    */
   data: {
     imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
+    // 操作弹出层
+    showPop: false,
+    // 添加计划弹出层
+    addPlanshow: false,
+    // 添加计划中选择动作类型的折叠列表
+    collactiveNames: ['0']
   },
-
+  onCollChange(event) {
+    this.setData({
+      collactiveNames: event.detail
+    });
+  },
+  showPopup() {
+    this.setData({
+      showPop: true
+    });
+  },
+  addPlan() {
+    this.setData({
+      addPlanshow: true
+    });
+  },
+  addPlanonClose() {
+    this.setData({
+      addPlanshow: false
+    });
+  },
+  onClose() {
+    this.setData({
+      showPop: false
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */

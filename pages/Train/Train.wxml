@@ -57,6 +57,7 @@
 					<van-cell title="自重" />
 				</van-collapse-item>
 			</van-collapse>
+			
 		</van-popup>
 
 	</view>

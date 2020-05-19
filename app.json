@@ -10,7 +10,8 @@
     "pages/logs/logs",
     "pages/ActionDesc/ActionDesc",
     "pages/Training/Training",
-    "pages/TrainTemplate/TrainTemplate"
+    "pages/TrainTemplate/TrainTemplate",
+    "pages/ActionAdd/ActionAdd"
   ],
   "tabBar": {
     "custom": true,

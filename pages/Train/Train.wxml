@@ -63,22 +63,6 @@
 	</view>
 </view>
 
-<!-- 侧边导航 （切换改为TreeSelec 参考文档：https://vant-contrib.gitee.io/vant-weapp/#/tree-select）
-<view class="slideBar">
-	<van-sidebar active-key="{{ slideKey }}" bind:change="onSlideChange">
-		<van-sidebar-item title="胸部" />
-		<van-sidebar-item title="肩部" />
-		<van-sidebar-item title="背部" />
-		<van-sidebar-item title="二头" />
-		<van-sidebar-item title="三头" />
-		<van-sidebar-item title="核心" />
-		<van-sidebar-item title="大腿" />
-		<van-sidebar-item title="小腿" />
-		<van-sidebar-item title="臀部" />
-		<van-sidebar-item title="有氧" />
-	</van-sidebar>
-</view> -->
-
 <view class="mid">
 	<!-- treeselect动作分类选择 -->
 	<van-tree-select items="{{ items }}" main-active-index="{{ mainActiveIndex }}" active-id="{{ activeId }}" bind:click-nav="onClickNav" bind:click-item="onClickItem" main-item-class="treeselect">

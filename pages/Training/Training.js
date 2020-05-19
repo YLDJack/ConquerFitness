@@ -23,7 +23,7 @@ Page({
   // 添加动作跳转
   addTrain() {
     wx.navigateTo({
-      url: '../TrainTemplate/TrainTemplate',
+      url: '../ActionAdd/ActionAdd',
     })
   },
   //模板训练跳转

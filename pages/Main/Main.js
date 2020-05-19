@@ -1,6 +1,8 @@
 // pages/Main/Main.js
 import * as echarts from '../../ec-canvas/echarts';
+var WxParse = require('../../wxParse/wxParse.js');
 var utils = require('../../utils/util');
+var that = this;
 const app = getApp();
 
 // 初始化饼图的方法
@@ -166,7 +168,8 @@ Page({
           day.bottomInfo = '4786';
           // var info = "<van-tag type='danger' plain >胸</van-tag>";
           // day.bottomInfo = document.write("<van-tag type='danger' plain >胸</van-tag>");
-
+          // var tag = "<van-tag type='danger' plain >胸</van-tag>";
+          // day.topInfo = WxParse.wxParse('topInfo', 'html', tag, that);
         }
       }
       return day;
@@ -204,6 +207,11 @@ Page({
       url: "../Training/Training",
     })
   },
+  showPlan() {
+    wx.navigateTo({
+      url: "../TrainTemplate/TrainTemplate",
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -216,37 +224,37 @@ Page({
     const now = new Date();
     const hour = now.getHours();
     if (hour < 6) {
-     this.setData({
-       hello:"凌晨好！"
-     });
+      this.setData({
+        hello: "凌晨好！"
+      });
     } else if (hour < 9) {
-     this.setData({
-       hello:"早上好！"
-     });
+      this.setData({
+        hello: "早上好！"
+      });
     } else if (hour < 12) {
-     this.setData({
-       hello:"上午好！"
-     });
+      this.setData({
+        hello: "上午好！"
+      });
     } else if (hour < 14) {
-     this.setData({
-       hello:"中午好！"
-     });
+      this.setData({
+        hello: "中午好！"
+      });
     } else if (hour < 17) {
-     this.setData({
-       hello:"下午好！"
-     });
+      this.setData({
+        hello: "下午好！"
+      });
     } else if (hour < 19) {
-     this.setData({
-       hello:"傍晚好！"
-     });
+      this.setData({
+        hello: "傍晚好！"
+      });
     } else if (hour < 22) {
-     this.setData({
-       hello:"晚上好！"
-     });
+      this.setData({
+        hello: "晚上好！"
+      });
     } else {
-     this.setData({
-       hello:"夜里好！"
-     });
+      this.setData({
+        hello: "夜里好！"
+      });
     }
 
   },

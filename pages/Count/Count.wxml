@@ -15,39 +15,38 @@
 							<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
 							<!-- 下方动作详情页 -->
 						</view>
-						<van-collapse value="{{ activeNames }}" bind:change="onCollChange">
-							<van-collapse-item title="胸部" name="1" value="本周1次">
-								<!-- 详情动作卡片 -->
-								<van-card title="杠铃卧推" thumb="{{ imageURL }}" thumb-link="../ActionDesc/ActionDesc">
-									<view slot="footer">
-										<van-icon name="arrow" bind:click="showDesc" />
-									</view>
-									<!-- 数据区域 -->
-									<view slot="bottom">
-										<view>本周组数
-											<text>10</text>
-										</view>
-										<view>本周容量
-											<text>3000</text>
-										</view>
-									</view>
-								</van-card>
-							</van-collapse-item>
-
-							<van-collapse-item title="背部" name="2" value="本周1次">
-							</van-collapse-item>
-
-							<van-collapse-item title="腿部" name="3" value="本周1次">
-							</van-collapse-item>
-
-							<van-collapse-item title="肩部" name="4" value="本周1次">
-							</van-collapse-item>
-
-							<van-collapse-item title="手臂" name="5" value="本周1次">
-							</van-collapse-item>
-						</van-collapse>
 						<view>
+							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">
+								<van-collapse-item title="胸部" name="1" value="本周1次">
+									<!-- 详情动作卡片 -->
+									<van-card title="杠铃卧推" thumb="{{ imageURL }}" thumb-link="../ActionDesc/ActionDesc">
+										<view slot="footer">
+											<van-icon name="arrow" bind:click="showDesc" />
+										</view>
+										<!-- 数据区域 -->
+										<view slot="bottom">
+											<view>本周组数
+												<text>10</text>
+											</view>
+											<view>本周容量
+												<text>3000</text>
+											</view>
+										</view>
+									</van-card>
+								</van-collapse-item>
 
+								<van-collapse-item title="背部" name="2" value="本周1次">
+								</van-collapse-item>
+
+								<van-collapse-item title="腿部" name="3" value="本周1次">
+								</van-collapse-item>
+
+								<van-collapse-item title="肩部" name="4" value="本周1次">
+								</van-collapse-item>
+
+								<van-collapse-item title="手臂" name="5" value="本周1次">
+								</van-collapse-item>
+							</van-collapse>
 						</view>
 					</van-tab>
 					<van-tab title="上周">
@@ -117,22 +116,42 @@
 						</view>
 						<cover-view class="container">
 							<!-- 线性表 -->
-							<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
-							</ec-canvas>
+							<!-- <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
+							</ec-canvas> -->
+							<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
 						</cover-view>
 						<view>
-							<van-cell-group>
-								<van-cell title="胸部" is-link value="本周1次" arrow-direction="down">
-								</van-cell>
-								<van-cell title="背部" is-link value="本周1次" arrow-direction="down">
-								</van-cell>
-								<van-cell title="肩部" is-link value="本周1次" arrow-direction="down">
-								</van-cell>
-								<van-cell title="腿部" is-link value="本周1次" arrow-direction="down">
-								</van-cell>
-								<van-cell title="手臂" is-link value="本周1次" arrow-direction="down">
-								</van-cell>
-							</van-cell-group>
+							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">
+								<van-collapse-item title="胸部" name="1" value="本周1次">
+									<!-- 详情动作卡片 -->
+									<van-card title="杠铃卧推" thumb="{{ imageURL }}" thumb-link="../ActionDesc/ActionDesc">
+										<view slot="footer">
+											<van-icon name="arrow" bind:click="showDesc" />
+										</view>
+										<!-- 数据区域 -->
+										<view slot="bottom">
+											<view>本周组数
+												<text>10</text>
+											</view>
+											<view>本周容量
+												<text>3000</text>
+											</view>
+										</view>
+									</van-card>
+								</van-collapse-item>
+
+								<van-collapse-item title="背部" name="2" value="本周1次">
+								</van-collapse-item>
+
+								<van-collapse-item title="腿部" name="3" value="本周1次">
+								</van-collapse-item>
+
+								<van-collapse-item title="肩部" name="4" value="本周1次">
+								</van-collapse-item>
+
+								<van-collapse-item title="手臂" name="5" value="本周1次">
+								</van-collapse-item>
+							</van-collapse>
 						</view>
 					</van-tab>
 					<van-tab title="上周">

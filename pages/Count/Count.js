@@ -12,7 +12,7 @@ function initPieChart(canvas, width, height, dpr) {
   });
   canvas.setChart(chart);
 
-  var option = {
+  const option = {
     backgroundColor: "#ffffff",
     color: ["#37A2DA", "#32C5E9", "#67E0E3", "#91F2DE", "#FFDB5C", "#FF9F7F"],
     series: [{
@@ -49,6 +49,7 @@ function initPieChart(canvas, width, height, dpr) {
 
 //初始化折线图的方法
 function initlineChart(canvas, width, height, dpr) {
+
   const chart = echarts.init(canvas, null, {
     width: width,
     height: height,
@@ -56,7 +57,7 @@ function initlineChart(canvas, width, height, dpr) {
   });
   canvas.setChart(chart);
 
-  var option = {
+  const option = {
     color: ["#37A2DA", "#67E0E3", "#9FE6B8"],
     legend: {
       data: ['胸部', '背部', '腿部'],

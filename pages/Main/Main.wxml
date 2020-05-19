@@ -1,0 +1,117 @@
+<!--index.wxml-->
+<!-- 开始按钮一栏 -->
+<van-button squre type="primary" block bind:click="navigateToAdd">新增数据</van-button>
+<view class="top">
+	<!-- 问好 -->
+	<view class="sayhello">
+		<image src="../../image/smile.png"></image>
+		<text class="sayhellotext">{{hello}}</text>
+	</view>
+	
+	<!-- 日历 -->
+	<view hover-class='none' class="calendar-navigator">
+		<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
+	</view>
+	<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" />
+	<!-- 当前日期 -->
+	<!-- <van-tag type="danger" plain size="large">当前日期</van-tag> -->
+	<van-tag type="danger" size="large" bindtap="showCalendar">{{date}}</van-tag>
+</view>
+
+<view class="coltwo">
+	<!-- 状态 -->
+	<view class="statetext">
+		<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
+		<van-tag type="primary" size="large">增肌</van-tag>
+	</view>
+	<view class="startbutton">
+		<van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large" block>开始训练</van-button>
+	</view>
+</view>
+<!-- <calendar is-calendar-show="{{isCalendarShow}}" mark="{{calendarMark}}" format="1" /> -->
+
+<!-- 数据展示 -->
+<!-- 通告栏 -->
+<van-notice-bar left-icon="bullhorn-o" text="来康康本周的成果吧！" mode="closeable" />
+<!-- 数据展示区域 -->
+<view class="data-group">
+	<view class="scrollwenzi">
+		<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+			<swiper-item>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">有氧运动时长(分钟)</view>
+					<view class="wenzi">300</view>
+				</view>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">肌肉容量</view>
+					<view class="wenzi">3000</view>
+				</view>
+			</swiper-item>
+
+			<swiper-item>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">消耗(千卡)</view>
+					<view class="wenzi">1500</view>
+				</view>
+				<view class="wenziframe" style="opacity:0.5">
+					<view class="wenzi">体重增长(KG)</view>
+					<view class="wenzi">-1</view>
+				</view>
+			</swiper-item>
+		</swiper>
+	</view>
+</view>
+
+<!-- <view class="eccontainer">
+	<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}" type="2d"></ec-canvas>
+</view>
+
+<view class="eccontainer line">
+	<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" type="2d" style="height:800rpx; width:100%;"></ec-canvas>
+</view> -->
+
+<!-- 数据表轮播 -->
+<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+	<swiper-item>
+		<!-- echarts画的饼图 -->
+		<view class="eccontainer">
+			<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
+		</view>
+	</swiper-item>
+
+	<swiper-item>
+	<!-- echarts线图 -->
+		<view class="eccontainer line">
+			<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
+			</ec-canvas>
+		</view>
+	</swiper-item>
+</swiper>
+
+<!-- 练习推荐 -->
+<view class="quickitems">
+	<view class="text">练习推荐</view>
+	<scroll-view class="module-scroll" scroll-x="{{true}}">
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+	</scroll-view>
+</view>

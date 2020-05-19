@@ -1,0 +1,97 @@
+<!--头像-->
+<view class="avatar">
+  <image class="a" src="{{userInfoAvatar}}"/>
+  <view class="nickName">{{nickName}}</view>
+</view>
+
+<!-- 身体数据图表页面跳转 -->
+<van-cell
+  is-link
+  icon="../../../../image/look.png"
+  title="查看健康数据图表"
+  link-type="navigateTo"
+  url="/pages/Personal_data/Personal_data"
+/>
+
+<!-- 弹出层 -->
+<van-cell title="体重" icon="../../../../image/record.png" is-link bind:click="showPopup_weight" />
+<van-popup show="{{ showweight }}" round closeable custom-style="height: 30%;" bind:close="onClose_weight">
+  <view class="obtaindate">{{date}}</view>
+  <view class="items">
+    <view>体重(kg)：</view>
+    <van-stepper value="{{ 20 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="confirm" bindtap="onConfirm">确定</view>
+</van-popup>
+
+<van-cell title="体脂" icon="../../../../image/record.png" is-link bind:click="showPopup_tizhi" />
+<van-popup show="{{ showtizhi }}" round closeable custom-style="height: 30%;" bind:close="onClose_tizhi">
+  <view class="obtaindate">{{date}}</view>
+  <view class="items">
+    <view>体脂(%)：</view>
+    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="confirm" bindtap="onConfirm">确定</view>
+</van-popup>
+
+<van-cell title="臀围" icon="../../../../image/record.png" is-link bind:click="showPopup_hip" />
+<van-popup show="{{ showhipline }}" round closeable custom-style="height: 30%;" bind:close="onClose_hip">
+  <view class="obtaindate">{{date}}</view>
+  <view class="items">
+    <view>臀围(cm)：</view>
+    <van-stepper value="{{ 5 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="confirm" bindtap="onConfirm">确定</view>
+</van-popup>
+
+<van-cell title="腿围" icon="../../../../image/record.png" is-link bind:click="showPopup_legs" />
+<van-popup show="{{ showlegs }}" round closeable custom-style="height: 40%;" bind:close="onClose_legs">
+  <view class="obtaindate">{{date}}</view>
+  <view class="items_leg">
+    <view>大腿(cm)：</view>
+    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="items_leg">
+    <view>小腿(cm)：</view>
+    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+  </view>
+  <view class="confirm" bindtap="onConfirm">确定</view>
+</van-popup>
+
+<van-cell title="锻炼状态" icon="../../../../image/status.png" is-link value="增肌" bind:click="showPopup_statu" />
+<van-popup show="{{ showstatu }}" position="bottom" custom-style="height: 40%;" bind:close="onClose_statu">
+  <van-picker columns="{{ columns }}" default-index="{{ 1 }}" show-toolbar title="锻炼状态" bind:change="onChange" bind:cancel="onCancel"
+  bind:confirm="onConfirm" />
+  <van-toast id="van-toast" />
+</van-popup>
+
+<van-cell
+  icon="../../../../image/setting.png"
+  is-link
+  title="训练设置"
+  link-type="navigateTo"
+  url="/pages/setPreferences/setPreferences"
+/>
+
+<van-cell
+  icon="../../../../image/feedback.png"
+  is-link
+  title="意见反馈"
+  link-type="navigateTo"
+  url="/pages/Feedback/Feedback"
+/>
+
+<!-- 分享 -->
+<button open-type='share' id="btnld" style="display:hidden"></button>
+<label for="btnld" style="z-index:99; height:76rpx">
+  <van-cell title="分享" icon="../../../../image/share.png" is-link bind:click="showPopup" />
+</label>
+
+<!-- <van-cell
+  icon="../../../../image/about.png"
+  is-link
+  title="关于ConquerFitness"
+  link-type="navigateTo"
+  url="/pages/About/about"
+/> -->
+

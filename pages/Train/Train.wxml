@@ -57,7 +57,7 @@
 					<van-cell title="自重" />
 				</van-collapse-item>
 			</van-collapse>
-			
+
 		</van-popup>
 
 	</view>
@@ -73,21 +73,21 @@
 			<!-- 胸部 -->
 			<van-grid gutter="{{ 10 }}" column-num="2" wx:if="{{mainActiveIndex==0}}">
 				<view>杠铃</view>
-				<van-grid-item icon="{{ imageURL }}" text="杠铃卧推" wx:for="{{ 10 }}" info="1次" bind:click="showPopup">
+				<van-grid-item bind:click="showPopup" wx:for="{{queryActionResult}}" wx:key="_id" text="{{item.actionName}}" icon="{{item.actionImage}}">
 				</van-grid-item>
 				<!-- 弹出层部分 必须放在点击按钮的下方-->
 				<van-popup show="{{ showText }}" bind:close="onClose">
 					<!-- 详情通过弹出层tabs展示 -->
-					<view style="margin-down:20rpx">杠铃卧推</view>
+					<view style="margin-down:20rpx">{{item.actionName}}</view>
 					<!-- 弹出层Tabs -->
 					<van-tabs type="card" style="margin-up:20rpx">
 						<!-- 详情tab -->
 						<van-tab title="详情">
 							<!-- 动作卡片 -->
-							<van-card>
+							<van-card wx:for="{{queryActionResult}}" wx:key="_id">
 								<!-- 图片部分 -->
 								<view slot="title">
-									<image src="{{ imageURL }}"></image>
+									<image src="{{item.actionImage}}"></image>
 								</view>
 								<!-- 描述部分 -->
 								<view slot="desc" style="margin-top:20rpx">
@@ -98,14 +98,13 @@
 								<view slot="bottom">
 									<view style="margin-top:20rpx">
 										<text>训练部位：</text>
-										<van-tag type="danger" size="large" style="margin-right:20rpx">胸</van-tag>
-										<van-tag type="danger" size="large" style="margin-right:20rpx">三头</van-tag>
-										<van-tag type="danger" size="large" style="margin-right:20rpx">三角肌前束</van-tag>
+										<van-tag type="danger" size="large" style="margin-right:20rpx">{{item.actionArea}}</van-tag>
+										<van-tag type="danger" size="large" style="margin-right:20rpx">{{item.actionSub}}</van-tag>
 									</view>
 
 									<view style="margin-top:20rpx">
 										<text>训练器材：</text>
-										<van-tag type="primary" size="large">杠铃</van-tag>
+										<van-tag type="primary" size="large">{{item.actionEquipment}}</van-tag>
 									</view>
 
 									<view style="margin-top:20rpx">

@@ -1,6 +1,6 @@
 <!--pages/Count.wxml  统计页面-->
 <!-- 图标类型选项卡  active默认值为0当前选中标签的标识符-->
-<van-tabs animated color="black">
+<van-tabs color="black">
 	<van-tab title="部位分布">
 		<!-- 顶级时间选项卡 -->
 		<van-tabs type="card" animated>
@@ -21,7 +21,7 @@
 									<!-- 详情动作卡片 -->
 									<van-card title="杠铃卧推" thumb="{{ imageURL }}" thumb-link="../ActionDesc/ActionDesc">
 										<view slot="footer">
-											<van-icon name="arrow" bind:click="showDesc" />
+											<van-icon name="arrow" bind:click="showDesc" />							
 										</view>
 										<!-- 数据区域 -->
 										<view slot="bottom">
@@ -105,7 +105,7 @@
 
 	</van-tab>
 
-	<van-tab title="训练量趋势" animated>
+	<van-tab title="训练量趋势">
 		<!-- 顶级时间选项卡 swipeable可滑动的-->
 		<van-tabs type="card" animated>
 			<!-- 第二级时间选项卡 swipeable可滑动的-->
@@ -116,9 +116,8 @@
 						</view>
 						<cover-view class="container">
 							<!-- 线性表 -->
-							<!-- <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
-							</ec-canvas> -->
-							<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
+							<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
+							</ec-canvas>
 						</cover-view>
 						<view>
 							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">

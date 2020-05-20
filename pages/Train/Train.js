@@ -73,6 +73,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    queryActionResult: [],
     // treeselect--左侧选中项的索引属性
     mainActiveIndex: 0,
     // treeselect--右侧选中项的 id，支持传入数组
@@ -166,6 +167,29 @@ Page({
       onInit: initlineChart
     }
   },
+  // 从云数据库查询动作
+  async onQueryAction() {
+    wx.cloud.init();
+    const db = wx.cloud.database()
+    // 查询当前用户所有的 counters
+    await db.collection('actions').where({
+      _id: "e2297d935ec2a7ac00d694d4662b9ee1"
+    }).get({
+      success: res => {
+        this.setData({
+          queryActionResult: res.data
+        })
+        console.log('[数据库] [查询记录] 成功: ', this.data.queryActionResult)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('[数据库] [查询记录] 失败：', err)
+      }
+    })
+  },
   //treeselect 左侧导航点击方法 
   onClickNav({
     detail = {}
@@ -240,7 +264,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.onQueryAction();
   },
 
   /**

@@ -91,27 +91,34 @@
 								</view>
 								<!-- 描述部分 -->
 								<view slot="desc" style="margin-top:20rpx">
+									<!-- 根据动作描述数组逐个渲染 -->
 									<view>动作描述：</view>
-									<text>从器械架上抓取杠铃，屈肘，使杠铃下降至上胸部，向下推举杠铃至手臂伸直，还原。重复上述动作。</text>
+									<text wx:for="{{item.actionDesc}}" wx:key="index">
+									{{index+1}}、{{item}}
+									</text>
 								</view>
 								<!-- 卡片底部标签和展示按钮部分 -->
 								<view slot="bottom">
 									<view style="margin-top:20rpx">
 										<text>训练部位：</text>
 										<van-tag type="danger" size="large" style="margin-right:20rpx">{{item.actionArea}}</van-tag>
-										<van-tag type="danger" size="large" style="margin-right:20rpx">{{item.actionSub}}</van-tag>
 									</view>
-
+									<!-- 弹出层训练肌群标签 -->
+									<view style="margin-top:20rpx">
+										<text>训练肌群：</text>
+										<van-tag type="primary" style="margin-right:20rpx" wx:for="{{item.actionSub}}" wx:key="index">{{item}}</van-tag>
+									</view>
+									<!-- 弹出层训练器材标签 -->
 									<view style="margin-top:20rpx">
 										<text>训练器材：</text>
-										<van-tag type="primary" size="large">{{item.actionEquipment}}</van-tag>
+										<van-tag type="success" size="large">{{item.actionEquipment}}</van-tag>
 									</view>
 
 									<view style="margin-top:20rpx">
 										<view>要点：</view>
-										<text>1.在增加重量之前保持正确的体位。
-								2.避免强力运动，缓慢地进行可控制运动。
-								3.上推杠铃时呼气。</text>
+										<text wx:for="{{item.actionDesc}}" wx:key="index">
+										{{index+1}}、{{item}}
+										</text>
 									</view>
 
 								</view>

@@ -78,6 +78,8 @@ ec-canvas {
 }
 .griditem{
   border-radius: 20rpx;
+  font-size: xx-large;
+  font-weight: bold;
 }
 
 .griditemimage {

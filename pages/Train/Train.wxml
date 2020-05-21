@@ -80,7 +80,7 @@
 					<!-- 弹出层部分 必须放在点击按钮的下方-->
 					<van-popup show="{{ showText }}" bind:close="onClose" closeable>
 						<!-- 详情通过弹出层tabs展示 -->
-						<view style="margin-down:20rpx">{{item.actionName}}</view>
+						<view class="tabtitle">{{item.actionName}}</view>
 						<!-- 弹出层Tabs -->
 						<van-tabs type="card" style="margin-up:20rpx">
 							<!-- 详情tab -->
@@ -88,7 +88,7 @@
 								<!-- 动作卡片 -->
 								<van-card wx:for="{{queryActionByName}}" wx:key="_id">
 									<!-- 图片部分 -->
-									<view slot="title">
+									<view slot="title" class="actionimage">
 										<image src="{{item.actionImage}}"></image>
 									</view>
 									<!-- 描述部分 -->
@@ -129,7 +129,7 @@
 
 							<!-- 历史记录 -->
 							<van-tab title="历史">
-								<van-card num="2" price="2.00" desc="描述信息" title="商品标题" thumb="{{ imageURL }}" />
+								<van-card num="2" desc="描述信息" title="商品标题" thumb="{{ imageURL }}" />
 							</van-tab>
 
 							<!-- 趋势折线图 -->
@@ -143,7 +143,7 @@
 
 							<van-tab title="备注">
 								<!-- 打分 -->
-								<view>
+								<view class="star">
 									<view>对动作进行打分：</view>
 									<van-rate value="{{ starvalue }}" size="{{ 25 }}" allow-half color="#ee0a24" void-color="#eee" void-icon="star" bind:change="onStarChange" />
 								</view>

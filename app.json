@@ -1,11 +1,11 @@
 {
   "pages": [
     "pages/Main/Main",
+    "pages/Train/Train",
     "pages/Personal/Personal",
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences",
     "pages/Personal_data/Personal_data",
-    "pages/Train/Train",
     "pages/Count/Count",
     "pages/logs/logs",
     "pages/ActionDesc/ActionDesc",

@@ -13,11 +13,11 @@
   <van-cell>
     <view slot="title" class="switchgroup">
       <view class="van-cell-text">英镑 (lbs)</view>
-      <van-switch name="checked_weightlbs" checked="{{ checked_weightlbs }}" bind:change="onChange_weight" />
+      <van-switch name="checked_weightlbs" checked="{{ checked_weightlbs }}" bind:change="onChange_weightlbs" />
     </view>
     <view slot="title" class="switchgroup">
       <view class="van-cell-text">公斤 (kg)</view>
-      <van-switch name="checked_weightkg" checked="{{ checked_weightkg }}" bind:change="onChange_weight" />
+      <van-switch name="checked_weightkg" checked="{{ checked_weightkg }}" bind:change="onChange_weightkg" />
     </view>
   </van-cell>
   <!-- 是否自动开始下一个动作 -->

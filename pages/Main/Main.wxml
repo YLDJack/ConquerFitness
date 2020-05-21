@@ -1,35 +1,44 @@
 <!--index.wxml-->
 <import src="../../wxParse/wxParse.wxml" />
-<!-- 开始按钮一栏 -->
+<!-- 第一栏 -->
 <view class="top">
-	<!-- 问好 -->
-	<view class="sayhello">
-		<image src="../../image/smile.png"></image>
-		<text class="sayhellotext">{{hello}}</text>
+	<view class="topleft">
+		<!-- 问好 -->
+		<view class="sayhello">
+			<image src="../../image/smile.png"></image>
+			<text class="sayhellotext">{{hello}}</text>
+		</view>
+		<!-- 日历 -->
+		<view hover-class='none' class="calendar-navigator">
+			<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
+			<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" />
+			<van-tag type="danger" size="medium" bindtap="showCalendar">{{date}}</van-tag>
+		</view>
 	</view>
-
-	<!-- 日历 -->
-	<view hover-class='none' class="calendar-navigator">
-		<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
+	<view class="topright">
+		<!-- 状态 -->
+		<view class="statetext">
+			<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
+			<van-tag type="primary" size="large">增肌</van-tag>
+		</view>
 	</view>
-	<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" />
-	<!-- <view>
-		<template is="wxParse" data="{{wxParseData:topInfo.nodes}}" />
-	</view> -->
-	<!-- 当前日期 -->
-	<!-- <van-tag type="danger" plain size="large">当前日期</van-tag> -->
-	<van-tag type="danger" size="large" bindtap="showCalendar">{{date}}</van-tag>
 </view>
 
-<view class="coltwo">
-	<!-- 状态 -->
-	<view class="statetext">
-		<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
-		<van-tag type="primary" size="large">增肌</van-tag>
+<view class="colbutton">
+	<view class="sidebutton" bindtap="showPlan">
+			<image src="../../image/plan.png"></image>
+			<view class="tabtext">训练计划</view>
+		<!-- <van-button icon="todo-list" color="#f06767" bind:click="showPlan" plain round>训练计划</van-button> -->
 	</view>
-	<view class="startbutton">
-		<van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large">开始训练</van-button>
-		<van-button icon="todo-list" type="info" bind:click="showPlan" plain>训练计划</van-button>
+	<view class="startbutton" bindtap="beginTraining">
+			<image src="../../image/icon_train_selected.png"></image>
+			<view class="tabtext">开始训练</view>
+		<!-- <van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large">开始训练</van-button> -->
+	</view>
+	<view class="sidebutton">
+			<image src="../../image/record.png"></image>
+			<view class="tabtext">数据记录</view>
+		<!-- <van-button color="linear-gradient(to right, #f05c27, #f70303)">我的记录</van-button> -->
 	</view>
 </view>
 <!-- <calendar is-calendar-show="{{isCalendarShow}}" mark="{{calendarMark}}" format="1" /> -->

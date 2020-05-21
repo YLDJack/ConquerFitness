@@ -91,3 +91,12 @@ ec-canvas {
   /* display: flex;
   justify-content: space-between; */
 }
+
+.tabtitle{
+  margin: 20rpx 20rpx 20rpx 35rpx;
+}
+
+.star{
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}

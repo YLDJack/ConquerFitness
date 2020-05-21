@@ -122,7 +122,6 @@
 											{{index+1}}、{{item}}
 											</text>
 										</view>
-
 									</view>
 
 								</van-card>

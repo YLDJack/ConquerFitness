@@ -2,7 +2,6 @@
 import * as echarts from '../../ec-canvas/echarts';
 const app = getApp();
 
-
 // 初始化饼图的方法
 function initPieChart(canvas, width, height, dpr) {
   const chart = echarts.init(canvas, null, {
@@ -145,7 +144,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    // // 设置openid
+    // if (app.globalData.openid) {
+    //   this.setData({
+    //     openid: app.globalData.openid
+    //   })
+    // }
   },
 
   /**

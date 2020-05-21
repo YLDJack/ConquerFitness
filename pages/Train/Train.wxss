@@ -54,6 +54,7 @@ ec-canvas {
   width: 100%;
   height: 100%;
 }
+
 .container {
   position: absolute;
   top: 0;
@@ -67,10 +68,25 @@ ec-canvas {
   box-sizing: border-box;
 }
 .mid {
+  height: 100%;
+}
+.bg{
+  background-color: #f7f8fa;
+}
+.grid{
   height: 1000rpx;
 }
+.griditem{
+  border-radius: 20rpx;
+}
 
-.closeandsave{
+.griditemimage {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+
+.closeandsave {
   padding: 25rpx;
   /* display: flex;
   justify-content: space-between; */

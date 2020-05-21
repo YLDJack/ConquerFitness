@@ -73,11 +73,17 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // // 获取的actionname
+    // actionName:"",
+    // 根据动作获取结果
+    queryActionByName: [],
+    // 所有动作的查询结果
+    queryActionResult: [],
     // treeselect--左侧选中项的索引属性
     mainActiveIndex: 0,
     // treeselect--右侧选中项的 id，支持传入数组
     activeId: [],
-    // items 数据结构
+    // 左边选择项items 数据结构
     items: [{
         // 导航名称
         text: '胸部',
@@ -149,12 +155,11 @@ Page({
         value: 1
       }
     ],
+    // 评价分数
     starvalue: 3,
     searchText: "",
     catevalue: 0,
     slideKey: 0,
-    imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
-    imageURL1: "http://img.mp.itc.cn/upload/20170614/bc0dfeca1f694952bd35859136227b98_th.jpg",
     //展示动作界面
     showText: false,
     //展示添加动作界面
@@ -166,6 +171,87 @@ Page({
       onInit: initlineChart
     }
   },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    this.onQueryActionByArea();
+  },
+  // 根据锻炼部位查询数据
+  //根据动作名查询数据，并显示弹出动作详细框
+  async onQueryActionByArea() {
+    const actionArea = this.data.items[this.data.mainActiveIndex].text;
+    console.log(actionArea);
+    wx.cloud.init();
+    const db = wx.cloud.database();
+    // 查询当前用户所有的 counters
+    await db.collection('actions').where({
+      actionArea: actionArea
+    }).get({
+      success: res => {
+        this.setData({
+          queryActionResult: res.data
+        })
+        console.log('[数据库] [查询记录] 成功: ', this.data.queryActionResult)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('[数据库] [查询记录] 失败：', err)
+      }
+    })
+  },
+  //根据动作名查询数据，并显示弹出动作详细框
+  showPopup: function (event) {
+    console.log(event);
+    // dataset中的数据必须为全部小写才能获取
+    const actionName = event.currentTarget.dataset.actionname;
+    console.log(actionName);
+    wx.cloud.init();
+    const db = wx.cloud.database();
+    // 查询当前用户所有的 counters
+    db.collection('actions').where({
+      actionName: actionName
+    }).get({
+      success: res => {
+        this.setData({
+          showText: true,
+          queryActionByName: res.data
+        })
+        console.log('[数据库] [查询记录] 成功: ', this.data.queryActionByName)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('[数据库] [查询记录] 失败：', err)
+      }
+    })
+  },
+  // // 从云数据库查询动作
+  // async onQueryAction() {
+  //   wx.cloud.init();
+  //   const db = wx.cloud.database()
+  //   // 查询当前用户所有的 counters
+  //   await db.collection('actions').get({
+  //     success: res => {
+  //       this.setData({
+  //         queryActionResult: res.data
+  //       })
+  //       console.log('[数据库] [查询记录] 成功: ', this.data.queryActionResult)
+  //     },
+  //     fail: err => {
+  //       wx.showToast({
+  //         icon: 'none',
+  //         title: '查询记录失败'
+  //       })
+  //       console.error('[数据库] [查询记录] 失败：', err)
+  //     }
+  //   })
+  // },
   //treeselect 左侧导航点击方法 
   onClickNav({
     detail = {}
@@ -173,6 +259,8 @@ Page({
     this.setData({
       mainActiveIndex: detail.index || 0
     });
+    // 由于选择不同的部位，所以重新进行查询
+    this.onQueryActionByArea();
   },
   //treeselect 右侧item点击方法（具体行为完全基于事件 click-item 的实现逻辑如何为属性 active-id 赋值，当 active-id 为数组时即为多选状态。）
   onClickItem({
@@ -220,13 +308,6 @@ Page({
       collactiveNames: event.detail
     });
   },
-  //显示弹出动作详细框
-  showPopup() {
-    this.setData({
-      showText: true
-    });
-  },
-
   onClose() {
     this.setData({
       showText: false
@@ -235,12 +316,6 @@ Page({
   // 侧边栏点击监听事件
   onSlideChange(event) {
     console.log("点击了侧边栏")
-  },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
   },
 
   /**

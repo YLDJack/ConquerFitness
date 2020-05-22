@@ -104,13 +104,7 @@ Page({
       },
       {
         // 导航名称
-        text: '二头',
-        // 禁用选项
-        disabled: false,
-      },
-      {
-        // 导航名称
-        text: '三头',
+        text: '手臂',
         // 禁用选项
         disabled: false,
       },

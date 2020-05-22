@@ -1,16 +1,14 @@
-<!--index.wxml-->
-<import src="../../wxParse/wxParse.wxml" />
 <!-- 第一栏 -->
 <view class="top">
 	<view class="topleft">
 		<!-- 问好 -->
 		<view class="sayhello">
-			<image src="../../image/smile.png"></image>
+			<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/smile.png?sign=b64df0dccf7fd58628532e4df6ae5508&t=1590111906"></image>
 			<text class="sayhellotext">{{hello}}</text>
 		</view>
 		<!-- 日历 -->
 		<view hover-class='none' class="calendar-navigator">
-			<image src="../../image/jianshen-.png" class="calendar-image" bindtap="showCalendar"></image>
+			<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/jianshen-.png?sign=e088c2c26e441c8d5d5c511e319aa512&t=1590111939" class="calendar-image" bindtap="showCalendar"></image>
 			<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" />
 			<van-tag type="danger" size="medium" bindtap="showCalendar">{{date}}</van-tag>
 		</view>
@@ -26,18 +24,18 @@
 
 <view class="colbutton">
 	<view class="sidebutton" bindtap="showPlan">
-			<image src="../../image/plan.png"></image>
-			<view class="tabtext">训练计划</view>
+		<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/plan.png?sign=23bc7d0a2778c204450e3666ee83c696&t=1590111982"></image>
+		<view class="tabtext">训练计划</view>
 		<!-- <van-button icon="todo-list" color="#f06767" bind:click="showPlan" plain round>训练计划</van-button> -->
 	</view>
 	<view class="startbutton" bindtap="beginTraining">
-			<image src="../../image/icon_train_selected.png"></image>
-			<view class="tabtext">开始训练</view>
+		<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=5160107c405b18f699911a5041ddea3f&t=1590112002"></image>
+		<view class="tabtext">开始训练</view>
 		<!-- <van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large">开始训练</van-button> -->
 	</view>
 	<view class="sidebutton">
-			<image src="../../image/record.png"></image>
-			<view class="tabtext">数据记录</view>
+		<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=2168226dc332931cc1b8d936f5ae4842&t=1590112080"></image>
+		<view class="tabtext">数据记录</view>
 		<!-- <van-button color="linear-gradient(to right, #f05c27, #f70303)">我的记录</van-button> -->
 	</view>
 </view>
@@ -94,10 +92,10 @@
 
 	<swiper-item>
 		<!-- echarts线图 -->
-		<view class="eccontainer line">
-			<!-- <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
+		<!-- <view class="eccontainer line"> -->
+		<!-- <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
 			</ec-canvas> -->
-		</view>
+		<!-- </view> -->
 	</swiper-item>
 </swiper>
 
@@ -107,21 +105,21 @@
 	<scroll-view class="module-scroll" scroll-x="{{true}}">
 		<navigator class="item-navigator">
 			<view class="item-group">
-				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/quick1.jpg?sign=2f1e524fc6701c955642e1ca80b78ae6&t=1590112132"></image>
 				<view class="item-title">斩妹腹肌</view>
 				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
 			</view>
 		</navigator>
 		<navigator class="item-navigator">
 			<view class="item-group">
-				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/quick1.jpg?sign=2f1e524fc6701c955642e1ca80b78ae6&t=1590112132"></image>
 				<view class="item-title">斩妹腹肌</view>
 				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
 			</view>
 		</navigator>
 		<navigator class="item-navigator">
 			<view class="item-group">
-				<image class="practise-background" src="../../image/quick1.jpg"></image>
+				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/quick1.jpg?sign=2f1e524fc6701c955642e1ca80b78ae6&t=1590112132"></image>
 				<view class="item-title">斩妹腹肌</view>
 				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
 			</view>

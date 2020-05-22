@@ -28,8 +28,8 @@
       },
       {
         "pagePath": "pages/Train/Train",
-        "iconPath": "image/icon_train.png",
-        "selectedIconPath": "image/icon_train_selected.png",
+        "iconPath": "image/icon_yalin.png",
+        "selectedIconPath": "image/icon_yalin_selected.png",
         "text": "动作"
       },
       {

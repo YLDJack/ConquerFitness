@@ -17,7 +17,7 @@
 					<text class="savetext">保存</text>
 				</view>
 				<!-- 添加动作弹出层中间输入界面 -->
-				<van-field icon="../../../../image/icon_train_selected.png" placeholder="请输入动作名称" required clickable="false" />
+				<van-field icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=15c041cf5dcc24d503cfd47966f20ba3&t=1590112640" placeholder="请输入动作名称" required clickable="false" />
 				<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange" clickable="true">
 
 					<!-- 动作类型 -->
@@ -129,7 +129,7 @@
 
 							<!-- 历史记录 -->
 							<van-tab title="历史">
-								<van-card num="2" desc="描述信息" title="商品标题" thumb="{{ imageURL }}" />
+								<van-card num="2" desc="描述信息" title="商品标题" thumb="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=15c041cf5dcc24d503cfd47966f20ba3&t=1590112640" />
 							</van-tab>
 
 							<!-- 趋势折线图 -->

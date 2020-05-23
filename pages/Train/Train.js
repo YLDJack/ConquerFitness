@@ -77,8 +77,24 @@ Page({
     // actionName:"",
     // 根据动作获取结果
     queryActionByName: [],
-    // 所有动作的查询结果
-    queryActionResult: [],
+    // 一个部位中所有动作的查询结果
+    queryActionByArea: [],
+    // 根据相应的部位和分类获取动作的数组结果
+    actionByAreaCate: [],
+    // 右侧页面中的分类数组
+    actionCate: [],
+    // 分类部位当前选中的值
+    catevalue: 0,
+    // 分类类型
+    cateOption: [{
+        text: '按器材',
+        value: 0
+      },
+      {
+        text: '按侧重',
+        value: 1
+      }
+    ],
     // treeselect--左侧选中项的索引属性
     mainActiveIndex: 0,
     // treeselect--右侧选中项的 id，支持传入数组
@@ -139,20 +155,9 @@ Page({
         disabled: false,
       }
     ],
-    // 分类类型
-    cateOption: [{
-        text: '按部位',
-        value: 0
-      },
-      {
-        text: '按器材',
-        value: 1
-      }
-    ],
     // 评价分数
     starvalue: 3,
     searchText: "",
-    catevalue: 0,
     slideKey: 0,
     //展示动作界面
     showText: false,
@@ -169,24 +174,28 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // 每当页面加载的时候，根据当前左侧部位分类发起请求
     this.onQueryActionByArea();
   },
   // 根据锻炼部位查询数据
   //根据动作名查询数据，并显示弹出动作详细框
-  async onQueryActionByArea() {
+  onQueryActionByArea() {
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
     wx.cloud.init();
     const db = wx.cloud.database();
     // 查询当前用户所有的 counters
-    await db.collection('actions').where({
+    db.collection('actions').where({
       actionArea: actionArea
     }).get({
       success: res => {
         this.setData({
-          queryActionResult: res.data
-        })
-        console.log('[数据库] [查询记录] 成功: ', this.data.queryActionResult)
+          queryActionByArea: res.data
+        });
+        console.log('[查询记录] 成功:', this.data.queryActionByArea);
+        // 查询获取到数据中存在的分类
+        this.QueryCate();
+        this.onQueryActionByAreaCate();
       },
       fail: err => {
         wx.showToast({
@@ -196,6 +205,66 @@ Page({
         console.error('[数据库] [查询记录] 失败：', err)
       }
     })
+  },
+  // 根据分类类别来获取分类
+  QueryCate() {
+    const cate = this.data.cateOption[this.data.catevalue].text
+    console.log(cate);
+    const data = this.data.queryActionByArea;
+    const length = data.length;
+    let cateSet = new Set();
+    if (cate === "按侧重") {
+      // 获取训练部位名
+      for (let i = 0; i < length; i++) {
+        cateSet.add(data[i].actionSub);
+      }
+    } else {
+      // 获取动作的装备名
+      for (let i = 0; i < length; i++) {
+        cateSet.add(data[i].actionEquipment);
+      }
+    }
+    let catedata = Array.from(cateSet);
+    this.setData({
+      actionCate: catedata
+    })
+    console.log("共有类：", this.data.actionCate);
+  },
+  // 根据传递来的分类来处理获取到的部位数据
+  onQueryActionByAreaCate() {
+    // 获取到的分部数据
+    const areadata = this.data.queryActionByArea;
+    // 获取分类
+    const cate = this.data.actionCate;
+
+    const length = areadata.length;
+    console.log(length);
+    // 分类后的数据
+    var catedata = {};
+    for (let i = 0; i < cate.length; i++) {
+      // 动态地给catedata对象添加以分类命名的键
+      catedata[cate[i]] = [];
+      console.log(catedata[cate[i]]);
+      for (let j = 0; j < length; j++) {
+        if (cate[i] === areadata[j].actionEquipment) {
+          catedata[cate[i]].push(areadata[j]);
+        }
+      }
+    }
+    this.setData({
+      actionByAreaCate: catedata
+    });
+    console.log('分类后的数据:', this.data.actionByAreaCate);
+  },
+  // treeselect的左侧点击方法
+  onClickNav({
+    detail = {}
+  }) {
+    this.setData({
+      mainActiveIndex: detail.index || 0
+    });
+    // 由于选择不同的部位，所以重新进行查询
+    this.onQueryActionByArea();
   },
   //根据动作名查询数据，并显示弹出动作详细框
   showPopup: function (event) {
@@ -228,7 +297,7 @@ Page({
   // // 从云数据库查询动作
   // async onQueryAction() {
   //   wx.cloud.init();
-  //   const db = wx.cloud.database()
+  //   const db = wx.cloud.database()        this.onQueryActionByAreaCate("徒手");
   //   // 查询当前用户所有的 counters
   //   await db.collection('actions').get({
   //     success: res => {
@@ -247,34 +316,7 @@ Page({
   //   })
   // },
   //treeselect 左侧导航点击方法 
-  onClickNav({
-    detail = {}
-  }) {
-    this.setData({
-      mainActiveIndex: detail.index || 0
-    });
-    // 由于选择不同的部位，所以重新进行查询
-    this.onQueryActionByArea();
-  },
-  //treeselect 右侧item点击方法（具体行为完全基于事件 click-item 的实现逻辑如何为属性 active-id 赋值，当 active-id 为数组时即为多选状态。）
-  onClickItem({
-    detail = {}
-  }) {
-    const {
-      activeId
-    } = this.data;
 
-    const index = activeId.indexOf(detail.id);
-    if (index > -1) {
-      activeId.splice(index, 1);
-    } else {
-      activeId.push(detail.id);
-    }
-
-    this.setData({
-      activeId
-    });
-  },
   // 添加动作跳转事件
   showAdd() {
     this.setData({

@@ -21,7 +21,7 @@ Component({
         pagePath: "/pages/Training/Training",
         iconPath: "/image/icon_train_selected.png",
         selectedIconPath: "/image/icon_train_selected.png",
-        text: "训练",
+        text: "开始训练",
         isSpecial: true
       },
       {

@@ -339,29 +339,6 @@ Page({
       }
     })
   },
-  // // 从云数据库查询动作
-  // async onQueryAction() {
-  //   wx.cloud.init();
-  //   const db = wx.cloud.database()        this.onQueryActionByAreaCate("徒手");
-  //   // 查询当前用户所有的 counters
-  //   await db.collection('actions').get({
-  //     success: res => {
-  //       this.setData({
-  //         queryActionResult: res.data
-  //       })
-  //       console.log('[数据库] [查询记录] 成功: ', this.data.queryActionResult)
-  //     },
-  //     fail: err => {
-  //       wx.showToast({
-  //         icon: 'none',
-  //         title: '查询记录失败'
-  //       })
-  //       console.error('[数据库] [查询记录] 失败：', err)
-  //     }
-  //   })
-  // },
-  //treeselect 左侧导航点击方法 
-
   // 添加动作跳转事件
   showAdd() {
     this.setData({
@@ -394,11 +371,6 @@ Page({
       showText: false
     });
   },
-  // 侧边栏点击监听事件
-  onSlideChange(event) {
-    console.log("点击了侧边栏")
-  },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

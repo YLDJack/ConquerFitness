@@ -6,7 +6,7 @@
 		<view class="select-search">
 			<!-- 分类下拉菜单 -->
 			<van-dropdown-menu overlay="false">
-				<van-dropdown-item popup-style="with=180rpx" value="{{ catevalue }}" options="{{ cateOption }}" bind:change="onCateChange"/>
+				<van-dropdown-item popup-style="with=180rpx" value="{{ catevalue }}" options="{{ cateOption }}" bind:change="onCateChange" />
 			</van-dropdown-menu>
 			<!-- 搜索框 -->
 			<van-search value="{{ searchText }}" placeholder="请输入搜索关键词" bind:search="onSearch" />
@@ -108,10 +108,10 @@
 												<text>训练部位：</text>
 												<van-tag type="primary" size="large" style="margin-right:20rpx">{{item.actionArea}}</van-tag>
 											</view>
-											<!-- 弹出层训练肌群标签 -->
+											<!-- 弹出层训练侧重标签 -->
 											<view style="margin-top:20rpx">
 												<text>训练侧重：</text>
-												<van-tag type="danger" style="margin-right:20rpx" size="large" wx:for="{{item.actionSub}}" wx:key="index">{{item}}</van-tag>
+												<van-tag type="danger" style="margin-right:20rpx" size="large">{{item.actionSub}}</van-tag>
 											</view>
 											<!-- 弹出层训练器材标签 -->
 											<view style="margin-top:20rpx">
@@ -200,7 +200,7 @@
 											<!-- 弹出层训练肌群标签 -->
 											<view style="margin-top:20rpx">
 												<text>训练侧重：</text>
-												<van-tag type="danger" style="margin-right:20rpx" size="large" wx:for="{{item.actionSub}}" wx:key="index">{{item}}</van-tag>
+												<van-tag type="danger" style="margin-right:20rpx" size="large">{{item.actionSub}}</van-tag>
 											</view>
 											<!-- 弹出层训练器材标签 -->
 											<view style="margin-top:20rpx">

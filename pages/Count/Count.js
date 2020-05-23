@@ -163,7 +163,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    if (typeof this.getTabBar === 'function' &&
+      this.getTabBar()) {
+      console.log('设置选中项 3')
+      this.getTabBar().setData({
+        selected: 3
+      })
+    }
   },
 
   /**
@@ -201,16 +207,3 @@ Page({
 
   }
 })
-// ,
-// Component({
-//   pageLifetimes: {
-//     show() {
-//       if (typeof this.getTabBar === 'function' &&
-//         this.getTabBar()) {
-//         this.getTabBar().setData({
-//           selected: 2
-//         })
-//       }
-//     }
-//   }
-// })

@@ -1,8 +1,6 @@
 // pages/Main/Main.js
 import * as echarts from '../../ec-canvas/echarts';
-var WxParse = require('../../wxParse/wxParse.js');
 var utils = require('../../utils/util');
-var that = this;
 const app = getApp();
 
 // 初始化饼图的方法
@@ -283,20 +281,16 @@ Page({
   scroll: function (e) {
     console.log(e)
   },
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    if (typeof this.getTabBar === 'function' &&
+      this.getTabBar()) {
+      console.log('设置选中项 0')
+      this.getTabBar().setData({
+        selected: 0
+      })
+    }
+  },
 })
-
-// Component({
-//   pageLifetimes: {
-//     show() {
-//       if (typeof this.getTabBar === 'function' &&
-//         this.getTabBar()) {
-//         this.getTabBar().setData({
-//           selected: 1
-//         })
-//       }
-//     }
-//   },
-//   options: {
-//     styleIsolation: 'shared'
-//   }
-// })

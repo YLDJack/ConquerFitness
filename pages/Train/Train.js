@@ -73,8 +73,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    // // 获取的actionname
-    // actionName:"",
+    // 搜索结果
+    queryActionBySearch: "",
     // 根据动作获取结果
     queryActionByName: [],
     // 一个部位中所有动作的查询结果
@@ -126,13 +126,7 @@ Page({
       },
       {
         // 导航名称
-        text: '大腿',
-        // 禁用选项
-        disabled: false,
-      },
-      {
-        // 导航名称
-        text: '小腿',
+        text: '腿部',
         // 禁用选项
         disabled: false,
       },
@@ -155,9 +149,10 @@ Page({
         disabled: false,
       }
     ],
+    //搜索的内容
+    searchText: "",
     // 评价分数
     starvalue: 3,
-    searchText: "",
     slideKey: 0,
     //展示动作界面
     showText: false,
@@ -267,10 +262,39 @@ Page({
     detail = {}
   }) {
     this.setData({
-      mainActiveIndex: detail.index || 0
+      mainActiveIndex: detail.index || 0,
+      // 切换分类时将搜索栏都置为空
+      searchText: "",
+      queryActionBySearch: ""
     });
     // 由于选择不同的部位，所以重新进行查询
     this.onQueryActionByArea();
+  },
+  onSearch(event) {
+    this.setData({
+      searchText: event.detail.trim()
+    })
+    const searchText = this.data.searchText;
+    if(!searchText){
+      this.setData({
+        queryActionBySearch: ""
+      })
+      return true;
+    }
+    const data = this.data.queryActionByArea;
+    const length = data.length;
+    console.log(searchText)
+    let searchaction = [];
+    for (let i = 0; i < length; i++) {
+      // 针对输入框进行模糊搜索
+      if (data[i].actionName.indexOf(searchText) >= 0 && searchText) {
+        searchaction.push(data[i])
+      }
+    }
+    this.setData({
+      queryActionBySearch: searchaction
+    })
+    console.log(this.data.queryActionBySearch);
   },
   // 分类发生变化的情况
   onCateChange(value) {

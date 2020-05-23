@@ -6,7 +6,7 @@
 		<view class="select-search">
 			<!-- 分类下拉菜单 -->
 			<van-dropdown-menu overlay="false">
-				<van-dropdown-item popup-style="with=180rpx" value="{{ catevalue }}" options="{{ cateOption }}" />
+				<van-dropdown-item popup-style="with=180rpx" value="{{ catevalue }}" options="{{ cateOption }}" bind:change="onCateChange"/>
 			</van-dropdown-menu>
 			<van-search value="{{ searchText }}" placeholder="请输入搜索关键词" />
 			<van-icon name="add" color="red" size="50rpx" bind:click="showAdd" />

@@ -213,7 +213,7 @@ Page({
     const data = this.data.queryActionByArea;
     const length = data.length;
     let cateSet = new Set();
-    if (cate === "按侧重") {
+    if (cate == "按侧重") {
       // 获取训练部位名
       for (let i = 0; i < length; i++) {
         cateSet.add(data[i].actionSub);
@@ -244,10 +244,16 @@ Page({
     for (let i = 0; i < cate.length; i++) {
       // 动态地给catedata对象添加以分类命名的键
       catedata[cate[i]] = [];
-      console.log(catedata[cate[i]]);
       for (let j = 0; j < length; j++) {
-        if (cate[i] === areadata[j].actionEquipment) {
-          catedata[cate[i]].push(areadata[j]);
+        // 判断是按器材还是按部位
+        if (this.data.cateOption[this.data.catevalue].text === "按器材") {
+          if (cate[i] === areadata[j].actionEquipment) {
+            catedata[cate[i]].push(areadata[j]);
+          }
+        } else {
+          if (cate[i] === areadata[j].actionSub) {
+            catedata[cate[i]].push(areadata[j]);
+          }
         }
       }
     }
@@ -265,6 +271,21 @@ Page({
     });
     // 由于选择不同的部位，所以重新进行查询
     this.onQueryActionByArea();
+  },
+  // 分类发生变化的情况
+  onCateChange(value) {
+    if (this.data.catevalue == 0) {
+      this.setData({
+        catevalue: 1
+      })
+    } else {
+      this.setData({
+        catevalue: 0
+      })
+    }
+    console.log(this.data.cateOption[this.data.catevalue].text);
+    this.QueryCate();
+    this.onQueryActionByAreaCate();
   },
   //根据动作名查询数据，并显示弹出动作详细框
   showPopup: function (event) {

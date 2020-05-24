@@ -69,9 +69,9 @@
 
 	<view class="mid">
 		<!-- treeselect动作分类选择 -->
-		<van-tree-select items="{{ items }}" main-active-index="{{ mainActiveIndex }}" active-id="{{ activeId }}" bind:click-nav="onClickNav" content-item-class="bg">
+		<van-tree-select items="{{ items }}" main-active-index="{{ mainActiveIndex }}" active-id="{{ activeId }}" bind:click-nav="onClickNav" content-item-class="bg" main-item-class="treenav" height="888rpx">
 			<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
-			<view slot="content">
+			<view slot="content" class="content">
 				<!-- 没有搜索动作按分类显示 -->
 				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && !queryActionBySearch}}">
 					<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
@@ -81,49 +81,49 @@
 							<image class="griditemimage" slot="icon" src="{{item.actionImage}}"></image>
 						</van-grid-item>
 						<!-- 弹出层部分 必须放在点击按钮的下方-->
-						<van-popup show="{{ showText }}" bind:close="onClose" closeable>
+						<van-popup show="{{ showText }}" bind:close="onClose" closeable custom-style="height:800rpx;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id">
 							<!-- 详情通过弹出层tabs展示 -->
 							<view class="tabtitle">{{item.actionName}}</view>
 							<!-- 弹出层Tabs -->
-							<van-tabs type="card" style="margin-up:20rpx">
+							<van-tabs type="card" class="poptabs">
 								<!-- 详情tab -->
 								<van-tab title="详情">
 									<!-- 动作卡片 -->
-									<van-card wx:for="{{queryActionByName}}" wx:key="_id">
+									<van-card>
 										<!-- 图片部分 -->
-										<view slot="title" class="actionimage">
-											<image src="{{item.actionImage}}"></image>
+										<view slot="title">
+											<image src="{{item.actionImage}}" class="actionimage"></image>
 										</view>
 										<!-- 描述部分 -->
-										<view slot="desc" style="margin-top:20rpx">
+										<view slot="desc">
 											<!-- 根据动作描述数组逐个渲染 -->
-											<view>动作描述：</view>
-											<text wx:for="{{item.actionDesc}}" wx:key="index">
-											{{index+1}}、{{item}}
-											</text>
+											<view class="subtitle">动作描述：</view>
+											<view wx:for="{{item.actionDesc}}" wx:key="index">
+												{{index+1}}、{{item}}
+											</view>
 										</view>
 										<!-- 卡片底部标签和展示按钮部分 -->
 										<view slot="bottom">
-											<view style="margin-top:20rpx">
+											<view class="subtitle">
 												<text>训练部位：</text>
-												<van-tag type="primary" size="large" style="margin-right:20rpx">{{item.actionArea}}</van-tag>
+												<van-tag type="primary" size="large">{{item.actionArea}}</van-tag>
 											</view>
-											<!-- 弹出层训练侧重标签 -->
-											<view style="margin-top:20rpx">
+											<!-- 弹出层训练肌群标签 -->
+											<view class="subtitle">
 												<text>训练侧重：</text>
-												<van-tag type="danger" style="margin-right:20rpx" size="large">{{item.actionSub}}</van-tag>
+												<van-tag type="danger" size="large">{{item.actionSub}}</van-tag>
 											</view>
 											<!-- 弹出层训练器材标签 -->
-											<view style="margin-top:20rpx">
+											<view class="subtitle">
 												<text>训练器材：</text>
 												<van-tag type="success" size="large">{{item.actionEquipment}}</van-tag>
 											</view>
 
-											<view style="margin-top:20rpx">
-												<view>要点：</view>
-												<text wx:for="{{item.actionDesc}}" wx:key="index">
-												{{index+1}}、{{item}}
-												</text>
+											<view>
+												<view class="subtitle">训练要点：</view>
+												<view wx:for="{{item.actionNote}}" wx:key="index">
+													{{index+1}}、{{item}}
+												</view>
 											</view>
 										</view>
 
@@ -170,49 +170,49 @@
 							<image class="griditemimage" slot="icon" src="{{item.actionImage}}"></image>
 						</van-grid-item>
 						<!-- 弹出层部分 必须放在点击按钮的下方-->
-						<van-popup show="{{ showText }}" bind:close="onClose" closeable>
+						<van-popup show="{{ showText }}" bind:close="onClose" closeable custom-style="height:60%;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id">
 							<!-- 详情通过弹出层tabs展示 -->
 							<view class="tabtitle">{{item.actionName}}</view>
 							<!-- 弹出层Tabs -->
-							<van-tabs type="card" style="margin-up:20rpx">
+							<van-tabs type="card" class="poptabs">
 								<!-- 详情tab -->
 								<van-tab title="详情">
 									<!-- 动作卡片 -->
-									<van-card wx:for="{{queryActionByName}}" wx:key="_id">
+									<van-card>
 										<!-- 图片部分 -->
-										<view slot="title" class="actionimage">
-											<image src="{{item.actionImage}}"></image>
+										<view slot="title">
+											<image src="{{item.actionImage}}" class="actionimage"></image>
 										</view>
 										<!-- 描述部分 -->
-										<view slot="desc" style="margin-top:20rpx">
+										<view slot="desc">
 											<!-- 根据动作描述数组逐个渲染 -->
-											<view>动作描述：</view>
-											<text wx:for="{{item.actionDesc}}" wx:key="index">
-											{{index+1}}、{{item}}
-											</text>
+											<view class="subtitle">动作描述：</view>
+											<view wx:for="{{item.actionDesc}}" wx:key="index">
+												{{index+1}}、{{item}}
+											</view>
 										</view>
 										<!-- 卡片底部标签和展示按钮部分 -->
 										<view slot="bottom">
-											<view style="margin-top:20rpx">
+											<view class="subtitle">
 												<text>训练部位：</text>
-												<van-tag type="primary" size="large" style="margin-right:20rpx">{{item.actionArea}}</van-tag>
+												<van-tag type="primary" size="large">{{item.actionArea}}</van-tag>
 											</view>
 											<!-- 弹出层训练肌群标签 -->
-											<view style="margin-top:20rpx">
+											<view class="subtitle">
 												<text>训练侧重：</text>
-												<van-tag type="danger" style="margin-right:20rpx" size="large">{{item.actionSub}}</van-tag>
+												<van-tag type="danger" size="large">{{item.actionSub}}</van-tag>
 											</view>
 											<!-- 弹出层训练器材标签 -->
-											<view style="margin-top:20rpx">
+											<view class="subtitle">
 												<text>训练器材：</text>
 												<van-tag type="success" size="large">{{item.actionEquipment}}</van-tag>
 											</view>
 
-											<view style="margin-top:20rpx">
-												<view>要点：</view>
-												<text wx:for="{{item.actionDesc}}" wx:key="index">
-												{{index+1}}、{{item}}
-												</text>
+											<view>
+												<view class="subtitle">训练要点：</view>
+												<view wx:for="{{item.actionNote}}" wx:key="index">
+													{{index+1}}、{{item}}
+												</view>
 											</view>
 										</view>
 
@@ -250,7 +250,6 @@
 					</van-grid>
 				</view>
 			</view>
-
 		</van-tree-select>
 	</view>
 </view>

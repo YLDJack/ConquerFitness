@@ -177,15 +177,17 @@ Page({
   onQueryActionByArea() {
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
-    wx.cloud.init();
-    const db = wx.cloud.database();
     // 查询当前用户所有的 counters
-    db.collection('actions').where({
-      actionArea: actionArea
-    }).get({
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'queryActionByArea',
+      // 传给云函数的参数
+      data: {
+        queryactionArea: actionArea
+      },
       success: res => {
         this.setData({
-          queryActionByArea: res.data
+          queryActionByArea: res.result.data
         });
         console.log('[查询记录] 成功:', this.data.queryActionByArea);
         // 查询获取到数据中存在的分类
@@ -235,7 +237,7 @@ Page({
     const length = areadata.length;
     console.log(length);
     // 分类后的数据
-    var catedata = {};
+    let catedata = {};
     for (let i = 0; i < cate.length; i++) {
       // 动态地给catedata对象添加以分类命名的键
       catedata[cate[i]] = [];
@@ -275,7 +277,7 @@ Page({
       searchText: event.detail.trim()
     })
     const searchText = this.data.searchText;
-    if(!searchText){
+    if (!searchText) {
       this.setData({
         queryActionBySearch: ""
       })
@@ -313,31 +315,21 @@ Page({
   },
   //根据动作名查询数据，并显示弹出动作详细框
   showPopup: function (event) {
-    console.log(event);
     // dataset中的数据必须为全部小写才能获取
     const actionName = event.currentTarget.dataset.actionname;
-    console.log(actionName);
-    wx.cloud.init();
-    const db = wx.cloud.database();
-    // 查询当前用户所有的 counters
-    db.collection('actions').where({
-      actionName: actionName
-    }).get({
-      success: res => {
-        this.setData({
-          showText: true,
-          queryActionByName: res.data
-        })
-        console.log('[数据库] [查询记录] 成功: ', this.data.queryActionByName)
-      },
-      fail: err => {
-        wx.showToast({
-          icon: 'none',
-          title: '查询记录失败'
-        })
-        console.error('[数据库] [查询记录] 失败：', err)
+    const data = this.data.queryActionByArea;
+    const length = data.length;
+    let catedata = [];
+    for (let i = 0; i < length; i++) {
+      if (actionName === data[i].actionName) {
+        catedata.push(data[i]);
       }
+    }
+    this.setData({
+      queryActionByName: catedata,
+      showText: true
     })
+    console.log("当前的动作是:", this.data.queryActionByName);
   },
   // 添加动作跳转事件
   showAdd() {

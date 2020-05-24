@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lzy1996carey/ConquerFitness.git"
+    "url": "git+https://github.com/YLDJack/ConquerFitness.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lzy1996carey/ConquerFitness/issues"
+    "url": "https://github.com/YLDJack/ConquerFitness/issues"
   },
-  "homepage": "https://github.com/lzy1996carey/ConquerFitness#readme",
+  "homepage": "https://github.com/YLDJack/ConquerFitness#readme",
   "dependencies": {
     "@vant/weapp": "^1.2.2"
   }

@@ -1,7 +1,14 @@
+.body {
+  display: flex;
+  /* 更换主轴方向从上到下 */
+  flex-direction: column;
+}
+
 /* top部分 */
 .top {
   height: 142rpx;
-  width: 750px;
+  flex-grow: 1;
+  width: 100%;
 }
 
 .top .title {
@@ -30,25 +37,78 @@
   width: 500rpx;
 }
 
-/* slide部分
-.slideBar {
-  float: left;
+/* 下方整体 */
+.mid {
+  margin-top: 10rpx;
+  padding-top: 10rpx;
+  flex-grow: 4;
 }
 
-.slideBar .van-sidebar-item {
-  height: 95rpx;
-} */
+.bg {
+  background-color: #f7f8fa;
+}
 
-/* mid部分
-.mid {
-  margin-left: 175rpx;
-} */
+/* 导航栏左侧样式类 */
+.treenav {
+  width: 202rpx;
+}
+
+/* 宫格的样式 */
+.content {
+  height: 100%;
+  background-color: #f7f8fa;
+}
+
+.griditem {
+  border-radius: 20rpx;
+  font-size: large;
+  font-weight: bold;
+}
+
+.griditemimage {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+
+.closeandsave {
+  padding: 25rpx;
+  /* display: flex;
+  justify-content: space-between; */
+}
+
+.tabtitle {
+  margin: 20rpx 20rpx 20rpx 35rpx;
+}
+
+.star {
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+/* 弹出层样式 */
+.poptabs{
+  margin: auto;
+}
+.tabtitle{
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.actionimage{
+  height: 400rpx;
+  width: 100%;
+}
+.subtitle{
+  font-size: 25rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}
 
 /* 添加动作的弹出层 */
 .addpop {
   width: 100%;
   height: 90%;
 }
+
 
 ec-canvas {
   width: 100%;
@@ -66,39 +126,4 @@ ec-canvas {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-}
-.mid {
-  height: 100%;
-}
-.bg{
-  background-color: #f7f8fa;
-}
-.grid{
-  height: 1000rpx;
-}
-.griditem{
-  border-radius: 20rpx;
-  font-size: xx-large;
-  font-weight: bold;
-}
-
-.griditemimage {
-  width: 100rpx;
-  height: 100rpx;
-  border-radius: 50%;
-}
-
-.closeandsave {
-  padding: 25rpx;
-  /* display: flex;
-  justify-content: space-between; */
-}
-
-.tabtitle{
-  margin: 20rpx 20rpx 20rpx 35rpx;
-}
-
-.star{
-  margin-left: 30rpx;
-  margin-top: 10rpx;
 }

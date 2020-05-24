@@ -42,13 +42,12 @@
   position: absolute;
   bottom: 8rpx;
   font-size: 25rpx;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 .centerImage {
-  width: 85rpx;
-  height: 85rpx;
+  width: 87rpx;
+  height: 87rpx;
   position: absolute;
   top: -4rpx;
-  border-radius: 50%;
-  border: 6rpx solid #fff;
+  border: 4rpx solid #fff;
 }

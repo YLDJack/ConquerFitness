@@ -177,7 +177,6 @@ Page({
   onQueryActionByArea() {
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
-    wx.cloud.init();
     const db = wx.cloud.database();
     // 查询当前用户所有的 counters
     db.collection('actions').where({

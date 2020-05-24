@@ -177,14 +177,17 @@ Page({
   onQueryActionByArea() {
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
-    const db = wx.cloud.database();
     // 查询当前用户所有的 counters
-    db.collection('actions').where({
-      actionArea: actionArea
-    }).get({
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'queryActionByArea',
+      // 传给云函数的参数
+      data: {
+        queryactionArea: actionArea
+      },
       success: res => {
         this.setData({
-          queryActionByArea: res.data
+          queryActionByArea: res.result.data
         });
         console.log('[查询记录] 成功:', this.data.queryActionByArea);
         // 查询获取到数据中存在的分类
@@ -274,7 +277,7 @@ Page({
       searchText: event.detail.trim()
     })
     const searchText = this.data.searchText;
-    if(!searchText){
+    if (!searchText) {
       this.setData({
         queryActionBySearch: ""
       })
@@ -317,16 +320,16 @@ Page({
     const data = this.data.queryActionByArea;
     const length = data.length;
     let catedata = [];
-    for(let i = 0 ; i<length;i++){
-      if(actionName === data[i].actionName){
+    for (let i = 0; i < length; i++) {
+      if (actionName === data[i].actionName) {
         catedata.push(data[i]);
       }
     }
     this.setData({
       queryActionByName: catedata,
-      showText:true
+      showText: true
     })
-    console.log("当前的动作是:",this.data.queryActionByName);
+    console.log("当前的动作是:", this.data.queryActionByName);
   },
   // 添加动作跳转事件
   showAdd() {

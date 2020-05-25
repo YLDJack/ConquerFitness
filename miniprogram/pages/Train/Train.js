@@ -74,6 +74,12 @@ Page({
    */
   data: {
 
+    // 上传图片列表
+    fileList: [],
+    // 添加的动作名称
+    addActionName: "",
+    addActionDesc: "",
+    addActionNote: "",
     // 选择动作的类型
     addActionType: "力量训练1",
     addActionEqu: "杠铃",
@@ -370,12 +376,73 @@ Page({
       addActionSub: detail.text
     });
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    // 每当页面加载的时候，根据当前左侧部位分类发起请求
-    this.onQueryActionByArea();
+  // 添加动作事件
+  onAddAction() {
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'actionAdd',
+      // 传给云函数的参数
+      data: {
+        actionName: this.data.addActionName,
+        actionDesc: this.data.addActionDesc,
+        actionNote: this.data.addActionNote,
+        // 选择动作的类型
+        actionType: this.data.addActionType,
+        actionEqu: this.data.addActionEqu,
+        // 添加动作的训练侧重
+        actionSub: this.data.addActionSub,
+        // 添加动作的训练部位
+        actionArea: this.data.addActionArea,
+        // 将训练图片的url当做参数传递，若为空则置空
+        actionImage: this.data.fileList[0].url || ""
+      },
+      success: res => {
+        wx.showToast({
+          title: '添加成功',
+        })
+        this.setData({
+          showAddPop:false
+        })
+      },
+      fail: error => {
+        console.log(error);
+        wx.showToast({
+          title: '添加失败',
+        })
+      }
+    })
+  },
+  // 添加图片
+  uploadImage(event) {
+    const {
+      file
+    } = event.detail;
+    console.log('图片加载完成', file);
+    const filePath = file.path;
+    const tempFlie = filePath.split('.')
+    const cloudPath = 'actionImage/' + 'actionimage-' + tempFlie[tempFlie.length - 2] + '.' + tempFlie[tempFlie.length - 1]
+    // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+    // wx.cloud代表传到云开的数据库
+    wx.cloud.uploadFile({
+      filePath: filePath,
+      cloudPath: cloudPath,
+      success: res => {
+        console.log('上传成功', res);
+        // 上传完成需要更新 fileList
+        // 上传完成需要更新 fileList
+        var {
+          fileList = []
+        } = this.data;
+        fileList.push({
+          file,
+          url: res.fileID
+        });
+        this.setData({
+          fileList
+        });
+        console.log(this.data.fileList);
+      }
+    });
   },
   // 根据锻炼部位查询数据
   //根据动作名查询数据，并显示弹出动作详细框
@@ -562,6 +629,13 @@ Page({
     this.setData({
       showText: false
     });
+  },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    // 每当页面加载的时候，根据当前左侧部位分类发起请求
+    this.onQueryActionByArea();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

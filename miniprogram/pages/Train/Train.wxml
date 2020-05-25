@@ -17,12 +17,16 @@
 				<!-- 添加动作弹出层首部按钮界面 -->
 				<view class="closeandsave">
 					<!-- <van-icon name="cross" /> -->
-					<van-button type="danger" size="mini">保存</van-button>
+					<van-button type="danger" size="mini" icon="add-o" bindtap="onAddAction">保存</van-button>
 				</view>
 				<!-- 添加动作弹出层中间输入界面 -->
-				<van-field label="动作名称" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=14457ecf67e875745303b33e04d94147&t=1590376044" placeholder="请输入动作名称" required clickable />
-				<van-field label="动作描述" placeholder="请输入动作描述" clickable right-icon="info-o" />
-				<van-field label="训练要点" placeholder="请输入训练要点" clickable right-icon="info-o" />
+				<van-field label="动作名称" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=14457ecf67e875745303b33e04d94147&t=1590376044" placeholder="请输入动作名称" required clickable value="{{addActionName}}" />
+				<van-field label="动作描述" placeholder="请输入动作描述" clickable value="{{addActionDesc}}" right-icon="info-o" />
+				<van-field label="训练要点" placeholder="请输入训练要点" clickable value="{{addActionNote}}" right-icon="info-o" />
+				<!-- 训练图片 -->
+				<van-cell title="训练图片">
+					<van-uploader file-list="{{ fileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage" />
+				</van-cell>
 				<!-- 下方选择框 -->
 				<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange">
 					<!-- 动作类型 -->
@@ -62,10 +66,7 @@
 							<van-tree-select items="{{ areaItems }}" main-active-index="{{ areaIndex }}" active-id="{{ areaActiveId }}" bind:click-nav="onAreaClickNav" bind:click-item="onAreaClickItem" clickable />
 						</van-collapse-item>
 					</view>
-
-
 				</van-collapse>
-
 			</van-popup>
 
 		</view>

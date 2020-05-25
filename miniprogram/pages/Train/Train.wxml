@@ -17,49 +17,53 @@
 				<!-- 添加动作弹出层首部按钮界面 -->
 				<view class="closeandsave">
 					<!-- <van-icon name="cross" /> -->
-					<text class="savetext">保存</text>
+					<van-button type="danger" size="mini">保存</van-button>
 				</view>
 				<!-- 添加动作弹出层中间输入界面 -->
-				<van-field icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=15c041cf5dcc24d503cfd47966f20ba3&t=1590112640" placeholder="请输入动作名称" required clickable="false" />
-				<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange" clickable="true">
-
+				<van-field label="动作名称" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=14457ecf67e875745303b33e04d94147&t=1590376044" placeholder="请输入动作名称" required clickable />
+				<van-field label="动作描述" placeholder="请输入动作描述" clickable right-icon="info-o" />
+				<van-field label="训练要点" placeholder="请输入训练要点" clickable right-icon="info-o" />
+				<!-- 下方选择框 -->
+				<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange">
 					<!-- 动作类型 -->
-					<van-collapse-item title="动作类型" name="1" right-icon="arrow" value="力量训练">
-						<van-cell title="力量训练" value="重量+次数" label="常规" />
-						<van-cell title="力量训练" value="重量（减去体重）+次数" label="辅助" />
-						<van-cell title="有氧训练" value="时间+距离+卡路里" />
+					<van-collapse-item title="动作类型" name="1" value="{{addActionType}}" clickable>
+						<view bindtap="selectType">
+							<van-cell title="力量训练1" value="重量+次数" label="常规" data-type="力量训练1" />
+							<van-cell title="力量训练2" value="重量（减去体重）+次数" label="辅助" data-type="力量训练2" />
+							<van-cell title="有氧训练" value="时间+距离+卡路里" data-type="有氧训练" />
+						</view>
 					</van-collapse-item>
-
-					<!-- 训练部位细分 -->
-					<van-collapse-item title="训练部位" name="2" right-icon="arrow" value="胸-上胸">
-						<van-collapse value="{{ collactiveNames1 }}" bind:change="onCollChange1" clickable="true">
-							<van-collapse-item title="胸部" name="1" right-icon="arrow">
-								<van-cell title="上胸" />
-								<van-cell title="中胸" />
-								<van-cell title="下胸" />
-							</van-collapse-item>
-							<van-collapse-item title="背部" name="2" right-icon="arrow">
-
-							</van-collapse-item>
-							<van-collapse-item title="肩部" name="3" right-icon="arrow">
-
-							</van-collapse-item>
-							<van-collapse-item title="腿部" name="4" right-icon="arrow">
-
-							</van-collapse-item>
-						</van-collapse>
-					</van-collapse-item>
-
 					<!-- 训练器材 -->
-					<van-collapse-item title="训练器材" name="3" right-icon="arrow" value="杠铃">
-						<van-cell title="哑铃" />
-						<van-cell title="杠铃" />
-						<van-cell title="史密斯机" />
-						<van-cell title="绳索" />
-						<van-cell title="TRX/&弹力带" />
-						<van-cell title="器械" />
-						<van-cell title="自重" />
+					<van-collapse-item title="训练器材" name="2" value="{{addActionEqu}}" clickable>
+						<view bindtap="selectEqu">
+							<van-cell title="杠铃" data-equ="杠铃">
+							</van-cell>
+							<van-cell title="哑铃" data-equ="哑铃">
+							</van-cell>
+							<van-cell title="器械" data-equ="器械">
+							</van-cell>
+							<van-cell title="徒手" data-equ="徒手">
+							</van-cell>
+						</view>
 					</van-collapse-item>
+					<!-- 训练部位细分 -->
+					<!-- 如果为有氧训练，则不可选择 -->
+					<van-collapse-item title="训练侧重" name="3" wx:if="{{addActionType ==='有氧训练'}}" value="心肺训练" disabled>
+					</van-collapse-item>
+
+					<!-- 不为有氧训练则可以选择 -->
+					<view wx:else>
+						<!-- 选中部位后的状态 -->
+						<van-collapse-item title="训练侧重" name="3" wx:if="{{addActionSub}}" value="{{addActionArea}}-{{addActionSub}}" clickable>
+							<van-tree-select items="{{ areaItems }}" main-active-index="{{ areaIndex }}" active-id="{{ areaActiveId }}" bind:click-nav="onAreaClickNav" bind:click-item="onAreaClickItem" />
+						</van-collapse-item>
+						<!-- 选中前的状态 -->
+						<van-collapse-item title="训练侧重" name="3" wx:else>
+							<van-tree-select items="{{ areaItems }}" main-active-index="{{ areaIndex }}" active-id="{{ areaActiveId }}" bind:click-nav="onAreaClickNav" bind:click-item="onAreaClickItem" clickable />
+						</van-collapse-item>
+					</view>
+
+
 				</van-collapse>
 
 			</van-popup>

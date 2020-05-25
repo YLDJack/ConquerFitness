@@ -73,6 +73,175 @@ Page({
    * 页面的初始数据
    */
   data: {
+
+    // 选择动作的类型
+    addActionType: "力量训练1",
+    addActionEqu: "杠铃",
+    // 添加动作的训练侧重
+    addActionSub: "",
+    // 添加动作的训练部位
+    addActionArea: "胸部",
+    // 选择动作部位的ts
+    areaItems: [{
+        // 导航名称
+        text: '胸部',
+        children: [{
+            // 名称
+            text: '胸大肌',
+            // id，作为匹配选中状态的标识
+            id: 1,
+          },
+          {
+            text: '上胸大肌',
+            id: 2
+          }, {
+            text: '前锯肌',
+            id: 3
+          }
+        ]
+      },
+      {
+        // 导航名称
+        text: '背部',
+        children: [{
+            // 名称
+            text: '背阔肌',
+            // id，作为匹配选中状态的标识
+            id: 4,
+          },
+          {
+            text: '大圆肌',
+            id: 5
+          }, {
+            text: '菱形肌',
+            id: 6
+          },
+          {
+            text: '冈下肌',
+            id: 7
+          }
+        ]
+      },
+      {
+        // 导航名称
+        text: '肩部',
+        children: [{
+            // 名称
+            text: '三角肌前束',
+            // id，作为匹配选中状态的标识
+            id: 8,
+          },
+          {
+            // 名称
+            text: '三角肌中束',
+            // id，作为匹配选中状态的标识
+            id: 9,
+          },
+          {
+            // 名称
+            text: '三角肌后束',
+            // id，作为匹配选中状态的标识
+            id: 10,
+          },
+          {
+            // 名称
+            text: '斜方肌',
+            // id，作为匹配选中状态的标识
+            id: 11,
+          },
+        ]
+      },
+      {
+        // 导航名称
+        text: '手臂',
+        children: [{
+            // 名称
+            text: '肱二头肌',
+            // id，作为匹配选中状态的标识
+            id: 12,
+          },
+          {
+            // 名称
+            text: '肱三头肌',
+            // id，作为匹配选中状态的标识
+            id: 13,
+          },
+          {
+            // 名称
+            text: '肱肌',
+            // id，作为匹配选中状态的标识
+            id: 14,
+          }
+        ]
+      },
+      {
+        // 导航名称
+        text: '核心',
+        // 禁用选项
+        children: [{
+            // 名称
+            text: '腹直肌',
+            // id，作为匹配选中状态的标识
+            id: 15,
+          },
+          {
+            // 名称
+            text: '腹外斜肌',
+            // id，作为匹配选中状态的标识
+            id: 16,
+          },
+          {
+            // 名称
+            text: '竖脊肌',
+            // id，作为匹配选中状态的标识
+            id: 17,
+          }
+        ]
+      },
+      {
+        // 导航名称
+        text: '腿部',
+        children: [{
+            // 名称
+            text: '股四头肌',
+            // id，作为匹配选中状态的标识
+            id: 18,
+          },
+          {
+            // 名称
+            text: '股二头肌',
+            // id，作为匹配选中状态的标识
+            id: 19,
+          },
+          {
+            // 名称
+            text: '小腿肌群',
+            // id，作为匹配选中状态的标识
+            id: 20,
+          }
+        ]
+      },
+
+      {
+        // 导航名称
+        text: '臀部',
+        children: [{
+            // 名称
+            text: '臀大肌',
+            // id，作为匹配选中状态的标识
+            id: 21,
+          },
+          {
+            // 名称
+            text: '臀中肌',
+            // id，作为匹配选中状态的标识
+            id: 22,
+          }
+        ]
+      }
+    ],
+    areaIndex: 0,
+    areaActiveId: null,
     // 搜索结果
     queryActionBySearch: "",
     // 根据动作获取结果
@@ -160,10 +329,46 @@ Page({
     showAddPop: false,
     // 添加动作界面弹出层coll默认选中数值
     collactiveNames: ['0'],
-    collactiveNames1: ['1'],
     lineec: {
       onInit: initlineChart
     }
+  },
+  // 选择运动类型按钮
+  selectType(event) {
+    let type = event.target.dataset.type;
+    this.setData({
+      addActionType: type
+    })
+  },
+  selectEqu(event) {
+    this.setData({
+      addActionEqu: event.target.dataset.equ
+    })
+  },
+  // 添加动作选择部位的左侧导航按钮
+  onAreaClickNav({
+    detail = {}
+  }) {
+    // 根据下标获取部位
+    let area = this.data.areaItems[detail.index].text;
+    // 若左侧改变时则同时改变右边的文本
+    let sub = this.data.areaItems[detail.index].children[0].text
+    this.setData({
+      areaIndex: detail.index || 0,
+      addActionArea: area,
+      addActionSub: sub
+    });
+  },
+  // 添加动作选择部位的右侧导航按钮
+  onAreaClickItem({
+    detail = {}
+  }) {
+    const areaActiveId = this.data.areaActiveId === detail.id ? null : detail.id;
+
+    this.setData({
+      areaActiveId: areaActiveId,
+      addActionSub: detail.text
+    });
   },
   /**
    * 生命周期函数--监听页面加载
@@ -345,11 +550,6 @@ Page({
   onCollChange(event) {
     this.setData({
       collactiveNames: event.detail
-    });
-  },
-  onCollChange1(event) {
-    this.setData({
-      collactiveNames1: event.detail
     });
   },
   //星星评分的点击事件

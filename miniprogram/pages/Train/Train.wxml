@@ -78,7 +78,7 @@
 			<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
 			<view slot="content" class="content">
 				<!-- 没有搜索动作按分类显示 -->
-				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && !queryActionBySearch}}">
+				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && queryActionBySearch.length==0}}">
 					<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
 					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid" wx:for="{{actionCate}}">
 						<view>{{item}}</view>
@@ -167,7 +167,7 @@
 				</view>
 
 				<!-- 如果发起搜索则动作不再按分类显示 -->
-				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex == index && queryActionBySearch}}">
+				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex == index && queryActionBySearch.length!=0}}">
 					<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
 					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid">
 						<view>搜索结果如下:</view>

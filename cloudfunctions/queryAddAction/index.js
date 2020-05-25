@@ -8,7 +8,10 @@ cloud.init({
 const db = cloud.database();
 // 云函数入口函数
 exports.main = async (event, context) => {
-  return await db.collection('actions').where({
-    actionArea: event.queryactionArea
+  const openId = cloud.getWXContext().OPENID;
+  // 等待其查询完再进行部位查询
+  return await db.collection('actionsAdd').where({
+    openId: openId,
+    actionArea:event.queryactionArea
   }).get()
 }

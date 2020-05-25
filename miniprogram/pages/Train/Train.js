@@ -248,7 +248,9 @@ Page({
     areaIndex: 0,
     areaActiveId: null,
     // 搜索结果
-    queryActionBySearch: "",
+    queryActionBySearch: [],
+    // 根据openid获取的添加的动作
+    queryAddActions: [],
     // 根据动作获取结果
     queryActionByName: [],
     // 一个部位中所有动作的查询结果
@@ -397,7 +399,7 @@ Page({
   onAddAction() {
     console.log(this.data.addActionName);
     let addActionImage = "";
-    if(this.data.fileList[0]){
+    if (this.data.fileList[0]) {
       addActionImage = this.data.fileList[0].url
     }
     wx.cloud.callFunction({
@@ -423,17 +425,19 @@ Page({
           title: '添加成功',
         })
         this.setData({
-          showAddPop:false,
+          showAddPop: false,
           // 将所有输入都清空
-          addActionName:"",
-          addActionDesc:"",
-          addActionNote:"",
-          fileList:[],
-          addActionType:"力量训练1",
-          addActionEqu:"杠铃",
-          addActionSub:"",
+          addActionName: "",
+          addActionDesc: "",
+          addActionNote: "",
+          fileList: [],
+          addActionType: "力量训练1",
+          addActionEqu: "杠铃",
+          addActionSub: "",
           areaActiveId: null
-        })
+        });
+        // 每当页面加载的时候，根据当前左侧部位分类发起请求
+        this.onQueryActionByArea();
       },
       fail: error => {
         console.log(error);
@@ -478,9 +482,10 @@ Page({
   // 根据锻炼部位查询数据
   //根据动作名查询数据，并显示弹出动作详细框
   onQueryActionByArea() {
+    this.onQueryAddActions();
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
-    // 查询当前用户所有的 counters
+    // 调用云函数查询动作
     wx.cloud.callFunction({
       // 云函数名称
       name: 'queryActionByArea',
@@ -489,10 +494,12 @@ Page({
         queryactionArea: actionArea
       },
       success: res => {
+        var actions = res.result.data;
+        actions = actions.concat(this.data.queryAddActions);
+        console.log('所有动作:', actions);
         this.setData({
-          queryActionByArea: res.result.data
+          queryActionByArea: actions
         });
-        console.log('[查询记录] 成功:', this.data.queryActionByArea);
         // 查询获取到数据中存在的分类
         this.QueryCate();
         this.onQueryActionByAreaCate();
@@ -502,7 +509,33 @@ Page({
           icon: 'none',
           title: '查询记录失败'
         })
-        console.error('[数据库] [查询记录] 失败：', err)
+        console.error('所有动作失败：', err)
+      }
+    })
+  },
+  // 查询添加后的动作
+  onQueryAddActions() {
+    const actionArea = this.data.items[this.data.mainActiveIndex].text;
+    // 调用云函数查询动作
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'queryAddAction',
+      // 传给云函数的参数
+      data: {
+        queryactionArea: actionArea
+      },
+      success: res => {
+        this.setData({
+          queryAddActions: res.result.data
+        });
+        console.log('添加的自定义动作:', res.result.data);
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('添加的自定义动作查询失败：', err)
       }
     })
   },
@@ -536,7 +569,6 @@ Page({
     const areadata = this.data.queryActionByArea;
     // 获取分类
     const cate = this.data.actionCate;
-
     const length = areadata.length;
     console.log(length);
     // 分类后的数据
@@ -570,7 +602,8 @@ Page({
       mainActiveIndex: detail.index || 0,
       // 切换分类时将搜索栏都置为空
       searchText: "",
-      queryActionBySearch: ""
+      queryActionBySearch: [],
+      queryAddActions: []
     });
     // 由于选择不同的部位，所以重新进行查询
     this.onQueryActionByArea();
@@ -582,7 +615,7 @@ Page({
     const searchText = this.data.searchText;
     if (!searchText) {
       this.setData({
-        queryActionBySearch: ""
+        queryActionBySearch: []
       })
       return true;
     }

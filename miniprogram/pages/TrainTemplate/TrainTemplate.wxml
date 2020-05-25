@@ -1,0 +1,91 @@
+<!--pages/TrainTemplate/TrainTemplate.wxml-->
+<!-- <text>pages/TrainTemplate/TrainTemplate.wxml</text> -->
+
+<!-- 页面顶部 -->
+<view>
+	<van-cell title="我的计划" label="共6套计划" border="{{ false }}">
+		<view slot="right-icon">
+			<van-icon name="more" color="red" size="50rpx" bind:click="showPopup" />
+			<van-popup show="{{ showPop }}" bind:close="onClose" position="bottom">
+				<van-cell-group>
+					<van-cell title="添加计划" center="true" clickable="true" bind:click="addPlan" />
+					<van-popup show="{{ addPlanshow }}" bind:close="addPlanonClose" position="bottom" custom-class="addpop" closeable="true">
+						<!-- 添加动作弹出层首部按钮界面 -->
+						<view class="closeandsave">
+							<!-- <van-icon name="cross" /> -->
+							<text class="savetext">保存</text>
+						</view>
+						<!-- 添加动作弹出层中间输入界面 -->
+						<van-field icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=8e69b4d71082615a42d8bb6c5707e2be&t=1590113990" placeholder="请输入计划名称" required clickable="false" />
+						<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange" clickable="true">
+							<!-- 训练类型类型 -->
+							<van-collapse-item title="训练类型" name="1" right-icon="arrow" value="力量训练+有氧训练">
+								<van-cell title="力量训练" />
+								<van-cell title="有氧训练" />
+								<van-cell title="HIIT" />
+							</van-collapse-item>
+
+							<!-- 训练器材 -->
+							<van-collapse-item title="涉及部位" name="2" right-icon="arrow" value="胸部+背部">
+								<van-cell title="胸部" />
+								<van-cell title="背部" />
+								<van-cell title="腿部" />
+							</van-collapse-item>
+						</van-collapse>
+					</van-popup>
+					<van-cell title="删除计划" center="true" clickable="true" />
+					<van-cell title="搜索计划" center="true" clickable="true" />
+					<van-cell title="分享计划" center="true" clickable="true" />
+				</van-cell-group>
+			</van-popup>
+		</view>
+	</van-cell>
+</view>
+
+<!-- 中间模板显示页面 -->
+<view>
+	<van-grid gutter="{{ 10 }}" column-num="1">
+		<view>已有模板</view>
+		<van-grid-item wx:for="{{ 2 }}" info="1次" use-slot>
+			<!-- 模板卡片 -->
+			<van-card thumb="{{ imageURL }}" title="胸与三头" desc="系统地训练全身">
+				<!-- 卡片底部标签和展示按钮部分 -->
+				<view slot="footer">
+					<van-tag type="danger" size="large">胸部</van-tag>
+					<van-tag type="danger" size="large">三头</van-tag>
+					<van-cell title="展示模板详情" is-link bind:click="showPopup" />
+				</view>
+			</van-card>
+		</van-grid-item>
+	</van-grid>
+</view>
+
+
+
+<!-- 推荐模板 -->
+<view class="quickitems">
+	<view class="text">模板推荐</view>
+	<scroll-view class="module-scroll" scroll-x="{{true}}">
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/quick1.jpg?sign=a5e74ccbdbad40ab569eacd25cd8a688&t=1590113964"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/quick1.jpg?sign=a5e74ccbdbad40ab569eacd25cd8a688&t=1590113964"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+		<navigator class="item-navigator">
+			<view class="item-group">
+				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/quick1.jpg?sign=a5e74ccbdbad40ab569eacd25cd8a688&t=1590113964"></image>
+				<view class="item-title">斩妹腹肌</view>
+				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			</view>
+		</navigator>
+	</scroll-view>
+</view>

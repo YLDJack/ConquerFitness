@@ -1,0 +1,138 @@
+page{
+  height: 100%;
+  background-color: #f7f8fa;
+}
+.body {
+  display: flex;
+  /* 更换主轴方向从上到下 */
+  flex-direction: column;
+}
+/* top部分 */
+.top {
+  height: 142rpx;
+  flex-grow: 1;
+  width: 100%;
+  background-color: white;
+}
+
+.top .title {
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  font-size: 36rpx;
+  margin-top: 15rpx;
+  margin-left: 15rpx;
+  height: 40%;
+}
+
+.top .select-search {
+  height: 60%;
+  width: 100%;
+  display: flex;
+  margin-top: -10rpx;
+}
+
+.van-dropdown-menu {
+  width: 180rpx;
+  height: 100%;
+  font-size: 26rpx;
+}
+
+.van-search {
+  width: 500rpx;
+}
+/* 下方整体 */
+.mid {
+  margin-top: 10rpx;
+  padding-top: 10rpx;
+  flex-grow: 4;
+  background-color: #f7f8fa;
+}
+
+.bg {
+  background-color: #f7f8fa;
+}
+
+/* 导航栏左侧样式类 */
+.treenav {
+  width: 202rpx;
+}
+
+/* 宫格的样式 */
+.content {
+  height: 100%;
+  background-color: #f7f8fa;
+}
+
+.griditem {
+  white-space: nowrap;
+  border-radius: 20rpx;
+  font-size: large;
+  font-weight: bold;
+}
+
+.griditemimage {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+
+.closeandsave {
+  padding: 25rpx;
+  /* display: flex;
+  justify-content: space-between; */
+}
+
+.tabtitle {
+  margin: 20rpx 20rpx 20rpx 35rpx;
+}
+
+.star {
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+
+/* 弹出层样式 */
+.poptabs {
+  margin: auto;
+}
+
+.tabtitle {
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.actionimage {
+  height: 400rpx;
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 25rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}
+
+/* 添加动作的弹出层 */
+.addpop {
+  width: 100%;
+  height: 90%;
+}
+
+
+ec-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}

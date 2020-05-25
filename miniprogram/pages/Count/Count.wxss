@@ -1,0 +1,33 @@
+/* pages/Count.wxss */
+.intro {
+  margin: 30px;
+  text-align: center;
+}
+ec-canvas {
+  width: 100%;
+  height: 300rpx;
+}
+.collapse{
+  margin-top: 300rpx;
+}
+.container {
+  /* position: absolute; */
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* display: flex; */
+  /* flex-direction: column; */
+  align-items: center;
+  /* justify-content: space-between; */
+  box-sizing: border-box;
+}
+.picker-pos {
+  margin-top: -130rpx;
+  margin-left: 150rpx;
+  color: blueviolet;
+}
+
+.totaltrain{
+  margin: 30rpx;
+}

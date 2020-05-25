@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/Main/Main",
+    "pages/Train/Train",
+    "pages/Personal/Personal",
+    "pages/Feedback/Feedback",
+    "pages/setPreferences/setPreferences",
+    "pages/Personal_data/Personal_data",
+    "pages/Count/Count",
+    "pages/logs/logs",
+    "pages/ActionDesc/ActionDesc",
+    "pages/Training/Training",
+    "pages/TrainTemplate/TrainTemplate",
+    "pages/ActionAdd/ActionAdd"
+  ],
+  "tabBar": {
+    "custom": true,
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/Main/Main",
+        "iconPath": "image/icon_component.png",
+        "selectedIconPath": "image/icon_component_HL.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/Train/Train",
+        "iconPath": "image/icon_yalin.png",
+        "selectedIconPath": "image/icon_yalin_selected.png",
+        "text": "动作"
+      },
+      {
+        "pagePath": "pages/Count/Count",
+        "iconPath": "image/icon_tubiao.png",
+        "selectedIconPath": "image/icon_tubiao_selected.png",
+        "text": "统计"
+      },
+      {
+        "pagePath": "pages/Personal/Personal",
+        "iconPath": "image/icon_personal.png",
+        "selectedIconPath": "image/icon_personal_selected.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "ConquerFitness",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json",
+  "cloud": true
+}

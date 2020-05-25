@@ -1,10 +1,12 @@
 {
+	"miniprogramRoot": "miniprogram/",
+	"cloudfunctionRoot": "cloudfunctions/",
 	"description": "项目配置文件",
 	"packOptions": {
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"enhance": true,
 		"postcss": true,
@@ -27,8 +29,8 @@
 		"bundle": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.10.4",
-	"appid": "wxd2a7ef5ce3039ecc",
+	"libVersion": "2.11.0",
+	"appid": "wx773cae64284e5337",
 	"projectname": "ConquerFitness",
 	"debugOptions": {
 		"hidedInDevtools": []
@@ -36,6 +38,7 @@
 	"isGameTourist": false,
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
+	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
 	"condition": {
 		"search": {
 			"current": -1,

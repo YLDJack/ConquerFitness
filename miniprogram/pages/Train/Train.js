@@ -73,7 +73,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-
     // 上传图片列表
     fileList: [],
     // 添加的动作名称
@@ -339,6 +338,24 @@ Page({
       onInit: initlineChart
     }
   },
+  // // 输入框输入事件
+  // bindNameInput: function(e){
+  //   this.setData({
+  //     addActionName:e.detail
+  //   })
+  //   console.log(this.data.addActionName)
+  // },
+  // // 输入框输入事件
+  // bindDescInput: function(e){
+  //   this.setData({
+  //     addActionDesc:e.detail
+  //   })
+  // },// 输入框输入事件
+  // bindNoteInput: function(e){
+  //   this.setData({
+  //     addActionNote:e.detail
+  //   })
+  // },
   // 选择运动类型按钮
   selectType(event) {
     let type = event.target.dataset.type;
@@ -378,6 +395,11 @@ Page({
   },
   // 添加动作事件
   onAddAction() {
+    console.log(this.data.addActionName);
+    let addActionImage = "";
+    if(this.data.fileList[0]){
+      addActionImage = this.data.fileList[0].url
+    }
     wx.cloud.callFunction({
       // 云函数名称
       name: 'actionAdd',
@@ -394,14 +416,23 @@ Page({
         // 添加动作的训练部位
         actionArea: this.data.addActionArea,
         // 将训练图片的url当做参数传递，若为空则置空
-        actionImage: this.data.fileList[0].url || ""
+        actionImage: addActionImage
       },
       success: res => {
         wx.showToast({
           title: '添加成功',
         })
         this.setData({
-          showAddPop:false
+          showAddPop:false,
+          // 将所有输入都清空
+          addActionName:"",
+          addActionDesc:"",
+          addActionNote:"",
+          fileList:[],
+          addActionType:"力量训练1",
+          addActionEqu:"杠铃",
+          addActionSub:"",
+          areaActiveId: null
         })
       },
       fail: error => {

@@ -223,35 +223,35 @@ Page({
     const hour = now.getHours();
     if (hour < 6) {
       this.setData({
-        hello: "凌晨好！"
+        hello: "凌晨好"
       });
     } else if (hour < 9) {
       this.setData({
-        hello: "早上好！"
+        hello: "早上好"
       });
     } else if (hour < 12) {
       this.setData({
-        hello: "上午好！"
+        hello: "上午好"
       });
     } else if (hour < 14) {
       this.setData({
-        hello: "中午好！"
+        hello: "中午好"
       });
     } else if (hour < 17) {
       this.setData({
-        hello: "下午好！"
+        hello: "下午好"
       });
     } else if (hour < 19) {
       this.setData({
-        hello: "傍晚好！"
+        hello: "傍晚好"
       });
     } else if (hour < 22) {
       this.setData({
-        hello: "晚上好！"
+        hello: "晚上好"
       });
     } else {
       this.setData({
-        hello: "夜里好！"
+        hello: "夜里好"
       });
     }
 

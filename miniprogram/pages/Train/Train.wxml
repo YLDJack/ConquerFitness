@@ -1,4 +1,5 @@
 <!-- 动作库、搜索栏 -->
+<van-toast id="van-toast" />
 <view class="body">
 	<view class="top">
 		<view class="title">动作库</view>
@@ -17,51 +18,57 @@
 				<!-- 添加动作弹出层首部按钮界面 -->
 				<view class="closeandsave">
 					<!-- <van-icon name="cross" /> -->
-					<text class="savetext">保存</text>
+					<van-button type="danger" size="mini" icon="add-o" bindtap="onAddAction">保存</van-button>
 				</view>
 				<!-- 添加动作弹出层中间输入界面 -->
-				<van-field icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=15c041cf5dcc24d503cfd47966f20ba3&t=1590112640" placeholder="请输入动作名称" required clickable="false" />
-				<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange" clickable="true">
+				<van-field label="动作名称" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=14457ecf67e875745303b33e04d94147&t=1590376044" placeholder="请输入动作名称(必填)" required clickable clearable model:value="{{addActionName}}" maxlength="9" show-word-limit />
+				<van-field label="动作描述" placeholder="多条语句以句号分割" clearable type="textarea" autosize model:value="{{addActionDesc}}" right-icon="info-o" maxlength="140" show-word-limit />
+				<van-field label="训练要点" placeholder="多条语句以句号分割" clearable type="textarea" autosize model:value="{{addActionNote}}" right-icon="info-o" maxlength="140" show-word-limit />
+				<!-- 训练图片 -->
+				<van-cell title="训练图片">
+					<van-uploader file-list="{{ fileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage" deletable />
 
+				</van-cell>
+				<!-- 下方选择框 -->
+				<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange">
 					<!-- 动作类型 -->
-					<van-collapse-item title="动作类型" name="1" right-icon="arrow" value="力量训练">
-						<van-cell title="力量训练" value="重量+次数" label="常规" />
-						<van-cell title="力量训练" value="重量（减去体重）+次数" label="辅助" />
-						<van-cell title="有氧训练" value="时间+距离+卡路里" />
+					<van-collapse-item title="动作类型" name="1" value="{{addActionType}}" clickable>
+						<view bindtap="selectType">
+							<van-cell title="力量训练1" value="重量+次数" label="常规" data-type="力量训练1" />
+							<van-cell title="力量训练2" value="重量（减去体重）+次数" label="辅助" data-type="力量训练2" />
+							<van-cell title="有氧训练" value="时间+距离+卡路里" data-type="有氧训练" />
+						</view>
 					</van-collapse-item>
-
-					<!-- 训练部位细分 -->
-					<van-collapse-item title="训练部位" name="2" right-icon="arrow" value="胸-上胸">
-						<van-collapse value="{{ collactiveNames1 }}" bind:change="onCollChange1" clickable="true">
-							<van-collapse-item title="胸部" name="1" right-icon="arrow">
-								<van-cell title="上胸" />
-								<van-cell title="中胸" />
-								<van-cell title="下胸" />
-							</van-collapse-item>
-							<van-collapse-item title="背部" name="2" right-icon="arrow">
-
-							</van-collapse-item>
-							<van-collapse-item title="肩部" name="3" right-icon="arrow">
-
-							</van-collapse-item>
-							<van-collapse-item title="腿部" name="4" right-icon="arrow">
-
-							</van-collapse-item>
-						</van-collapse>
-					</van-collapse-item>
-
 					<!-- 训练器材 -->
-					<van-collapse-item title="训练器材" name="3" right-icon="arrow" value="杠铃">
-						<van-cell title="哑铃" />
-						<van-cell title="杠铃" />
-						<van-cell title="史密斯机" />
-						<van-cell title="绳索" />
-						<van-cell title="TRX/&弹力带" />
-						<van-cell title="器械" />
-						<van-cell title="自重" />
+					<van-collapse-item title="训练器材" name="2" value="{{addActionEqu}}" clickable>
+						<view bindtap="selectEqu">
+							<van-cell title="杠铃" data-equ="杠铃">
+							</van-cell>
+							<van-cell title="哑铃" data-equ="哑铃">
+							</van-cell>
+							<van-cell title="器械" data-equ="器械">
+							</van-cell>
+							<van-cell title="徒手" data-equ="徒手">
+							</van-cell>
+						</view>
 					</van-collapse-item>
-				</van-collapse>
+					<!-- 训练部位细分 -->
+					<!-- 如果为有氧训练，则不可选择 -->
+					<van-collapse-item title="训练侧重" name="3" wx:if="{{addActionType ==='有氧训练'}}" value="心肺训练" disabled>
+					</van-collapse-item>
 
+					<!-- 不为有氧训练则可以选择 -->
+					<view wx:else>
+						<!-- 选中部位后的状态 -->
+						<van-collapse-item title="训练侧重" name="3" wx:if="{{addActionSub}}" value="{{addActionArea}}-{{addActionSub}}" clickable>
+							<van-tree-select items="{{ areaItems }}" main-active-index="{{ areaIndex }}" active-id="{{ areaActiveId }}" bind:click-nav="onAreaClickNav" bind:click-item="onAreaClickItem" />
+						</van-collapse-item>
+						<!-- 选中前的状态 -->
+						<van-collapse-item title="训练侧重" name="3" wx:else>
+							<van-tree-select items="{{ areaItems }}" main-active-index="{{ areaIndex }}" active-id="{{ areaActiveId }}" bind:click-nav="onAreaClickNav" bind:click-item="onAreaClickItem" clickable />
+						</van-collapse-item>
+					</view>
+				</van-collapse>
 			</van-popup>
 
 		</view>
@@ -73,17 +80,19 @@
 			<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
 			<view slot="content" class="content">
 				<!-- 没有搜索动作按分类显示 -->
-				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && !queryActionBySearch}}">
+				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && queryActionBySearch.length==0}}" wx:key="index">
 					<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
-					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid" wx:for="{{actionCate}}">
+					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid" wx:for="{{actionCate}}" wx:key="index">
 						<view>{{item}}</view>
-						<van-grid-item wx:for="{{actionByAreaCate[item]}}" wx:key="_id" text="{{item.actionName}}" bindtap="showPopup" data-actionname="{{item.actionName}}" content-class="griditem">
+						<!-- 动作卡片 -->
+						<van-grid-item wx:for="{{actionByAreaCate[item]}}" wx:key="_id" text="{{item.actionName}}" bindtap="showPopup" data-id="{{item._id}}" content-class="griditem">
 							<image class="griditemimage" slot="icon" src="{{item.actionImage}}"></image>
 						</van-grid-item>
 						<!-- 弹出层部分 必须放在点击按钮的下方-->
-						<van-popup show="{{ showText }}" bind:close="onClose" closeable custom-style="height:800rpx;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id">
+						<van-popup show="{{ showText }}" bind:close="onClose" closeable custom-style="height:800rpx;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id" bind:close="closeItem">
 							<!-- 详情通过弹出层tabs展示 -->
-							<view class="tabtitle">{{item.actionName}}</view>
+							<view class="tabtitle" wx:if="{{!item.openId}}">{{item.actionName}}</view>
+							<view class="tabtitle" wx:else>{{updateActionName}}</view>
 							<!-- 弹出层Tabs -->
 							<van-tabs type="card" class="poptabs">
 								<!-- 详情tab -->
@@ -129,12 +138,6 @@
 
 									</van-card>
 								</van-tab>
-
-								<!-- 历史记录 -->
-								<van-tab title="历史">
-									<van-card num="2" desc="描述信息" title="商品标题" thumb="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=15c041cf5dcc24d503cfd47966f20ba3&t=1590112640" />
-								</van-tab>
-
 								<!-- 趋势折线图 -->
 								<van-tab title="趋势">
 									<cover-view class="container">
@@ -156,23 +159,88 @@
 										<van-field value="{{ message }}" label="备注" type="textarea" placeholder="请输入备注" autosize border="{{ false }}" />
 									</van-cell-group>
 								</van-tab>
+
+								<!-- 自定义动作的删除界面 -->
+								<van-tab title="操作" wx:if="{{item.openId}}">
+									<view>
+										<view class="actionButton">
+											<van-button type="danger" custom-class="addactionbutton" bind:click="delAddAction" data-delid="{{item._id}}">删除</van-button>
+											<van-button type="info" custom-class="addactionbutton" bind:click="onUpdate">编辑</van-button>
+										</view>
+										<view>
+											<!-- 更新界面的弹出层 -->
+											<van-field label="动作名称:" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=14457ecf67e875745303b33e04d94147&t=1590376044" placeholder="请输入动作名称(必填)" required clickable clearable model:value="{{updateActionName}}" maxlength="9" show-word-limit disabled="{{!updateTag}}" focus="{{updateTag}}" />
+											<van-field label="动作描述{{index+1}}:" wx:for="{{updateActionDesc}}" wx:bind="index" clearable right-icon="info-o" maxlength="50" show-word-limit disabled="{{!updateTag}}" value="{{item}}" bind:change="confirmDesc" data-index="{{index}}" />
+											<van-field label="训练要点{{index+1}}:" wx:for="{{updateActionNote}}" wx:bind="index" clearable right-icon="info-o" maxlength="50" show-word-limit disabled="{{!updateTag}}" value="{{item}}" bind:change="confirmNote" data-index="{{index}}" />
+											<!-- 训练图片 -->
+											<van-cell title="训练图片" wx:if="{{updateTag}}" use-label-slot>
+												<image src="{{updateActionImage}}" style="height:100rpx;width:100rpx" slot="label"></image>
+												<van-uploader file-list="{{ updatefileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage1" deletable slot="right-icon" />
+
+											</van-cell>
+											<!-- 不编辑动作时，只显示原本的图片 -->
+											<van-cell title="训练图片" wx:else>
+												<image src="{{updateActionImage}}" style="height:100rpx;width:100rpx" slot="right-icon"></image>
+											</van-cell>
+
+											<!-- 下方选择框 -->
+											<van-collapse value="{{ updatecollactiveNames }}" bind:change="onCollChange1">
+												<!-- 动作类型 -->
+												<van-collapse-item title="动作类型" name="1" value="{{updateActionType}}" clickable disabled="{{!updateTag}}">
+													<view bindtap="selectType1">
+														<van-cell title="力量训练1" value="重量+次数" label="常规" data-type="力量训练1" />
+														<van-cell title="力量训练2" value="重量（减去体重）+次数" label="辅助" data-type="力量训练2" />
+														<van-cell title="有氧训练" value="时间+距离+卡路里" data-type="有氧训练" />
+													</view>
+												</van-collapse-item>
+												<!-- 训练器材 -->
+												<van-collapse-item title="训练器材" name="2" value="{{updateActionEqu}}" clickable disabled="{{!updateTag}}">
+													<view bindtap="selectEqu1">
+														<van-cell title="杠铃" data-equ="杠铃">
+														</van-cell>
+														<van-cell title="哑铃" data-equ="哑铃">
+														</van-cell>
+														<van-cell title="器械" data-equ="器械">
+														</van-cell>
+														<van-cell title="徒手" data-equ="徒手">
+														</van-cell>
+													</view>
+												</van-collapse-item>
+												<!-- 训练部位细分 -->
+												<!-- 如果为有氧训练，则不可选择 -->
+												<van-collapse-item title="训练侧重" name="3" wx:if="{{updateActionType ==='有氧训练'}}" value="心肺训练" disabled>
+												</van-collapse-item>
+
+												<!-- 不为有氧训练则可以选择 -->
+												<!-- 选中部位后的状态 -->
+												<van-collapse-item title="训练侧重" name="3" value="{{updateActionArea}}-{{updateActionSub}}" clickable disabled="{{!updateTag}}" wx:else>
+													<van-tree-select items="{{ areaItems }}" main-active-index="{{ updateareaIndex }}" active-id="{{ updateareaActiveId }}" bind:click-nav="onupdateAreaClickNav" bind:click-item="onupdateAreaClickItem" />
+												</van-collapse-item>
+											</van-collapse>
+											<van-button type="danger" custom-class="addactionbutton" bind:click="updateAddAction" data-delid="{{item._id}}" wx:if="{{updateTag}}">完成</van-button>
+
+										</view>
+									</view>
+								</van-tab>
+
 							</van-tabs>
 						</van-popup>
 					</van-grid>
 				</view>
 
 				<!-- 如果发起搜索则动作不再按分类显示 -->
-				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex == index && queryActionBySearch}}">
+				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex == index && queryActionBySearch.length!=0}}" wx:key="index">
 					<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
 					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid">
 						<view>搜索结果如下:</view>
-						<van-grid-item wx:for="{{queryActionBySearch}}" wx:key="_id" text="{{item.actionName}}" bindtap="showPopup" data-actionname="{{item.actionName}}" content-class="griditem">
+						<van-grid-item wx:for="{{queryActionBySearch}}" wx:key="_id" text="{{item.actionName}}" bindtap="showPopup" data-id="{{item._id}}" content-class="griditem">
 							<image class="griditemimage" slot="icon" src="{{item.actionImage}}"></image>
 						</van-grid-item>
 						<!-- 弹出层部分 必须放在点击按钮的下方-->
-						<van-popup show="{{ showText }}" bind:close="onClose" closeable custom-style="height:60%;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id">
+						<van-popup show="{{ showText }}" bind:close="onClose" closeable custom-style="height:800rpx;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id" bind:close="closeItem">
 							<!-- 详情通过弹出层tabs展示 -->
-							<view class="tabtitle">{{item.actionName}}</view>
+							<view class="tabtitle" wx:if="{{!item.openId}}">{{item.actionName}}</view>
+							<view class="tabtitle" wx:else>{{updateActionName}}</view>
 							<!-- 弹出层Tabs -->
 							<van-tabs type="card" class="poptabs">
 								<!-- 详情tab -->
@@ -218,12 +286,6 @@
 
 									</van-card>
 								</van-tab>
-
-								<!-- 历史记录 -->
-								<van-tab title="历史">
-									<van-card num="2" desc="描述信息" title="商品标题" thumb="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=15c041cf5dcc24d503cfd47966f20ba3&t=1590112640" />
-								</van-tab>
-
 								<!-- 趋势折线图 -->
 								<van-tab title="趋势">
 									<cover-view class="container">
@@ -245,6 +307,70 @@
 										<van-field value="{{ message }}" label="备注" type="textarea" placeholder="请输入备注" autosize border="{{ false }}" />
 									</van-cell-group>
 								</van-tab>
+
+								<!-- 自定义动作的删除界面 -->
+								<van-tab title="操作" wx:if="{{item.openId}}">
+									<view>
+										<view class="actionButton">
+											<van-button type="danger" custom-class="addactionbutton" bind:click="delAddAction" data-delid="{{item._id}}">删除</van-button>
+											<van-button type="info" custom-class="addactionbutton" bind:click="onUpdate">编辑</van-button>
+										</view>
+										<view>
+											<!-- 更新界面的弹出层 -->
+											<van-field label="动作名称:" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=14457ecf67e875745303b33e04d94147&t=1590376044" placeholder="请输入动作名称(必填)" required clickable clearable model:value="{{updateActionName}}" maxlength="9" show-word-limit disabled="{{!updateTag}}" focus="{{updateTag}}" />
+											<van-field label="动作描述{{index+1}}:" wx:for="{{updateActionDesc}}" wx:bind="index" clearable right-icon="info-o" maxlength="50" show-word-limit disabled="{{!updateTag}}" value="{{item}}" bind:change="confirmDesc" data-index="{{index}}" />
+											<van-field label="训练要点{{index+1}}:" wx:for="{{updateActionNote}}" wx:bind="index" clearable right-icon="info-o" maxlength="50" show-word-limit disabled="{{!updateTag}}" value="{{item}}" bind:change="confirmNote" data-index="{{index}}" />
+											<!-- 训练图片 -->
+											<van-cell title="训练图片" wx:if="{{updateTag}}" use-label-slot>
+												<image src="{{updateActionImage}}" style="height:100rpx;width:100rpx" slot="label"></image>
+												<van-uploader file-list="{{ updatefileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage1" deletable slot="right-icon" />
+
+											</van-cell>
+											<!-- 不编辑动作时，只显示原本的图片 -->
+											<van-cell title="训练图片" wx:else>
+												<image src="{{updateActionImage}}" style="height:100rpx;width:100rpx" slot="right-icon"></image>
+											</van-cell>
+
+											<!-- 下方选择框 -->
+											<van-collapse value="{{ updatecollactiveNames }}" bind:change="onCollChange1">
+												<!-- 动作类型 -->
+												<van-collapse-item title="动作类型" name="1" value="{{updateActionType}}" clickable disabled="{{!updateTag}}">
+													<view bindtap="selectType1">
+														<van-cell title="力量训练1" value="重量+次数" label="常规" data-type="力量训练1" />
+														<van-cell title="力量训练2" value="重量（减去体重）+次数" label="辅助" data-type="力量训练2" />
+														<van-cell title="有氧训练" value="时间+距离+卡路里" data-type="有氧训练" />
+													</view>
+												</van-collapse-item>
+												<!-- 训练器材 -->
+												<van-collapse-item title="训练器材" name="2" value="{{updateActionEqu}}" clickable disabled="{{!updateTag}}">
+													<view bindtap="selectEqu1">
+														<van-cell title="杠铃" data-equ="杠铃">
+														</van-cell>
+														<van-cell title="哑铃" data-equ="哑铃">
+														</van-cell>
+														<van-cell title="器械" data-equ="器械">
+														</van-cell>
+														<van-cell title="徒手" data-equ="徒手">
+														</van-cell>
+													</view>
+												</van-collapse-item>
+												<!-- 训练部位细分 -->
+												<!-- 如果为有氧训练，则不可选择 -->
+												<van-collapse-item title="训练侧重" name="3" wx:if="{{updateActionType ==='有氧训练'}}" value="心肺训练" disabled>
+												</van-collapse-item>
+
+												<!-- 不为有氧训练则可以选择 -->
+												<!-- 选中部位后的状态 -->
+												<van-collapse-item title="训练侧重" name="3" value="{{updateActionArea}}-{{updateActionSub}}" clickable disabled="{{!updateTag}}" wx:else>
+													<van-tree-select items="{{ areaItems }}" main-active-index="{{ updateareaIndex }}" active-id="{{ updateareaActiveId }}" bind:click-nav="onupdateAreaClickNav" bind:click-item="onupdateAreaClickItem" />
+												</van-collapse-item>
+											</van-collapse>
+											<van-button type="danger" custom-class="addactionbutton" bind:click="updateAddAction" data-delid="{{item._id}}" wx:if="{{updateTag}}">完成</van-button>
+
+										</view>
+									</view>
+								</van-tab>
+
 							</van-tabs>
 						</van-popup>
 					</van-grid>

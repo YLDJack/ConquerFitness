@@ -19,10 +19,11 @@
   align-items: center;
 }
 
-.sayhello image{
+.sayhello .image{
   width: 60rpx;
   height: 50rpx;
   margin-right: 15rpx;
+  border-radius: 50%;
 }
 .sayhello .sayhellotext{
   color: rgb(107, 105, 105);

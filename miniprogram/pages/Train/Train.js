@@ -340,24 +340,6 @@ Page({
       onInit: initlineChart
     }
   },
-  // // 输入框输入事件
-  // bindNameInput: function(e){
-  //   this.setData({
-  //     addActionName:e.detail
-  //   })
-  //   console.log(this.data.addActionName)
-  // },
-  // // 输入框输入事件
-  // bindDescInput: function(e){
-  //   this.setData({
-  //     addActionDesc:e.detail
-  //   })
-  // },// 输入框输入事件
-  // bindNoteInput: function(e){
-  //   this.setData({
-  //     addActionNote:e.detail
-  //   })
-  // },
   // 选择运动类型按钮
   selectType(event) {
     let type = event.target.dataset.type;
@@ -497,51 +479,82 @@ Page({
       // 传给云函数的参数
       data: {
         queryactionArea: actionArea
-      },
-      success: res => {
-        var actions = res.result.data;
-        actions = actions.concat(this.data.queryAddActions);
-        console.log('所有动作:', actions);
-        this.setData({
-          queryActionByArea: actions
-        });
-        // 查询获取到数据中存在的分类
-        this.QueryCate();
-        this.onQueryActionByAreaCate();
-      },
-      fail: err => {
-        wx.showToast({
-          icon: 'none',
-          title: '查询记录失败'
-        })
-        console.error('所有动作失败：', err)
       }
+    }).
+    then(res => {
+      var actions = res.result.data;
+      actions = actions.concat(this.data.queryAddActions);
+      console.log('所有动作:', actions);
+      this.setData({
+        queryActionByArea: actions
+      });
+      // 查询获取到数据中存在的分类
+      this.QueryCate();
+      this.onQueryActionByAreaCate();
+    }).catch(err => {
+      wx.showToast({
+        icon: 'none',
+        title: '查询记录失败'
+      })
+      console.error('所有动作失败：', err)
     })
   },
   // 查询自定义动作动作
-  onQueryAddActions() {
+  async onQueryAddActions() {
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     // 调用云函数查询动作
-    wx.cloud.callFunction({
+    await wx.cloud.callFunction({
       // 云函数名称
       name: 'queryAddAction',
       // 传给云函数的参数
       data: {
         queryactionArea: actionArea
-      },
-      success: res => {
-        this.setData({
-          queryAddActions: res.result.data
-        });
-        console.log('添加的自定义动作:', res.result.data);
-      },
-      fail: err => {
-        wx.showToast({
-          icon: 'none',
-          title: '查询记录失败'
-        })
-        console.error('添加的自定义动作查询失败：', err)
       }
+    }).
+    then(res => {
+      this.setData({
+        queryAddActions: res.result.data
+      });
+      console.log('添加的自定义动作:', res.result.data);
+    }).
+    catch(err => {
+      wx.showToast({
+        icon: 'none',
+        title: '查询记录失败'
+      })
+      console.error('添加的自定义动作查询失败：', err)
+    })
+  },
+  // 删除自定义动作
+  delAddAction(event) {
+    const delid = event.currentTarget.dataset.delid;
+    console.log("要删除的动作ID是：", delid);
+    // 调用云函数查询动作
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'delAction',
+      // 传给云函数的参数
+      data: {
+        delid: delid
+      }
+    }).
+    then(res => {
+      wx.showToast({
+        title: '删除成功',
+      })
+      console.log(delid,'删除成功');
+      // 查询获取到数据中存在的分类
+      this.onQueryActionByArea();
+      // 删除成功后关闭界面
+      this.setData({
+        showText:false
+      });
+    }).catch(err => {
+      wx.showToast({
+        icon: 'none',
+        title: '删除记录失败'
+      })
+      console.error('所有动作失败：', err)
     })
   },
   // 根据分类类别来获取分类

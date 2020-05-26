@@ -14,7 +14,7 @@
 			<van-icon name="add" color="red" size="50rpx" bind:click="showAdd" />
 			<!-- 添加动作弹出层部分 必须放在点击按钮的下方-->
 			<van-popup show="{{ showAddPop }}" closeable bind:close="onAddClose" custom-class="addpop" position="bottom">
-				<van-toast id="van-toast" style="width:100%;"/>
+				<van-toast id="van-toast" style="width:100%;" />
 				<!-- 添加动作弹出层首部按钮界面 -->
 				<view class="closeandsave">
 					<!-- <van-icon name="cross" /> -->
@@ -79,10 +79,11 @@
 			<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
 			<view slot="content" class="content">
 				<!-- 没有搜索动作按分类显示 -->
-				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && queryActionBySearch.length==0}}">
+				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && queryActionBySearch.length==0}}" wx:key="index">
 					<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
-					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid" wx:for="{{actionCate}}">
+					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid" wx:for="{{actionCate}}" wx:key="index">
 						<view>{{item}}</view>
+						<!-- 动作卡片 -->
 						<van-grid-item wx:for="{{actionByAreaCate[item]}}" wx:key="_id" text="{{item.actionName}}" bindtap="showPopup" data-actionname="{{item.actionName}}" content-class="griditem">
 							<image class="griditemimage" slot="icon" src="{{item.actionImage}}"></image>
 						</van-grid-item>
@@ -135,12 +136,6 @@
 
 									</van-card>
 								</van-tab>
-
-								<!-- 历史记录 -->
-								<van-tab title="历史">
-									<van-card num="2" desc="描述信息" title="商品标题" thumb="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=15c041cf5dcc24d503cfd47966f20ba3&t=1590112640" />
-								</van-tab>
-
 								<!-- 趋势折线图 -->
 								<van-tab title="趋势">
 									<cover-view class="container">
@@ -162,13 +157,22 @@
 										<van-field value="{{ message }}" label="备注" type="textarea" placeholder="请输入备注" autosize border="{{ false }}" />
 									</van-cell-group>
 								</van-tab>
+
+								<!-- 自定义动作的删除界面 -->
+								<van-tab title="编辑" wx:if="{{item.openId}}">
+									<view >
+										<van-button type="danger" custom-class="addactionbutton" bind:click="delAddAction" data-delid="{{item._id}}">删除动作</van-button>
+										<van-button type="info" custom-class="addactionbutton">修改名称</van-button>
+									</view>
+								</van-tab>
+
 							</van-tabs>
 						</van-popup>
 					</van-grid>
 				</view>
 
 				<!-- 如果发起搜索则动作不再按分类显示 -->
-				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex == index && queryActionBySearch.length!=0}}">
+				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex == index && queryActionBySearch.length!=0}}" wx:key="index">
 					<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
 					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid">
 						<view>搜索结果如下:</view>

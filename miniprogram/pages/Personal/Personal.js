@@ -19,6 +19,11 @@ Page({
     columns: ['增肌', '减脂', '塑形']
 
   },
+  onChange_collapse(event) {
+    this.setData({
+      activeNames: event.detail,
+    });
+  },
   // 弹出臀围选择
   showPopup_hip() {
     this.setData({

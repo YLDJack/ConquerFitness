@@ -7,9 +7,8 @@ Page({
   data: {
     checked: true,
     checked_countdown: true,
-    checked_weightlbs: true,
-    checked_weightkg: false,
-    checked_selfnext: true
+    checked_selfnext: true,
+    radio: '1',
   },
   
   // 设置倒计时
@@ -19,14 +18,19 @@ Page({
   },
   
   // 设置默认重量单位
-  onChange_weightlbs({ detail }) {
-    // 需要手动对 checked 状态进行更新
-    this.setData({ checked_weightlbs: detail });
+  onChange_weight(event) {
+    this.setData({
+      radio: event.detail,
+    });
   },
-  onChange_weightkg({ detail }) {
-    // 需要手动对 checked 状态进行更新
-    this.setData({ checked_weightkg: detail });
+
+  onClick_weight(event) {
+    const { name } = event.currentTarget.dataset;
+    this.setData({
+      radio: name,
+    });
   },
+
 
   // 设置自动跳转
   onChange_selfnext({ detail }) {

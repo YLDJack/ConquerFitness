@@ -13,7 +13,7 @@
       value="{{ messagevalue }}"
       placeholder="请输入反馈信息"
       border="{{ false }}"
-      bind:change="onChange"
+      bind:change="onChange_message"
     />
   </van-cell-group>
 </view>
@@ -22,10 +22,10 @@
 <view class="contact">
   <van-cell-group>
     <van-field
-      value="{{ messagevalue }}"
-      placeholder="手机/邮箱/QQ(选填)"
+      value="{{ contactvalue }}"
+      placeholder="手机/邮箱/QQ（选填）"
       border="{{ false }}"
-      bind:change="onChange"
+      bind:change="onChange_contact"
     />
   </van-cell-group>
 </view>
@@ -41,5 +41,5 @@
 </view>
 
 <view class="submit">
-  <van-button type="primary" size="large" color="#0079FE">提交</van-button>
+  <van-button type="primary" size="large" color="#0079FE" bindtap="onAdd">提交</van-button>
 </view>

@@ -13,6 +13,7 @@ Page({
     ],
     value1: 0,
     messagevalue: '',
+    contactvalue: '',
     // 上传图片预览
     fileList: []
   },
@@ -38,7 +39,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // if (app.globalData.openid) {
+    //   this.setData({
+    //     openid: app.globalData.openid
+    //   })
+    // }
+  },
 
+  onAdd: function (){
+  
   },
 
   /**

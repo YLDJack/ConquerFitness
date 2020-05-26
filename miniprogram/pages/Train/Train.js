@@ -1,7 +1,7 @@
 // pages/Train/Train.js'
 // import toast from '../../node_modules/@vant/weapp/dist/toast/toast';
 import * as echarts from '../../ec-canvas/echarts';
-
+import Toast from '@vant/weapp/toast/toast'
 const app = getApp();
 
 //初始化折线图的方法
@@ -395,8 +395,13 @@ Page({
       addActionSub: detail.text
     });
   },
-  // 添加动作事件
+  // 添加自定义动作事件
   onAddAction() {
+    // 如果用户名为空提醒其输入用户名
+    if (!this.data.addActionName) {
+      Toast.fail('请输入用户名');
+      return false;
+    }
     console.log(this.data.addActionName);
     let addActionImage = "";
     if (this.data.fileList[0]) {
@@ -481,8 +486,8 @@ Page({
   },
   // 根据锻炼部位查询数据
   //根据动作名查询数据，并显示弹出动作详细框
-  onQueryActionByArea() {
-    this.onQueryAddActions();
+  async onQueryActionByArea() {
+    await this.onQueryAddActions();
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
     // 调用云函数查询动作
@@ -513,7 +518,7 @@ Page({
       }
     })
   },
-  // 查询添加后的动作
+  // 查询自定义动作动作
   onQueryAddActions() {
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     // 调用云函数查询动作
@@ -594,7 +599,7 @@ Page({
     });
     console.log('分类后的数据:', this.data.actionByAreaCate);
   },
-  // treeselect的左侧点击方法
+  // treeselect的左侧点击方法,切换部位方法
   onClickNav({
     detail = {}
   }) {
@@ -603,7 +608,8 @@ Page({
       // 切换分类时将搜索栏都置为空
       searchText: "",
       queryActionBySearch: [],
-      queryAddActions: []
+      queryAddActions: [],
+      queryActionByArea: []
     });
     // 由于选择不同的部位，所以重新进行查询
     this.onQueryActionByArea();

@@ -4,93 +4,78 @@
   <view class="nickName">{{nickName}}</view>
 </view> -->
 <view class="userinfo">
-  <view class="userinfo-avatar">
-    <open-data  type="userAvatarUrl"></open-data>
-  </view>
-    <open-data type="userNickName"></open-data>
+	<view class="userinfo-avatar">
+		<open-data type="userAvatarUrl"></open-data>
+	</view>
+	<open-data type="userNickName"></open-data>
 </view>
 
 <!-- 身体数据图表页面跳转 -->
-<van-cell
-  is-link
-  icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/look.png?sign=6ea05de292d0d1c8920539b7a64214b7&t=1590113337"
-  title="查看健康数据图表"
-  link-type="navigateTo"
-  url="/pages/Personal_data/Personal_data"
-/>
+<van-cell is-link icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/look.png?sign=6ea05de292d0d1c8920539b7a64214b7&t=1590113337" title="查看健康数据图表" link-type="navigateTo" url="/pages/Personal_data/Personal_data" />
 
-<!-- 弹出层 -->
-<van-cell title="体重" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=18913b8606c886d11bc34aa6fb3368d0&t=1590113362" is-link bind:click="showPopup_weight" />
-<van-popup show="{{ showweight }}" round closeable custom-style="height: 30%;" bind:close="onClose_weight">
-  <view class="obtaindate">{{date}}</view>
-  <view class="items">
-    <view>体重(kg)：</view>
-    <van-stepper value="{{ 20 }}" step="0.1" decimal-length="{{ 1 }}" />
-  </view>
-  <view class="confirm" bindtap="onConfirm">确定</view>
-</van-popup>
+<van-collapse value="{{ activeNames }}" bind:change="onChange_collapse">
+	<van-collapse-item title="我的健康数据" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=18913b8606c886d11bc34aa6fb3368d0&t=1590113362" name="1">
+		<!-- 弹出层 -->
+		<van-cell title="体重" is-link bind:click="showPopup_weight" />
+		<van-popup show="{{ showweight }}" round closeable custom-style="height: 30%;" bind:close="onClose_weight">
+			<view class="obtaindate">{{date}}</view>
+			<view class="items">
+				<view>体重(kg)：</view>
+				<van-stepper value="{{ 20 }}" step="0.1" decimal-length="{{ 1 }}" />
+			</view>
+			<view class="confirm" bindtap="onConfirm">确定</view>
+		</van-popup>
 
-<van-cell title="体脂" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=18913b8606c886d11bc34aa6fb3368d0&t=1590113362" is-link bind:click="showPopup_tizhi" />
-<van-popup show="{{ showtizhi }}" round closeable custom-style="height: 30%;" bind:close="onClose_tizhi">
-  <view class="obtaindate">{{date}}</view>
-  <view class="items">
-    <view>体脂(%)：</view>
-    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
-  </view>
-  <view class="confirm" bindtap="onConfirm">确定</view>
-</van-popup>
+		<van-cell title="体脂" is-link bind:click="showPopup_tizhi" />
+		<van-popup show="{{ showtizhi }}" round closeable custom-style="height: 30%;" bind:close="onClose_tizhi">
+			<view class="obtaindate">{{date}}</view>
+			<view class="items">
+				<view>体脂(%)：</view>
+				<van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+			</view>
+			<view class="confirm" bindtap="onConfirm">确定</view>
+		</van-popup>
 
-<van-cell title="臀围" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=18913b8606c886d11bc34aa6fb3368d0&t=1590113362" is-link bind:click="showPopup_hip" />
-<van-popup show="{{ showhipline }}" round closeable custom-style="height: 30%;" bind:close="onClose_hip">
-  <view class="obtaindate">{{date}}</view>
-  <view class="items">
-    <view>臀围(cm)：</view>
-    <van-stepper value="{{ 5 }}" step="0.1" decimal-length="{{ 1 }}" />
-  </view>
-  <view class="confirm" bindtap="onConfirm">确定</view>
-</van-popup>
+		<van-cell title="臀围" is-link bind:click="showPopup_hip" />
+		<van-popup show="{{ showhipline }}" round closeable custom-style="height: 30%;" bind:close="onClose_hip">
+			<view class="obtaindate">{{date}}</view>
+			<view class="items">
+				<view>臀围(cm)：</view>
+				<van-stepper value="{{ 5 }}" step="0.1" decimal-length="{{ 1 }}" />
+			</view>
+			<view class="confirm" bindtap="onConfirm">确定</view>
+		</van-popup>
 
-<van-cell title="腿围" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=18913b8606c886d11bc34aa6fb3368d0&t=1590113362" is-link bind:click="showPopup_legs" />
-<van-popup show="{{ showlegs }}" round closeable custom-style="height: 40%;" bind:close="onClose_legs">
-  <view class="obtaindate">{{date}}</view>
-  <view class="items_leg">
-    <view>大腿(cm)：</view>
-    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
-  </view>
-  <view class="items_leg">
-    <view>小腿(cm)：</view>
-    <van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
-  </view>
-  <view class="confirm" bindtap="onConfirm">确定</view>
-</van-popup>
+		<van-cell title="腿围" is-link bind:click="showPopup_legs" />
+		<van-popup show="{{ showlegs }}" round closeable custom-style="height: 40%;" bind:close="onClose_legs">
+			<view class="obtaindate">{{date}}</view>
+			<view class="items_leg">
+				<view>大腿(cm)：</view>
+				<van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+			</view>
+			<view class="items_leg">
+				<view>小腿(cm)：</view>
+				<van-stepper value="{{ 1 }}" step="0.1" decimal-length="{{ 1 }}" />
+			</view>
+			<view class="confirm" bindtap="onConfirm">确定</view>
+		</van-popup>
+	</van-collapse-item>
+</van-collapse>
 
 <van-cell title="锻炼状态" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/status.png?sign=193f7eb93287c5719ce89a6f42903dfb&t=1590113399" is-link value="增肌" bind:click="showPopup_statu" />
 <van-popup show="{{ showstatu }}" position="bottom" custom-style="height: 40%;" bind:close="onClose_statu">
-  <van-picker columns="{{ columns }}" default-index="{{ 1 }}" show-toolbar title="锻炼状态" bind:change="onChange" bind:cancel="onCancel"
-  bind:confirm="onConfirm" />
-  <van-toast id="van-toast" />
+	<van-picker columns="{{ columns }}" default-index="{{ 1 }}" show-toolbar title="锻炼状态" bind:change="onChange" bind:cancel="onCancel" bind:confirm="onConfirm" />
+	<van-toast id="van-toast" />
 </van-popup>
 
-<van-cell
-  icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/setting.png?sign=8ac92f299f9437afc597a2b32f794d8e&t=1590113414"
-  is-link
-  title="训练设置"
-  link-type="navigateTo"
-  url="/pages/setPreferences/setPreferences"
-/>
+<van-cell icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/setting.png?sign=8ac92f299f9437afc597a2b32f794d8e&t=1590113414" is-link title="训练设置" link-type="navigateTo" url="/pages/setPreferences/setPreferences" />
 
-<van-cell
-  icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/feedback.png?sign=2a4fb53d2382600573db8a62715ebbb5&t=1590113732"
-  is-link
-  title="意见反馈"
-  link-type="navigateTo"
-  url="/pages/Feedback/Feedback"
-/>
+<van-cell icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/feedback.png?sign=2a4fb53d2382600573db8a62715ebbb5&t=1590113732" is-link title="意见反馈" link-type="navigateTo" url="/pages/Feedback/Feedback" />
 
 <!-- 分享 -->
 <button open-type='share' id="btnld" style="display:hidden"></button>
 <label for="btnld" style="z-index:99; height:76rpx">
-  <van-cell title="分享" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/share.png?sign=7a92240167f0586a1cbedbbca259b135&t=1590113751" is-link bind:click="showPopup" />
+	<van-cell title="分享" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/share.png?sign=7a92240167f0586a1cbedbbca259b135&t=1590113751" is-link bind:click="showPopup" />
 </label>
 
 <!-- <van-cell
@@ -100,4 +85,3 @@
   link-type="navigateTo"
   url="/pages/About/about"
 /> -->
-

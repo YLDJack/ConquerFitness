@@ -1,5 +1,3 @@
-// pages/Train/Train.js'
-// import toast from '../../node_modules/@vant/weapp/dist/toast/toast';
 import * as echarts from '../../ec-canvas/echarts';
 import Toast from '@vant/weapp/toast/toast'
 const app = getApp();
@@ -439,6 +437,13 @@ Page({
     if (this.data.fileList[0]) {
       addActionImage = this.data.fileList[0].url
     }
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '上传中...',
+      duration: 0,
+      loadingType: "circular"
+    });
     wx.cloud.callFunction({
       // 云函数名称
       name: 'actionAdd',
@@ -458,6 +463,7 @@ Page({
         actionImage: addActionImage
       },
       success: res => {
+        toast.clear();
         wx.showToast({
           title: '添加成功',
         })
@@ -477,6 +483,7 @@ Page({
         this.onQueryActionByArea();
       },
       fail: error => {
+        toast.clear();
         console.log(error);
         wx.showToast({
           title: '添加失败',
@@ -523,9 +530,12 @@ Page({
     if (this.data.updatefileList[0]) {
       updateActionImage = this.data.updatefileList[0].url
     }
-    Toast.loading({
+    const toast = Toast.loading({
       mask: true,
-      message: '加载中...'
+      forbidClick: true, // 禁用背景点击
+      message: '同步中...',
+      duration: 0,
+      loadingType: "circular"
     });
     // 调用云函数查询动作
     wx.cloud.callFunction({
@@ -549,6 +559,7 @@ Page({
       },
     }).
     then(res => {
+      toast.clear();
       wx.showToast({
         icon: 'none',
         title: '更新记录成功'
@@ -562,6 +573,7 @@ Page({
       })
     }).
     catch(err => {
+      toast.clear();
       wx.showToast({
         icon: 'none',
         title: '更新记录失败'
@@ -578,9 +590,12 @@ Page({
   },
   // 添加图片
   uploadImage(event) {
-    Toast.loading({
+    const toast = Toast.loading({
       mask: true,
-      message: '加载中...'
+      forbidClick: true, // 禁用背景点击
+      message: '上传中...',
+      duration: 0,
+      loadingType: "circular"
     });
     const {
       file
@@ -595,6 +610,7 @@ Page({
       filePath: filePath,
       cloudPath: cloudPath,
       success: res => {
+        toast.clear();
         console.log('上传成功', res);
         // 上传完成需要更新 fileList
         var {
@@ -613,9 +629,12 @@ Page({
   },
   // 修改自定义动作时添加图片
   uploadImage1(event) {
-    Toast.loading({
+    const toast = Toast.loading({
       mask: true,
-      message: '加载中...'
+      forbidClick: true, // 禁用背景点击
+      message: '上传中...',
+      duration: 0,
+      loadingType: "circular"
     });
     const {
       file
@@ -630,7 +649,8 @@ Page({
       filePath: filePath,
       cloudPath: cloudPath,
       success: res => {
-        console.log('上传成功', res);
+        toast.clear(),
+          console.log('上传成功', res);
         // 上传完成需要更新 fileList
         var {
           updatefileList = []
@@ -649,6 +669,14 @@ Page({
   // 根据锻炼部位查询数据
   //根据动作名查询数据，并显示弹出动作详细框
   async onQueryActionByArea() {
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '加载中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+
     await this.onQueryAddActions();
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
@@ -662,6 +690,7 @@ Page({
       }
     }).
     then(res => {
+      toast.clear();
       var actions = res.result.data;
       actions = actions.concat(this.data.queryAddActions);
       console.log('所有动作:', actions);
@@ -672,9 +701,10 @@ Page({
       this.QueryCate();
       this.onQueryActionByAreaCate();
     }).catch(err => {
+      toast.clear();
       wx.showToast({
         icon: 'none',
-        title: '查询记录失败'
+        title: '查询所有动作失败'
       })
       console.error('所有动作失败：', err)
     })
@@ -700,13 +730,20 @@ Page({
     catch(err => {
       wx.showToast({
         icon: 'none',
-        title: '添加记录失败'
+        title: '查询自定义动作失败'
       })
-      console.error('添加的自定义动作失败：', err)
+      console.error('查询自定义动作失败：', err)
     })
   },
   // 删除自定义动作
   delAddAction(event) {
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '删除中...',
+      duration: 0,
+      loadingType: "circular"
+    });
     const delid = event.currentTarget.dataset.delid;
     console.log("要删除的动作ID是：", delid);
     // 调用云函数查询动作
@@ -719,9 +756,7 @@ Page({
       }
     }).
     then(res => {
-      wx.showToast({
-        title: '删除成功',
-      })
+      toast.clear();
       console.log(delid, '删除成功');
       // 查询获取到数据中存在的分类
       this.onQueryActionByArea();
@@ -730,11 +765,12 @@ Page({
         showText: false
       });
     }).catch(err => {
+      toast.clear();
       wx.showToast({
         icon: 'none',
         title: '删除记录失败'
       })
-      console.error('所有动作失败：', err)
+      console.error('删除记录失败：', err)
     })
   },
   // 根据分类类别来获取分类

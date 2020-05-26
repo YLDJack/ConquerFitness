@@ -8,20 +8,21 @@
 
 .top .topleft{
   height: 100%;
-  width: 300rpx;
+  width: 500rpx;
   margin-left: 20rpx;
 }
 
 .topleft .sayhello{
   height: 45%;
-  width: 300rpx;
+  width: 500rpx;
   display: flex;
   align-items: center;
+  white-space:nowrap;
 }
 
 .sayhello .image{
   width: 60rpx;
-  height: 50rpx;
+  height: 60rpx;
   margin-right: 15rpx;
   border-radius: 50%;
 }

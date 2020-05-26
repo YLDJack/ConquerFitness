@@ -131,6 +131,12 @@ page {
   margin: 20rpx 20rpx 20rpx 30rpx;
 }
 
+.addactionbutton {
+  font-size: 25rpx;
+  font-weight: bold;
+  margin: 20rpx 20rpx 20rpx 30rpx;
+}
+
 
 ec-canvas {
   width: 100%;

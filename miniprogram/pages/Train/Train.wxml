@@ -218,7 +218,6 @@
 												</van-collapse-item>
 											</van-collapse>
 											<van-button type="danger" custom-class="addactionbutton" bind:click="updateAddAction" data-delid="{{item._id}}" wx:if="{{updateTag}}">完成</van-button>
-
 										</view>
 									</view>
 								</van-tab>

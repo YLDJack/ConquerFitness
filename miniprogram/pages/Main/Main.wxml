@@ -3,8 +3,12 @@
 	<view class="topleft">
 		<!-- 问好 -->
 		<view class="sayhello">
-			<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/smile.png?sign=b64df0dccf7fd58628532e4df6ae5508&t=1590111906"></image>
-			<text class="sayhellotext">{{hello}}</text>
+			<!-- <image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/smile.png?sign=b64df0dccf7fd58628532e4df6ae5508&t=1590111906"></image> -->
+			<open-data type="userAvatarUrl" class="image"></open-data>
+			<view class="sayhellotext">
+				<open-data type="userNickName"></open-data>
+				,{{hello}}!
+			</view>
 		</view>
 		<!-- 日历 -->
 		<view hover-class='none' class="calendar-navigator">

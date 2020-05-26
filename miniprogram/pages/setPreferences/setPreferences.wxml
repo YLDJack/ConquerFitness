@@ -1,31 +1,31 @@
 <!-- 计时方式设置 -->
 <view class="settingbox">
-  <!-- 设置是否倒计时 -->
-  <view class="title">计时方式</view>
-  <van-cell>
-    <view slot="title" class="switchgroup">
-      <view class="van-cell-text">开启倒计时</view>
-      <van-switch checked="{{ checked_countdown }}" bind:change="onChange_countdown" />
-    </view>
-  </van-cell>
-  <!-- 设置重量单位 -->
-  <view class="title">默认重量单位</view>
-  <van-cell>
-    <view slot="title" class="switchgroup">
-      <view class="van-cell-text">英镑 (lbs)</view>
-      <van-switch name="checked_weightlbs" checked="{{ checked_weightlbs }}" bind:change="onChange_weightlbs" />
-    </view>
-    <view slot="title" class="switchgroup">
-      <view class="van-cell-text">公斤 (kg)</view>
-      <van-switch name="checked_weightkg" checked="{{ checked_weightkg }}" bind:change="onChange_weightkg" />
-    </view>
-  </van-cell>
-  <!-- 是否自动开始下一个动作 -->
-  <view class="title">有序训练可以打开这个选项</view>
-  <van-cell>
-    <view slot="title" class="switchgroup">
-      <view class="van-cell-text">是否自动跳转下一个动作</view>
-      <van-switch checked="{{ checked_selfnext }}" bind:change="onChange_selfnext" />
-    </view>
-  </van-cell>
+	<!-- 设置是否倒计时 -->
+	<view class="title">计时方式</view>
+	<van-cell>
+		<view slot="title" class="switchgroup">
+			<view class="van-cell-text">开启倒计时</view>
+			<van-switch checked="{{ checked_countdown }}" bind:change="onChange_countdown" />
+		</view>
+	</van-cell>
+	<!-- 设置重量单位 -->
+	<view class="title">默认重量单位</view>
+	<van-radio-group value="{{ radio }}" bind:change="onChange_weight">
+		<van-cell-group>
+			<van-cell title="英镑 (lbs)" clickable data-name="1" bind:click="onClick_weight">
+				<van-radio slot="right-icon" name="1" />
+			</van-cell>
+			<van-cell title="公斤 (kg)" clickable data-name="2" bind:click="onClick_weight">
+				<van-radio slot="right-icon" name="2" />
+			</van-cell>
+		</van-cell-group>
+	</van-radio-group>
+	<!-- 是否自动开始下一个动作 -->
+	<view class="title">有序训练可以打开这个选项</view>
+	<van-cell>
+		<view slot="title" class="switchgroup">
+			<view class="van-cell-text">是否自动跳转下一个动作</view>
+			<van-switch checked="{{ checked_selfnext }}" bind:change="onChange_selfnext" />
+		</view>
+	</van-cell>
 </view>

@@ -649,6 +649,10 @@ Page({
   // 根据锻炼部位查询数据
   //根据动作名查询数据，并显示弹出动作详细框
   async onQueryActionByArea() {
+    Toast.loading({
+      mask: true,
+      message: '加载中...'
+    });
     await this.onQueryAddActions();
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);

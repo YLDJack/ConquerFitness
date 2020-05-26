@@ -649,12 +649,14 @@ Page({
   // 根据锻炼部位查询数据
   //根据动作名查询数据，并显示弹出动作详细框
   async onQueryActionByArea() {
-    Toast.loading({
+    const toast = Toast.loading({
       mask: true,
+      forbidClick: true, // 禁用背景点击
       message: '加载中...',
-      duration: 300,
+      duration: 0,
       loadingType: "circular"
     });
+
     await this.onQueryAddActions();
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
@@ -668,6 +670,7 @@ Page({
       }
     }).
     then(res => {
+      toast.clear();
       var actions = res.result.data;
       actions = actions.concat(this.data.queryAddActions);
       console.log('所有动作:', actions);
@@ -678,6 +681,7 @@ Page({
       this.QueryCate();
       this.onQueryActionByAreaCate();
     }).catch(err => {
+      toast.clear();
       wx.showToast({
         icon: 'none',
         title: '查询记录失败'

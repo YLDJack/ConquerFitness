@@ -651,7 +651,9 @@ Page({
   async onQueryActionByArea() {
     Toast.loading({
       mask: true,
-      message: '加载中...'
+      message: '加载中...',
+      duration: 300,
+      loadingType: "circular"
     });
     await this.onQueryAddActions();
     const actionArea = this.data.items[this.data.mainActiveIndex].text;

@@ -449,8 +449,11 @@ Page({
       filePath: filePath,
       cloudPath: cloudPath,
       success: res => {
+        Toast.loading({
+          mask: true,
+          message: '加载中...'
+        });
         console.log('上传成功', res);
-        // 上传完成需要更新 fileList
         // 上传完成需要更新 fileList
         var {
           fileList = []
@@ -542,12 +545,12 @@ Page({
       wx.showToast({
         title: '删除成功',
       })
-      console.log(delid,'删除成功');
+      console.log(delid, '删除成功');
       // 查询获取到数据中存在的分类
       this.onQueryActionByArea();
       // 删除成功后关闭界面
       this.setData({
-        showText:false
+        showText: false
       });
     }).catch(err => {
       wx.showToast({
@@ -556,6 +559,12 @@ Page({
       })
       console.error('所有动作失败：', err)
     })
+  },
+  // 编辑自定义动作
+  updateAddAction(event) {
+    const delid = event.currentTarget.dataset.delid;
+    console.log("要编辑的动作ID是：", delid);
+
   },
   // 根据分类类别来获取分类
   QueryCate() {

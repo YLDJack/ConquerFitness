@@ -11,11 +11,13 @@ const db = cloud.database();
 exports.main = async (event, context) => {
 
   const openId = cloud.getWXContext().OPENID;
-  let addactionNote = event.actionNote.split("。");
-  let addactionDesc = event.actionDesc.split("。");
-  return await db.collection('actionsAdd').add({
+  let addactionNote = event.actionNote;
+  let addactionDesc = event.actionDesc;
+  return await db.collection('actionsAdd').where({
+    _id: event._id,
+    openId: openId
+  }).update({
     data: {
-      openId:openId,
       actionArea: event.actionArea,
       actionDesc: addactionDesc,
       actionEquipment: event.actionEqu,

@@ -69,12 +69,22 @@ function initlineChart(canvas, width, height, dpr) {
 
 Page({
 
-  /**
-   * 页面的初始数据
-   */
+  //页面的初始数据
   data: {
+    // 更新的动作
+    updateActionName: "",
+    updateActionDesc: "",
+    updateActionNote: "",
+    updateActionType: "",
+    updateActionEqu: "",
+    updateActionSub: "",
+    updateActionArea: "",
+    updateActionImage: "",
+    // 是否编辑动作标签
+    updateTag: false,
     // 上传图片列表
     fileList: [],
+    updatefileList: [],
     // 添加的动作名称
     addActionName: "",
     addActionDesc: "",
@@ -247,6 +257,8 @@ Page({
     ],
     areaIndex: 0,
     areaActiveId: null,
+    updateareaIndex: 0,
+    updateareaActiveId: null,
     // 搜索结果
     queryActionBySearch: [],
     // 根据openid获取的添加的动作
@@ -336,6 +348,7 @@ Page({
     showAddPop: false,
     // 添加动作界面弹出层coll默认选中数值
     collactiveNames: ['0'],
+    updatecollactiveNames: ['0'],
     lineec: {
       onInit: initlineChart
     }
@@ -347,9 +360,21 @@ Page({
       addActionType: type
     })
   },
+  // 更新动作时选择运动类型按钮
+  selectType1(event) {
+    let type = event.target.dataset.type;
+    this.setData({
+      updateActionType: type
+    })
+  },
   selectEqu(event) {
     this.setData({
       addActionEqu: event.target.dataset.equ
+    })
+  },
+  selectEqu1(event) {
+    this.setData({
+      updateActionEqu: event.target.dataset.equ
     })
   },
   // 添加动作选择部位的左侧导航按钮
@@ -375,6 +400,31 @@ Page({
     this.setData({
       areaActiveId: areaActiveId,
       addActionSub: detail.text
+    });
+  },
+  // 更新动作选择部位的左侧导航按钮
+  onupdateAreaClickNav({
+    detail = {}
+  }) {
+    // 根据下标获取部位
+    let area = this.data.areaItems[detail.index].text;
+    // 若左侧改变时则同时改变右边的文本
+    let sub = this.data.areaItems[detail.index].children[0].text
+    this.setData({
+      updateareaIndex: detail.index || 0,
+      updateActionArea: area,
+      updateActionSub: sub
+    });
+  },
+  // 更新动作选择部位的右侧导航按钮
+  onupdateAreaClickItem({
+    detail = {}
+  }) {
+    const areaActiveId = this.data.areaActiveId === detail.id ? null : detail.id;
+
+    this.setData({
+      updateareaActiveId: areaActiveId,
+      updateActionSub: detail.text
     });
   },
   // 添加自定义动作事件
@@ -434,8 +484,104 @@ Page({
       }
     })
   },
+  // 编辑动作开关
+  onUpdate() {
+    this.setData({
+      updateTag: !this.data.updateTag
+    })
+  },
+  confirmDesc(event) {
+    const index = event.currentTarget.dataset.index
+    console.log('当前输入的描述:', index, event.detail);
+    let desc = this.data.updateActionDesc;
+    desc[index] = event.detail;
+    this.setData({
+      updateActionDesc: desc
+    })
+  },
+  confirmNote(event) {
+    const index = event.currentTarget.dataset.index
+    console.log('当前输入的重点:', index, event.detail);
+    let note = this.data.updateActionNote;
+    note[index] = event.detail;
+    this.setData({
+      updateActionNote: note
+    })
+  },
+  // 编辑自定义动作
+  updateAddAction(event) {
+    if (!this.data.updateActionName) {
+      wx.showToast({
+        title: '用户名不能为空!',
+        icon: "none"
+      })
+      return false;
+    }
+    const delid = event.currentTarget.dataset.delid;
+    console.log("要编辑的动作ID是：", delid);
+    let updateActionImage = this.data.updateActionImage;
+    if (this.data.updatefileList[0]) {
+      updateActionImage = this.data.updatefileList[0].url
+    }
+    Toast.loading({
+      mask: true,
+      message: '加载中...'
+    });
+    // 调用云函数查询动作
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'updateAddAction',
+      // 传给云函数的参数
+      data: {
+        _id: delid,
+        actionName: this.data.updateActionName,
+        actionDesc: this.data.updateActionDesc,
+        actionNote: this.data.updateActionNote,
+        // 选择动作的类型
+        actionType: this.data.updateActionType,
+        actionEqu: this.data.updateActionEqu,
+        // 添加动作的训练侧重
+        actionSub: this.data.updateActionSub,
+        // 添加动作的训练部位
+        actionArea: this.data.updateActionArea,
+        // 将训练图片的url当做参数传递，若为空则置空
+        actionImage: updateActionImage
+      },
+    }).
+    then(res => {
+      wx.showToast({
+        icon: 'none',
+        title: '更新记录成功'
+      });
+      this.onQueryActionByArea();
+      this.setData({
+        updateTag: false,
+        updateActionImage: updateActionImage,
+        updatefileList: [],
+        showText: false
+      })
+    }).
+    catch(err => {
+      wx.showToast({
+        icon: 'none',
+        title: '更新记录失败'
+      })
+      console.error('更新自定义动作失败：', err)
+    })
+  },
+  closeItem() {
+    this.setData({
+      updatefileList: [],
+      showText: false,
+      updateTag: false
+    })
+  },
   // 添加图片
   uploadImage(event) {
+    Toast.loading({
+      mask: true,
+      message: '加载中...'
+    });
     const {
       file
     } = event.detail;
@@ -449,10 +595,6 @@ Page({
       filePath: filePath,
       cloudPath: cloudPath,
       success: res => {
-        Toast.loading({
-          mask: true,
-          message: '加载中...'
-        });
         console.log('上传成功', res);
         // 上传完成需要更新 fileList
         var {
@@ -466,6 +608,41 @@ Page({
           fileList
         });
         console.log(this.data.fileList);
+      }
+    });
+  },
+  // 修改自定义动作时添加图片
+  uploadImage1(event) {
+    Toast.loading({
+      mask: true,
+      message: '加载中...'
+    });
+    const {
+      file
+    } = event.detail;
+    console.log('图片加载完成', file);
+    const filePath = file.path;
+    const tempFlie = filePath.split('.')
+    const cloudPath = 'actionImage/' + 'actionimage-' + tempFlie[tempFlie.length - 2] + '.' + tempFlie[tempFlie.length - 1];
+    // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+    // wx.cloud代表传到云开的数据库
+    wx.cloud.uploadFile({
+      filePath: filePath,
+      cloudPath: cloudPath,
+      success: res => {
+        console.log('上传成功', res);
+        // 上传完成需要更新 fileList
+        var {
+          updatefileList = []
+        } = this.data;
+        updatefileList.push({
+          file,
+          url: res.fileID
+        });
+        this.setData({
+          updatefileList
+        });
+        console.log(this.data.updatefileList);
       }
     });
   },
@@ -523,9 +700,9 @@ Page({
     catch(err => {
       wx.showToast({
         icon: 'none',
-        title: '查询记录失败'
+        title: '添加记录失败'
       })
-      console.error('添加的自定义动作查询失败：', err)
+      console.error('添加的自定义动作失败：', err)
     })
   },
   // 删除自定义动作
@@ -559,12 +736,6 @@ Page({
       })
       console.error('所有动作失败：', err)
     })
-  },
-  // 编辑自定义动作
-  updateAddAction(event) {
-    const delid = event.currentTarget.dataset.delid;
-    console.log("要编辑的动作ID是：", delid);
-
   },
   // 根据分类类别来获取分类
   QueryCate() {
@@ -680,18 +851,26 @@ Page({
   //根据动作名查询数据，并显示弹出动作详细框
   showPopup: function (event) {
     // dataset中的数据必须为全部小写才能获取
-    const actionName = event.currentTarget.dataset.actionname;
+    const id = event.currentTarget.dataset.id;
     const data = this.data.queryActionByArea;
     const length = data.length;
     let catedata = [];
     for (let i = 0; i < length; i++) {
-      if (actionName === data[i].actionName) {
+      if (id === data[i]._id) {
         catedata.push(data[i]);
       }
     }
     this.setData({
       queryActionByName: catedata,
-      showText: true
+      showText: true,
+      updateActionName: catedata[0].actionName,
+      updateActionDesc: catedata[0].actionDesc,
+      updateActionNote: catedata[0].actionNote,
+      updateActionType: catedata[0].actionType,
+      updateActionEqu: catedata[0].actionEquipment,
+      updateActionSub: catedata[0].actionSub,
+      updateActionArea: catedata[0].actionArea,
+      updateActionImage: catedata[0].actionImage
     })
     console.log("当前的动作是:", this.data.queryActionByName);
   },
@@ -709,6 +888,11 @@ Page({
   onCollChange(event) {
     this.setData({
       collactiveNames: event.detail
+    });
+  },
+  onCollChange1(event) {
+    this.setData({
+      updatecollactiveNames: event.detail
     });
   },
   //星星评分的点击事件

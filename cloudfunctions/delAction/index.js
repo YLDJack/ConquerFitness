@@ -14,9 +14,8 @@ exports.main = async (event, context) => {
   console.log(openId);
   try {
     return await db.collection('actionsAdd').where({
-      data: {
-        _id: event.delid+""
-      }
+      openId:openId,
+      _id: event.delid
     }).remove()
   } catch (e) {
     console.error(e)

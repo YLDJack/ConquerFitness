@@ -69,6 +69,11 @@ Page({
 
   //页面的初始数据
   data: {
+    delArray: [],
+    // 批量删除
+    delbutton: false,
+    // 弹出层里的tab索引
+    moretabactive: 0,
     // 更新的动作
     updateActionName: "",
     updateActionDesc: "",
@@ -283,8 +288,12 @@ Page({
     ],
     // treeselect--左侧选中项的索引属性
     mainActiveIndex: 0,
+    // more弹出层里的ts的索引
+    addpopActiveIndex: 0,
     // treeselect--右侧选中项的 id，支持传入数组
     activeId: [],
+    // more弹出层里的ts的选中id数组
+    addpopactiveId: [],
     // 左边选择项items 数据结构
     items: [{
         // 导航名称
@@ -350,6 +359,23 @@ Page({
     lineec: {
       onInit: initlineChart
     }
+  },
+  // 点击删除
+  onDelClick(event) {
+    // 使用set确保每个id都是不重复的
+    let newdel = new Set(this.data.delArray);
+    newdel = newdel.add(event.currentTarget.dataset.id);
+    newdel = Array.from(newdel);
+    this.setData({
+      delArray:newdel
+    })
+    console.log(this.data.delArray);
+  },
+  // 开始批量删除
+  startDel() {
+    this.setData({
+      delbutton: !this.data.delbutton
+    })
   },
   // 选择运动类型按钮
   selectType(event) {
@@ -468,7 +494,7 @@ Page({
           title: '添加成功',
         })
         this.setData({
-          showAddPop: false,
+          moretabactive: 1,
           // 将所有输入都清空
           addActionName: "",
           addActionDesc: "",
@@ -565,10 +591,18 @@ Page({
         title: '更新记录成功'
       });
       this.onQueryActionByArea();
+      // 如果当前在搜索界面，则重新发起搜索
+      if (this.data.searchText) {
+        this.setData({
+          queryActionBySearch: []
+        })
+        this.onSearch();
+      }
       this.setData({
         updateTag: false,
         updateActionImage: updateActionImage,
         updatefileList: [],
+
         showText: false
       })
     }).
@@ -677,9 +711,9 @@ Page({
       loadingType: "circular"
     });
 
-    await this.onQueryAddActions();
     const actionArea = this.data.items[this.data.mainActiveIndex].text;
     console.log(actionArea);
+    await this.onQueryAddActions(actionArea);
     // 调用云函数查询动作
     wx.cloud.callFunction({
       // 云函数名称
@@ -710,8 +744,8 @@ Page({
     })
   },
   // 查询自定义动作动作
-  async onQueryAddActions() {
-    const actionArea = this.data.items[this.data.mainActiveIndex].text;
+  async onQueryAddActions(actionArea) {
+    // const actionArea = this.data.items[this.data.mainActiveIndex].text;
     // 调用云函数查询动作
     await wx.cloud.callFunction({
       // 云函数名称
@@ -758,8 +792,14 @@ Page({
     then(res => {
       toast.clear();
       console.log(delid, '删除成功');
-      // 查询获取到数据中存在的分类
       this.onQueryActionByArea();
+      // 如果当前在搜索界面，则重新发起搜索
+      if (this.data.searchText) {
+        this.setData({
+          queryActionBySearch: []
+        })
+        this.onSearch();
+      }
       // 删除成功后关闭界面
       this.setData({
         showText: false
@@ -828,7 +868,7 @@ Page({
     });
     console.log('分类后的数据:', this.data.actionByAreaCate);
   },
-  // treeselect的左侧点击方法,切换部位方法
+  // 首页treeselect的左侧点击方法,切换部位方法
   onClickNav({
     detail = {}
   }) {
@@ -843,10 +883,23 @@ Page({
     // 由于选择不同的部位，所以重新进行查询
     this.onQueryActionByArea();
   },
-  onSearch(event) {
+  // 弹出层的ts的左侧导航点击事件
+  onaddClickNav({
+    detail = {}
+  }) {
     this.setData({
-      searchText: event.detail.trim()
-    })
+      addpopActiveIndex: detail.index || 0,
+      queryAddActions: []
+    });
+    const actionArea = this.data.items[this.data.addpopActiveIndex].text;
+    this.onQueryAddActions(actionArea);
+  },
+  onSearch(event) {
+    if (event) {
+      this.setData({
+        searchText: event.detail.trim()
+      })
+    }
     const searchText = this.data.searchText;
     if (!searchText) {
       this.setData({
@@ -888,7 +941,7 @@ Page({
   showPopup: function (event) {
     // dataset中的数据必须为全部小写才能获取
     const id = event.currentTarget.dataset.id;
-    const data = this.data.queryActionByArea;
+    const data = event.currentTarget.dataset.querydata;
     const length = data.length;
     let catedata = [];
     for (let i = 0; i < length; i++) {
@@ -913,12 +966,12 @@ Page({
   // 添加动作跳转事件
   showAdd() {
     this.setData({
-      showAddPop: true
+      showAddPop: true,
     });
   },
   onAddClose() {
     this.setData({
-      showAddPop: false
+      showAddPop: false,
     });
   },
   onCollChange(event) {

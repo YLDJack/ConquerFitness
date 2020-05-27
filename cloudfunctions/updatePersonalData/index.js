@@ -10,16 +10,21 @@ const db = cloud.database();
 // 云函数入口函数
 exports.main = async (event, context) => {
 
-
   const openId = cloud.getWXContext().OPENID;
-  return await db.collection('Feedback').add({
+
+  return await db.collection('PersonalData').where({
+    openId: openId
+  }).update({
     data: {
-      // event和小程序端传参的参数一致
       openId: openId,
-      optionText: event.optionText,
-      messageValue: event.messageValue,
-      contactValue: event.contactValue,
-      feedbackImage: event.feedbackImage,
+      trainState: event.trainState,
+      weight: event.weight,
+      fat: event.fat,
+      ass: event.ass,
+      leg: event.leg,
+      smallleg: event.smallleg,
+      breast: event.breast,
+      arms: event.arms,
     }
   })
 }

@@ -8,6 +8,16 @@ Page({
    * 页面的初始化数据
    */
   data: {
+    date: "",
+    trainState: "增肌",
+    cloudexist: true,
+    weight: 50,
+    fat: 15,
+    ass: 50,
+    leg: 30,
+    smallleg: 20,
+    breast: 20,
+    arms: 20,
     tempFilePaths: '',
     nickName: '',
     userInfoAvatar: '',
@@ -16,12 +26,216 @@ Page({
     showtizhi: false,
     showlegs: false,
     showstatu: false,
+    showbreast: false,
+    showarms: false,
     columns: ['增肌', '减脂', '塑形']
-
+  },
+  // 
+  onpickerConfirm(event) {
+    const {
+      value
+    } = event.detail;
+    this.setData({
+      trainState: value,
+      showstatu: false
+    })
+    this.onUpdateCloudData();
+  },
+  onpickerCancel() {
+    this.setData({
+      showstatu: false
+    })
+  },
+  // 改变体重时的调用方法
+  onChange_Weight(event) {
+    this.setData({
+      weight: event.detail
+    })
+  },
+  onChange_fat(event) {
+    this.setData({
+      fat: event.detail
+    })
+  },
+  onChange_arms(event) {
+    this.setData({
+      arms: event.detail
+    })
+  },
+  onChange_breast(event) {
+    this.setData({
+      breast: event.detail
+    })
+  },
+  onChange_hip(event) {
+    this.setData({
+      ass: event.detail
+    })
+  },
+  onChange_legs(event) {
+    this.setData({
+      leg: event.detail
+    })
+  },
+  onChange_smallleg(event) {
+    this.setData({
+      smallleg: event.detail
+    })
+  },
+  onLoad: function () {
+    // 获取时间值
+    var DATE = util.formatDate(new Date());
+    this.setData({
+      date: DATE,
+    });
+    this.getDataFromCloud();
+  },
+  // 更新数据方法
+  updateDataToCloud() {
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '更新云端身体数据中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'updatePersonalData',
+      // 传给云函数的参数
+      data: {
+        date:this.data.date,
+        trainState: this.data.trainState,
+        weight: this.data.weight,
+        fat: this.data.fat,
+        ass: this.data.ass,
+        leg: this.data.leg,
+        smallleg: this.data.smallleg,
+        breast: this.data.breast,
+        arms: this.data.arms,
+      },
+      success: res => {
+        toast.clear();
+        wx.showToast({
+          title: '更新成功',
+        })
+        this.setData({
+          cloudexist: true
+        });
+      },
+      fail: error => {
+        toast.clear();
+        console.log(error);
+        wx.showToast({
+          title: '更新失败',
+        })
+      }
+    })
+  },
+  // 将数据添加到云端的方法
+  addDataToCloud() {
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '上传身体数据中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'addPersonalData',
+      // 传给云函数的参数
+      data: {
+        date:this.data.date,
+        trainState: this.data.trainState,
+        weight: this.data.weight,
+        fat: this.data.fat,
+        ass: this.data.ass,
+        leg: this.data.leg,
+        smallleg: this.data.smallleg,
+        breast: this.data.breast,
+        arms: this.data.arms,
+      },
+      success: res => {
+        toast.clear();
+        wx.showToast({
+          title: '上传成功',
+        })
+        this.setData({
+          cloudexist: true
+        });
+      },
+      fail: error => {
+        toast.clear();
+        console.log(error);
+        wx.showToast({
+          title: '上传失败',
+        })
+      }
+    })
+  },
+  // 从云端获取数据的方法
+  getDataFromCloud() {
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '获取身体数据中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getPersonalData',
+      success: res => {
+        toast.clear();
+        console.log(res.result)
+        if (res.result.data.length === 0) {
+          wx.showToast({
+            title: '云端不存在数据，将进行同步！',
+          });
+          this.setData({
+            cloudexist: false
+          });
+          this.addDataToCloud();
+        } else {
+          wx.showToast({
+            title: '获取成功',
+          });
+          this.setData({
+            weight: res.result.data[0].weight,
+            fat: res.result.data[0].fat,
+            ass: res.result.data[0].ass,
+            leg: res.result.data[0].leg,
+            smallleg: res.result.data[0].smallleg,
+            breast: res.result.data[0].breast,
+            arms: res.result.data[0].arms,
+          });
+        }
+      },
+      fail: error => {
+        toast.clear();
+        console.log(error);
+        wx.showToast({
+          title: '获取失败',
+        })
+      }
+    })
   },
   onChange_collapse(event) {
     this.setData({
       activeNames: event.detail,
+    });
+  },
+  // 弹出胸围选择
+  showPopup_breast() {
+    this.setData({
+      showbreast: true
+    });
+  },
+  // 弹出臂围选择
+  showPopup_arms() {
+    this.setData({
+      showarms: true
     });
   },
   // 弹出臀围选择
@@ -61,6 +275,18 @@ Page({
       showhipline: false
     });
   },
+  // 关闭臀围选择器
+  onClose_arms() {
+    this.setData({
+      showarms: false
+    });
+  },
+  // 关闭臀围选择器
+  onClose_breast() {
+    this.setData({
+      showbreast: false
+    });
+  },
   // 关闭体重选择器
   onClose_weight() {
     this.setData({
@@ -93,26 +319,13 @@ Page({
     } = event.detail;
     Toast(`当前值：${value}, 当前索引：${index}`);
   },
-  onConfirm(event) {
-    const {
-      picker,
-      value,
-      index
-    } = event.detail;
-    Toast(`当前值：${value}, 当前索引：${index}`);
+  onUpdateCloudData() {
+    this.updateDataToCloud();
   },
 
   onCancel() {
     Toast('取消');
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-  },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -172,13 +385,4 @@ Page({
       }
     }
   },
-
-
-  onLoad: function () {
-    // 获取时间值
-    var DATE = util.formatDate(new Date());
-    this.setData({
-      date: DATE,
-    });
-  }
 })

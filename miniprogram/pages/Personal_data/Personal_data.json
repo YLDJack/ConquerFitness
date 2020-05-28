@@ -2,6 +2,6 @@
   "enablePullDownRefresh": true,
   "navigationBarTitleText": "图表",
   "usingComponents": {
-    "van-nav-bar": "@vant/weapp/nav-bar/index"
+    "ec-canvas": "../../ec-canvas/ec-canvas"
   }
 }

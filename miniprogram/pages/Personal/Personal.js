@@ -8,9 +8,8 @@ Page({
    * 页面的初始化数据
    */
   data: {
-    date:"",
+    date: "",
     trainState: "增肌",
-    cloudexist: true,
     weight: 50,
     fat: 15,
     ass: 50,
@@ -83,13 +82,20 @@ Page({
     })
   },
   onLoad: function () {
-    // 获取时间值
-    var DATE = util.formatDate(new Date());
+    let bodydata = app.globalData.bodydata;
+    let date = app.globalData.date;
     this.setData({
-      date: DATE,
+      date: date,
+      trainState: bodydata.trainState,
+      weight: bodydata.weight,
+      fat: bodydata.fat,
+      ass: bodydata.ass,
+      leg: bodydata.leg,
+      smallleg: bodydata.smallleg,
+      breast: bodydata.breast,
+      arms: bodydata.arms,
     });
-    // this.addDataToCloud();
-    this.getDataFromCloud();
+
   },
   // 更新数据方法
   updateDataToCloud() {
@@ -129,99 +135,6 @@ Page({
         console.log(error);
         wx.showToast({
           title: '更新失败',
-          icon: "none"
-        })
-      }
-    })
-  },
-  // 将数据添加到云端的方法
-  addDataToCloud() {
-    const toast = Toast.loading({
-      mask: true,
-      forbidClick: true, // 禁用背景点击
-      message: '上传身体数据中...',
-      duration: 0,
-      loadingType: "circular"
-    });
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'addPersonalData',
-      // 传给云函数的参数
-      data: {
-        date: this.data.date,
-        trainState: this.data.trainState,
-        weight: this.data.weight,
-        fat: this.data.fat,
-        ass: this.data.ass,
-        leg: this.data.leg,
-        smallleg: this.data.smallleg,
-        breast: this.data.breast,
-        arms: this.data.arms,
-      },
-      success: res => {
-        toast.clear();
-        wx.showToast({
-          title: '上传成功',
-        })
-        this.setData({
-          cloudexist: true
-        });
-      },
-      fail: error => {
-        toast.clear();
-        console.log(error);
-        wx.showToast({
-          title: '上传失败',
-          icon: "none"
-        })
-      }
-    })
-  },
-  // 从云端获取数据的方法
-  getDataFromCloud() {
-    const toast = Toast.loading({
-      mask: true,
-      forbidClick: true, // 禁用背景点击
-      message: '获取身体数据中...',
-      duration: 0,
-      loadingType: "circular"
-    });
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'getPersonalData',
-      success: res => {
-        toast.clear();
-        console.log(res.result)
-        let length = res.result.data.length;
-        if (length === 0) {
-          wx.showToast({
-            title: '云端不存在数据，将进行同步！',
-          });
-          this.setData({
-            cloudexist: false
-          });
-          this.addDataToCloud();
-        } else {
-          wx.showToast({
-            title: '获取成功',
-          });
-          this.setData({
-            weight: res.result.data[length - 1].weight,
-            fat: res.result.data[length - 1].fat,
-            ass: res.result.data[length - 1].ass,
-            leg: res.result.data[length - 1].leg,
-            smallleg: res.result.data[length - 1].smallleg,
-            breast: res.result.data[length - 1].breast,
-            arms: res.result.data[length - 1].arms,
-            cloudexist:true
-          });
-        }
-      },
-      fail: error => {
-        toast.clear();
-        console.log(error);
-        wx.showToast({
-          title: '获取失败',
           icon: "none"
         })
       }

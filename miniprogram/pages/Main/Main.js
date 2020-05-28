@@ -1,7 +1,7 @@
 // pages/Main/Main.js
 import * as echarts from '../../ec-canvas/echarts';
 var utils = require('../../utils/util');
-const app = getApp();
+var app = getApp();
 
 // 初始化饼图的方法
 function initPieChart(canvas, width, height, dpr) {
@@ -112,6 +112,7 @@ function initlineChart(canvas, width, height, dpr) {
 
 Page({
   data: {
+    bodydata: app.globalData.bodydata,
     // 问候语
     hello: "早上好",
     // 当前时期
@@ -213,10 +214,18 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    //获取当前时间
+  onLoad: function () {
+    var that = this;
+    app.getDataFromCloud(function(){
+      that.setData({
+        bodydata:app.globalData.bodydata
+      })
+    })
+    console.log("首页获取到的数据:",this.data.bodydata);
+    let date = app.globalData.date
+    //获取当前时间和身体数据
     this.setData({
-      date: utils.formatDate(new Date())
+      date: date,
     });
     // 根据当前时间判断早上下午
     const now = new Date();

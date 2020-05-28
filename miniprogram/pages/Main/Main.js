@@ -215,13 +215,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
-    var that = this;
-    app.getDataFromCloud(function(){
-      that.setData({
-        bodydata:app.globalData.bodydata
-      })
-    })
-    console.log("首页获取到的数据:",this.data.bodydata);
     let date = app.globalData.date
     //获取当前时间和身体数据
     this.setData({

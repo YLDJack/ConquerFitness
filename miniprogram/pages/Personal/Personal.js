@@ -126,9 +126,7 @@ Page({
         wx.showToast({
           title: '更新成功',
         })
-        this.setData({
-          cloudexist: true
-        });
+       app.getDataFromCloud();
       },
       fail: error => {
         toast.clear();

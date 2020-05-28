@@ -2,7 +2,8 @@
 var util = require("/utils/util");
 App({
   globalData: {
-    bodydata: "1",
+    bodydata: {},
+    bodydatas: [],
     date: util.formatDate(new Date())
   },
   // 将数据添加到云端的方法
@@ -50,14 +51,13 @@ App({
             icon: "none"
           });
           this.addDataToCloud();
-          this.getDataFromCloud();
         } else {
           wx.showToast({
             title: '获取个人数据成功',
           });
           this.globalData.bodydata = res.result.data[length - 1];
+          this.globalData.bodydatas = res.result.data;
           console.log("身体数据:", this.globalData.bodydata);
-          typeof cb == "function" && cb(that.globalData.bodydata)
         }
       },
       fail: error => {

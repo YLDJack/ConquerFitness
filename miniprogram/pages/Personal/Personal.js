@@ -8,7 +8,7 @@ Page({
    * 页面的初始化数据
    */
   data: {
-    date: "",
+    date:"",
     trainState: "增肌",
     cloudexist: true,
     weight: 50,
@@ -88,6 +88,7 @@ Page({
     this.setData({
       date: DATE,
     });
+    // this.addDataToCloud();
     this.getDataFromCloud();
   },
   // 更新数据方法
@@ -104,7 +105,7 @@ Page({
       name: 'updatePersonalData',
       // 传给云函数的参数
       data: {
-        date:this.data.date,
+        date: this.data.date,
         trainState: this.data.trainState,
         weight: this.data.weight,
         fat: this.data.fat,
@@ -128,6 +129,7 @@ Page({
         console.log(error);
         wx.showToast({
           title: '更新失败',
+          icon: "none"
         })
       }
     })
@@ -146,7 +148,7 @@ Page({
       name: 'addPersonalData',
       // 传给云函数的参数
       data: {
-        date:this.data.date,
+        date: this.data.date,
         trainState: this.data.trainState,
         weight: this.data.weight,
         fat: this.data.fat,
@@ -170,6 +172,7 @@ Page({
         console.log(error);
         wx.showToast({
           title: '上传失败',
+          icon: "none"
         })
       }
     })
@@ -189,7 +192,8 @@ Page({
       success: res => {
         toast.clear();
         console.log(res.result)
-        if (res.result.data.length === 0) {
+        let length = res.result.data.length;
+        if (length === 0) {
           wx.showToast({
             title: '云端不存在数据，将进行同步！',
           });
@@ -202,13 +206,14 @@ Page({
             title: '获取成功',
           });
           this.setData({
-            weight: res.result.data[0].weight,
-            fat: res.result.data[0].fat,
-            ass: res.result.data[0].ass,
-            leg: res.result.data[0].leg,
-            smallleg: res.result.data[0].smallleg,
-            breast: res.result.data[0].breast,
-            arms: res.result.data[0].arms,
+            weight: res.result.data[length - 1].weight,
+            fat: res.result.data[length - 1].fat,
+            ass: res.result.data[length - 1].ass,
+            leg: res.result.data[length - 1].leg,
+            smallleg: res.result.data[length - 1].smallleg,
+            breast: res.result.data[length - 1].breast,
+            arms: res.result.data[length - 1].arms,
+            cloudexist:true
           });
         }
       },
@@ -217,6 +222,7 @@ Page({
         console.log(error);
         wx.showToast({
           title: '获取失败',
+          icon: "none"
         })
       }
     })

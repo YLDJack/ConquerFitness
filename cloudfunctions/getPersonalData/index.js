@@ -6,11 +6,12 @@ cloud.init({
 });
 
 const db = cloud.database();
+
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const openId = cloud.getWXContext().OPENID;
+  let openID = cloud.getWXContext().OPENID;
+  // 按照时间升序排列
   return await db.collection('PersonalData').where({
-    openId: openId,
-    date: event.date
-  }).get()
+    openId: openID || event.openId
+  }).orderBy('date', 'asc').get()
 }

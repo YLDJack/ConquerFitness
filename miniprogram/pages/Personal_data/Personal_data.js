@@ -12,50 +12,155 @@ Page({
     date01: '2019-6-1',
     date02: '2019-6-7',
     // 原本默认的坐标轴数据
-    series: [{
-        data: ([34, 66, 45, 59, 37, 85, 60]).reverse(),
+    series: [
+      {
+        data: [],
         name: '体重',
         smooth: false,
-        type: 'line'
-      }, {
-        data: ([15, 12, 7, 23, 3, 14, 22]).reverse(),
+        type: 'line',
+        // 设置始终显示数据
+        itemStyle: {
+          normal: {
+            label: {
+              // 设置单位
+              formatter: '{c}Kg',
+              show: true, //开启显示
+              position: 'top', //在上方显示
+            }
+          }
+        },
+        // 显示最大值最小值以及平均值
+        markPoint: {
+          data: [{
+              type: 'max',
+              name: '最大值',
+              symbolSize: 40,
+
+            },
+            {
+              type: 'min',
+              name: '最小值',
+              symbolSize: 40
+            }
+          ]
+        },
+        // 设置平均值的线
+        markLine: {
+          label: {
+            show: true,
+            position:'end'
+          },
+          data: [{
+            type: 'average',
+            name: '平均值'
+          }]
+        }
+      }, 
+      {
+        data: [],
         name: '体脂',
         smooth: false,
-        type: 'line'
+        type: 'line',
+         // 设置始终显示数据
+         itemStyle: {
+          normal: {
+            label: {
+              // 设置单位
+              formatter: '{c}cm',
+              show: true, //开启显示
+              position: 'top', //在上方显示
+            }
+          }
+        },
       },
       {
-        data: ([15, 12, 7, 23, 3, 14, 22]).reverse(),
+        data: [],
         name: '臂围',
         smooth: false,
-        type: 'line'
+        type: 'line',
+         // 设置始终显示数据
+         itemStyle: {
+          normal: {
+            label: {
+              // 设置单位
+              formatter: '{c}cm',
+              show: true, //开启显示
+              position: 'top', //在上方显示
+            }
+          }
+        },
       },
       {
-        data: ([15, 12, 7, 23, 3, 14, 22]).reverse(),
+        data: [],
         name: '胸围',
         smooth: false,
-        type: 'line'
+        type: 'line',
+         // 设置始终显示数据
+         itemStyle: {
+          normal: {
+            label: {
+              // 设置单位
+              formatter: '{c}cm',
+              show: true, //开启显示
+              position: 'top', //在上方显示
+            }
+          }
+        }
       },
       {
-        data: ([15, 12, 7, 23, 3, 14, 22]).reverse(),
+        data: [],
         name: '臀围',
         smooth: false,
-        type: 'line'
+        type: 'line',
+         // 设置始终显示数据
+         itemStyle: {
+          normal: {
+            label: {
+              // 设置单位
+              formatter: '{c}cm',
+              show: true, //开启显示
+              position: 'top', //在上方显示
+            }
+          }
+        }
       },
       {
-        data: ([15, 12, 7, 23, 3, 14, 22]).reverse(),
+        data: [],
         name: '大腿',
         smooth: false,
-        type: 'line'
+        type: 'line',
+         // 设置始终显示数据
+         itemStyle: {
+          normal: {
+            label: {
+              // 设置单位
+              formatter: '{c}cm',
+              show: true, //开启显示
+              position: 'top', //在上方显示
+            }
+          }
+        }
       },
       {
-        data: ([15, 12, 7, 23, 3, 14, 22]).reverse(),
+        data: [],
         name: '小腿',
         smooth: false,
-        type: 'line'
+        type: 'line',
+         // 设置始终显示数据
+         itemStyle: {
+          normal: {
+            label: {
+              // 设置单位
+              formatter: '{c}cm',
+              show: true, //开启显示
+              position: 'top', //在上方显示
+            }
+          }
+        }
       }
     ],
-    // 默认7天
-    ascissaData: (['6-1', '6-2', '6-3', '6-4', '6-5', '6-6', '6-7']).reverse(),
+    // 坐标x轴
+    ascissaData: [],
     bodydatas: [],
     lineec: {
       lazyLoad: true, // 延迟加载
@@ -74,8 +179,8 @@ Page({
   //初始化图表
   init_echarts: function () {
     this.echartsComponnet.init((canvas, width, height, dpr) => {
-      // 初始化图表
-      const Chart = echarts.init(canvas, null, {
+      // 初始化图表,init中的第二个参数可以设置主题颜色
+      const Chart = echarts.init(canvas, 'light', {
         width: width,
         height: height,
         devicePixelRatio: dpr // new
@@ -91,6 +196,7 @@ Page({
     console.log(that.data.series)
     console.log(that.data.ascissaData)
     var legendList = []
+    // 将名称放入下方图例中
     for (var i in that.data.series) {
       var obj = {
         name: that.data.series[i].name,
@@ -104,22 +210,28 @@ Page({
       that.data.series[i].data.reverse()
     }
     var option = {
-      // 折线图线条的颜色
-      color: ["#37A2DA", "#67E0E3", "#9FE6B8"],
-      // 折线图的线条代表意义
+      // 下方的图例折线图的线条代表意义
       legend: {
-        itemWidth: 5, //小圆点的宽度
-        itemGap: 25,
+        itemWidth: 20, //小圆点的宽度
+        // itemGap: 25,
         selectedModel: 'single', //折线可多选
-        inactiveColor: '#87CEEB',
+        inactiveColor: '#ccc', //图例关闭时的颜色
         data: legendList,
         bottom: 0,
-        left: 30,
+        // left: 30,
         z: 100
       },
       // 刻度
       grid: {
-        containLabel: true
+        containLabel: true,
+
+      },
+      // 指定表的标题
+      title:{
+        show:true,
+        text:'身体数据折线图',
+        left: 'center',
+        subtext:'点击相应的图例可以隐藏数据'
       },
       // 悬浮图标
       tooltip: {
@@ -134,9 +246,12 @@ Page({
         }
       },
       xAxis: {
+        //坐标轴名字 name:'日期',
+        // nameLocation:'center',
         type: 'category',
         boundaryGap: false,
         data: that.data.ascissaData.reverse(),
+        onZero: true,
         // show: false
       },
       yAxis: {
@@ -148,10 +263,10 @@ Page({
           }
         },
         axisLine: { //y轴坐标是否显示
-          show: false
+          show: true
         },
         axisTick: { //y轴刻度小标是否显示
-          show: false
+          show: true
         }
       },
       series: that.data.series
@@ -164,7 +279,7 @@ Page({
       bodydatas: app.globalData.bodydatas
     })
     let bodydatas = this.data.bodydatas;
-    console.log('获取到的身体数据:',bodydatas);
+    console.log('获取到的身体数据:', bodydatas);
     // 处理好的横坐标
     let ascissaData = [];
     // 处理好的整体数据

@@ -1,2 +1,5 @@
-<!--pages/Personal_data/Personal_data.wxml-->
-
+	<view class="container">
+		<!-- 线性表 -->
+		<ec-canvas id="mylinechart" canvas-id="mychart-line" ec="{{ lineec }}">
+		</ec-canvas>
+	</view>

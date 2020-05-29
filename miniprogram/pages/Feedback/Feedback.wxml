@@ -2,7 +2,7 @@
 <!-- 下拉列表选择反馈类型 -->
 <view class="dropdownmenu">
   <van-dropdown-menu>
-    <van-dropdown-item value="{{ value1 }}" options="{{ option1 }}" />
+    <van-dropdown-item value="{{ optionValue }}" options="{{ option }}" bind:change="onOptionChange" />
   </van-dropdown-menu>
 </view>
 
@@ -10,7 +10,7 @@
 <view class="fieldbox">
   <van-cell-group>
     <van-field
-      value="{{ messagevalue }}"
+      value="{{ messageValue }}"
       placeholder="请输入反馈信息"
       border="{{ false }}"
       bind:change="onChange_message"
@@ -22,7 +22,7 @@
 <view class="contact">
   <van-cell-group>
     <van-field
-      value="{{ contactvalue }}"
+      value="{{ contactValue }}"
       placeholder="手机/邮箱/QQ（选填）"
       border="{{ false }}"
       bind:change="onChange_contact"
@@ -30,16 +30,18 @@
   </van-cell-group>
 </view>
 
+<van-toast id="van-toast" />
+
 <!-- 上传图片 -->
 <view class="uploader">
   <view class="text">上传图片 (最多6张)</view>
   <van-uploader
   file-list="{{ fileList }}"
   max-count="6"
-  bind:after-read="afterRead"
+  bind:after-read="uploadImage"
 />
 </view>
 
 <view class="submit">
-  <van-button type="primary" size="large" color="#0079FE" bindtap="onAdd">提交</van-button>
+  <van-button type="primary" size="large" color="#0079FE" bindtap="onAddFeedback">提交</van-button>
 </view>

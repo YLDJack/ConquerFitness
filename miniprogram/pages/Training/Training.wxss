@@ -1,5 +1,19 @@
 .van-count-down{
-  margin-left: 20rpx;
+  margin-left: 40rpx;
+}
+.symbal{
+  color: #da3131;
+  margin-right: 10rpx;
+}
+.item {
+  display: inline-block;
+  width: 55rpx;
+  margin-right: 10rpx;
+  color: #fff;
+  font-size: 36rpx;
+  text-align: center;
+  background-color: #da3131;
+  border-radius: 2px;
 }
 
 .text_progress{
@@ -14,22 +28,26 @@
   color: rgb(146, 144, 144);
 }
 
-.drop2{
+.traingroup{
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
-
-.drop2 .van-count-down{
-  margin-left: 30rpx;
-  margin-top: 10rpx;
+.groupnum{
+  font-size: 28rpx;
+  margin-right: 15rpx;
 }
-
-.drop2 .van-button{
+.traindata{
+  width: 180rpx;
+  margin-right: 20rpx;
+  
+}
+.traincountdown{
   margin-left: 25rpx;
-  margin-top: 10rpx;
 }
 
 .edit{
-  margin-left: 30rpx;
+  margin-top: 50rpx;
+  display: flex;
+  justify-content: space-between;
+  font-size: 28rpx;
 }

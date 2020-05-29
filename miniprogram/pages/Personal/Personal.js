@@ -8,6 +8,15 @@ Page({
    * 页面的初始化数据
    */
   data: {
+    date: "",
+    trainState: "增肌",
+    weight: 50,
+    fat: 15,
+    ass: 50,
+    leg: 30,
+    smallleg: 20,
+    breast: 20,
+    arms: 20,
     tempFilePaths: '',
     nickName: '',
     userInfoAvatar: '',
@@ -16,12 +25,155 @@ Page({
     showtizhi: false,
     showlegs: false,
     showstatu: false,
+    showbreast: false,
+    showarms: false,
     columns: ['增肌', '减脂', '塑形']
-
+  },
+  // 
+  onpickerConfirm(event) {
+    const {
+      value
+    } = event.detail;
+    this.setData({
+      trainState: value,
+      showstatu: false
+    })
+    this.onUpdateCloudData();
+  },
+  onpickerCancel() {
+    this.setData({
+      showstatu: false
+    })
+  },
+  // 改变体重时的调用方法
+  onChange_Weight(event) {
+    this.setData({
+      weight: event.detail
+    })
+  },
+  onChange_fat(event) {
+    this.setData({
+      fat: event.detail
+    })
+  },
+  onChange_arms(event) {
+    this.setData({
+      arms: event.detail
+    })
+  },
+  onChange_breast(event) {
+    this.setData({
+      breast: event.detail
+    })
+  },
+  onChange_hip(event) {
+    this.setData({
+      ass: event.detail
+    })
+  },
+  onChange_legs(event) {
+    this.setData({
+      leg: event.detail
+    })
+  },
+  onChange_smallleg(event) {
+    this.setData({
+      smallleg: event.detail
+    })
+  },
+  onLoad: function () {
+    this.loadbodydatas();
+  },
+  loadbodydatas(update) {
+    let bodydata = app.globalData.bodydata;
+    let date = app.globalData.date;
+    if (update) {
+      // 异步函数的调用顺序问题
+      if (app.getDataFromCloud()) {
+        bodydata = app.globalData.bodydata;
+        date = app.globalData.date;
+        this.setData({
+          date: date,
+          trainState: bodydata.trainState,
+          weight: bodydata.weight,
+          fat: bodydata.fat,
+          ass: bodydata.ass,
+          leg: bodydata.leg,
+          smallleg: bodydata.smallleg,
+          breast: bodydata.breast,
+          arms: bodydata.arms,
+        });
+        return true;
+      }
+    }
+    this.setData({
+      date: date,
+      trainState: bodydata.trainState,
+      weight: bodydata.weight,
+      fat: bodydata.fat,
+      ass: bodydata.ass,
+      leg: bodydata.leg,
+      smallleg: bodydata.smallleg,
+      breast: bodydata.breast,
+      arms: bodydata.arms,
+    });
+  },
+  // 更新数据方法
+  updateDataToCloud() {
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '更新云端身体数据中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'updatePersonalData',
+      // 传给云函数的参数
+      data: {
+        date: this.data.date,
+        trainState: this.data.trainState,
+        weight: this.data.weight,
+        fat: this.data.fat,
+        ass: this.data.ass,
+        leg: this.data.leg,
+        smallleg: this.data.smallleg,
+        breast: this.data.breast,
+        arms: this.data.arms,
+      },
+      success: res => {
+        toast.clear();
+        wx.showToast({
+          title: '更新成功',
+        })
+        this.loadbodydatas(true);
+      },
+      fail: error => {
+        toast.clear();
+        console.log(error);
+        wx.showToast({
+          title: '更新失败',
+          icon: "none"
+        })
+      }
+    })
   },
   onChange_collapse(event) {
     this.setData({
       activeNames: event.detail,
+    });
+  },
+  // 弹出胸围选择
+  showPopup_breast() {
+    this.setData({
+      showbreast: true
+    });
+  },
+  // 弹出臂围选择
+  showPopup_arms() {
+    this.setData({
+      showarms: true
     });
   },
   // 弹出臀围选择
@@ -61,6 +213,18 @@ Page({
       showhipline: false
     });
   },
+  // 关闭臀围选择器
+  onClose_arms() {
+    this.setData({
+      showarms: false
+    });
+  },
+  // 关闭臀围选择器
+  onClose_breast() {
+    this.setData({
+      showbreast: false
+    });
+  },
   // 关闭体重选择器
   onClose_weight() {
     this.setData({
@@ -93,26 +257,13 @@ Page({
     } = event.detail;
     Toast(`当前值：${value}, 当前索引：${index}`);
   },
-  onConfirm(event) {
-    const {
-      picker,
-      value,
-      index
-    } = event.detail;
-    Toast(`当前值：${value}, 当前索引：${index}`);
+  onUpdateCloudData() {
+    this.updateDataToCloud();
   },
 
   onCancel() {
     Toast('取消');
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-  },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -172,13 +323,4 @@ Page({
       }
     }
   },
-
-
-  onLoad: function () {
-    // 获取时间值
-    var DATE = util.formatDate(new Date());
-    this.setData({
-      date: DATE,
-    });
-  }
 })

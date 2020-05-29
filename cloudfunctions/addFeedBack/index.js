@@ -12,18 +12,14 @@ exports.main = async (event, context) => {
 
 
   const openId = cloud.getWXContext().OPENID;
-  return await db.collection('actionsAdd').add({
+  return await db.collection('Feedback').add({
     data: {
       // event和小程序端传参的参数一致
       openId: openId,
-      actionArea: event.actionArea,
-      actionDesc: event.addactionDesc,
-      actionEquipment: event.actionEqu,
-      actionImage: event.actionImage,
-      actionName: event.actionName,
-      actionNote: event.addactionNote,
-      actionSub: event.actionSub,
-      actionType: event.actionType,
+      feedbackOption: event.feedbackOption,
+      messageValue: event.messageValue,
+      contactValue: event.contactValue,
+      feedbackImage: event.feedbackImage,
     }
   })
 }

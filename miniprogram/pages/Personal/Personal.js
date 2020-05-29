@@ -10,7 +10,6 @@ Page({
   data: {
     date: "",
     trainState: "增肌",
-    cloudexist: true,
     weight: 50,
     fat: 15,
     ass: 50,
@@ -83,12 +82,41 @@ Page({
     })
   },
   onLoad: function () {
-    // 获取时间值
-    var DATE = util.formatDate(new Date());
+    this.loadbodydatas();
+  },
+  loadbodydatas(update) {
+    let bodydata = app.globalData.bodydata;
+    let date = app.globalData.date;
+    if (update) {
+      // 异步函数的调用顺序问题
+      if (app.getDataFromCloud()) {
+        bodydata = app.globalData.bodydata;
+        date = app.globalData.date;
+        this.setData({
+          date: date,
+          trainState: bodydata.trainState,
+          weight: bodydata.weight,
+          fat: bodydata.fat,
+          ass: bodydata.ass,
+          leg: bodydata.leg,
+          smallleg: bodydata.smallleg,
+          breast: bodydata.breast,
+          arms: bodydata.arms,
+        });
+        return true;
+      }
+    }
     this.setData({
-      date: DATE,
+      date: date,
+      trainState: bodydata.trainState,
+      weight: bodydata.weight,
+      fat: bodydata.fat,
+      ass: bodydata.ass,
+      leg: bodydata.leg,
+      smallleg: bodydata.smallleg,
+      breast: bodydata.breast,
+      arms: bodydata.arms,
     });
-    this.getDataFromCloud();
   },
   // 更新数据方法
   updateDataToCloud() {
@@ -104,7 +132,7 @@ Page({
       name: 'updatePersonalData',
       // 传给云函数的参数
       data: {
-        date:this.data.date,
+        date: this.data.date,
         trainState: this.data.trainState,
         weight: this.data.weight,
         fat: this.data.fat,
@@ -119,104 +147,14 @@ Page({
         wx.showToast({
           title: '更新成功',
         })
-        this.setData({
-          cloudexist: true
-        });
+        this.loadbodydatas(true);
       },
       fail: error => {
         toast.clear();
         console.log(error);
         wx.showToast({
           title: '更新失败',
-        })
-      }
-    })
-  },
-  // 将数据添加到云端的方法
-  addDataToCloud() {
-    const toast = Toast.loading({
-      mask: true,
-      forbidClick: true, // 禁用背景点击
-      message: '上传身体数据中...',
-      duration: 0,
-      loadingType: "circular"
-    });
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'addPersonalData',
-      // 传给云函数的参数
-      data: {
-        date:this.data.date,
-        trainState: this.data.trainState,
-        weight: this.data.weight,
-        fat: this.data.fat,
-        ass: this.data.ass,
-        leg: this.data.leg,
-        smallleg: this.data.smallleg,
-        breast: this.data.breast,
-        arms: this.data.arms,
-      },
-      success: res => {
-        toast.clear();
-        wx.showToast({
-          title: '上传成功',
-        })
-        this.setData({
-          cloudexist: true
-        });
-      },
-      fail: error => {
-        toast.clear();
-        console.log(error);
-        wx.showToast({
-          title: '上传失败',
-        })
-      }
-    })
-  },
-  // 从云端获取数据的方法
-  getDataFromCloud() {
-    const toast = Toast.loading({
-      mask: true,
-      forbidClick: true, // 禁用背景点击
-      message: '获取身体数据中...',
-      duration: 0,
-      loadingType: "circular"
-    });
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'getPersonalData',
-      success: res => {
-        toast.clear();
-        console.log(res.result)
-        if (res.result.data.length === 0) {
-          wx.showToast({
-            title: '云端不存在数据，将进行同步！',
-          });
-          this.setData({
-            cloudexist: false
-          });
-          this.addDataToCloud();
-        } else {
-          wx.showToast({
-            title: '获取成功',
-          });
-          this.setData({
-            weight: res.result.data[0].weight,
-            fat: res.result.data[0].fat,
-            ass: res.result.data[0].ass,
-            leg: res.result.data[0].leg,
-            smallleg: res.result.data[0].smallleg,
-            breast: res.result.data[0].breast,
-            arms: res.result.data[0].arms,
-          });
-        }
-      },
-      fail: error => {
-        toast.clear();
-        console.log(error);
-        wx.showToast({
-          title: '获取失败',
+          icon: "none"
         })
       }
     })

@@ -1,3 +1,4 @@
+<van-toast id="van-toast" />
 <!-- 第一栏 -->
 <view class="top">
 	<view class="topleft">

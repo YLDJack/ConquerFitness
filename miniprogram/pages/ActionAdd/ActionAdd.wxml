@@ -1,12 +1,19 @@
 <!-- 动作库、搜索栏 -->
-<view class="top">
+<view class="toptitle">
 	<view class="title">动作库</view>
+	<view class="success">
+		<van-button icon="success" type="default" size="small" plain custom-class="width:40rpx;height:40rpx" />
+	</view>
+</view>
+<view class="top">
 	<!-- 分类下拉菜单 -->
 	<view class="select-search">
 		<van-dropdown-menu overlay="false">
 			<van-dropdown-item popup-style="with=180rpx" value="{{ catevalue }}" options="{{ cateOption }}" />
 		</van-dropdown-menu>
 		<van-search value="{{ searchText }}" placeholder="请输入搜索关键词" />
+	</view>
+	<view class="add">
 		<van-icon name="add" color="red" size="50rpx" bind:click="showAdd" />
 		<!-- 添加动作弹出层部分 必须放在点击按钮的下方-->
 		<van-popup show="{{ showAddPop }}" closeable bind:close="onAddClose" custom-class="addpop" position="bottom">
@@ -59,7 +66,6 @@
 			</van-collapse>
 
 		</van-popup>
-
 	</view>
 </view>
 
@@ -76,7 +82,7 @@
 				<!-- 设置一个selected属性如果为true，则改变颜色 -->
 				<van-grid-item icon="{{ imageURL }}" text="杠铃卧推" wx:for="{{ 10 }}" info="已选中" wx:if="{{gridselected}}" bind:click="ongridSelect" custom-class="selected">
 				</van-grid-item>
-				<van-grid-item icon="{{ imageURL }}" text="杠铃卧推" wx:for="{{ 10 }}"  wx:if="{{!gridselected}}" bind:click="ongridSelect">
+				<van-grid-item icon="{{ imageURL }}" text="杠铃卧推" wx:for="{{ 10 }}" wx:if="{{!gridselected}}" bind:click="ongridSelect">
 				</van-grid-item>
 			</van-grid>
 			<!-- 背部 -->

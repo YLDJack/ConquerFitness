@@ -22,6 +22,7 @@
     "van-icon": "@vant/weapp/icon/index",
     "van-collapse": "@vant/weapp/collapse/index",
     "van-collapse-item": "@vant/weapp/collapse-item/index",
-    "ec-canvas": "../../ec-canvas/ec-canvas"
+    "ec-canvas": "../../ec-canvas/ec-canvas",
+    "van-button": "@vant/weapp/button/index"
   }
 }

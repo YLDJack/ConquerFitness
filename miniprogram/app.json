@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/Training/Training",
     "pages/Main/Main",
     "pages/Train/Train",
     "pages/Personal/Personal",
@@ -9,7 +10,6 @@
     "pages/Count/Count",
     "pages/logs/logs",
     "pages/ActionDesc/ActionDesc",
-    "pages/Training/Training",
     "pages/TrainTemplate/TrainTemplate",
     "pages/ActionAdd/ActionAdd"
   ],

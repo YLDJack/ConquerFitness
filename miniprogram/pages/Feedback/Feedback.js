@@ -18,6 +18,13 @@ Page({
     // 上传图片预览
     fileList: []
   },
+
+  // 反馈类型change
+  onOptionChange(event){
+    this.setData({
+      optionValue: event.detail
+    })
+  },
   
   // 反馈信息
   onChange_message(event) {
@@ -84,11 +91,14 @@ Page({
       Toast.fail('请输入反馈信息');
       return false;
     }
-    if (this.data.optionValue === 0) {
+    let addFeedbackOption = "";
+    if (this.data.optionValue == 0) {
       Toast.fail('请选择反馈类型');
       return false;
+    }else{
+      addFeedbackOption = this.data.option[this.data.optionValue].text;
     }
-    console.log(this.data.messageValue);
+    // console.log(this.data.messageValue);
     let addFeedbackImage = "";
     if (this.data.fileList){
       addFeedbackImage = this.data.fileList;
@@ -98,7 +108,7 @@ Page({
       name: 'addFeedBack',
       // 传给云函数的参数
       data: {
-        optionText: this.data.optionValue.text,
+        feedbackOption: addFeedbackOption,
         messageValue: this.data.messageValue,
         contactValue: this.data.contactValue,
         feedbackImage: addFeedbackImage

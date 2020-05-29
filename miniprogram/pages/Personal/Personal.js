@@ -82,8 +82,30 @@ Page({
     })
   },
   onLoad: function () {
+    this.loadbodydatas();
+  },
+  loadbodydatas(update) {
     let bodydata = app.globalData.bodydata;
     let date = app.globalData.date;
+    if (update) {
+      // 异步函数的调用顺序问题
+      if (app.getDataFromCloud()) {
+        bodydata = app.globalData.bodydata;
+        date = app.globalData.date;
+        this.setData({
+          date: date,
+          trainState: bodydata.trainState,
+          weight: bodydata.weight,
+          fat: bodydata.fat,
+          ass: bodydata.ass,
+          leg: bodydata.leg,
+          smallleg: bodydata.smallleg,
+          breast: bodydata.breast,
+          arms: bodydata.arms,
+        });
+        return true;
+      }
+    }
     this.setData({
       date: date,
       trainState: bodydata.trainState,
@@ -95,7 +117,6 @@ Page({
       breast: bodydata.breast,
       arms: bodydata.arms,
     });
-
   },
   // 更新数据方法
   updateDataToCloud() {
@@ -126,7 +147,7 @@ Page({
         wx.showToast({
           title: '更新成功',
         })
-       app.getDataFromCloud();
+        this.loadbodydatas(true);
       },
       fail: error => {
         toast.clear();

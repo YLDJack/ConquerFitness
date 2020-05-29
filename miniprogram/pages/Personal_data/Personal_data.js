@@ -66,10 +66,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      bodydatas: app.globalData.bodydatas
-    })
-    console.log("获取到的身体数据", this.data.bodydatas);
     this.getChartData();
     // 此处要与标签的id一致不是canvasid
     this.echartsComponnet = this.selectComponent('#mylinechart');
@@ -164,7 +160,11 @@ Page({
   },
   // 获取折线图数据
   getChartData: function () {
+    this.setData({
+      bodydatas: app.globalData.bodydatas
+    })
     let bodydatas = this.data.bodydatas;
+    console.log('获取到的身体数据:',bodydatas);
     // 处理好的横坐标
     let ascissaData = [];
     // 处理好的整体数据
@@ -188,18 +188,17 @@ Page({
     data[5] = breast;
     data[6] = arms;
 
-
-
-
+    // 将各项身体指标设置为y轴，并进行reverse。才能从小到大排序
     for (let i = 0; i < series.length; i++) {
-      series[i].data = data[i];
+      series[i].data = data[i].reverse();
     }
+    //将身体数据的时间设置为x轴
     for (let i = 0; i < length; i++) {
       ascissaData.push(bodydatas[i].date);
     }
     this.setData({
       series: series,
-      ascissaData: ascissaData
+      ascissaData: ascissaData.reverse()
     });
   },
   // 将身体数据中的每个属性都包装成数组
@@ -207,7 +206,7 @@ Page({
     let bodydatas = this.data.bodydatas;
     let length = this.data.bodydatas.length;
     let res = [];
-    for(let i =0;i<length;i++){
+    for (let i = 0; i < length; i++) {
       res.push(bodydatas[i][item]);
     }
     console.log(res);

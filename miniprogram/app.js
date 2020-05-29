@@ -38,8 +38,8 @@ App({
     })
   },
   // 从云端获取数据的方法
-  getDataFromCloud(cb) {
-    wx.cloud.callFunction({
+  async getDataFromCloud() {
+    await wx.cloud.callFunction({
       // 云函数名称
       name: 'getPersonalData',
       success: res => {
@@ -58,6 +58,7 @@ App({
           this.globalData.bodydata = res.result.data[length - 1];
           this.globalData.bodydatas = res.result.data;
           console.log("身体数据:", this.globalData.bodydata);
+          return true;
         }
       },
       fail: error => {

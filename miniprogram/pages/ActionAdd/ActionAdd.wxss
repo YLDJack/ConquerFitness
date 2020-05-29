@@ -1,25 +1,42 @@
 /* top部分 */
+
+.toptitle {
+  margin-top: 15rpx;
+  margin-left: 15rpx;
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: space-between;
+}
+.toptitle .title{
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  font-size: 36rpx;
+  width: 300rpx;
+}
+.toptitle .success{
+  width: 200rpx;
+  text-align: center;
+}
+
 .top {
-  height: 142rpx;
-  width: 750px;
+  height: 100rpx;
+  width: 100%;
+  /* text-align: center; */
+  display: flex;
 }
 .selected {
   background-color: red;
 }
-.top .title {
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-  font-size: 36rpx;
-  margin-top: 15rpx;
-  margin-left: 15rpx;
-  height: 40%;
-}
 
 .top .select-search {
-  height: 60%;
-  width: 100%;
+  height: 100%;
+  width: 90%;
   display: flex;
-  margin-top: -10rpx;
+}
+.top .add{
+  display: flex;
+  justify-content: center;
 }
 
 .van-dropdown-menu {

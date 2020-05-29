@@ -2,7 +2,7 @@
 <!-- 下拉列表选择反馈类型 -->
 <view class="dropdownmenu">
   <van-dropdown-menu>
-    <van-dropdown-item value="{{ optionValue }}" options="{{ option }}" />
+    <van-dropdown-item value="{{ optionValue }}" options="{{ option }}" bind:change="onOptionChange" />
   </van-dropdown-menu>
 </view>
 

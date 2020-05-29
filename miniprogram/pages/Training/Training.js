@@ -6,6 +6,7 @@ Page({
    */
   data: {
     time: 60 * 1000,
+    timeData: {},
     value: 5,
     //下拉列表的初始状态
     activeNames: ['1'],
@@ -15,6 +16,12 @@ Page({
     },
     circlevalue: 80
   },
+  onCountdown(e) {
+    this.setData({
+      timeData: e.detail,
+    });
+  },
+
   onCollChange(event) {
     this.setData({
       activeNames: event.detail

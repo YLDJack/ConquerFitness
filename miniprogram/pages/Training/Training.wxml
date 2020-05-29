@@ -1,5 +1,11 @@
 <!--pages/Training/Training.wxml-->
-<van-count-down time="{{ time }}" format="HH 时 mm 分 ss 秒" />
+<van-count-down use-slot time="{{ time }}" bind:change="onCountdown">
+	<text class="item">{{ timeData.hours }}</text>
+	<text class="symbal">:</text>
+	<text class="item">{{ timeData.minutes }}</text>
+	<text class="symbal">:</text>
+	<text class="item">{{ timeData.seconds }}</text>
+</van-count-down>
 <view>
 	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit">
 		<text slot="right-icon" >8个动作 5000容量</text>
@@ -43,23 +49,24 @@
 			</van-field>
 		</view>
 
-		<view>
-			<van-field label="重量（KG）:">
-			</van-field>
-			<van-field label="组数（次）:">
-			</van-field>
-			<view class="drop2">
-				<van-count-down time="{{ time }}" format="mm 分 ss 秒" />
-				<view>
-					<van-button icon="success" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" />
-					<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" />
-				</view>
+		<view class="traingroup">
+			<view class="groupnum">1</view>
+			<view class="traindata">
+				<van-field placeholder="重量(KG)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:#646262">
+				</van-field>
 			</view>
-
+			<view class="traindata">
+				<van-field placeholder="数量(次)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:#646262">
+				</van-field>
+			</view>
+			<view class="traincountdown">
+				<van-button icon="success" type="info" plain custom-style="margin-right:35rpx;width:100rpx;height:100rpx;border-radius:50rpx" />
+				<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" />
+			</view>
 		</view>
 
 		<view class="edit">
-			<text>+</text>
+			<van-icon name="plus" size="40rpx" />
 			<text>编辑</text>
 		</view>
 

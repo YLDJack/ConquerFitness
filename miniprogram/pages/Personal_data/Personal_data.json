@@ -1,7 +1,9 @@
 {
   "enablePullDownRefresh": true,
-  "navigationBarTitleText": "图表",
+  "navigationBarTitleText": "身体数据",
   "usingComponents": {
-    "ec-canvas": "../../ec-canvas/ec-canvas"
+    "ec-canvas": "../../ec-canvas/ec-canvas",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index"
   }
 }

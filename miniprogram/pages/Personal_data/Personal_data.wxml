@@ -1,5 +1,67 @@
-	<view class="container">
-		<!-- 线性表 -->
-		<ec-canvas id="mylinechart" canvas-id="mychart-line" ec="{{ lineec }}">
-		</ec-canvas>
-	</view>
+<!-- 顶级时间选项卡 -->
+<cover-view >
+	<van-tabs type="card" animated>
+		<!-- 第二级时间选项卡 swipeable可滑动的-->
+		<van-tab title="周">
+			<van-tabs swipeable animated color="black" border="true">
+				<van-tab title="本周">
+					<view class="container">
+						<!-- 线性表 -->
+						<ec-canvas id="mylinechart" canvas-id="mychart-line" ec="{{ lineec }}" wx:if="{{showchart}}">
+						</ec-canvas>
+					</view>
+				</van-tab>
+				<van-tab title="上周">
+				</van-tab>
+				<van-tab title="16">
+				</van-tab>
+				<van-tab title="15">
+				</van-tab>
+				<van-tab title="14">
+				</van-tab>
+				<van-tab title="13">
+				</van-tab>
+				<van-tab title="12">
+				</van-tab>
+				<van-tab title="11">
+				</van-tab>
+			</van-tabs>
+		</van-tab>
+
+		<van-tab title="月">
+			<van-tabs swipeable animated>
+				<van-tab title="本月">
+				</van-tab>
+				<van-tab title="上月">
+				</van-tab>
+				<van-tab title="3月">
+				</van-tab>
+				<van-tab title="2月">
+				</van-tab>
+				<van-tab title="1月">
+				</van-tab>
+				<van-tab title="">
+				</van-tab>
+				<van-tab title="去年12月">
+				</van-tab>
+				<van-tab title="去年11月">
+				</van-tab>
+			</van-tabs>
+		</van-tab>
+
+		<van-tab title="年">
+			<van-tabs swipeable animated>
+				<van-tab title="今年">
+				</van-tab>
+				<van-tab title="去年">
+				</van-tab>
+				<van-tab title="2018年">
+				</van-tab>
+				<van-tab title="2017年">
+				</van-tab>
+				<van-tab title="2016年">
+				</van-tab>
+			</van-tabs>
+		</van-tab>
+	</van-tabs>
+</cover-view>

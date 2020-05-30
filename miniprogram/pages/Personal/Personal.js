@@ -81,6 +81,40 @@ Page({
       smallleg: event.detail
     })
   },
+  loadbodydatas(){
+    let bodydata = app.globalData.bodydata; 
+    let date = app.globalData.date; 
+    if (update) { 
+      // 异步函数的调用顺序问题 
+      if (app.getDataFromCloud()) { 
+        bodydata = app.globalData.bodydata; 
+        date = app.globalData.date; 
+        this.setData({ 
+          date: date, 
+          trainState: bodydata.trainState, 
+          weight: bodydata.weight, 
+          fat: bodydata.fat, 
+          ass: bodydata.ass, 
+          leg: bodydata.leg, 
+          smallleg: bodydata.smallleg, 
+          breast: bodydata.breast, 
+          arms: bodydata.arms, 
+        }); 
+        return true; 
+      } 
+    } 
+    this.setData({ 
+      date: date, 
+      trainState: bodydata.trainState, 
+      weight: bodydata.weight, 
+      fat: bodydata.fat, 
+      ass: bodydata.ass, 
+      leg: bodydata.leg, 
+      smallleg: bodydata.smallleg, 
+      breast: bodydata.breast, 
+      arms: bodydata.arms, 
+    }); 
+  },
   onLoad: function () {
     this.loadbodydatas();
   },

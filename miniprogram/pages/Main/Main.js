@@ -258,11 +258,6 @@ Page({
     }
 
   },
-  onClick() {
-    wx.navigateTo({
-      url: '../TrainTemplate/TrainTemplate',
-    })
-  },
   scrollToRed: function (e) {
     this.setData({
       toView: 'green'

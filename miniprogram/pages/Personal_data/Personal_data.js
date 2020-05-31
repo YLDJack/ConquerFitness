@@ -9,11 +9,9 @@ Page({
    */
   data: {
     // 默认数据
-    date01: '2019-6-1',
-    date02: '2019-6-7',
+    showchart:true,
     // 原本默认的坐标轴数据
-    series: [
-      {
+    series: [{
         data: [],
         name: '体重',
         smooth: false,
@@ -48,25 +46,25 @@ Page({
         markLine: {
           label: {
             show: true,
-            position:'end'
+            position: 'end'
           },
           data: [{
             type: 'average',
             name: '平均值'
           }]
         }
-      }, 
+      },
       {
         data: [],
         name: '体脂',
         smooth: false,
         type: 'line',
-         // 设置始终显示数据
-         itemStyle: {
+        // 设置始终显示数据
+        itemStyle: {
           normal: {
             label: {
               // 设置单位
-              formatter: '{c}cm',
+              formatter: '{c}%',
               show: true, //开启显示
               position: 'top', //在上方显示
             }
@@ -78,8 +76,8 @@ Page({
         name: '臂围',
         smooth: false,
         type: 'line',
-         // 设置始终显示数据
-         itemStyle: {
+        // 设置始终显示数据
+        itemStyle: {
           normal: {
             label: {
               // 设置单位
@@ -95,8 +93,8 @@ Page({
         name: '胸围',
         smooth: false,
         type: 'line',
-         // 设置始终显示数据
-         itemStyle: {
+        // 设置始终显示数据
+        itemStyle: {
           normal: {
             label: {
               // 设置单位
@@ -112,8 +110,8 @@ Page({
         name: '臀围',
         smooth: false,
         type: 'line',
-         // 设置始终显示数据
-         itemStyle: {
+        // 设置始终显示数据
+        itemStyle: {
           normal: {
             label: {
               // 设置单位
@@ -129,8 +127,8 @@ Page({
         name: '大腿',
         smooth: false,
         type: 'line',
-         // 设置始终显示数据
-         itemStyle: {
+        // 设置始终显示数据
+        itemStyle: {
           normal: {
             label: {
               // 设置单位
@@ -146,8 +144,8 @@ Page({
         name: '小腿',
         smooth: false,
         type: 'line',
-         // 设置始终显示数据
-         itemStyle: {
+        // 设置始终显示数据
+        itemStyle: {
           normal: {
             label: {
               // 设置单位
@@ -167,6 +165,12 @@ Page({
     },
   },
 
+  tabClick: function (e) {
+    this.setData({
+      sliderOffset: e.currentTarget.offsetLeft,
+      activeIndex: e.currentTarget.id
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -227,16 +231,19 @@ Page({
 
       },
       // 指定表的标题
-      title:{
-        show:true,
-        text:'身体数据折线图',
+      title: {
+        show: true,
+        text: '身体数据折线图',
         left: 'center',
-        subtext:'点击相应的图例可以隐藏数据'
+        subtext: '点击相应的图例可以隐藏数据'
       },
       // 悬浮图标
       tooltip: {
         show: true,
         trigger: 'axis',
+        axisPointer: {
+          type: 'cross'
+        },
         position: function (pos, params, dom, rect, size) {
           var obj = {
             top: 60
@@ -297,11 +304,11 @@ Page({
     let data = {};
     data[0] = weight;
     data[1] = fat;
-    data[2] = ass;
-    data[3] = leg;
-    data[4] = smallleg;
-    data[5] = breast;
-    data[6] = arms;
+    data[2] = arms;
+    data[3] = breast;
+    data[4] = ass;
+    data[5] = leg;
+    data[6] = smallleg;
 
     // 将各项身体指标设置为y轴，并进行reverse。才能从小到大排序
     for (let i = 0; i < series.length; i++) {

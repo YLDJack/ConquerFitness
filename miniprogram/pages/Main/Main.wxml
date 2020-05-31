@@ -22,7 +22,7 @@
 		<!-- 状态 -->
 		<view class="statetext">
 			<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
-			<van-tag type="primary" size="large">增肌</van-tag>
+			<van-tag type="primary" size="large">{{trainStatus}}</van-tag>
 		</view>
 	</view>
 </view>

@@ -1,0 +1,18 @@
+/* miniprogram/pages/DataRecord/DataRecord.wxss */
+.datacard{
+  margin:15rpx;
+  background-color: rgb(223, 240, 198);
+  border-radius: 20rpx;
+  text-align: center;
+  padding: 10rpx;
+}
+.datatitle{
+  margin-top:10rpx;
+}
+.datadiscribe{
+  font-size: 20rpx;
+  color: gray;
+}
+.dataimg{
+  height: 400rpx;
+}

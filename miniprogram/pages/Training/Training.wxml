@@ -1,11 +1,17 @@
-<!--pages/Training/Training.wxml-->
-<van-count-down use-slot time="{{ time }}" bind:change="onCountdown">
-	<text class="item">{{ timeData.hours }}</text>
-	<text class="symbal">:</text>
-	<text class="item">{{ timeData.minutes }}</text>
-	<text class="symbal">:</text>
-	<text class="item">{{ timeData.seconds }}</text>
-</van-count-down>
+<!-- 正计时秒表 -->
+<view class="miaobiao">
+	<view class="count">
+		<text>{{hour}}</text>:
+		<text>{{minutes}}</text>:
+		<text>{{seconds}}</text>
+	</view>
+	<view class="countbutton">
+		<van-icon name="play-circle" size="60rpx" bind:click="onStartClock" />
+		<van-icon name="pause-circle" size="60rpx" bind:click="onPauseClock" />
+		<van-icon name="stop-circle" size="60rpx" bind:click="onStopClock" />
+	</view>
+</view>
+
 <view>
 	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit">
 		<text slot="right-icon" >8个动作 5000容量</text>
@@ -61,7 +67,35 @@
 			</view>
 			<view class="traincountdown">
 				<van-button icon="success" type="info" plain custom-style="margin-right:35rpx;width:100rpx;height:100rpx;border-radius:50rpx" />
-				<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" />
+				<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" bind:click="showClockPopup" />
+				<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(43, 41, 41)">
+					<view class="resttime">
+						<van-count-down use-slot time="{{ countdowntime }}" bind:change="onChangeClock">
+							<text class="item">{{ timeData.hours }}</text>
+							<text class="symbal">:</text>
+							<text class="item">{{ timeData.minutes }}</text>
+							<text class="symbal">:</text>
+							<text class="item">{{ timeData.seconds }}</text>
+						</van-count-down>
+					</view>
+					<view class="setresttime">
+						<van-button type="primary" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">-10s</van-button>
+						<van-button type="primary" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">+10s</van-button>
+					</view>
+					<view class="inputresttime">
+						<view class="inputtip">输入休息时间(s):</view>
+						<van-field custom-style="padding:2rpx;color:white;width:100rpx;height:50rpx;color:black;font-size:28rpx;border-radius:10rpx;background-color:rgb(139, 138, 138)">
+						</van-field>
+					</view>
+					<view class="setbutton">
+						<!-- 暂停按钮点击后变成开始按钮 -->
+						<van-icon name="pause-circle-o" size="100rpx" bind:click="pauseToStart" wx:if="{{isPause}}" />
+						<van-icon name="play-circle-o" size="100rpx" bind:click="pauseToStart" wx:else="{{isStart}}" />
+						<!-- 停止按钮点击后计时归零（重置）,颜色变红 -->
+						<van-icon name="stop-circle-o" size="100rpx" bind:click="stopToReset" wx:if="{{isGray}}" />
+						<van-icon name="stop-circle-o" color="red" size="100rpx" bind:click="stopToReset" wx:else="{{isRed}}" />
+					</view>
+				</van-popup>
 			</view>
 		</view>
 

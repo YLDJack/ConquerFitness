@@ -211,6 +211,11 @@ Page({
       url: "../TrainTemplate/TrainTemplate",
     })
   },
+  dataRecord(){
+    wx.navigateTo({
+      url: "../DataRecord/DataRecord",
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

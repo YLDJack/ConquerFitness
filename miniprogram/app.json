@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/Training/Training",
     "pages/Main/Main",
+    "pages/Training/Training",
     "pages/Train/Train",
     "pages/Personal/Personal",
     "pages/Feedback/Feedback",
@@ -52,9 +52,5 @@
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
-  "cloud": true,
-  "useExtendedLib": {
-    "kbone": true,
-    "weui": true
-  }
+  "cloud": true
 }

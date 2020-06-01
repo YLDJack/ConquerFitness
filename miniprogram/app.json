@@ -1,8 +1,6 @@
 {
   "pages": [
-    "pages/ActionAdd/ActionAdd",
     "pages/Main/Main",
-
     "pages/Train/Train",
     "pages/Training/Training",
     "pages/Personal/Personal",
@@ -12,7 +10,7 @@
     "pages/Count/Count",
     "pages/logs/logs",
     "pages/ActionDesc/ActionDesc",
-
+    "pages/ActionAdd/ActionAdd",
     "pages/DataRecord/DataRecord"
   ],
   "tabBar": {

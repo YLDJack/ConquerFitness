@@ -1,8 +1,8 @@
 {
   "pages": [
     "pages/Main/Main",
-    "pages/Training/Training",
     "pages/Train/Train",
+    "pages/Training/Training",
     "pages/Personal/Personal",
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences",
@@ -10,8 +10,8 @@
     "pages/Count/Count",
     "pages/logs/logs",
     "pages/ActionDesc/ActionDesc",
-    "pages/TrainTemplate/TrainTemplate",
-    "pages/ActionAdd/ActionAdd"
+    "pages/ActionAdd/ActionAdd",
+    "pages/DataRecord/DataRecord"
   ],
   "tabBar": {
     "custom": true,
@@ -19,7 +19,8 @@
     "selectedColor": "#3cc51f",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
-    "list": [{
+    "list": [
+      {
         "pagePath": "pages/Main/Main",
         "iconPath": "image/icon_component.png",
         "selectedIconPath": "image/icon_component_HL.png",

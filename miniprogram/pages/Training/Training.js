@@ -5,11 +5,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    hour: "00",
-    minutes: "00",
-    seconds: "00",
-    count: 0,
-    timer: null,
+    time: 60 * 1000,
+    timeData: {},
     value: 5,
     //下拉列表的初始状态
     activeNames: ['1'],
@@ -17,51 +14,12 @@ Page({
       '0%': '#ffd01e',
       '100%': '#ee0a24'
     },
-    circlevalue: 80,
-    showClock: false,
-    countdowntime: 60*1000,
-    timeData:{},
-    isPause:true,
-    isStart:false,
-    isGray:true,
-    isRed:false
+    circlevalue: 80
   },
-
-  // 页面顶部正计时处理单个数字
-  showNum(num){
-    if(num < 10){
-      return "0" + num;
-    }else{
-      return num;
-    }
-  },
-  // 页面顶部正计时点击开始按钮
-  onStartClock: function(){
-    this.data.timer = setInterval(
-      function(){
-        var countNew = this.data.count + 1;
-        this.setData({
-          count: countNew,
-          seconds: showNum(countNew % 60),
-          minutes: showNum(parseInt(countNew / 60) % 60),
-          hour: showNum(parseInt(countNew / 3600))
-        })
-      }
-    , 1000);
-  },
-  // 顶部暂停按钮
-  onPauseClock: function(){
-    clearInterval(this.data.timer)
-  },
-  // 顶部停止按钮
-  onStopClock: function(){
-    clearInterval(this.data.timer),
+  onCountdown(e) {
     this.setData({
-      count:0,
-      seconds:"00",
-      minutes:"00",
-      hour:"00"
-    })
+      timeData: e.detail,
+    });
   },
 
   onCollChange(event) {
@@ -69,47 +27,6 @@ Page({
       activeNames: event.detail
     });
   },
-
-  // Clock按钮弹出层
-  showClockPopup() {
-    this.setData({ showClock: true });
-  },
-  onCloseClock() {
-    this.setData({ showClock: false });
-  },
-
-  // 倒计时事件
-  onChangeClock(e) {
-    this.setData({
-      timeData: e.detail,
-    });
-  },
-
-  // clock弹出层中的按钮
-  pauseToStart(){
-    if(this.data.isPause){
-      this.setData({
-        isStart:true,
-        isPause:false
-      });
-    }else if(this.data.isStart){
-      this.setData({
-        isStart:false,
-        isPause:true,
-        isRed:false,
-        isGray:true
-      });
-    }
-  },
-  stopToReset(){
-    if(this.data.isGray){
-      this.setData({
-        isGray:false,
-        isRed:true
-      })
-    }
-  },
-
   // 添加动作跳转
   addTrain() {
     wx.navigateTo({

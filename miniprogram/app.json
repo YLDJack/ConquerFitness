@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/Training/Training",
     "pages/Main/Main",
+    "pages/Training/Training",
     "pages/Train/Train",
     "pages/Personal/Personal",
     "pages/Feedback/Feedback",
@@ -19,7 +19,8 @@
     "selectedColor": "#3cc51f",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
-    "list": [{
+    "list": [
+      {
         "pagePath": "pages/Main/Main",
         "iconPath": "image/icon_component.png",
         "selectedIconPath": "image/icon_component_HL.png",
@@ -52,9 +53,5 @@
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
-  "cloud": true,
-  "useExtendedLib": {
-    "kbone": true,
-    "weui": true
-  }
+  "cloud": true
 }

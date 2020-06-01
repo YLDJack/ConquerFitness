@@ -211,15 +211,43 @@ Page({
       url: "../TrainTemplate/TrainTemplate",
     })
   },
-  dataRecord(){
+  dataRecord() {
     wx.navigateTo({
       url: "../DataRecord/DataRecord",
+    });
+  },
+  // 从云端获取数据的方法
+  async getDataFromCloud() {
+    await wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getPersonalData',
+      success: res => {
+        wx.showToast({
+          title: '获取训练状态成功',
+          icon: "none"
+        })
+        let length = res.result.data.length;
+        let status = res.result.data[length - 1].trainState;
+        this.setData({
+          trainStatus: status
+        });
+        console.log('状态', this.data.trainStatus);
+
+      },
+      fail: error => {
+        console.log(error);
+        wx.showToast({
+          title: '获取状态失败',
+          icon: "none"
+        })
+      }
     })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
+    this.getDataFromCloud();
     let date = app.globalData.date
     //获取当前时间和身体数据
     this.setData({
@@ -292,12 +320,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (typeof this.getTabBar === 'function' &&
-      this.getTabBar()) {
-      console.log('设置选中项 0')
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      console.log('设置选中项 0');
       this.getTabBar().setData({
         selected: 0
       })
     }
-  },
+  }
 })

@@ -18,26 +18,35 @@
 				<view class="tabtitle">更多操作</view>
 				<van-tabs active="{{ moretabactive }}" class="moretab" type="card" animated>
 					<van-tab title="编辑动作">
-						<view class="tabtitle">
-							<text>已添动作</text>
-							<van-button type="danger" bind:click="startDel">批量删除</van-button>
-							<van-button type="danger" wx:if="{{delbutton}}">确认</van-button>
+						<view class="addtop">
+							<view class="addtoptitle">已添动作</view>
+							<view class="addtopbutton">
+								<van-button type="danger" wx:if="{{delbutton}}" size="small" style="margin-right:20rpx" bind:click="shouldDel">确认</van-button>
+								<van-button type="danger" bind:click="startDel" size="small" wx:if="{{delbutton}}">取消</van-button>
+								<van-button type="danger" bind:click="startDel" size="small" wx:else>编辑</van-button>
+							</view>
 						</view>
 						<van-tree-select items="{{ items }}" main-active-index="{{ addpopActiveIndex }}" active-id="{{ addpopactiveId }}" bind:click-nav="onaddClickNav" content-item-class="bg" main-item-class="treenav" height="888rpx">
 							<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
 							<view slot="content" class="content">
-								<view wx:for="{{items.length}}" wx:if="{{addpopactiveId== index}}" wx:key="index">
+								<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index}}" wx:key="index">
 									<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
 
 									<!-- 若点击了批量删除 -->
 									<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid" wx:if="{{delbutton}}">
 										<!-- 动作卡片 -->
-										<van-grid-item wx:for="{{queryAddActions}}" content-class="griditem" wx:key="_id" text="{{item.actionName}}" bind:click="onDelClick" data-id="{{item._id}}" dot>
+										<van-grid-item wx:for="{{queryAddActions}}"  content-class="griditem" wx:key="_id" bind:click="onDelItemClick" data-id="{{item._id}}" data-index="{{index}}">
 											<view slot="icon">
-												<image class="griditemimage" src="{{item.actionImage}}"></image>
-												<text wx:if="{{item._id}} in {{delArray}}">选中</text>
+												<image src="{{item.actionImage}}" class="griditemimage"></image>
+											</view>
+											<view slot="text">
+												<view wx:if="{{delstatus[index]}}">
+													<van-checkbox value="{{ true }}" checked-color="red" icon-size="35rpx"></van-checkbox>
+												</view>
+												<view wx:else style="font-weight: bold;white-space: nowrap;">{{item.actionName}}</view>
 											</view>
 										</van-grid-item>
+
 									</van-grid>
 
 

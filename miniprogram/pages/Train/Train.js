@@ -69,7 +69,10 @@ Page({
 
   //页面的初始数据
   data: {
+    // 要删除数据的_id
     delArray: [],
+    // 被选中的item
+    delstatus: [],
     // 批量删除
     delbutton: false,
     // 弹出层里的tab索引
@@ -360,21 +363,80 @@ Page({
       onInit: initlineChart
     }
   },
-  // 点击删除
-  onDelClick(event) {
+  // 确认删除
+  shouldDel() {
+    // 发起云函数请求
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '批量删除中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'delmultiPersonalDatas',
+      // 传给云函数的参数
+      data: {
+        // 将要删除的数据传给云函数
+        delArray: this.data.delArray
+      },
+      success: res => {
+        toast.clear();
+        wx.showToast({
+          title: '批量删除成功',
+        })
+        this.setData({
+          // 删除完后将选中数组和删除id的数组都置为空
+          delArray: [],
+          delstatus: []
+        });
+        // 并且重新要发起查询请求
+       this.onQueryActionByArea();
+        // 若查询的获得的数据为空则将编辑按钮退回原来的状态
+        if (this.data.queryAddActions.length === 0) {
+          this.setData({
+            delbutton: false
+          })
+        }
+      },
+      fail: error => {
+        toast.clear();
+        console.log(error);
+        wx.showToast({
+          title: '批量删除失败失败',
+        })
+      }
+    })
+  },
+  // 点击要删除的item
+  onDelItemClick(event) {
     // 使用set确保每个id都是不重复的
+    let delindex = event.currentTarget.dataset.index;
+    let delstatus = this.data.delstatus;
     let newdel = new Set(this.data.delArray);
-    newdel = newdel.add(event.currentTarget.dataset.id);
+    // 判断是否已经被选中，如果已经被选中，则将其变为未选中。
+    if (delstatus[delindex]) {
+      delstatus[delindex] = false;
+      newdel.delete(event.currentTarget.dataset.id);
+    } else {
+      delstatus[delindex] = true;
+      newdel.add(event.currentTarget.dataset.id);
+    }
     newdel = Array.from(newdel);
     this.setData({
-      delArray:newdel
+      delArray: newdel,
+      delstatus: delstatus
     })
-    console.log(this.data.delArray);
+    console.log('要删除的index', this.data.delstatus);
+    console.log('删除动作的id', this.data.delArray);
   },
   // 开始批量删除
   startDel() {
     this.setData({
-      delbutton: !this.data.delbutton
+      delbutton: !this.data.delbutton,
+      // 将选中的动作置为空
+      delstatus: []
     })
   },
   // 选择运动类型按钮
@@ -972,6 +1034,7 @@ Page({
   onAddClose() {
     this.setData({
       showAddPop: false,
+      delbutton:false
     });
   },
   onCollChange(event) {

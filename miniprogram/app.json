@@ -1,8 +1,8 @@
 {
   "pages": [
-
-    "pages/Main/Main",
     "pages/ActionAdd/ActionAdd",
+    "pages/Main/Main",
+
     "pages/Train/Train",
     "pages/Training/Training",
     "pages/Personal/Personal",

@@ -1,0 +1,6 @@
+function getSelectStatus(selectStatus, id) {
+  callMethod(getSelectStatus,{selectStatus:selectStatus,id:id});
+}
+module.exports = {
+  getSelectStatus:getSelectStatus
+};

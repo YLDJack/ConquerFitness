@@ -7,6 +7,8 @@ Page({
 
   //页面的初始数据
   data: {
+    // 选中状态
+    selectStatus: [],
     // 选中的动作
     selectActions: [],
     // 更新的动作
@@ -286,21 +288,52 @@ Page({
     collactiveNames: ['0'],
     updatecollactiveNames: ['0']
   },
+  getSelectStatus(selectStatus, id) {
+    var result = selectStatus['' + id];
+    console.log('是否正确', id);
+    return result;
+  },
   // 选择动作按钮
   selsectActions(event) {
-    const id = event.currentTarget.dataset.id;
-    const actions = this.data.queryActionByArea;
-    var selectAction = this.data.selectActions;
-    for (let i = 0; i < actions.length; i++) {
-      if (actions[i]._id === id) {
-        console.log(actions[i]);
-        selectAction.push(actions[i]);
+    let id = event.currentTarget.dataset.id;
+    let selectAction = this.data.selectActions;
+    let selectStatus = this.data.selectStatus;
+    let actionByAreaCate = this.data.actionByAreaCate;
+    let actionCate = this.data.actionCate;
+    // 如果已经选中则置isSelected为false
+    if (selectStatus[id] === true) {
+      selectStatus[id] = false;
+      // 否则则置isSelected为true
+      for (let i = 0; i < actionCate.length; i++) {
+        for (let j = 0; j < actionByAreaCate[actionCate[i]].length; j++) {
+          if (actionByAreaCate[actionCate[i]][j]._id === id) {
+            actionByAreaCate[actionCate[i]][j].isSelected = false;
+            var index = selectAction.indexOf(actionByAreaCate[actionCate[i]][j]._id)
+            selectAction.splice(index, 1);
+
+          }
+        }
+      }
+    } else {
+      selectStatus[id] = true;
+      // 否则则置isSelected为true
+      for (let i = 0; i < actionCate.length; i++) {
+        for (let j = 0; j < actionByAreaCate[actionCate[i]].length; j++) {
+          if (actionByAreaCate[actionCate[i]][j]._id === id) {
+            actionByAreaCate[actionCate[i]][j].isSelected = true;
+            selectAction.push(actionByAreaCate[actionCate[i]][j]._id);
+          }
+        }
       }
     }
+
     this.setData({
-      selectActions: selectAction
+      actionByAreaCate: actionByAreaCate,
+      selectActions: selectAction,
+      selectStatus: selectStatus
     })
-    console.log('选择的动作是', this.data.selectActions);
+    console.log('选择的动作是：', this.data.selectActions);
+    console.log('选择的动作状态：', this.data.selectStatus);
   },
   // 选择运动类型按钮
   selectType(event) {

@@ -211,114 +211,115 @@ Page({
       url: "../TrainTemplate/TrainTemplate",
     })
   },
-  dataRecord(){
+  dataRecord() {
     wx.navigateTo({
       url: "../DataRecord/DataRecord",
-  // 从云端获取数据的方法
-  async getDataFromCloud() {
-    await wx.cloud.callFunction({
-      // 云函数名称
-      name: 'getPersonalData',
-      success: res => {
-        wx.showToast({
-          title: '获取训练状态成功',
-          icon: "none"
+      // 从云端获取数据的方法
+      async getDataFromCloud() {
+        await wx.cloud.callFunction({
+          // 云函数名称
+          name: 'getPersonalData',
+          success: res => {
+            wx.showToast({
+              title: '获取训练状态成功',
+              icon: "none"
+            })
+            let length = res.result.data.length;
+            let status = res.result.data[length - 1].trainState;
+            this.setData({
+              trainStatus: status
+            });
+            console.log('状态', this.data.trainStatus);
+
+          },
+          fail: error => {
+            console.log(error);
+            wx.showToast({
+              title: '获取状态失败',
+              icon: "none"
+            })
+          }
         })
-        let length = res.result.data.length;
-        let status = res.result.data[length - 1].trainState;
+      },
+      /**
+       * 生命周期函数--监听页面加载
+       */
+      onLoad: function () {
+        this.getDataFromCloud();
+        let date = app.globalData.date
+        //获取当前时间和身体数据
         this.setData({
-          trainStatus:status
+          date: date,
         });
-        console.log('状态',this.data.trainStatus);
+        // 根据当前时间判断早上下午
+        const now = new Date();
+        const hour = now.getHours();
+        if (hour < 6) {
+          this.setData({
+            hello: "凌晨好"
+          });
+        } else if (hour < 9) {
+          this.setData({
+            hello: "早上好"
+          });
+        } else if (hour < 12) {
+          this.setData({
+            hello: "上午好"
+          });
+        } else if (hour < 14) {
+          this.setData({
+            hello: "中午好"
+          });
+        } else if (hour < 17) {
+          this.setData({
+            hello: "下午好"
+          });
+        } else if (hour < 19) {
+          this.setData({
+            hello: "傍晚好"
+          });
+        } else if (hour < 22) {
+          this.setData({
+            hello: "晚上好"
+          });
+        } else {
+          this.setData({
+            hello: "夜里好"
+          });
+        }
 
       },
-      fail: error => {
-        console.log(error);
-        wx.showToast({
-          title: '获取状态失败',
-          icon: "none"
+      scrollToRed: function (e) {
+        this.setData({
+          toView: 'green'
         })
-      }
-    })
-  },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-   onLoad: function () {
-    this.getDataFromCloud();
-    let date = app.globalData.date
-    //获取当前时间和身体数据
-    this.setData({
-      date: date,
-    });
-    // 根据当前时间判断早上下午
-    const now = new Date();
-    const hour = now.getHours();
-    if (hour < 6) {
-      this.setData({
-        hello: "凌晨好"
-      });
-    } else if (hour < 9) {
-      this.setData({
-        hello: "早上好"
-      });
-    } else if (hour < 12) {
-      this.setData({
-        hello: "上午好"
-      });
-    } else if (hour < 14) {
-      this.setData({
-        hello: "中午好"
-      });
-    } else if (hour < 17) {
-      this.setData({
-        hello: "下午好"
-      });
-    } else if (hour < 19) {
-      this.setData({
-        hello: "傍晚好"
-      });
-    } else if (hour < 22) {
-      this.setData({
-        hello: "晚上好"
-      });
-    } else {
-      this.setData({
-        hello: "夜里好"
-      });
-    }
+      },
+      scrollTo100: function (e) {
+        this.setData({
+          scrollLeft: 100
+        })
+      },
 
-  },
-  scrollToRed: function (e) {
-    this.setData({
-      toView: 'green'
+      upper: function (e) {
+        console.log('滚动到顶部')
+      },
+      lower: function (e) {
+        console.log('滚动到底部')
+      },
+      scroll: function (e) {
+        console.log(e)
+      },
+      /**
+       * 生命周期函数--监听页面显示
+       */
+      onShow: function () {
+        if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+          console.log('设置选中项 0');
+          this.getTabBar().setData({
+            selected: 0
+          })
+        }
+      },
     })
-  },
-  scrollTo100: function (e) {
-    this.setData({
-      scrollLeft: 100
-    })
-  },
-
-  upper: function (e) {
-    console.log('滚动到顶部')
-  },
-  lower: function (e) {
-    console.log('滚动到底部')
-  },
-  scroll: function (e) {
-    console.log(e)
-  },
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    if (typeof this.getTabBar === 'function' &&
-      this.getTabBar()) {
-      console.log('设置选中项 0')
-      this.getTabBar().setData({
-        selected: 0
-      })
-    }
-  },
-})
+  }
+});

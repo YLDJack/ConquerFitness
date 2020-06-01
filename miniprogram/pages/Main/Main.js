@@ -112,7 +112,7 @@ function initlineChart(canvas, width, height, dpr) {
 
 Page({
   data: {
-    bodydata: app.globalData.bodydata,
+    trainStatus:"增肌",
     // 问候语
     hello: "早上好",
     // 当前时期

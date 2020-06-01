@@ -81,9 +81,49 @@ Page({
       smallleg: event.detail
     })
   },
-  onLoad: function () {
-    this.loadbodydatas();
+  loadbodydatas() {
+    let bodydata = app.globalData.bodydata;
+    let date = app.globalData.date;
+    this.setData({
+      date: date,
+      trainState: bodydata.trainState,
+      weight: bodydata.weight,
+      fat: bodydata.fat,
+      ass: bodydata.ass,
+      leg: bodydata.leg,
+      smallleg: bodydata.smallleg,
+      breast: bodydata.breast,
+      arms: bodydata.arms,
+    });
   },
+  onLoad: function () { 
+    this.loadbodydatas(); 
+    this.setData({ 
+      date: app.globalData.date 
+    }) 
+  }, 
+  // 从云端获取数据的方法 
+  async getDataFromCloud() { 
+    await wx.cloud.callFunction({ 
+      // 云函数名称 
+      name: 'getPersonalData', 
+      success: res => { 
+        let length = res.result.data.length; 
+        let bodydata = res.result.data[length - 1]; 
+        this.loadbodydatas(); 
+        wx.showToast({ 
+          title: '获取最新个人数据成功', 
+        }); 
+      }, 
+      fail: error => { 
+        console.log(error); 
+        wx.showToast({ 
+          title: '获取失败', 
+          icon: "none" 
+        }) 
+      } 
+    }) 
+  }, 
   // 更新数据方法
   updateDataToCloud() {
     const toast = Toast.loading({
@@ -113,6 +153,7 @@ Page({
         wx.showToast({
           title: '更新成功',
         })
+        app.getDataFromCloud();
       },
       fail: error => {
         toast.clear();

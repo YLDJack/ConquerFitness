@@ -239,85 +239,87 @@ Page({
               icon: "none"
             })
           },
-      /**
-       * 生命周期函数--监听页面加载
-       */
-      onLoad: function () {
-        this.getDataFromCloud();
-        let date = app.globalData.date
-        //获取当前时间和身体数据
-        this.setData({
-          date: date,
-        });
-        // 根据当前时间判断早上下午
-        const now = new Date();
-        const hour = now.getHours();
-        if (hour < 6) {
-          this.setData({
-            hello: "凌晨好"
-          });
-        } else if (hour < 9) {
-          this.setData({
-            hello: "早上好"
-          });
-        } else if (hour < 12) {
-          this.setData({
-            hello: "上午好"
-          });
-        } else if (hour < 14) {
-          this.setData({
-            hello: "中午好"
-          });
-        } else if (hour < 17) {
-          this.setData({
-            hello: "下午好"
-          });
-        } else if (hour < 19) {
-          this.setData({
-            hello: "傍晚好"
-          });
-        } else if (hour < 22) {
-          this.setData({
-            hello: "晚上好"
-          });
-        } else {
-          this.setData({
-            hello: "夜里好"
-          });
-        }
+          /**
+           * 生命周期函数--监听页面加载
+           */
+          onLoad: function () {
+            this.getDataFromCloud();
+            let date = app.globalData.date
+            //获取当前时间和身体数据
+            this.setData({
+              date: date,
+            });
+            // 根据当前时间判断早上下午
+            const now = new Date();
+            const hour = now.getHours();
+            if (hour < 6) {
+              this.setData({
+                hello: "凌晨好"
+              });
+            } else if (hour < 9) {
+              this.setData({
+                hello: "早上好"
+              });
+            } else if (hour < 12) {
+              this.setData({
+                hello: "上午好"
+              });
+            } else if (hour < 14) {
+              this.setData({
+                hello: "中午好"
+              });
+            } else if (hour < 17) {
+              this.setData({
+                hello: "下午好"
+              });
+            } else if (hour < 19) {
+              this.setData({
+                hello: "傍晚好"
+              });
+            } else if (hour < 22) {
+              this.setData({
+                hello: "晚上好"
+              });
+            } else {
+              this.setData({
+                hello: "夜里好"
+              });
+            }
 
-      },
-      scrollToRed: function (e) {
-        this.setData({
-          toView: 'green'
-        })
-      },
-      scrollTo100: function (e) {
-        this.setData({
-          scrollLeft: 100
-        })
-      },
+          },
+          scrollToRed: function (e) {
+            this.setData({
+              toView: 'green'
+            })
+          },
+          scrollTo100: function (e) {
+            this.setData({
+              scrollLeft: 100
+            })
+          },
 
-      upper: function (e) {
-        console.log('滚动到顶部')
-      },
-      lower: function (e) {
-        console.log('滚动到底部')
-      },
-      scroll: function (e) {
-        console.log(e)
-      },
-      /**
-       * 生命周期函数--监听页面显示
-       */
-      onShow: function () {
-        if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-          console.log('设置选中项 0');
-          this.getTabBar().setData({
-            selected: 0
-          })
-        }
-      },
+          upper: function (e) {
+            console.log('滚动到顶部')
+          },
+          lower: function (e) {
+            console.log('滚动到底部')
+          },
+          scroll: function (e) {
+            console.log(e)
+          },
+          /**
+           * 生命周期函数--监听页面显示
+           */
+          onShow: function () {
+            if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+              console.log('设置选中项 0');
+              this.getTabBar().setData({
+                selected: 0
+              })
+            }
+          },
+        })
+      }
     })
   }
-});
+})

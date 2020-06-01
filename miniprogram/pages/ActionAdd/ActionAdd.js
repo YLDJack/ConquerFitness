@@ -288,10 +288,12 @@ Page({
     collactiveNames: ['0'],
     updatecollactiveNames: ['0']
   },
-  getSelectStatus(selectStatus, id) {
-    var result = selectStatus['' + id];
-    console.log('是否正确', id);
-    return result;
+  // 添加动作按钮
+  doAddActions(){
+    app.globalData.trainingActions = this.data.selectActions;
+    wx.navigateTo({
+      url: '../Training/Training',
+    })
   },
   // 选择动作按钮
   selsectActions(event) {
@@ -308,7 +310,7 @@ Page({
         for (let j = 0; j < actionByAreaCate[actionCate[i]].length; j++) {
           if (actionByAreaCate[actionCate[i]][j]._id === id) {
             actionByAreaCate[actionCate[i]][j].isSelected = false;
-            var index = selectAction.indexOf(actionByAreaCate[actionCate[i]][j]._id)
+            var index = selectAction.indexOf(actionByAreaCate[actionCate[i]][j])
             selectAction.splice(index, 1);
 
           }
@@ -321,7 +323,7 @@ Page({
         for (let j = 0; j < actionByAreaCate[actionCate[i]].length; j++) {
           if (actionByAreaCate[actionCate[i]][j]._id === id) {
             actionByAreaCate[actionCate[i]][j].isSelected = true;
-            selectAction.push(actionByAreaCate[actionCate[i]][j]._id);
+            selectAction.push(actionByAreaCate[actionCate[i]][j]);
           }
         }
       }

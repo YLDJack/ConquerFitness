@@ -12,7 +12,7 @@
 			</van-dropdown-menu>
 			<!-- 搜索框 -->
 			<van-search value="{{ searchText }}" placeholder="请输入搜索关键词" bind:search="onSearch" />
-			<van-icon name="success" color="red" size="50rpx" wx:if="{{selectActions.length}}" />
+			<van-icon name="success" color="red" size="50rpx" wx:if="{{selectActions.length}}" bind:click="doAddActions"/>
 		</view>
 	</view>
 
@@ -31,8 +31,9 @@
 							<image class="griditemimage" slot="icon" src="{{item.actionImage}}"></image>
 							<view slot="text" class="textslot">
 								<view>{{item.actionName}}</view>
+
 								<view wx:if="{{item.isSelected}}">
-									<van-checkbox value="{{ true }}" checked-color="red" icon-size="50rpx"></van-checkbox>
+									<van-checkbox value="{{ true }}" checked-color="red" icon-size="35rpx"></van-checkbox>
 								</view>
 								<view wx:else>
 									<van-button size="small" type="danger" custom-class="addactionbutton" bind:click="showPopup" data-id="{{item._id}}" data-querydata="{{queryActionByArea}}">查看动作详情</van-button>

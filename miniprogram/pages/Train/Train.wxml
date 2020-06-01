@@ -26,7 +26,7 @@
 						<van-tree-select items="{{ items }}" main-active-index="{{ addpopActiveIndex }}" active-id="{{ addpopactiveId }}" bind:click-nav="onaddClickNav" content-item-class="bg" main-item-class="treenav" height="888rpx">
 							<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
 							<view slot="content" class="content">
-								<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index}}" wx:key="index">
+								<view wx:for="{{items.length}}" wx:if="{{addpopactiveId== index}}" wx:key="index">
 									<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
 
 									<!-- 若点击了批量删除 -->

@@ -71,7 +71,8 @@ Page({
         count: 0,
         seconds: "00",
         minutes: "00",
-        hour: "00"
+        hour: "00",
+        timer:null
       })
   },
 

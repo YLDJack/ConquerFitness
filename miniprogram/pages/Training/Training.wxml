@@ -6,9 +6,9 @@
 		<text>{{seconds}}</text>
 	</view>
 	<view class="countbutton">
-		<van-icon name="play-circle" size="60rpx" bind:click="onStartClock" />
-		<van-icon name="pause-circle" size="60rpx" bind:click="onPauseClock" />
-		<van-icon name="stop-circle" size="60rpx" bind:click="onStopClock" />
+		<van-icon wx:if="{{timer}}" name="pause-circle-o" size="60rpx" bind:click="onPauseClock" />
+		<van-icon wx:else name="play-circle-o" size="60rpx" bind:click="onStartClock" />
+		<van-icon name="replay" size="60rpx" bind:click="onStopClock" />
 	</view>
 </view>
 

@@ -38,7 +38,7 @@
 		<view class="tabtext">开始训练</view>
 		<!-- <van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large">开始训练</van-button> -->
 	</view>
-	<view class="sidebutton">
+	<view class="sidebutton" bindtap="dataRecord">
 		<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=2168226dc332931cc1b8d936f5ae4842&t=1590112080"></image>
 		<view class="tabtext">数据记录</view>
 		<!-- <van-button color="linear-gradient(to right, #f05c27, #f70303)">我的记录</van-button> -->

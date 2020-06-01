@@ -211,6 +211,9 @@ Page({
       url: "../TrainTemplate/TrainTemplate",
     })
   },
+  dataRecord(){
+    wx.navigateTo({
+      url: "../DataRecord/DataRecord",
   // 从云端获取数据的方法
   async getDataFromCloud() {
     await wx.cloud.callFunction({

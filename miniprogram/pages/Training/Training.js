@@ -7,7 +7,7 @@ Page({
    */
   data: {
     // 编辑组数的标记
-    delGroupsTag:false,
+    delGroupsTag: false,
     // 总组数
     TotalType: 0,
     TotalGroup: 0,
@@ -48,26 +48,44 @@ Page({
     isGray: true,
     isRed: false
   },
-  // 确认删除组数
-  doDelGroups(event){
+  // 完成动作
+  onComplish(event) {
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
     // 动作组数的小标
     const index1 = event.currentTarget.dataset.index1;
-    console.log('动作的下标',index);
-    console.log('动作组数的下标',index1);
+    console.log('完成动作的下标', index);
+    console.log('完成动作组数的下标', index1);
     let trainRecord = this.data.TrainRecord;
     let trainGroups = trainRecord[index].trainGroups;
     // 删除下标为index1的组数
-    trainGroups.splice(index1,1);
+    trainGroups[index1].Complish = !trainGroups[index1].Complish;
     trainRecord[index].trainGroups = trainGroups;
-    console.log('删除之后的组数',trainRecord[index].trainGroups);
+    console.log('完成之后的组数', trainRecord[index].trainGroups);
+    this.setData({
+      TrainRecord: trainRecord
+    })
+  },
+  // 确认删除组数
+  doDelGroups(event) {
+    // 动作的下边index
+    const index = event.currentTarget.dataset.index;
+    // 动作组数的小标
+    const index1 = event.currentTarget.dataset.index1;
+    console.log('动作的下标', index);
+    console.log('动作组数的下标', index1);
+    let trainRecord = this.data.TrainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
+    // 删除下标为index1的组数
+    trainGroups.splice(index1, 1);
+    trainRecord[index].trainGroups = trainGroups;
+    console.log('删除之后的组数', trainRecord[index].trainGroups);
     this.setData({
       TrainRecord: trainRecord,
     })
   },
   // 开启删除组数
-  onDelGroups(){
+  onDelGroups() {
     this.setData({
       delGroupsTag: !this.data.delGroupsTag
     })
@@ -79,10 +97,11 @@ Page({
     let addgroup = {
       trainWeight: 20,
       trainNumber: 1,
-      trainRestTime: 30 * 1000
+      trainRestTime: 30 * 1000,
+      Complish: false
     };
     trainRecord[index].trainGroups.push(addgroup);
-    console.log('要加组数的记录:',trainRecord[index].trainGroups);
+    console.log('要加组数的记录:', trainRecord[index].trainGroups);
     this.setData({
       TrainRecord: trainRecord,
     })
@@ -307,7 +326,8 @@ Page({
       trainRecord[i].trainGroups = [{
         trainWeight: 20,
         trainNumber: 1,
-        trainRestTime: 30 * 1000
+        trainRestTime: 30 * 1000,
+        Complish: false
       }]
     }
     console.log('训练记录', trainRecord);

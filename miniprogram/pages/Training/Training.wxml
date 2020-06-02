@@ -177,9 +177,10 @@
 					</view>
 					<!-- 倒计时和确认模块 -->
 					<view class="traincountdown">
-						<van-button icon="success" type="info" plain custom-style="margin-right:35rpx;width:100rpx;height:100rpx;border-radius:50rpx" />
-						<!-- 确认按钮弹出层 -->
-						<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" bind:click="showClockPopup" />
+						<!--完成按钮 -->
+						<van-checkbox value="{{ item.Complish }}" checked-color="#07c160" icon-size="50rpx" bind:change="onComplish" data-index1="{{index1}}" data-index="{{index}}"></van-checkbox>
+						<!-- 倒计时按钮 -->
+						<van-button icon="clock-o" type="info" plain custom-style="width:50rpx;height:50rpx;border-radius:100%" bind:click="showClockPopup" />
 						<!-- 倒计时弹出层 -->
 						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)">
 							<view class="resttime">
@@ -210,7 +211,7 @@
 							</view>
 						</van-popup>
 						<!-- 删除按钮 -->
-						<van-button wx:if="{{delGroupsTag}}" icon="cross" type="info" plain custom-style="margin-right:35rpx;width:100rpx;height:100rpx;border-radius:50rpx" data-index1="{{index1}}" data-index="{{index}}" catchtap="doDelGroups"/>
+						<van-button wx:if="{{delGroupsTag}}" icon="cross" type="info" plain custom-style="margin-right:35rpx;width:100rpx;height:100rpx;border-radius:50rpx" data-index1="{{index1}}" data-index="{{index}}" catchtap="doDelGroups" />
 					</view>
 				</view>
 			</view>

@@ -35,6 +35,21 @@ Page({
     // tab
     active: 0,
     activeNames: ['0'],
+    // 体重下拉面板中数据
+    weightcollapse: ['w'],
+    weightcircle: 50,
+    gradientColor: {
+      '0%': 'rgb(63, 236, 255)',
+      '100%': 'rgb(132, 114, 248)',
+    },
+    showweight: false,
+    date: "",
+    weight: 50,
+    // 体脂下拉计算面板
+    fatcollapse: ['0'],
+    sexvalue: '',
+    waistline: '',
+    showfattip: false
   },
 
   onChangeTab(event) {
@@ -42,6 +57,64 @@ Page({
       title: `切换到标签 ${event.detail.name}`,
       icon: 'none',
     });
+  },
+
+  // 体重下拉面板
+  onChangeWeightCard(event) {
+    this.setData({
+      weightcollapse: event.detail,
+    });
+  },
+
+  // 改变体重时的调用方法
+  onChange_Weight(event) {
+    this.setData({
+      weight: event.detail
+    })
+  },
+  // 弹出体重选择
+  showPopup_weight() {
+    this.setData({
+      showweight: true
+    });
+  },
+  // 关闭体重选择器
+  onClose_weight() {
+    this.setData({
+      showweight: false
+    });
+  },
+
+  // 体脂下拉计算面板
+  onChangeFatCard(event) {
+    this.setData({
+      fatcollapse: event.detail,
+    });
+  },
+
+  onChangeSex(event) {
+    // event.detail 为当前输入的值
+    console.log(event.detail);
+  },
+  onWaistline(event) {
+    // event.detail 为当前输入的值
+    console.log(event.detail);
+  },
+
+  // 体脂范围提示
+  showfatpopup() {
+    this.setData({ showfattip: true });
+  },
+
+  onCloseFattip() {
+    this.setData({ showfattip: false });
+  },
+
+  // 曲线日历按钮挑战数据图表页面
+  onClickLinebtn(){
+    wx.navigateTo({
+      url: '../Personal_data/Personal_data',
+    })
   },
 
   // 日期选择器弹出层

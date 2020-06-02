@@ -6,6 +6,20 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 编辑组数的标记
+    delGroupsTag:false,
+    // 总组数
+    TotalType: 0,
+    TotalGroup: 0,
+    TotalCount: 0,
+    // 训练记录数组
+    TrainRecord: [],
+    // 训练备注
+    TrainMark: '',
+    // 单个动作
+    queryActionByName: [],
+    // 点击图片显示弹出层的属性
+    showPopup: false,
     // 删除的动作状态
     delActionsStatus: [],
     // 要删除的动作
@@ -34,22 +48,83 @@ Page({
     isGray: true,
     isRed: false
   },
+  // 确认删除组数
+  doDelGroups(event){
+    // 动作的下边index
+    const index = event.currentTarget.dataset.index;
+    // 动作组数的小标
+    const index1 = event.currentTarget.dataset.index1;
+    console.log('动作的下标',index);
+    console.log('动作组数的下标',index1);
+    let trainRecord = this.data.TrainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
+    // 删除下标为index1的组数
+    trainGroups.splice(index1,1);
+    trainRecord[index].trainGroups = trainGroups;
+    console.log('删除之后的组数',trainRecord[index].trainGroups);
+    this.setData({
+      TrainRecord: trainRecord,
+    })
+  },
+  // 开启删除组数
+  onDelGroups(){
+    this.setData({
+      delGroupsTag: !this.data.delGroupsTag
+    })
+  },
+  // 添加组数事件
+  addgroup(event) {
+    const index = event.currentTarget.dataset.index;
+    let trainRecord = this.data.TrainRecord;
+    let addgroup = {
+      trainWeight: 20,
+      trainNumber: 1,
+      trainRestTime: 30 * 1000
+    };
+    trainRecord[index].trainGroups.push(addgroup);
+    console.log('要加组数的记录:',trainRecord[index].trainGroups);
+    this.setData({
+      TrainRecord: trainRecord,
+    })
+  },
+  // 关闭弹出层事件
+  onPopupClose() {
+    this.setData({
+      showPopup: false
+    })
+  },
+  // 点击图片弹出动作详情
+  showPopup(event) {
+    const id = event.currentTarget.dataset.id;
+    const data = this.data.trainingActions;
+    let catedata = [];
+    for (let i = 0; i < data.length; i++) {
+      if (id === data[i]._id) {
+        catedata.push(data[i]);
+      }
+    }
+    this.setData({
+      queryActionByName: catedata,
+      showPopup: true
+    })
+    console.log("当前的动作是:", this.data.queryActionByName);
+  },
   // 确认删除事件
   onDel() {
     let trainingActions = this.data.trainingActions;
     let delActions = this.data.delActions;
     for (let i = 0; i < trainingActions.length; i++) {
-      for(let j = 0 ; j<delActions.length; j++){
-        if(trainingActions[i] == delActions[j]){
-          trainingActions.splice(i,1)
+      for (let j = 0; j < delActions.length; j++) {
+        if (trainingActions[i] == delActions[j]) {
+          trainingActions.splice(i, 1)
         }
       }
     }
     app.globalData.trainingActions = trainingActions;
     this.setData({
-      trainingActions:trainingActions,
-      delActionsStatus:[],
-      delActions:[]
+      trainingActions: trainingActions,
+      delActionsStatus: [],
+      delActions: []
     })
   },
   // 每个动作右边的checkbox点击事件
@@ -83,7 +158,10 @@ Page({
   // 点击编辑按钮事件
   startDel() {
     this.setData({
-      delTag: !this.data.delTag
+      delTag: !this.data.delTag,
+      // 点击取消后要将删除和删除选中数组清空
+      delActions: [],
+      delActionsStatus: []
     })
   },
   // 页面顶部正计时处理单个数字
@@ -220,9 +298,28 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let trainingActions = app.globalData.trainingActions;
+    let length = trainingActions.length;
+    let trainRecord = this.data.TrainRecord;
+    for (let i = 0; i < length; i++) {
+      // 初始化训练记录
+      trainRecord[i] = trainingActions[i];
+      trainRecord[i].trainGroups = [{
+        trainWeight: 20,
+        trainNumber: 1,
+        trainRestTime: 30 * 1000
+      }]
+    }
+    console.log('训练记录', trainRecord);
     this.setData({
-      trainingActions: app.globalData.trainingActions
+      trainingActions: trainingActions,
+      TotalType: length,
+      TrainRecord: trainRecord
     })
+    // 如果训练动作不为空则自动开始计时
+    if (this.data.trainingActions.length) {
+      this.onStartClock();
+    }
   },
 
   /**

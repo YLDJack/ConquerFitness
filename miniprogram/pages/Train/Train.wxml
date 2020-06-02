@@ -57,7 +57,7 @@
 											<image class="griditemimage" slot="icon" src="{{item.actionImage}}"></image>
 										</van-grid-item>
 										<!-- 弹出层部分 必须放在点击按钮的下方-->
-										<van-popup show="{{ showText }}" bind:close="onClose" closeable custom-style="height:800rpx;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id" bind:close="closeItem">
+										<van-popup show="{{ showText }}" closeable custom-style="height:800rpx;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id" bind:close="closeItem">
 											<!-- 详情通过弹出层tabs展示 -->
 											<view class="tabtitle">{{updateActionName}}</view>
 											<!-- 弹出层Tabs -->

@@ -15,6 +15,8 @@
     "van-popup": "@vant/weapp/popup/index",
     "van-progress": "@vant/weapp/progress/index",
     "van-cell": "@vant/weapp/cell/index",
-    "van-checkbox": "@vant/weapp/checkbox/index"
+    "van-checkbox": "@vant/weapp/checkbox/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index"
   }
 }

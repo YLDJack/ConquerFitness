@@ -47,7 +47,9 @@ Page({
     }
     app.globalData.trainingActions = trainingActions;
     this.setData({
-      trainingActions:trainingActions
+      trainingActions:trainingActions,
+      delActionsStatus:[],
+      delActions:[]
     })
   },
   // 每个动作右边的checkbox点击事件

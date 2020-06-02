@@ -6,7 +6,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    trainingActions:[],
+    // 删除的动作状态
+    delActionsStatus: [],
+    // 要删除的动作
+    delActions: [],
+    // del的标志
+    delTag: false,
+    trainingActions: [],
     hour: "00",
     minutes: "00",
     seconds: "00",
@@ -28,7 +34,56 @@ Page({
     isGray: true,
     isRed: false
   },
-
+  // 确认删除事件
+  onDel() {
+    let trainingActions = this.data.trainingActions;
+    let delActions = this.data.delActions;
+    for (let i = 0; i < trainingActions.length; i++) {
+      for(let j = 0 ; j<delActions.length; j++){
+        if(trainingActions[i] == delActions[j]){
+          trainingActions.splice(i,1)
+        }
+      }
+    }
+    app.globalData.trainingActions = trainingActions;
+    this.setData({
+      trainingActions:trainingActions
+    })
+  },
+  // 每个动作右边的checkbox点击事件
+  onDelChange(event) {
+    let index = event.currentTarget.dataset.index;
+    let delActionsStatus = this.data.delActionsStatus;
+    let delActions = this.data.delActions;
+    let trainingActions = this.data.trainingActions;
+    console.log('训练的动作', index);
+    if (!delActionsStatus[index]) {
+      delActionsStatus[index] = true;
+      // 如果是要删除的数据，则将其加入delActions
+      delActions.push(trainingActions[index]);
+    } else {
+      delActionsStatus[index] = false;
+      // 如果是取消删除的数据，则将其从delActions中删除
+      let delindex = delActions.indexOf(trainingActions[index]);
+      console.log('要删除的id', delindex)
+      // 新建了一个数组，并修改了原数组。所以不用赋值
+      delActions.splice(delindex, 1);
+    }
+    // // 将相应index取反
+    // delActionsStatus[index] = !delActionsStatus[index];
+    this.setData({
+      delActionsStatus: delActionsStatus,
+      delActions: delActions
+    })
+    console.log('删除的状态', delActionsStatus);
+    console.log('删除的数据的id', delActions);
+  },
+  // 点击编辑按钮事件
+  startDel() {
+    this.setData({
+      delTag: !this.data.delTag
+    })
+  },
   // 页面顶部正计时处理单个数字
   showNum(num) {
     if (num < 10) {
@@ -54,9 +109,9 @@ Page({
             hour: this.showNum(parseInt(countNew / 3600))
           })
         }, 1000);
-        this.setData({
-          timer:timer
-        });
+      this.setData({
+        timer: timer
+      });
     }
   },
   // 顶部暂停按钮
@@ -74,7 +129,7 @@ Page({
         seconds: "00",
         minutes: "00",
         hour: "00",
-        timer:null
+        timer: null
       })
   },
 
@@ -164,7 +219,7 @@ Page({
    */
   onLoad: function (options) {
     this.setData({
-      trainingActions:app.globalData.trainingActions
+      trainingActions: app.globalData.trainingActions
     })
   },
 

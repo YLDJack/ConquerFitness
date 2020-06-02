@@ -25,9 +25,9 @@
 .titleandweight{
   margin-left: 20rpx;
 }
-.titleandweight .label{
-  font-size: 24rpx;
-  color: rgb(146, 144, 144);
+.titleandweight text{
+  font-size: 30rpx;
+  font-weight: bold;
 }
 
 .traingroup{
@@ -99,4 +99,11 @@
   display: flex;
   justify-content: space-evenly;
   margin-top: 25rpx;
+}
+/* 下拉框的输入条 */
+.valueslot{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: center;
 }

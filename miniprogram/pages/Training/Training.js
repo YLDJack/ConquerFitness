@@ -26,7 +26,6 @@ Page({
     delActions: [],
     // del的标志
     delTag: false,
-    trainingActions: [],
     hour: "00",
     minutes: "00",
     seconds: "00",
@@ -39,7 +38,6 @@ Page({
       '0%': '#ffd01e',
       '100%': '#ee0a24'
     },
-    circlevalue: 80,
     showClock: false,
     countdowntime: 60 * 1000,
     timeData: {},
@@ -47,6 +45,49 @@ Page({
     isStart: false,
     isGray: true,
     isRed: false
+  },
+  // 输入重量完成后的监听事件
+  onWeightConfirm(event) {
+    let weight = event.detail.value;
+    // 动作的下边index
+    const index = event.currentTarget.dataset.index;
+    // 动作组数的小标
+    const index1 = event.currentTarget.dataset.index1;
+    // 设置相应的重量到训练记录里
+    let trainRecord = this.data.TrainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
+    trainGroups[index1].trainWeight = weight;
+    trainRecord[index].trainGroups = trainGroups;
+    // 先把运来的清空再进行相加
+    trainRecord[index].trainCount = 0;
+    for (let i = 0; i < trainGroups.length; i++) {
+      trainRecord[index].trainCount += trainGroups[i].trainWeight * trainGroups[i].trainNumber
+    }
+    console.log('修改重量完成后的记录', trainRecord[index]);
+    this.setData({
+      TrainRecord: trainRecord
+    });
+  },
+  // 输入次数完成后的监听事件
+  onNumberConfirm(event) {
+    let number = event.detail.value;
+    // 动作的下边index
+    const index = event.currentTarget.dataset.index;
+    // 动作组数的小标
+    const index1 = event.currentTarget.dataset.index1;
+    // 设置相应的重量到训练记录里
+    let trainRecord = this.data.TrainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
+    trainGroups[index1].trainNumber = number;
+    trainRecord[index].trainGroups = trainGroups;
+    trainRecord[index].trainCount = 0;
+    for (let i = 0; i < trainGroups.length; i++) {
+      trainRecord[index].trainCount += trainGroups[i].trainWeight * trainGroups[i].trainNumber
+    }
+    console.log('修改数量完成后的记录', trainRecord[index]);
+    this.setData({
+      TrainRecord: trainRecord
+    });
   },
   // 完成动作
   onComplish(event) {
@@ -58,9 +99,16 @@ Page({
     console.log('完成动作组数的下标', index1);
     let trainRecord = this.data.TrainRecord;
     let trainGroups = trainRecord[index].trainGroups;
-    // 删除下标为index1的组数
+    // 将对应多的数组下标签取反
     trainGroups[index1].Complish = !trainGroups[index1].Complish;
+    // 如果动作已完成则添加完成的容量
+    if (trainGroups[index1].Complish) {
+      trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber
+    } else {
+      trainRecord[index].trainComplishCount -= trainGroups[index1].trainWeight * trainGroups[index1].trainNumber
+    }
     trainRecord[index].trainGroups = trainGroups;
+
     console.log('完成之后的组数', trainRecord[index].trainGroups);
     this.setData({
       TrainRecord: trainRecord
@@ -72,10 +120,15 @@ Page({
     const index = event.currentTarget.dataset.index;
     // 动作组数的小标
     const index1 = event.currentTarget.dataset.index1;
-    console.log('动作的下标', index);
-    console.log('动作组数的下标', index1);
+    console.log('删除的动作的下标', index);
+    console.log('删除的动作组数的下标', index1);
     let trainRecord = this.data.TrainRecord;
     let trainGroups = trainRecord[index].trainGroups;
+    // 删除组数后也要把动作中的已完成容量和总容量删除
+    trainRecord[index].trainCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
+    if(trainGroups[index1].Complish){
+      trainRecord[index].trainComplishCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
+    }
     // 删除下标为index1的组数
     trainGroups.splice(index1, 1);
     trainRecord[index].trainGroups = trainGroups;
@@ -95,8 +148,8 @@ Page({
     const index = event.currentTarget.dataset.index;
     let trainRecord = this.data.TrainRecord;
     let addgroup = {
-      trainWeight: 20,
-      trainNumber: 1,
+      trainWeight: '',
+      trainNumber: '',
       trainRestTime: 30 * 1000,
       Complish: false
     };
@@ -294,19 +347,6 @@ Page({
       url: '../TrainTemplate/TrainTemplate',
     })
   },
-  // // 标签切换函数
-  // onTabChange(event) {
-  //   if (event.detail === "添加动作") {
-  //     console.log(event.detail);
-  //     wx.navigateTo({
-  //       url: '../Train/Train',
-  //     })
-  //   } else if (event.detail === "模板训练") {
-  //     wx.navigateTo({
-  //       url: '../TrainTemplate/TrainTemplate',
-  //     })
-  //   }
-  // },
   // 评价的点击函数
   onChange(event) {
     this.setData({
@@ -318,26 +358,32 @@ Page({
    */
   onLoad: function (options) {
     let trainingActions = app.globalData.trainingActions;
-    let length = trainingActions.length;
+    let length = trainingActions.length || 0;
     let trainRecord = this.data.TrainRecord;
     for (let i = 0; i < length; i++) {
       // 初始化训练记录
       trainRecord[i] = trainingActions[i];
+      trainRecord[i].trainCount = 0;
+      trainRecord[i].trainComplishCount = 0;
       trainRecord[i].trainGroups = [{
-        trainWeight: 20,
-        trainNumber: 1,
+        trainWeight: '',
+        trainNumber: '',
         trainRestTime: 30 * 1000,
         Complish: false
       }]
+      // for(let j = 0 ;j<trainRecord[i].trainGroups.length;j++){
+      //   if
+      // }
     }
+
+
     console.log('训练记录', trainRecord);
     this.setData({
-      trainingActions: trainingActions,
       TotalType: length,
-      TrainRecord: trainRecord
+      TrainRecord: trainRecord,
     })
     // 如果训练动作不为空则自动开始计时
-    if (this.data.trainingActions.length) {
+    if (length) {
       this.onStartClock();
     }
   },

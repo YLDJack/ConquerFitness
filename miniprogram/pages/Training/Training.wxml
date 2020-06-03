@@ -23,10 +23,10 @@
 		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
 		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
 		<!-- 顶部训练进度部分 -->
-		<view class="text_progress">
+		<!-- <view class="text_progress">
 			<text>本次训练进度:</text>
 			<van-progress percentage="50" stroke-width="8" />
-		</view>
+		</view> -->
 	</view>
 </view>
 <van-divider />
@@ -229,7 +229,7 @@
 
 <!-- 点击编辑按钮之后 -->
 <view wx:else>
-	<van-cell-group wx:for="{{trainingActions}}">
+	<van-cell-group wx:for="{{TrainRecord}}">
 		<van-cell use-label-slot>
 			<!-- 标题插槽 -->
 			<view slot="title" class="titleandweight">

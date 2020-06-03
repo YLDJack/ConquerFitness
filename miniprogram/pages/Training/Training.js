@@ -65,11 +65,12 @@ Page({
     }
     console.log('修改重量完成后的记录', trainRecord[index]);
     this.setData({
-      TrainRecord: trainRecord
+      TrainRecord: trainRecord,
     });
   },
   // 输入次数完成后的监听事件
   onNumberConfirm(event) {
+
     let number = event.detail.value;
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
@@ -86,11 +87,15 @@ Page({
     }
     console.log('修改数量完成后的记录', trainRecord[index]);
     this.setData({
-      TrainRecord: trainRecord
+      TrainRecord: trainRecord,
     });
   },
   // 完成动作
   onComplish(event) {
+    // 总容量
+    let TotalCount = 0;
+    // 总组数
+    let TotalGroup = 0;
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
     // 动作组数的小标
@@ -107,11 +112,23 @@ Page({
     } else {
       trainRecord[index].trainComplishCount -= trainGroups[index1].trainWeight * trainGroups[index1].trainNumber
     }
+
+    //获取已完成的总组数
+    for (let i = 0; i < trainRecord.length; i++) {
+      TotalCount += trainRecord[i].trainComplishCount;
+      for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
+        if (trainRecord[i].trainGroups[j].Complish) {
+          TotalGroup++;
+        }
+      }
+    }
     trainRecord[index].trainGroups = trainGroups;
 
     console.log('完成之后的组数', trainRecord[index].trainGroups);
     this.setData({
-      TrainRecord: trainRecord
+      TrainRecord: trainRecord,
+      TotalCount:TotalCount,
+      TotalGroup:TotalGroup
     })
   },
   // 确认删除组数
@@ -126,7 +143,7 @@ Page({
     let trainGroups = trainRecord[index].trainGroups;
     // 删除组数后也要把动作中的已完成容量和总容量删除
     trainRecord[index].trainCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
-    if(trainGroups[index1].Complish){
+    if (trainGroups[index1].Complish) {
       trainRecord[index].trainComplishCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
     }
     // 删除下标为index1的组数
@@ -371,11 +388,7 @@ Page({
         trainRestTime: 30 * 1000,
         Complish: false
       }]
-      // for(let j = 0 ;j<trainRecord[i].trainGroups.length;j++){
-      //   if
-      // }
     }
-
 
     console.log('训练记录', trainRecord);
     this.setData({

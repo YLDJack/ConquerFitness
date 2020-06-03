@@ -1,21 +1,3 @@
-// miniprogram/pages/DataRecord/DataRecord.js
-//定义年、月、日的数组都为空
-const date = new Date()
-const years = []
-const months = []
-const days = []
-// 获取年
-for (let i = 1990; i <= date.getFullYear(); i++) {
-years.push(i)
-}
-// 获取月份
-for (let i = 1; i <= 12; i++) {
-months.push(i)
-}
-// 获取日期
-for (let i = 1; i <= 31; i++) {
-days.push(i)
-}
 
 Page({
 
@@ -23,15 +5,17 @@ Page({
    * 页面的初始数据
    */
   data: {
-    // 日期选择器内容
-    showDatePicker:false,
-    years,
-    year: date.getFullYear(),
-    months,
-    month: 2,
-    days,
-    day: 2,
-    // value: [9999, 1, 1],
+    // 前十年到今天的日期选择器内容
+    currentDate: new Date().getTime(),
+    maxDate: new Date().getTime(),
+    formatter(type, value) {
+      if (type === 'year') {
+        return `${value}年`;
+      } else if (type === 'month') {
+        return `${value}月`;
+      }
+      return value;
+    },
     // tab
     active: 0,
     activeNames: ['0'],
@@ -45,11 +29,20 @@ Page({
     showweight: false,
     date: "",
     weight: 50,
+    InitialWeight: false,
+    TargetWeight: false,
     // 体脂下拉计算面板
     fatcollapse: ['0'],
     sexvalue: '',
-    waistline: '',
-    showfattip: false
+    showfattip: false,
+    // 围度下拉面板
+    circlecollapse: ['0'],
+    ChestLine: false,
+    ArmLine: false,
+    WaistLine: false,
+    HitLine: false,
+    HamLine: false,
+    CalfLine: false
   },
 
   onChangeTab(event) {
@@ -84,6 +77,34 @@ Page({
       showweight: false
     });
   },
+  // 目标体重编辑
+  editTargetWeight() {
+    this.setData({
+      TargetWeight: true
+    });
+  },
+  onCloseTargetWeight() {
+    this.setData({ TargetWeight: false });
+  },
+  onChangeTargetWeight(event) {
+    this.setData({
+      TargetWeight: event.detail
+    })
+  },
+  // 初始体重编辑
+  editInitialWeight() {
+    this.setData({
+      InitialWeight: true
+    });
+  },
+  onCloseInitialWeight() {
+    this.setData({ InitialWeight: false });
+  },
+  onChangeInitialWeight(event) {
+    this.setData({
+      InitialWeight: event.detail
+    })
+  },
 
   // 体脂下拉计算面板
   onChangeFatCard(event) {
@@ -96,10 +117,6 @@ Page({
     // event.detail 为当前输入的值
     console.log(event.detail);
   },
-  onWaistline(event) {
-    // event.detail 为当前输入的值
-    console.log(event.detail);
-  },
 
   // 体脂范围提示
   showfatpopup() {
@@ -108,6 +125,127 @@ Page({
 
   onCloseFattip() {
     this.setData({ showfattip: false });
+  },
+
+  // 围度下拉面板change事件
+  onChangecircCard(event) {
+    this.setData({
+      circlecollapse: event.detail,
+    });
+  },
+
+  // 胸围编辑
+  editChestLine(){
+    this.setData({
+      ChestLine: true
+    });
+  },
+
+  onCloseChestLine(){
+    this.setData({
+      ChestLine: false
+    });
+  },
+
+  onChangeChestLine(event) {
+    this.setData({
+      ChestLine: event.detail
+    })
+  },
+
+  // 臂围编辑
+  editArmLine(){
+    this.setData({
+      ArmLine: true
+    });
+  },
+
+  onCloseArmLine(){
+    this.setData({
+      ArmLine: false
+    });
+  },
+
+  onChangeArmLine(event) {
+    this.setData({
+      ArmLine: event.detail
+    })
+  },
+
+  // 腰围编辑
+  editWaistLine(){
+    this.setData({
+      WaistLine: true
+    });
+  },
+
+  onCloseWaistLine(){
+    this.setData({
+      WaistLine: false
+    });
+  },
+
+  onChangeWaistLine(event) {
+    this.setData({
+      WaistLine: event.detail
+    })
+  },
+
+  // 臀围编辑
+  editHitLine(){
+    this.setData({
+      HitLine: true
+    });
+  },
+
+  onCloseHitLine(){
+    this.setData({
+      HitLine: false
+    });
+  },
+
+  onChangeHitLine(event) {
+    this.setData({
+      HitLine: event.detail
+    })
+  },
+
+  // 大腿围编辑
+  editHamLine(){
+    this.setData({
+      HamLine: true
+    });
+  },
+
+  onCloseHamLine(){
+    this.setData({
+      HamLine: false
+    });
+  },
+
+  onChangeHamLine(event) {
+    this.setData({
+      HamLine: event.detail
+    })
+  },
+
+  // 小腿围编辑
+  editCalfLine(){
+    this.setData({
+      CalfLine: true
+    });
+  },
+
+  onCloseCalfLine(){
+    this.setData({
+      CalfLine: false
+    });
+  },
+
+  onChangeCalfLine(event) {
+    this.setData({
+      CalfLine: event.detail
+    })
   },
 
   // 曲线日历按钮挑战数据图表页面
@@ -125,16 +263,12 @@ Page({
   onCloseDatePicker() {
     this.setData({ showDatePicker: false });
   },
-  
-  // 获取改变后的日期
-  bindChange(e) {
-    const val = e.detail.value
+  // 饮食记录页前十年到今天的日期选择器
+  onInputDate(event) {
     this.setData({
-    year: this.data.years[val[0]],
-    month: this.data.months[val[1]],
-    day: this.data.days[val[2]]
-    })
-    },
+      currentDate: event.detail,
+    });
+  },
 
   // 饮食记录下拉面板
   onChange(event) {

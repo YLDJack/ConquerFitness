@@ -1,9 +1,8 @@
 {
   "pages": [
-    "pages/Training/Training",
     "pages/Main/Main",
     "pages/Train/Train",
-
+    "pages/Training/Training",
     "pages/Personal/Personal",
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences",

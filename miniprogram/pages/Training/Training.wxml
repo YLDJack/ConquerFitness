@@ -15,7 +15,7 @@
 
 <view>
 	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" model:value="{{ TrainMark }}">
-		<text slot="right-icon" >{{TotalType}}种动作共{{TotalGroup}}组{{TotalCount}}容量</text>
+		<text slot="right-icon" >{{TotalType}}种动作已完成{{TotalGroup}}组{{TotalCount}}容量</text>
 	</van-field>
 	<!-- 顶部编辑按钮部分 -->
 	<view>
@@ -180,35 +180,27 @@
 					<view class="traincountdown">
 						<!--完成按钮 -->
 						<van-checkbox value="{{ item.Complish }}" checked-color="#07c160" icon-size="50rpx" bind:change="onComplish" data-index1="{{index1}}" data-index="{{index}}"></van-checkbox>
-						<!-- 倒计时按钮 -->
-						<van-button icon="clock-o" type="info" plain custom-style="width:50rpx;height:50rpx;border-radius:100%" bind:click="showClockPopup" />
-						<!-- 倒计时弹出层 -->
+						<!-- 休息倒计时按钮 -->
+						<van-icon wx:if="{{ item.Complish }}" name="underway-o" id="resttime{{index1}}" size="50rpx"  />
+						<van-icon wx:else name="underway-o" size="50rpx" bind:click="showClockPopup" data-index1="{{index1}}" data-index="{{index}}"/>
+						<!-- 休息倒计时弹出层 -->
 						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)">
 							<view class="resttime">
-								<van-count-down use-slot time="{{item.trainRestTime}}" format="HH:mm:ss" bind:change="onChangeClock">
-									<text class="item">{{ timeData.hours }}</text>
-									<text class="symbal">:</text>
+								<van-count-down use-slot id="control-count-down" time="{{item.trainRestTime}}" format="mm:ss" auto-start="{{ false }}" bind:change="onChangeClock" bind:finish="countdownFinished" data-index1="{{index1}}">
 									<text class="item">{{ timeData.minutes }}</text>
 									<text class="symbal">:</text>
 									<text class="item">{{ timeData.seconds }}</text>
 								</van-count-down>
 							</view>
 							<view class="setresttime">
-								<van-button type="primary" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">-10s</van-button>
-								<van-button type="primary" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">+10s</van-button>
+								<van-button type="primary" bind:click="subTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">-10s</van-button>
+								<van-button type="primary" bind:click="addTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">+10s</van-button>
+								<van-button type="primary" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">结束</van-button>
 							</view>
 							<view class="inputresttime">
 								<view class="inputtip">输入休息时间(s):</view>
-								<van-field custom-style="padding:2rpx;color:white;width:100rpx;height:50rpx;color:black;font-size:28rpx;border-radius:10rpx;background-color:rgb(180,180,180)">
+								<van-field custom-style="padding:2rpx;color:white;width:100rpx;height:50rpx;color:black;font-size:28rpx;border-radius:10rpx;background-color:rgb(180,180,180)" bind:blur="onRestTimeConfirm" placeholder="单位：秒(s)">
 								</van-field>
-							</view>
-							<view class="setbutton">
-								<!-- 暂停按钮点击后变成开始按钮 -->
-								<van-icon name="pause-circle-o" size="100rpx" bind:click="pauseToStart" wx:if="{{isPause}}" />
-								<van-icon name="play-circle-o" size="100rpx" bind:click="pauseToStart" wx:else="{{isStart}}" />
-								<!-- 停止按钮点击后计时归零（重置）,颜色变红 -->
-								<van-icon name="stop-circle-o" size="100rpx" bind:click="stopToReset" wx:if="{{isGray}}" />
-								<van-icon name="stop-circle-o" color="red" size="100rpx" bind:click="stopToReset" wx:else="{{isRed}}" />
 							</view>
 						</van-popup>
 						<!-- 删除按钮 -->

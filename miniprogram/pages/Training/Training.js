@@ -1,3 +1,4 @@
+var utils = require('../../utils/util');
 // pages/Training/Training.js
 const app = getApp();
 Page({
@@ -109,11 +110,25 @@ Page({
     // 如果动作已完成则添加完成的容量
     if (trainGroups[index1].Complish) {
       trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber
+      // 每次开始倒计时前都重新获取数据中的倒计时事件
+      const countDown = this.selectComponent('#control-count-down');
+      let time1 = trainRecord[index].trainGroups[index1].trainRestTime;
+      console.log(time1);
+      countDown.setData({
+        time: time1,
+        groupIndex:index1
+      });
+      countDown.start();
+      // 如果完成的话就弹出计时框，否则不弹出
+      this.setData({
+        showClock: true
+      });
     } else {
       trainRecord[index].trainComplishCount -= trainGroups[index1].trainWeight * trainGroups[index1].trainNumber
     }
+    trainRecord[index].trainGroups = trainGroups;
 
-    //获取已完成的总组数
+    //获取已完成的总组数和总容量
     for (let i = 0; i < trainRecord.length; i++) {
       TotalCount += trainRecord[i].trainComplishCount;
       for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
@@ -122,17 +137,22 @@ Page({
         }
       }
     }
-    trainRecord[index].trainGroups = trainGroups;
+
+
 
     console.log('完成之后的组数', trainRecord[index].trainGroups);
     this.setData({
       TrainRecord: trainRecord,
-      TotalCount:TotalCount,
-      TotalGroup:TotalGroup
-    })
+      TotalCount: TotalCount,
+      TotalGroup: TotalGroup,
+    });
   },
   // 确认删除组数
   doDelGroups(event) {
+    // 总容量
+    let TotalCount = 0;
+    // 总组数
+    let TotalGroup = 0;
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
     // 动作组数的小标
@@ -149,9 +169,22 @@ Page({
     // 删除下标为index1的组数
     trainGroups.splice(index1, 1);
     trainRecord[index].trainGroups = trainGroups;
+
+    //获取已完成的总组数和总容量
+    for (let i = 0; i < trainRecord.length; i++) {
+      TotalCount += trainRecord[i].trainComplishCount;
+      for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
+        if (trainRecord[i].trainGroups[j].Complish) {
+          TotalGroup++;
+        }
+      }
+    }
+
     console.log('删除之后的组数', trainRecord[index].trainGroups);
     this.setData({
       TrainRecord: trainRecord,
+      TotalCount: TotalCount,
+      TotalGroup: TotalGroup
     })
   },
   // 开启删除组数
@@ -283,6 +316,7 @@ Page({
       });
     }
   },
+
   // 顶部暂停按钮
   onPauseClock: function () {
     clearInterval(this.data.timer);
@@ -308,22 +342,108 @@ Page({
     });
   },
 
-  // Clock按钮弹出层
-  showClockPopup() {
+  // 倒计时按钮弹出层
+  showClockPopup(event) {
     this.setData({
       showClock: true
     });
+    // 每次开始倒计时前都重新获取数据中的倒计时事件
+    const countDown = this.selectComponent('#control-count-down');
+    // 动作的下边index
+    const index = event.currentTarget.dataset.index;
+    // 动作组数的小标
+    const index1 = event.currentTarget.dataset.index1;
+    let trainRecord = this.data.TrainRecord;
+    let time1 = trainRecord[index].trainGroups[index1].trainRestTime;
+    console.log(time1);
+    countDown.setData({
+      time: time1,
+      groupIndex:index1
+    });
+    countDown.start();
   },
   onCloseClock() {
     this.setData({
       showClock: false
     });
+    const countDown = this.selectComponent('#control-count-down');
+    countDown.reset();
   },
+  // 结束倒计时时触发的事件
+  countdownFinished() {
+    // 每次开始倒计时前都重新获取数据中的倒计时事件
+    const countDown = this.selectComponent('#control-count-down');
+    let index1 = countDown.data.groupIndex;
+    const time1 = (countDown.data.time / 1000) + 's';
+    const icon = this.selectComponent('#resttime' + index1);
+    console.log('#resttime' + index1);
+    icon.setData({
+      info: time1
+    });
+    this.setData({
+      showClock: false
+    });
+  },
+  // 添加十秒倒计时事件
+  addTenSeconds() {
+    // 获取倒计时的dom对象
+    const countDown = this.selectComponent('#control-count-down');
+    let timeData = this.data.timeData;
+    timeData.seconds += 10;
+    // 通过设置自定义控件的数据来设置方法
+    let time1 = (timeData.seconds + 1 + timeData.minutes * 60) * 1000;
+    countDown.setData({
+      time: time1
+    })
+    // 设置完时间要重新开始
+    countDown.start();
+    this.setData({
+      timeData: timeData
+    })
 
+  },
+  // 减少十秒倒计时事件
+  subTenSeconds() {
+    // 获取倒计时的dom对象
+    const countDown = this.selectComponent('#control-count-down');
+    let timeData = this.data.timeData;
+    if (timeData.seconds > 10) {
+      timeData.seconds -= 10;
+    } else {
+      timeData.seconds = 0;
+    }
+    // 通过设置自定义控件的数据来设置方法
+    let time1 = (timeData.seconds + 1 + timeData.minutes * 60) * 1000;
+    countDown.setData({
+      time: time1
+    })
+    // 设置完时间要重新开始
+    countDown.start();
+    this.setData({
+      timeData: timeData
+    })
+
+  },
+  // 设定休息时间事件
+  onRestTimeConfirm(event) {
+    // 获取倒计时的dom对象
+    const countDown = this.selectComponent('#control-count-down');
+    // 文本框输入的时间
+    let time1 = event.detail.value;
+    let timeData = this.data.timeData;
+    timeData.seconds = time1;
+    countDown.setData({
+      time: time1 * 1000
+    })
+    countDown.start();
+    this.setData({
+      timeData: timeData
+    });
+  },
   // 倒计时事件
   onChangeClock(e) {
     this.setData({
-      timeData: e.detail,
+      timeData: e.detail || e,
     });
   },
 

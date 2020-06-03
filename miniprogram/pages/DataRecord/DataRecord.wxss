@@ -1,18 +1,61 @@
-/* miniprogram/pages/DataRecord/DataRecord.wxss */
-.datacard{
-  margin:15rpx;
-  background-color: rgb(223, 240, 198);
-  border-radius: 20rpx;
-  text-align: center;
-  padding: 10rpx;
+/* 体重下拉第一栏样式 */
+.weightcard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.datatitle{
-  margin-top:10rpx;
+.button{
+  margin-top: 20rpx;
+  display: flex;
 }
-.datadiscribe{
-  font-size: 20rpx;
-  color: gray;
+.addbutton{
+  margin-right: 60rpx;
 }
-.dataimg{
-  height: 400rpx;
+
+.targettip{
+  margin-top: 20rpx;
+}
+
+/* 体重记录弹出框 */
+.obtaindate{
+  margin: 28rpx;
+}
+
+.van-popup{
+  width: 500rpx;
+}
+
+.items{
+  padding-left: 30rpx;
+  width: 90%;
+  height: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirm{
+  float: right;
+  margin-right: 40rpx;
+
+}
+
+/* 体脂部分 */
+.calculate{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fatdisplay{
+  margin-left: 30rpx;
+  margin-top: 20rpx;
+  display: flex;
+  align-items: center;
+}
+.unit{
+  margin-left: 10rpx;
+}
+.calbutton{
+  margin-right: 30rpx;
 }

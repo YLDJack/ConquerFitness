@@ -1,14 +1,66 @@
 <van-tabs active="{{ active }}" color="black" bind:change="onChangeTab">
+	<!-- 身体记录 -->
 	<van-tab title="身体记录">
-		<view class="datacard">
-			<view class="datatitle">体重</view>
-			<view class="datadiscribe">2020-05-31记录：50KG</view>
-			<view class="dataimg"></view>
-			<view class="adddata">
-				<van-button round type="primary">记录数据</van-button>
-			</view>
-		</view>
+		<!-- 体重记录 -->
+		<van-collapse value="{{ weightcollapse }}" bind:change="onChangeWeightCard">
+			<van-collapse-item title="体重" name="w" value="50KG" label="我在减肥">
+				<view class="weightcard">
+					<van-circle value="{{ weightcircle }}" color="{{ gradientColor }}" stroke-width="6" text="已减3.0" />
+					<view class="button">
+						<view class="addbutton">
+							<van-button round color="linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))" bind:click="showPopup_weight">添加记录</van-button>
+							<van-popup show="{{ showweight }}" round closeable custom-style="height: 30%;" bind:close="onClose_weight">
+								<view class="obtaindate">{{date}}</view>
+								<view class="items">
+									<view>体重(kg)：</view>
+									<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChange_Weight" />
+								</view>
+								<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+							</van-popup>
+						</view>
+						<view class="linebutton">
+							<van-button round color="linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))" bind:click="onClickLinebtn">曲线日历</van-button>
+						</view>
+					</view>
+					<text class="targettip">离目标还剩3.0KG</text>
+				</view>
+				<van-cell title="初始体重" value="53KG" label="减重第一天 2020-05-02 " icon="edit" />
+				<van-cell title="最新体重" value="50KG" label="减重第30天 2020-06-02 " icon="edit" />
+				<van-cell title="目标体重" value="47KG" label="目标日期 2020-10-02 " icon="edit" />
+			</van-collapse-item>
+		</van-collapse>
+		<!-- 体脂记录 -->
+		<van-collapse value="{{ fatcollapse }}" bind:change="onChangeFatCard">
+			<van-collapse-item title="体脂" name="f" value="20%" label="记录体重后可计算体脂">
+				<view class="fatcard">
+					<view class="field">
+						<van-cell-group>
+							<van-field value="{{ sexvalue }}" label="请输入性别：" placeholder="男/女" border="{{ false }}" bind:change="onChangeSex" />
+							<van-field value="{{ waistline }}" label="请输入腰围：" placeholder="厘米" border="{{ false }}" bind:change="onWaistline" />
+						</van-cell-group>
+					</view>
+					<view class="calculate">
+						<view class="fatdisplay">
+							<van-field value="{{ fatvalue }}" custom-style="width:150rpx;font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" border="{{ false }}" bind:change="onFatChange" />
+							<text class="unit">%</text>
+						</view>
+						<view class="button">
+							<view class="calbutton">
+								<van-button round color="linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))" bind:click="calculateFat">体脂计算</van-button>
+							</view>
+							<view class="savebutton">
+								<van-button round color="linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))" bind:click="saveFat">确认保存</van-button>
+							</view>
+						</view>
+					</view>
+				</view>
+				<van-cell title="最新体脂" value="20%" label="运动员体质" icon="warning" bind:click="showfatpopup"/>
+				<van-popup show="{{ showfattip }}" bind:close="onCloseFattip">内容</van-popup>
+			</van-collapse-item>
+		</van-collapse>
 	</van-tab>
+
+	<!-- 饮食记录 -->
 	<van-tab title="饮食记录">
 		<!-- 搜索栏 -->
 		<van-search value="{{ value }}" placeholder="搜索食物和热量" />

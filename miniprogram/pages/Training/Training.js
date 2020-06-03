@@ -7,6 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 开始休息时间
+    startRest: 0,
     // 编辑组数的标记
     delGroupsTag: false,
     // 总组数
@@ -49,6 +51,10 @@ Page({
   },
   // 输入重量完成后的监听事件
   onWeightConfirm(event) {
+     // 总容量
+     let TotalCount = 0;
+     // 总组数
+     let TotalGroup = 0;
     let weight = event.detail.value;
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
@@ -59,19 +65,39 @@ Page({
     let trainGroups = trainRecord[index].trainGroups;
     trainGroups[index1].trainWeight = weight;
     trainRecord[index].trainGroups = trainGroups;
-    // 先把运来的清空再进行相加
+    // 先把原来来的清空再进行相加
     trainRecord[index].trainCount = 0;
+    trainRecord[index].trainComplishCount = 0;
     for (let i = 0; i < trainGroups.length; i++) {
-      trainRecord[index].trainCount += trainGroups[i].trainWeight * trainGroups[i].trainNumber
+      // 添加总容量
+      trainRecord[index].trainCount += trainGroups[i].trainWeight * trainGroups[i].trainNumber;
+      // 添加总完成容量
+      if (trainGroups[i].Complish) {
+        trainRecord[index].trainComplishCount += trainGroups[i].trainNumber * trainGroups[i].trainWeight;
+      }
+    }
+    //获取页面已完成的总组数和总容量
+    for (let i = 0; i < trainRecord.length; i++) {
+      TotalCount += trainRecord[i].trainComplishCount;
+      for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
+        if (trainRecord[i].trainGroups[j].Complish) {
+          TotalGroup++;
+        }
+      }
     }
     console.log('修改重量完成后的记录', trainRecord[index]);
     this.setData({
+      TrainRecord: trainRecord,
+      TotalCount: TotalCount,
       TrainRecord: trainRecord,
     });
   },
   // 输入次数完成后的监听事件
   onNumberConfirm(event) {
-
+    // 总容量
+    let TotalCount = 0;
+    // 总组数
+    let TotalGroup = 0;
     let number = event.detail.value;
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
@@ -82,12 +108,32 @@ Page({
     let trainGroups = trainRecord[index].trainGroups;
     trainGroups[index1].trainNumber = number;
     trainRecord[index].trainGroups = trainGroups;
+    // 先把原来来的清空再进行相加
     trainRecord[index].trainCount = 0;
+    trainRecord[index].trainComplishCount = 0;
     for (let i = 0; i < trainGroups.length; i++) {
-      trainRecord[index].trainCount += trainGroups[i].trainWeight * trainGroups[i].trainNumber
+      // 添加总容量
+      trainRecord[index].trainCount += trainGroups[i].trainWeight * trainGroups[i].trainNumber;
+      // 添加总完成容量
+      if (trainGroups[i].Complish) {
+        trainRecord[index].trainComplishCount += trainGroups[i].trainNumber * trainGroups[i].trainWeight;
+      }
     }
+
+    //获取已完成的总组数和总容量
+    for (let i = 0; i < trainRecord.length; i++) {
+      TotalCount += trainRecord[i].trainComplishCount;
+      for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
+        if (trainRecord[i].trainGroups[j].Complish) {
+          TotalGroup++;
+        }
+      }
+    }
+
     console.log('修改数量完成后的记录', trainRecord[index]);
     this.setData({
+      TrainRecord: trainRecord,
+      TotalCount: TotalCount,
       TrainRecord: trainRecord,
     });
   },
@@ -109,22 +155,9 @@ Page({
     trainGroups[index1].Complish = !trainGroups[index1].Complish;
     // 如果动作已完成则添加完成的容量
     if (trainGroups[index1].Complish) {
-      trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber
-      // 每次开始倒计时前都重新获取数据中的倒计时事件
-      const countDown = this.selectComponent('#control-count-down');
-      let time1 = trainRecord[index].trainGroups[index1].trainRestTime;
-      console.log(time1);
-      countDown.setData({
-        time: time1,
-        groupIndex:index1
-      });
-      countDown.start();
-      // 如果完成的话就弹出计时框，否则不弹出
-      this.setData({
-        showClock: true
-      });
+      trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
     } else {
-      trainRecord[index].trainComplishCount -= trainGroups[index1].trainWeight * trainGroups[index1].trainNumber
+      trainRecord[index].trainComplishCount -= trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
     }
     trainRecord[index].trainGroups = trainGroups;
 
@@ -137,9 +170,6 @@ Page({
         }
       }
     }
-
-
-
     console.log('完成之后的组数', trainRecord[index].trainGroups);
     this.setData({
       TrainRecord: trainRecord,
@@ -344,37 +374,62 @@ Page({
 
   // 倒计时按钮弹出层
   showClockPopup(event) {
+    // 总容量
+    let TotalCount = 0;
+    // 总组数
+    let TotalGroup = 0;
+    // 动作的下边index
+    const index = event.currentTarget.dataset.index;
+    // 动作组数的下标
+    const index1 = event.currentTarget.dataset.index1;
+    let trainRecord = this.data.TrainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
+    // 应当点击计时之后同时完成动作,如果动作已经是完成了的，则不作任何操作
+    if (!trainGroups[index1].Complish) {
+      trainGroups[index1].Complish = true;
+      trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
+    }
+    trainRecord[index].trainGroups = trainGroups;
+    //获取已完成的总组数和总容量
+    for (let i = 0; i < trainRecord.length; i++) {
+      TotalCount += trainRecord[i].trainComplishCount;
+      for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
+        if (trainRecord[i].trainGroups[j].Complish) {
+          TotalGroup++;
+        }
+      }
+    }
+    let startRest1 = Date.now();
     this.setData({
+      TrainRecord: trainRecord,
+      TotalCount: TotalCount,
+      TotalGroup: TotalGroup,
+      startRest: startRest1,
       showClock: true
     });
     // 每次开始倒计时前都重新获取数据中的倒计时事件
     const countDown = this.selectComponent('#control-count-down');
-    // 动作的下边index
-    const index = event.currentTarget.dataset.index;
-    // 动作组数的小标
-    const index1 = event.currentTarget.dataset.index1;
-    let trainRecord = this.data.TrainRecord;
     let time1 = trainRecord[index].trainGroups[index1].trainRestTime;
     console.log(time1);
     countDown.setData({
       time: time1,
-      groupIndex:index1
+      groupIndex: index1
     });
     countDown.start();
   },
+  // 闹钟弹出层关闭按钮
   onCloseClock() {
-    this.setData({
-      showClock: false
-    });
-    const countDown = this.selectComponent('#control-count-down');
-    countDown.reset();
+    this.countdownFinished();
   },
   // 结束倒计时时触发的事件
   countdownFinished() {
+    let startRest = this.data.startRest;
+    let stopRest = Date.now();
     // 每次开始倒计时前都重新获取数据中的倒计时事件
     const countDown = this.selectComponent('#control-count-down');
     let index1 = countDown.data.groupIndex;
-    const time1 = (countDown.data.time / 1000) + 's';
+    let time = (stopRest - startRest) / 1000;
+    let time1 = time.toFixed(0) + 's';
     const icon = this.selectComponent('#resttime' + index1);
     console.log('#resttime' + index1);
     icon.setData({
@@ -383,6 +438,7 @@ Page({
     this.setData({
       showClock: false
     });
+    countDown.reset();
   },
   // 添加十秒倒计时事件
   addTenSeconds() {

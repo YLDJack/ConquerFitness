@@ -178,11 +178,10 @@
 					</view>
 					<!-- 倒计时和确认模块 -->
 					<view class="traincountdown">
-						<!--完成按钮 -->
-						<van-checkbox value="{{ item.Complish }}" checked-color="#07c160" icon-size="50rpx" bind:change="onComplish" data-index1="{{index1}}" data-index="{{index}}"></van-checkbox>
+						<!--如果组数或次数为空，则无法选择完成按钮 -->
+						<van-checkbox value="{{ item.Complish }}" checked-color="#07c160" icon-size="50rpx" bind:change="onComplish" data-index1="{{index1}}" data-index="{{index}}" disabled="{{!(item.trainNumber && item.trainWeight)}}"></van-checkbox>
 						<!-- 休息倒计时按钮 -->
-						<van-icon wx:if="{{ item.Complish }}" name="underway-o" id="resttime{{index1}}" size="50rpx"  />
-						<van-icon wx:else name="underway-o" size="50rpx" bind:click="showClockPopup" data-index1="{{index1}}" data-index="{{index}}"/>
+						<van-icon name="underway-o" id="resttime{{index1}}" size="50rpx" bind:click="showClockPopup" data-index1="{{index1}}" data-index="{{index}}" />
 						<!-- 休息倒计时弹出层 -->
 						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)">
 							<view class="resttime">
@@ -204,7 +203,7 @@
 							</view>
 						</van-popup>
 						<!-- 删除按钮 -->
-						<van-button wx:if="{{delGroupsTag}}" icon="cross" type="info" plain custom-style="margin-right:35rpx;width:100rpx;height:100rpx;border-radius:50rpx" data-index1="{{index1}}" data-index="{{index}}" catchtap="doDelGroups" />
+						<van-icon name="cross" wx:if="{{delGroupsTag}}" size="50rpx" catchtap="doDelGroups" data-index1="{{index1}}" data-index="{{index}}" />
 					</view>
 				</view>
 			</view>

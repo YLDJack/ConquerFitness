@@ -16,7 +16,7 @@ Page({
     TotalGroup: 0,
     TotalCount: 0,
     // 训练记录数组
-    TrainRecord: [],
+    trainRecord: [],
     // 训练备注
     TrainMark: '',
     // 单个动作
@@ -51,17 +51,17 @@ Page({
   },
   // 输入重量完成后的监听事件
   onWeightConfirm(event) {
-     // 总容量
-     let TotalCount = 0;
-     // 总组数
-     let TotalGroup = 0;
+    // 总容量
+    let TotalCount = 0;
+    // 总组数
+    let TotalGroup = 0;
     let weight = event.detail.value;
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
     // 动作组数的小标
     const index1 = event.currentTarget.dataset.index1;
     // 设置相应的重量到训练记录里
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
     trainGroups[index1].trainWeight = weight;
     trainRecord[index].trainGroups = trainGroups;
@@ -87,9 +87,9 @@ Page({
     }
     console.log('修改重量完成后的记录', trainRecord[index]);
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
       TotalCount: TotalCount,
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
     });
   },
   // 输入次数完成后的监听事件
@@ -104,7 +104,7 @@ Page({
     // 动作组数的小标
     const index1 = event.currentTarget.dataset.index1;
     // 设置相应的重量到训练记录里
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
     trainGroups[index1].trainNumber = number;
     trainRecord[index].trainGroups = trainGroups;
@@ -132,9 +132,8 @@ Page({
 
     console.log('修改数量完成后的记录', trainRecord[index]);
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
       TotalCount: TotalCount,
-      TrainRecord: trainRecord,
     });
   },
   // 完成动作
@@ -149,7 +148,7 @@ Page({
     const index1 = event.currentTarget.dataset.index1;
     console.log('完成动作的下标', index);
     console.log('完成动作组数的下标', index1);
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
     // 将对应多的数组下标签取反
     trainGroups[index1].Complish = !trainGroups[index1].Complish;
@@ -172,7 +171,7 @@ Page({
     }
     console.log('完成之后的组数', trainRecord[index].trainGroups);
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
       TotalCount: TotalCount,
       TotalGroup: TotalGroup,
     });
@@ -189,7 +188,7 @@ Page({
     const index1 = event.currentTarget.dataset.index1;
     console.log('删除的动作的下标', index);
     console.log('删除的动作组数的下标', index1);
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
     // 删除组数后也要把动作中的已完成容量和总容量删除
     trainRecord[index].trainCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
@@ -212,7 +211,7 @@ Page({
 
     console.log('删除之后的组数', trainRecord[index].trainGroups);
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
       TotalCount: TotalCount,
       TotalGroup: TotalGroup
     })
@@ -226,7 +225,7 @@ Page({
   // 添加组数事件
   addgroup(event) {
     const index = event.currentTarget.dataset.index;
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let addgroup = {
       trainWeight: '',
       trainNumber: '',
@@ -236,7 +235,7 @@ Page({
     trainRecord[index].trainGroups.push(addgroup);
     console.log('要加组数的记录:', trainRecord[index].trainGroups);
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
     })
   },
   // 关闭弹出层事件
@@ -248,7 +247,7 @@ Page({
   // 点击图片弹出动作详情
   showPopup(event) {
     const id = event.currentTarget.dataset.id;
-    const data = this.data.trainingActions;
+    const data = this.data.trainRecord;
     let catedata = [];
     for (let i = 0; i < data.length; i++) {
       if (id === data[i]._id) {
@@ -263,18 +262,18 @@ Page({
   },
   // 确认删除事件
   onDel() {
-    let trainingActions = this.data.trainingActions;
+    let trainRecord = this.data.trainRecord;
     let delActions = this.data.delActions;
-    for (let i = 0; i < trainingActions.length; i++) {
+    for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < delActions.length; j++) {
-        if (trainingActions[i] == delActions[j]) {
-          trainingActions.splice(i, 1)
+        if (trainRecord[i] == delActions[j]) {
+          trainRecord.splice(i, 1)
         }
       }
     }
-    app.globalData.trainingActions = trainingActions;
+    app.globalData.trainRecord = trainRecord;
     this.setData({
-      trainingActions: trainingActions,
+      trainRecord: trainRecord,
       delActionsStatus: [],
       delActions: []
     })
@@ -284,16 +283,16 @@ Page({
     let index = event.currentTarget.dataset.index;
     let delActionsStatus = this.data.delActionsStatus;
     let delActions = this.data.delActions;
-    let trainingActions = this.data.trainingActions;
+    let trainRecord = this.data.trainRecord;
     console.log('训练的动作', index);
     if (!delActionsStatus[index]) {
       delActionsStatus[index] = true;
       // 如果是要删除的数据，则将其加入delActions
-      delActions.push(trainingActions[index]);
+      delActions.push(trainRecord[index]);
     } else {
       delActionsStatus[index] = false;
       // 如果是取消删除的数据，则将其从delActions中删除
-      let delindex = delActions.indexOf(trainingActions[index]);
+      let delindex = delActions.indexOf(trainRecord[index]);
       console.log('要删除的id', delindex)
       // 新建了一个数组，并修改了原数组。所以不用赋值
       delActions.splice(delindex, 1);
@@ -382,7 +381,7 @@ Page({
     const index = event.currentTarget.dataset.index;
     // 动作组数的下标
     const index1 = event.currentTarget.dataset.index1;
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
     // 应当点击计时之后同时完成动作,如果动作已经是完成了的，则不作任何操作
     if (!trainGroups[index1].Complish) {
@@ -400,14 +399,7 @@ Page({
       }
     }
     let startRest1 = Date.now();
-    this.setData({
-      TrainRecord: trainRecord,
-      TotalCount: TotalCount,
-      TotalGroup: TotalGroup,
-      startRest: startRest1,
-      showClock: true
-    });
-    // 每次开始倒计时前都重新获取数据中的倒计时事件
+    // 每次开始倒计时前都重新获取数据中的倒计时事件，这个必须在showClock: true前面否则会造成闪退。
     const countDown = this.selectComponent('#control-count-down');
     let time1 = trainRecord[index].trainGroups[index1].trainRestTime;
     console.log(time1);
@@ -416,10 +408,19 @@ Page({
       groupIndex: index1
     });
     countDown.start();
+    this.setData({
+      trainRecord: trainRecord,
+      TotalCount: TotalCount,
+      TotalGroup: TotalGroup,
+      startRest: startRest1,
+      showClock: true
+    });
   },
   // 闹钟弹出层关闭按钮
   onCloseClock() {
     this.countdownFinished();
+    const countDown = this.selectComponent('#control-count-down');
+    countDown.reset();
   },
   // 结束倒计时时触发的事件
   countdownFinished() {
@@ -431,14 +432,12 @@ Page({
     let time = (stopRest - startRest) / 1000;
     let time1 = time.toFixed(0) + 's';
     const icon = this.selectComponent('#resttime' + index1);
-    console.log('#resttime' + index1);
     icon.setData({
       info: time1
     });
     this.setData({
       showClock: false
     });
-    countDown.reset();
   },
   // 添加十秒倒计时事件
   addTenSeconds() {
@@ -552,7 +551,7 @@ Page({
   onLoad: function (options) {
     let trainingActions = app.globalData.trainingActions;
     let length = trainingActions.length || 0;
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     for (let i = 0; i < length; i++) {
       // 初始化训练记录
       trainRecord[i] = trainingActions[i];
@@ -569,7 +568,7 @@ Page({
     console.log('训练记录', trainRecord);
     this.setData({
       TotalType: length,
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
     })
     // 如果训练动作不为空则自动开始计时
     if (length) {

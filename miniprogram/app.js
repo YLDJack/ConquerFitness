@@ -5,7 +5,9 @@ App({
     bodydata: {},
     bodydatas: [],
     date: util.formatDate(new Date()),
-    trainingActions:[]
+    trainingActions: [],
+    selectActions: [],
+    selectStatus: []
   },
   // 将数据添加到云端的方法
   async addDataToCloud() {

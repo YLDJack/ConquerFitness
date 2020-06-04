@@ -17,8 +17,19 @@
 }
 
 /* 体重记录弹出框 */
-.obtaindate{
-  margin: 28rpx;
+.datechoosbtn{
+  margin-top: 25rpx;
+}
+
+.choosebtntext{
+  display: flex;
+  margin-top: 25rpx;
+  margin-left: 30rpx;
+  align-items: center;
+}
+.choosetext{
+  color: white;
+  font-size: 28rpx;
 }
 
 .van-popup{
@@ -32,12 +43,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: white;
+  font-size: 28rpx;
 }
 
 .confirm{
   float: right;
   margin-right: 40rpx;
-
+  color: white;
+  font-size: 28rpx;
 }
 
 /* 体脂部分 */
@@ -58,4 +72,17 @@
 }
 .calbutton{
   margin-right: 30rpx;
+}
+
+.fattext{
+  margin-top: 55rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  color: white;
+}
+
+/* 围度记录 */
+.circbtnfield{
+  width: 100%;
+  text-align: center;
 }

@@ -4,18 +4,28 @@
 		<!-- 体重记录 -->
 		<van-collapse value="{{ weightcollapse }}" bind:change="onChangeWeightCard">
 			<van-collapse-item title="体重" name="w" value="50KG" label="我在减肥">
+				<!-- 环形区域和按钮区域 -->
 				<view class="weightcard">
+					<!-- 环形区域 -->
 					<van-circle value="{{ weightcircle }}" color="{{ gradientColor }}" stroke-width="6" text="已减3.0" />
+					<!-- 按钮区域 -->
 					<view class="button">
 						<view class="addbutton">
 							<van-button round color="linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))" bind:click="showPopup_weight">添加记录</van-button>
-							<van-popup show="{{ showweight }}" round closeable custom-style="height: 30%;" bind:close="onClose_weight">
-								<view class="obtaindate">{{date}}</view>
+							<!-- 添加记录弹出框 -->
+							<van-popup show="{{ showweight }}" round closeable custom-style="height:30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onClose_weight">
+								<view class="datechoosbtn">
+									<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0);margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
+								</view>
 								<view class="items">
 									<view>体重(kg)：</view>
 									<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChange_Weight" />
 								</view>
 								<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+							</van-popup>
+							<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+								<!-- 日期选择器 -->
+								<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
 							</van-popup>
 						</view>
 						<view class="linebutton">
@@ -24,19 +34,54 @@
 					</view>
 					<text class="targettip">离目标还剩3.0KG</text>
 				</view>
-				<van-cell title="初始体重" value="53KG" label="减重第一天 2020-05-02 " icon="edit" />
-				<van-cell title="最新体重" value="50KG" label="减重第30天 2020-06-02 " icon="edit" />
-				<van-cell title="目标体重" value="47KG" label="目标日期 2020-10-02 " icon="edit" />
+				<!-- 目标体重 -->
+				<van-cell title="目标体重" value="47KG" label="目标日期 2020-10-02 " icon="edit" bind:click="editTargetWeight" />
+					<!-- 点击修改目标体重弹出框 -->
+				<van-popup show="{{ TargetWeight }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseTargetWeight">
+					<view class="choosebtntext">
+						<view class="choosetext">
+							目标日期：
+						</view>
+						<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0)" bind:click="showDatePopup">2020-05-02</van-button>
+					</view>
+					<view class="items">
+						<view>目标体重(kg)：</view>
+						<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChangeTargetWeight" />
+					</view>
+					<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+				</van-popup>
+				<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+					<!-- 日期选择器 -->
+					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
+				</van-popup>
+				<!-- 初始体重 -->
+				<van-cell title="初始体重" value="53KG" label="减重第一天 2020-05-02 " icon="edit" bind:click="editInitialWeight" />
+				<!-- 点击修改初始体重弹出框 -->
+				<van-popup show="{{ InitialWeight }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseInitialWeight">
+					<view class="datechoosbtn">
+						<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0);margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
+					</view>
+					<view class="items">
+						<view>初始体重(kg)：</view>
+						<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChangeInitialWeight" />
+					</view>
+					<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+				</van-popup>
+				<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+					<!-- 日期选择器 -->
+					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
+				</van-popup>
+				<!-- 最新体重 -->
+				<van-cell title="最新体重" value="50KG" label="减重第30天 2020-06-02 " bind:click="editNewWeight" />
 			</van-collapse-item>
 		</van-collapse>
 		<!-- 体脂记录 -->
 		<van-collapse value="{{ fatcollapse }}" bind:change="onChangeFatCard">
-			<van-collapse-item title="体脂" name="f" value="20%" label="记录体重后可计算体脂">
+			<van-collapse-item title="体脂" name="f" value="20%" label="体脂计算需要您的体重、腰围和性别信息哦，支持手动输入">
 				<view class="fatcard">
 					<view class="field">
 						<van-cell-group>
 							<van-field value="{{ sexvalue }}" label="请输入性别：" placeholder="男/女" border="{{ false }}" bind:change="onChangeSex" />
-							<van-field value="{{ waistline }}" label="请输入腰围：" placeholder="厘米" border="{{ false }}" bind:change="onWaistline" />
 						</van-cell-group>
 					</view>
 					<view class="calculate">
@@ -54,8 +99,123 @@
 						</view>
 					</view>
 				</view>
-				<van-cell title="最新体脂" value="20%" label="运动员体质" icon="warning" bind:click="showfatpopup"/>
-				<van-popup show="{{ showfattip }}" bind:close="onCloseFattip">内容</van-popup>
+				<van-cell title="最新体脂" value="20%" label="运动员体质" icon="warning" bind:click="showfatpopup" />
+				<!-- 点击弹出和体脂有关的内容 -->
+				<van-popup show="{{ showfattip }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseFattip">
+					<view class="fattext">
+						身体脂肪含量占身体体重比率简称为“体脂率”
+					</view>
+				</van-popup>
+			</van-collapse-item>
+		</van-collapse>
+		<!-- 围度记录 -->
+		<van-collapse value="{{ circlecollapse }}" bind:change="onChangecircCard">
+			<van-collapse-item title="围度" name="c" label="最近记录了胸围">
+				<view class="circbtnfield">
+					<van-button round color="linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))" bind:click="onClickLinebtn">曲线日历</van-button>
+				</view>
+				<!-- 胸围 -->
+				<van-cell title="胸围" value="80cm" label="2020-05-02" icon="edit" bind:click="editChestLine"/>
+				<!-- 点击修改胸围弹出框 -->
+				<van-popup show="{{ ChestLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseChestLine">
+					<view class="datechoosbtn">
+						<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0);margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
+					</view>
+					<view class="items">
+						<view>胸围(cm)：</view>
+						<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChangeChestLine" />
+					</view>
+					<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+				</van-popup>
+				<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+					<!-- 日期选择器 -->
+					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
+				</van-popup>
+				<!-- 臂围 -->
+				<van-cell title="臂围" value="20cm" label="2020-05-02 " icon="edit" bind:click="editArmLine" />
+				<!-- 点击修改臂围弹出框 -->
+				<van-popup show="{{ ArmLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseArmLine">
+					<view class="datechoosbtn">
+						<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0);margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
+					</view>
+					<view class="items">
+						<view>臂围(cm)：</view>
+						<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChangeArmLine" />
+					</view>
+					<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+				</van-popup>
+				<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+					<!-- 日期选择器 -->
+					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
+				</van-popup>
+				<!-- 腰围 -->
+				<van-cell title="腰围" value="60cm" label="2020-05-02 " icon="edit" bind:click="editWaistLine"/>
+				<!-- 点击修改腰围弹出框 -->
+				<van-popup show="{{ WaistLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseWaistLine">
+					<view class="datechoosbtn">
+						<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0);margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
+					</view>
+					<view class="items">
+						<view>腰围(cm)：</view>
+						<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChangeWaistLine" />
+					</view>
+					<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+				</van-popup>
+				<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+					<!-- 日期选择器 -->
+					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
+				</van-popup>
+				<!-- 臀围 -->
+				<van-cell title="臀围" value="80cm" label="2020-05-02 " icon="edit" bind:click="editHitLine" />
+				<!-- 点击修改臀围弹出框 -->
+				<van-popup show="{{ HitLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseHitLine">
+					<view class="datechoosbtn">
+						<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0);margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
+					</view>
+					<view class="items">
+						<view>臀围(cm)：</view>
+						<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChangeHitLine" />
+					</view>
+					<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+				</van-popup>
+				<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+					<!-- 日期选择器 -->
+					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
+				</van-popup>
+				<!-- 大腿围 -->
+				<van-cell title="大腿围" value="35cm" label="2020-05-02 " icon="edit" bind:click="editHamLine"/>
+				<!-- 点击修改大腿围弹出框 -->
+				<van-popup show="{{ HamLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseHamLine">
+					<view class="datechoosbtn">
+						<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0);margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
+					</view>
+					<view class="items">
+						<view>大腿围(cm)：</view>
+						<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChangeHamLine" />
+					</view>
+					<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+				</van-popup>
+				<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+					<!-- 日期选择器 -->
+					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
+				</van-popup>
+				<!-- 小腿围 -->
+				<van-cell title="小腿围" value="20cm" label="2020-05-02 " icon="edit" bind:click="editCalfLine" />
+				<!-- 点击修改小腿围弹出框 -->
+				<van-popup show="{{ CalfLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseCalfLine">
+					<view class="datechoosbtn">
+						<van-button icon="plus" type="default" size="small" custom-style="background:rgba(0,0,0,0);margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
+					</view>
+					<view class="items">
+						<view>小腿围(cm)：</view>
+						<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChangeCalfLine" />
+					</view>
+					<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+				</van-popup>
+				<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
+					<!-- 日期选择器 -->
+					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
+				</van-popup>
 			</van-collapse-item>
 		</van-collapse>
 	</van-tab>
@@ -65,25 +225,10 @@
 		<!-- 搜索栏 -->
 		<van-search value="{{ value }}" placeholder="搜索食物和热量" />
 		<!-- 添加记录按钮 -->
-		<van-button icon="plus" type="default" size="small" custom-style="margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">{{year}}-{{month}}-{{day}}</van-button>
+		<van-button icon="plus" type="default" size="small" custom-style="margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">2020-05-02</van-button>
 		<van-popup show="{{ showDatePicker }}" position="bottom" bind:close="onCloseDatePicker">
 			<!-- 日期选择器 -->
-			<view>
-				<view>{{year}}年{{month}}月{{day}}日</view>
-				<picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px;" bindchange="bindChange">
-					<picker-view-column>
-						<view wx:for="{{years}}" wx:key='{{index}}' style="line-height: 50px">{{item}}年</view>
-					</picker-view-column>
-
-					<picker-view-column>
-						<view wx:for="{{months}}" wx:key='{{index}}' style="line-height: 50px">{{item}}月</view>
-					</picker-view-column>
-
-					<picker-view-column>
-						<view wx:for="{{days}}" wx:key='{{index}}' style="line-height: 50px">{{item}}日</view>
-					</picker-view-column>
-				</picker-view>
-			</view>
+			<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
 		</van-popup>
 		<!-- 记录卡片 -->
 		<van-collapse value="{{ activeNames }}" bind:change="onChange">

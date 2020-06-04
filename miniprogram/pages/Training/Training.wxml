@@ -15,7 +15,12 @@
 
 <view>
 	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" model:value="{{ TrainMark }}">
-		<text slot="right-icon" >{{TotalType}}种动作已完成{{TotalGroup}}组{{TotalCount}}容量</text>
+		<view slot="right-icon">
+			共{{TotalType}}种已完成{{TotalGroup}}组{{TotalCount}}容量
+			<view wx:for="{{totalArea}}">
+				{{item.area}}:{{item.areaType}}种已完成{{item.areaCount}}容量
+			</view>
+		</view>
 	</van-field>
 	<!-- 顶部编辑按钮部分 -->
 	<view class="topedit">

@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
+    imageURL: "cloud://conquercheck-geges.636f-conquercheck-geges-1301732640/bodypartsImage/icon_breast.png",
     // 操作弹出层
     showPop: false,
     // 添加计划弹出层
@@ -37,6 +37,19 @@ Page({
     this.setData({
       showPop: false
     });
+  },
+
+  // 点击模板跳转到traing页面，但是顶部添加备注位置读取了模板宫格中的text
+  addTemplate(){
+    wx.navigateTo({
+      url: '../addTemplateDisplay/addTemplateDisplay',
+    })
+  },
+
+  templateTraining(){
+    wx.navigateTo({
+      url: '../addTemplateDisplay/addTemplateDisplay',
+    })
   },
   /**
    * 生命周期函数--监听页面加载

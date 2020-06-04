@@ -8,14 +8,13 @@
  
 }
 
-
 .quickitems{
   
   height: 500rpx;
   width: 100%;
 }
 
-.quickitems .text{
+.text{
   margin-left: 20rpx;
   
   font-weight: bold;

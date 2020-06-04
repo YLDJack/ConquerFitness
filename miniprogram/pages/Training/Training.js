@@ -85,11 +85,12 @@ Page({
         }
       }
     }
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     console.log('修改重量完成后的记录', trainRecord[index]);
     this.setData({
       trainRecord: trainRecord,
-      TotalCount: TotalCount,
-      trainRecord: trainRecord,
+      TotalCount: TotalCount
     });
   },
   // 输入次数完成后的监听事件
@@ -129,7 +130,8 @@ Page({
         }
       }
     }
-
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     console.log('修改数量完成后的记录', trainRecord[index]);
     this.setData({
       trainRecord: trainRecord,
@@ -170,6 +172,8 @@ Page({
       }
     }
     console.log('完成之后的组数', trainRecord[index].trainGroups);
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     this.setData({
       trainRecord: trainRecord,
       TotalCount: TotalCount,
@@ -210,6 +214,8 @@ Page({
     }
 
     console.log('删除之后的组数', trainRecord[index].trainGroups);
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     this.setData({
       trainRecord: trainRecord,
       TotalCount: TotalCount,
@@ -234,6 +240,8 @@ Page({
     };
     trainRecord[index].trainGroups.push(addgroup);
     console.log('要加组数的记录:', trainRecord[index].trainGroups);
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     this.setData({
       trainRecord: trainRecord,
     })
@@ -408,6 +416,8 @@ Page({
       groupIndex: index1
     });
     countDown.start();
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     this.setData({
       trainRecord: trainRecord,
       TotalCount: TotalCount,
@@ -529,6 +539,7 @@ Page({
 
   // 添加动作跳转
   addTrain() {
+    // 关闭当前页，直接跳转
     wx.navigateTo({
       url: '../ActionAdd/ActionAdd',
     })
@@ -549,31 +560,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let trainingActions = app.globalData.trainingActions;
-    let length = trainingActions.length || 0;
-    let trainRecord = this.data.trainRecord;
-    for (let i = 0; i < length; i++) {
-      // 初始化训练记录
-      trainRecord[i] = trainingActions[i];
-      trainRecord[i].trainCount = 0;
-      trainRecord[i].trainComplishCount = 0;
-      trainRecord[i].trainGroups = [{
-        trainWeight: '',
-        trainNumber: '',
-        trainRestTime: 30 * 1000,
-        Complish: false
-      }]
-    }
-
-    console.log('训练记录', trainRecord);
-    this.setData({
-      TotalType: length,
-      trainRecord: trainRecord,
-    })
-    // 如果训练动作不为空则自动开始计时
-    if (length) {
-      this.onStartClock();
-    }
+   
   },
 
   /**
@@ -587,7 +574,43 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    let trainingActions = app.globalData.trainingActions;
+    console.log('获取到的动作', trainingActions);
+    // 从全局中获取
+    let trainRecord = app.globalData.trainRecord || [];
+    console.log('获取到的记录', trainRecord);
+    for (let i = 0; i < trainRecord.length; i++) {
+      for (let j = 0; j < trainingActions.length; j++) {
+        // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
+        if (trainRecord[i]._id == trainingActions[j]._id) {
+          trainingActions.splice(j, 1);
+        }
+      }
+    }
+    // 初始化剩下的动作
+    for (let i = 0; i < trainingActions.length; i++) {
+      trainingActions[i].trainCount = 0;
+      trainingActions[i].trainComplishCount = 0;
+      trainingActions[i].trainGroups = [{
+        trainWeight: '',
+        trainNumber: '',
+        trainRestTime: 30 * 1000,
+        Complish: false
+      }]
+    }
+    // 将这些动作加入到record
+    trainRecord = trainRecord.concat(trainingActions);
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
+    console.log('训练记录', trainRecord);
+    this.setData({
+      TotalType: trainRecord.length,
+      trainRecord: trainRecord,
+    })
+    // 如果训练动作不为空则自动开始计时
+    if (trainRecord.length) {
+      this.onStartClock();
+    }
   },
 
   /**
@@ -601,7 +624,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    //当页面卸载时要保存训练记录，之后也要保存训练时间
+    app.globalData.trainRecord = this.data.trainRecord;
   },
 
   /**
@@ -615,7 +639,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
   },
 
   /**

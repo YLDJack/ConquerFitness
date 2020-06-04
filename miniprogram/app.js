@@ -6,6 +6,7 @@ App({
     bodydatas: [],
     date: util.formatDate(new Date()),
     trainingActions: [],
+    trainRecord:[],
     selectActions: [],
     selectStatus: []
   },

@@ -289,10 +289,13 @@ Page({
     updatecollactiveNames: ['0']
   },
   // 添加动作按钮
-  doAddActions(){
+  doAddActions() {
     app.globalData.trainingActions = this.data.selectActions;
-    wx.navigateTo({
-      url: '../Training/Training',
+    // wx.redirectTo({
+    //   url: '../Training/Training',
+    // })
+    wx.navigateBack({
+      delta: 1
     })
   },
   // 选择动作按钮
@@ -328,7 +331,8 @@ Page({
         }
       }
     }
-
+    app.globalData.selectActions = selectAction;
+    app.globalData.selectStatus = selectStatus;
     this.setData({
       actionByAreaCate: actionByAreaCate,
       selectActions: selectAction,
@@ -675,7 +679,7 @@ Page({
     console.log(actionArea);
     await this.onQueryAddActions(actionArea);
     // 调用云函数查询动作
-    wx.cloud.callFunction({
+    await wx.cloud.callFunction({
       // 云函数名称
       name: 'queryActionByArea',
       // 传给云函数的参数
@@ -694,6 +698,9 @@ Page({
       // 查询获取到数据中存在的分类
       this.QueryCate();
       this.onQueryActionByAreaCate();
+      // 获取当前的状态
+      this.getSelectStatus();
+
     }).catch(err => {
       toast.clear();
       wx.showToast({
@@ -702,6 +709,31 @@ Page({
       })
       console.error('所有动作失败：', err)
     })
+  },
+  // 如果全局变量中已经存在了，选择数组，则直接将其赋值给本页面的选择数组
+  async getSelectStatus() {
+    if (app.globalData.selectActions && app.globalData.selectStatus) {
+      // 同时要遍历分类好的数据，设置它的isSelected
+      let actionByAreaCate = this.data.actionByAreaCate;
+      let actionCate = this.data.actionCate;
+      for (let i = 0; i < app.globalData.selectActions.length; i++) {
+        // 否则则置isSelected为true
+        for (let j = 0; j < actionCate.length; j++) {
+          for (let z = 0; z < actionByAreaCate[actionCate[j]].length; z++) {
+            if (actionByAreaCate[actionCate[j]][z]._id === app.globalData.selectActions[i]._id) {
+              actionByAreaCate[actionCate[j]][z].isSelected = true;
+            }
+          }
+        }
+      }
+      await this.setData({
+        actionByAreaCate: actionByAreaCate,
+        selectActions: app.globalData.selectActions,
+        selectStatus: app.globalData.selectStatus
+      })
+      console.log('原先已有的动作:', app.globalData.selectActions);
+      console.log('原先已有的选择状态:', app.globalData.selectStatus);
+    }
   },
   // 查询自定义动作动作
   async onQueryAddActions(actionArea) {
@@ -959,8 +991,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
     // 每当页面加载的时候，根据当前左侧部位分类发起请求
     this.onQueryActionByArea();
+
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

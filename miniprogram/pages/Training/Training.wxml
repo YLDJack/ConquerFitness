@@ -15,10 +15,15 @@
 
 <view>
 	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" model:value="{{ TrainMark }}">
-		<text slot="right-icon" >{{TotalType}}种动作已完成{{TotalGroup}}组{{TotalCount}}容量</text>
+		<view slot="right-icon">
+			共{{TotalType}}种已完成{{TotalGroup}}组{{TotalCount}}容量
+			<view wx:for="{{totalArea}}">
+				{{item.area}}:{{item.areaType}}种已完成{{item.areaCount}}容量
+			</view>
+		</view>
 	</van-field>
 	<!-- 顶部编辑按钮部分 -->
-	<view>
+	<view class="topedit">
 		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认</van-button>
 		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
 		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
@@ -33,7 +38,7 @@
 
 <!-- 正常情况下显示下拉菜单 -->
 <view wx:if="{{!delTag}}">
-	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{TrainRecord}}" wx:for-index="index" wx:key="_id">
+	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{trainRecord}}" wx:for-index="index" wx:key="_id">
 		<van-collapse-item name="{{index}}">
 
 			<!-- 名字和最大重量区域 -->
@@ -164,7 +169,7 @@
 
 			<!-- 力量训练 -->
 			<view wx:else>
-				<view class="traingroup" wx:for="{{TrainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
+				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
 					<view class="groupnum">{{index1+1}}</view>
 					<view class="traindata">
 						<!-- 输入重量 设定好只能输入数字-->
@@ -194,7 +199,7 @@
 							<view class="setresttime">
 								<van-button type="primary" bind:click="subTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">-10s</van-button>
 								<van-button type="primary" bind:click="addTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">+10s</van-button>
-								<van-button type="primary" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">结束</van-button>
+								<van-button type="primary" custom-style="width:100rpx;height:50rpx;" bind:click="onCloseClock">结束</van-button>
 							</view>
 							<view class="inputresttime">
 								<view class="inputtip">输入休息时间(s):</view>
@@ -220,7 +225,7 @@
 
 <!-- 点击编辑按钮之后 -->
 <view wx:else>
-	<van-cell-group wx:for="{{TrainRecord}}">
+	<van-cell-group wx:for="{{trainRecord}}">
 		<van-cell use-label-slot>
 			<!-- 标题插槽 -->
 			<view slot="title" class="titleandweight">

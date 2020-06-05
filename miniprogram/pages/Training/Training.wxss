@@ -17,6 +17,14 @@
   margin-right: 10rpx;
 }
 
+/* 顶部编辑部分 */
+.topedit {
+  padding:0 20rpx 0 20rpx;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 28rpx;
+}
+
 /* 弹出层样式 */
 .poptabs {
   margin: auto;

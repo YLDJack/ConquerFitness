@@ -47,7 +47,6 @@ App({
       // 云函数名称
       name: 'getPersonalData',
       success: res => {
-        console.log(res.result)
         let length = res.result.data.length;
         if (length === 0) {
           wx.showToast({

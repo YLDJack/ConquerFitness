@@ -112,7 +112,7 @@ function initlineChart(canvas, width, height, dpr) {
 
 Page({
   data: {
-    trainStatus: "增肌",
+    trainStatus:"增肌",
     // 问候语
     hello: "早上好",
     // 当前时期
@@ -211,6 +211,11 @@ Page({
       url: "../TrainTemplate/TrainTemplate",
     })
   },
+  dataRecord() {
+    wx.navigateTo({
+      url: "../DataRecord/DataRecord",
+    });
+  },
   // 从云端获取数据的方法
   async getDataFromCloud() {
     await wx.cloud.callFunction({
@@ -224,9 +229,9 @@ Page({
         let length = res.result.data.length;
         let status = res.result.data[length - 1].trainState;
         this.setData({
-          trainStatus:status
+          trainStatus: status
         });
-        console.log('状态',this.data.trainStatus);
+        console.log('状态', this.data.trainStatus);
 
       },
       fail: error => {
@@ -241,7 +246,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-   onLoad: function () {
+  onLoad: function () {
     this.getDataFromCloud();
     let date = app.globalData.date
     //获取当前时间和身体数据
@@ -310,12 +315,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (typeof this.getTabBar === 'function' &&
-      this.getTabBar()) {
-      console.log('设置选中项 0')
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      console.log('设置选中项 0');
       this.getTabBar().setData({
         selected: 0
       })
     }
-  },
+  }
 })

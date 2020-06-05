@@ -1,42 +1,36 @@
-/* top部分 */
-
-.toptitle {
-  margin-top: 15rpx;
-  margin-left: 15rpx;
-  width: 100%;
-  height: 40%;
-  display: flex;
-  justify-content: space-between;
+page {
+  height: 100%;
+  background-color: #f7f8fa;
 }
-.toptitle .title{
+
+.body {
+  display: flex;
+  /* 更换主轴方向从上到下 */
+  flex-direction: column;
+}
+
+/* top部分 */
+.top {
+  height: 142rpx;
+  flex-grow: 1;
+  width: 100%;
+  background-color: white;
+}
+
+.top .title {
   font-family: Microsoft YaHei;
   font-weight: bold;
   font-size: 36rpx;
-  width: 300rpx;
-}
-.toptitle .success{
-  width: 200rpx;
-  text-align: center;
-}
-
-.top {
-  height: 100rpx;
-  width: 100%;
-  /* text-align: center; */
-  display: flex;
-}
-.selected {
-  background-color: red;
+  margin-top: 15rpx;
+  margin-left: 15rpx;
+  height: 40%;
 }
 
 .top .select-search {
-  height: 100%;
-  width: 90%;
+  height: 60%;
+  width: 100%;
   display: flex;
-}
-.top .add{
-  display: flex;
-  justify-content: center;
+  margin-top: -10rpx;
 }
 
 .van-dropdown-menu {
@@ -49,30 +43,97 @@
   width: 500rpx;
 }
 
-/* slide部分
-.slideBar {
-  float: left;
-}
-
-.slideBar .van-sidebar-item {
-  height: 95rpx;
-} */
-
-/* mid部分
+/* 下方整体 */
 .mid {
-  margin-left: 175rpx;
-} */
-
-/* 添加动作的弹出层 */
-.addpop {
-  width: 100%;
-  height: 90%;
+  margin-top: 10rpx;
+  padding-top: 10rpx;
+  flex-grow: 4;
+  background-color: #f7f8fa;
 }
+
+.bg {
+  background-color: #f7f8fa;
+}
+
+/* 导航栏左侧样式类 */
+.treenav {
+  width: 202rpx;
+}
+
+/* 宫格的样式 */
+.content {
+  height: 100%;
+  background-color: #f7f8fa;
+}
+
+.griditem {
+  white-space: nowrap;
+  border-radius: 20rpx;
+  font-size: large;
+  font-weight: bold;
+}
+
+.griditemimage {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+
+.closeandsave {
+  padding: 25rpx;
+  /* display: flex;
+  justify-content: space-between; */
+}
+
+.star {
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+
+/* 弹出层样式 */
+.poptabs {
+  margin: auto;
+}
+
+.tabtitle {
+  margin: 20rpx 20rpx 20rpx 35rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.actionimage {
+  height: 400rpx;
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 25rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}
+.actionButton {
+  display: flex;
+  justify-content: space-between;
+}
+.textslot{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+
+.addactionbutton {
+  font-size: 25rpx;
+  font-weight: bold;
+  margin: 20rpx 20rpx 20rpx 30rpx;
+}
+
 
 ec-canvas {
   width: 100%;
   height: 100%;
 }
+
 .container {
   position: absolute;
   top: 0;
@@ -84,13 +145,4 @@ ec-canvas {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-}
-.mid {
-  height: 1000rpx;
-}
-
-.closeandsave{
-  padding: 25rpx;
-  /* display: flex;
-  justify-content: space-between; */
 }

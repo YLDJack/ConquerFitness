@@ -1,0 +1,88 @@
+/* 体重下拉第一栏样式 */
+.weightcard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.button{
+  margin-top: 20rpx;
+  display: flex;
+}
+.addbutton{
+  margin-right: 60rpx;
+}
+
+.targettip{
+  margin-top: 20rpx;
+}
+
+/* 体重记录弹出框 */
+.datechoosbtn{
+  margin-top: 25rpx;
+}
+
+.choosebtntext{
+  display: flex;
+  margin-top: 25rpx;
+  margin-left: 30rpx;
+  align-items: center;
+}
+.choosetext{
+  color: white;
+  font-size: 28rpx;
+}
+
+.van-popup{
+  width: 500rpx;
+}
+
+.items{
+  padding-left: 30rpx;
+  width: 90%;
+  height: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-size: 28rpx;
+}
+
+.confirm{
+  float: right;
+  margin-right: 40rpx;
+  color: white;
+  font-size: 28rpx;
+}
+
+/* 体脂部分 */
+.calculate{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fatdisplay{
+  margin-left: 30rpx;
+  margin-top: 20rpx;
+  display: flex;
+  align-items: center;
+}
+.unit{
+  margin-left: 10rpx;
+}
+.calbutton{
+  margin-right: 30rpx;
+}
+
+.fattext{
+  margin-top: 55rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  color: white;
+}
+
+/* 围度记录 */
+.circbtnfield{
+  width: 100%;
+  text-align: center;
+}

@@ -1,53 +1,158 @@
-.van-count-down{
-  margin-left: 40rpx;
-}
-.symbal{
-  color: #da3131;
-  margin-right: 10rpx;
-}
-.item {
-  display: inline-block;
-  width: 55rpx;
-  margin-right: 10rpx;
-  color: #fff;
-  font-size: 36rpx;
-  text-align: center;
-  background-color: #da3131;
-  border-radius: 2px;
-}
-
-.text_progress{
-  margin-left: 20rpx;
-}
-
-.titleandweight{
-  margin-left: 20rpx;
-}
-.titleandweight .label{
-  font-size: 24rpx;
-  color: rgb(146, 144, 144);
-}
-
-.traingroup{
+/* 第一行的计时器 */
+.miaobiao {
+  margin: 10rpx 30rpx 10rpx 30rpx;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
-.groupnum{
+
+.count {
+  display: flex;
+  font-size: 50rpx;
+  color: rgb(107, 105, 105);
+  font-weight: bold;
+}
+
+.countbutton {
+  margin-right: 10rpx;
+}
+
+/* 顶部编辑部分 */
+.topedit {
+  padding:0 20rpx 0 20rpx;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 28rpx;
+}
+
+/* 弹出层样式 */
+.poptabs {
+  margin: auto;
+}
+
+.tabtitle {
+  margin: 20rpx 20rpx 20rpx 35rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+
+.star {
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+
+.actionimage {
+  height: 400rpx;
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 25rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}
+
+/* 训练进度区域 */
+.text_progress {
+  margin-left: 20rpx;
+}
+
+.titleandweight {
+  margin-left: 20rpx;
+}
+
+.titleandweight text {
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.traingroup {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.groupnum {
   font-size: 28rpx;
   margin-right: 15rpx;
 }
-.traindata{
+
+.traindata {
   width: 180rpx;
   margin-right: 20rpx;
-  
-}
-.traincountdown{
-  margin-left: 25rpx;
+
 }
 
-.edit{
+.traincountdown {
+  margin-left: 25rpx;
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.edit {
   margin-top: 50rpx;
   display: flex;
   justify-content: space-between;
   font-size: 28rpx;
+}
+
+/* 倒计时弹出层的样式 */
+.resttime {
+  margin-top: 60rpx;
+  font-size: 55rpx;
+  color: white;
+  font-weight: bold;
+}
+
+.setresttime {
+  width: 385rpx;
+  /* height: 200rpx; */
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 25rpx;
+  padding-left: 15rpx;
+
+}
+
+.item {
+  display: inline-block;
+  width: 50rpx;
+  /* margin-right: 10rpx; */
+  color: #fff;
+  font-size: 40rpx;
+  text-align: center;
+  background-color: rgb(43, 41, 41);
+  border-radius: 4rpx;
+}
+
+.symbal {
+  font-size: 40rpx;
+  color: #fff;
+}
+
+.inputresttime {
+  display: flex;
+  margin-top: 20rpx;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.inputtip {
+  color: white;
+}
+
+.setbutton {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 25rpx;
+}
+
+/* 下拉框的输入条 */
+.valueslot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: center;
 }

@@ -4,7 +4,11 @@ App({
   globalData: {
     bodydata: {},
     bodydatas: [],
-    date: util.formatDate(new Date())
+    date: util.formatDate(new Date()),
+    trainingActions: [],
+    trainRecord:[],
+    selectActions: [],
+    selectStatus: []
   },
   // 将数据添加到云端的方法
   async addDataToCloud() {

@@ -2,6 +2,13 @@
   width: 100%;
   height: 90%;
 }
+
+.closeandsave{
+  margin: 25rpx;
+ 
+}
+
+
 .quickitems{
   
   height: 500rpx;

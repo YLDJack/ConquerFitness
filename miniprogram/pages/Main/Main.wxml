@@ -38,7 +38,7 @@
 		<view class="tabtext">开始训练</view>
 		<!-- <van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large">开始训练</van-button> -->
 	</view>
-	<view class="sidebutton">
+	<view class="sidebutton" bindtap="dataRecord">
 		<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=2168226dc332931cc1b8d936f5ae4842&t=1590112080"></image>
 		<view class="tabtext">数据记录</view>
 		<!-- <van-button color="linear-gradient(to right, #f05c27, #f70303)">我的记录</van-button> -->
@@ -52,7 +52,7 @@
 <!-- 数据展示区域 -->
 <view class="data-group">
 	<view class="scrollwenzi">
-		<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+		<swiper class='data-swiper' autoplay='true' circular current="0">
 			<swiper-item>
 				<view class="wenziframe" style="opacity:0.5">
 					<view class="wenzi">有氧运动时长(分钟)</view>
@@ -77,14 +77,6 @@
 		</swiper>
 	</view>
 </view>
-
-<!-- <view class="eccontainer">
-	<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}" type="2d"></ec-canvas>
-</view>
-
-<view class="eccontainer line">
-	<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" type="2d" style="height:800rpx; width:100%;"></ec-canvas>
-</view> -->
 
 <!-- 数据表轮播 -->
 <swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">

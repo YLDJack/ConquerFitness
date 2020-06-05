@@ -139,6 +139,27 @@ page {
   margin-top: 20rpx;
 }
 
+/* 编辑已添动作的上方按钮和文字样式 */
+.addtop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30rpx;
+  font-weight: bold;
+  margin: 20rpx 0 10rpx 0;
+}
+
+.addtopbutton {
+  margin-right: 35rpx;
+}
+
+.addtoptitle {
+  margin-left: 35rpx;
+}
+
+
+
+
 /* 添加动作的弹出层 */
 .addpop {
   width: 100%;

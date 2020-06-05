@@ -239,6 +239,8 @@ Page({
     trainRecord[index].trainCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
     if (trainGroups[index1].Complish) {
       trainRecord[index].trainComplishCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
+      // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+      this.countArea();
     }
     // 删除下标为index1的组数
     trainGroups.splice(index1, 1);
@@ -309,22 +311,83 @@ Page({
     })
     console.log("当前的动作是:", this.data.queryActionByName);
   },
-  // 确认删除事件
+  // 确认删除动作事件
   onDel() {
+    // 总容量
+    let TotalCount = this.data.TotalCount;
+    // 总组数
+    let TotalGroup = this.data.TotalGroup;
     let trainRecord = this.data.trainRecord;
     let delActions = this.data.delActions;
+    let TotalType = this.data.TotalType;
+    let areas1 = new Set();
+    let totalArea = [];
+    // 设定删除之后的选择数组
+    let selectStatus = [];
+    let selectActions = [];
+
     for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < delActions.length; j++) {
         if (trainRecord[i] == delActions[j]) {
-          trainRecord.splice(i, 1)
+          // 如果删除的动作已经完成的,应当删除页面中的种类数，已经完成容量和组数
+          trainRecord[i].isSelected = false;
+          for (let k = 0; k < trainRecord[i].trainGroups.length; k++) {
+            if (trainRecord[i].trainGroups[k].Complish) {
+              TotalCount -= trainRecord[i].trainComplishCount;
+              trainRecord[i].trainComplishCount -= trainRecord[i].trainGroups[k].trainNumber * trainRecord[i].trainGroups[k].trainWeight;
+              TotalGroup--;
+              // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+              this.countArea();
+            }
+
+          }
+          trainRecord.splice(i, 1);
+          TotalType -= 1;
         }
       }
     }
+
+    // 删除了相应的数据之后，还要对统计数组进行处理
+    for (let i = 0; i < trainRecord.length; i++) {
+      areas1.add(trainRecord[i].actionArea);
+      //修改选择动作的数组
+      selectStatus[trainRecord[i]._id] = true;
+      selectActions.push(trainRecord[i]);
+    }
+    app.globalData.selectActions = selectActions;
+    app.globalData.selectStatus = selectStatus;
+    areas1 = Array.from(areas1);
+    for (let i = 0; i < areas1.length; i++) {
+      let oneArea = {
+        area: areas1[i],
+        // 动作个数
+        areaType: 0,
+        // 动作总容量
+        areaCount: 0,
+      }
+      totalArea.push(oneArea);
+    }
+    for (let i = 0; i < totalArea.length; i++) {
+      for (let j = 0; j < trainRecord.length; j++) {
+        // 获取每个部位的动作的种类数
+        if (trainRecord[j].actionArea === totalArea[i].area) {
+          totalArea[i].areaType += 1;
+          totalArea[i].areaCount += trainRecord[j].trainComplishCount;
+        }
+      }
+    }
+
+
+
     app.globalData.trainRecord = trainRecord;
     this.setData({
+      totalArea: totalArea,
       trainRecord: trainRecord,
       delActionsStatus: [],
-      delActions: []
+      delActions: [],
+      TotalType: TotalType,
+      TotalCount: TotalCount,
+      TotalGroup: TotalGroup
     })
   },
   // 每个动作右边的checkbox点击事件
@@ -623,6 +686,7 @@ Page({
     // 从全局中获取
     let trainRecord = app.globalData.trainRecord || [];
     let totalArea = this.data.totalArea;
+    let existAreas = [];
     let areas = new Set();
     console.log('获取到的记录', trainRecord);
     for (let i = 0; i < trainRecord.length; i++) {
@@ -645,16 +709,26 @@ Page({
         Complish: false
       }]
     }
+
+    // 获取统计中已经存在的部位
+    for (let i = 0; i < totalArea.length; i++) {
+      existAreas.push(totalArea[i].area);
+    }
+    console.log('已存在的动作部位', existAreas);
     areas = Array.from(areas);
+    // 原来如果已经存在相同的部位的数据，应当不再进行初始化
     for (let i = 0; i < areas.length; i++) {
-      let oneArea = {
-        area: areas[i],
-        // 动作个数
-        areaType: 0,
-        // 动作总容量
-        areaCount: 0,
+      if (existAreas.indexOf(areas[i]) == -1) {
+        let oneArea = {
+          area: areas[i],
+          // 动作个数
+          areaType: 0,
+          // 动作总容量
+          areaCount: 0,
+        }
+        totalArea.push(oneArea);
       }
-      totalArea.push(oneArea);
+
     }
     // 将这些动作加入到record
     trainRecord = trainRecord.concat(trainingActions);
@@ -669,7 +743,7 @@ Page({
     }
     //设置全局变量的记录
     app.globalData.trainRecord = trainRecord;
-    console.log('动作部位', totalArea);
+
     this.setData({
       TotalType: trainRecord.length,
       totalArea: totalArea,

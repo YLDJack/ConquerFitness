@@ -111,6 +111,22 @@ page {
   font-size: 40rpx;
   font-weight: bold;
 }
+/* 编辑已添动作的上方按钮和文字样式 */
+.addtop{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30rpx;
+  font-weight: bold;
+  margin: 20rpx 0 10rpx 0;
+}
+.addtopbutton{
+  margin-right: 35rpx;
+}
+.addtoptitle{
+  margin-left: 35rpx;
+}
+
 
 .actionimage {
   height: 400rpx;

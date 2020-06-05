@@ -11,12 +11,14 @@ Page({
     startRest: 0,
     // 编辑组数的标记
     delGroupsTag: false,
+    // 按部位划分的记录数组
+    totalArea: [],
     // 总组数
     TotalType: 0,
     TotalGroup: 0,
     TotalCount: 0,
     // 训练记录数组
-    TrainRecord: [],
+    trainRecord: [],
     // 训练备注
     TrainMark: '',
     // 单个动作
@@ -49,63 +51,94 @@ Page({
     isGray: true,
     isRed: false
   },
+  // 统计每个动作的已完成容量的方法
+  countArea() {
+    // 获取按部位计算的分类数组
+    let totalArea = this.data.totalArea;
+    let trainRecord = this.data.trainRecord;
+
+    // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+    for (let k = 0; k < totalArea.length; k++) {
+      // 每次遍历时，先将该部位的容量清0；因为这里是从头开始遍历整个记录，所有每个部位都会加到自己各自对应的地方上去的。
+      totalArea[k].areaCount = 0;
+      for (let j = 0; j < trainRecord.length; j++) {
+        if (trainRecord[j].actionArea === totalArea[k].area) {
+          totalArea[k].areaCount += trainRecord[j].trainComplishCount;
+        }
+      }
+    }
+    console.log('分类状态：', totalArea);
+    this.setData({
+      totalArea: totalArea
+    });
+  },
   // 输入重量完成后的监听事件
   onWeightConfirm(event) {
-     // 总容量
-     let TotalCount = 0;
-     // 总组数
-     let TotalGroup = 0;
+    let TotalGroup = 0;
+    // 总容量
+    let TotalCount = 0;
     let weight = event.detail.value;
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
     // 动作组数的小标
     const index1 = event.currentTarget.dataset.index1;
     // 设置相应的重量到训练记录里
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
+
     trainGroups[index1].trainWeight = weight;
     trainRecord[index].trainGroups = trainGroups;
     // 先把原来来的清空再进行相加
     trainRecord[index].trainCount = 0;
     trainRecord[index].trainComplishCount = 0;
+
+
+    // 获取单个动作的总容量和完成容量直接设置到record中去
     for (let i = 0; i < trainGroups.length; i++) {
       // 添加总容量
       trainRecord[index].trainCount += trainGroups[i].trainWeight * trainGroups[i].trainNumber;
       // 添加总完成容量
       if (trainGroups[i].Complish) {
         trainRecord[index].trainComplishCount += trainGroups[i].trainNumber * trainGroups[i].trainWeight;
+
+        // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+        this.countArea();
       }
     }
     //获取页面已完成的总组数和总容量
     for (let i = 0; i < trainRecord.length; i++) {
       TotalCount += trainRecord[i].trainComplishCount;
+
       for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
         if (trainRecord[i].trainGroups[j].Complish) {
           TotalGroup++;
         }
       }
     }
+
+
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     console.log('修改重量完成后的记录', trainRecord[index]);
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
       TotalCount: TotalCount,
-      TrainRecord: trainRecord,
     });
   },
   // 输入次数完成后的监听事件
   onNumberConfirm(event) {
+    let TotalGroup = 0;
     // 总容量
     let TotalCount = 0;
-    // 总组数
-    let TotalGroup = 0;
     let number = event.detail.value;
     // 动作的下边index
     const index = event.currentTarget.dataset.index;
     // 动作组数的小标
     const index1 = event.currentTarget.dataset.index1;
     // 设置相应的重量到训练记录里
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
+
     trainGroups[index1].trainNumber = number;
     trainRecord[index].trainGroups = trainGroups;
     // 先把原来来的清空再进行相加
@@ -117,6 +150,9 @@ Page({
       // 添加总完成容量
       if (trainGroups[i].Complish) {
         trainRecord[index].trainComplishCount += trainGroups[i].trainNumber * trainGroups[i].trainWeight;
+
+        // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+        this.countArea();
       }
     }
 
@@ -129,12 +165,12 @@ Page({
         }
       }
     }
-
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     console.log('修改数量完成后的记录', trainRecord[index]);
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
       TotalCount: TotalCount,
-      TrainRecord: trainRecord,
     });
   },
   // 完成动作
@@ -149,15 +185,21 @@ Page({
     const index1 = event.currentTarget.dataset.index1;
     console.log('完成动作的下标', index);
     console.log('完成动作组数的下标', index1);
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
+
     // 将对应多的数组下标签取反
     trainGroups[index1].Complish = !trainGroups[index1].Complish;
     // 如果动作已完成则添加完成的容量
     if (trainGroups[index1].Complish) {
       trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
+      // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+      this.countArea();
     } else {
       trainRecord[index].trainComplishCount -= trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
+
+      // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+      this.countArea();
     }
     trainRecord[index].trainGroups = trainGroups;
 
@@ -170,9 +212,11 @@ Page({
         }
       }
     }
-    console.log('完成之后的组数', trainRecord[index].trainGroups);
+    console.log('完成之后的组数', trainRecord[index]);
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
       TotalCount: TotalCount,
       TotalGroup: TotalGroup,
     });
@@ -189,12 +233,14 @@ Page({
     const index1 = event.currentTarget.dataset.index1;
     console.log('删除的动作的下标', index);
     console.log('删除的动作组数的下标', index1);
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
     // 删除组数后也要把动作中的已完成容量和总容量删除
     trainRecord[index].trainCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
     if (trainGroups[index1].Complish) {
       trainRecord[index].trainComplishCount -= trainGroups[index1].trainNumber * trainGroups[index1].trainWeight;
+      // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+      this.countArea();
     }
     // 删除下标为index1的组数
     trainGroups.splice(index1, 1);
@@ -211,8 +257,10 @@ Page({
     }
 
     console.log('删除之后的组数', trainRecord[index].trainGroups);
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
       TotalCount: TotalCount,
       TotalGroup: TotalGroup
     })
@@ -226,7 +274,7 @@ Page({
   // 添加组数事件
   addgroup(event) {
     const index = event.currentTarget.dataset.index;
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let addgroup = {
       trainWeight: '',
       trainNumber: '',
@@ -235,8 +283,10 @@ Page({
     };
     trainRecord[index].trainGroups.push(addgroup);
     console.log('要加组数的记录:', trainRecord[index].trainGroups);
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
     this.setData({
-      TrainRecord: trainRecord,
+      trainRecord: trainRecord,
     })
   },
   // 关闭弹出层事件
@@ -248,7 +298,7 @@ Page({
   // 点击图片弹出动作详情
   showPopup(event) {
     const id = event.currentTarget.dataset.id;
-    const data = this.data.trainingActions;
+    const data = this.data.trainRecord;
     let catedata = [];
     for (let i = 0; i < data.length; i++) {
       if (id === data[i]._id) {
@@ -261,22 +311,83 @@ Page({
     })
     console.log("当前的动作是:", this.data.queryActionByName);
   },
-  // 确认删除事件
+  // 确认删除动作事件
   onDel() {
-    let trainingActions = this.data.trainingActions;
+    // 总容量
+    let TotalCount = this.data.TotalCount;
+    // 总组数
+    let TotalGroup = this.data.TotalGroup;
+    let trainRecord = this.data.trainRecord;
     let delActions = this.data.delActions;
-    for (let i = 0; i < trainingActions.length; i++) {
+    let TotalType = this.data.TotalType;
+    let areas1 = new Set();
+    let totalArea = [];
+    // 设定删除之后的选择数组
+    let selectStatus = [];
+    let selectActions = [];
+
+    for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < delActions.length; j++) {
-        if (trainingActions[i] == delActions[j]) {
-          trainingActions.splice(i, 1)
+        if (trainRecord[i] == delActions[j]) {
+          // 如果删除的动作已经完成的,应当删除页面中的种类数，已经完成容量和组数
+          trainRecord[i].isSelected = false;
+          for (let k = 0; k < trainRecord[i].trainGroups.length; k++) {
+            if (trainRecord[i].trainGroups[k].Complish) {
+              TotalCount -= trainRecord[i].trainComplishCount;
+              trainRecord[i].trainComplishCount -= trainRecord[i].trainGroups[k].trainNumber * trainRecord[i].trainGroups[k].trainWeight;
+              TotalGroup--;
+              // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+              this.countArea();
+            }
+
+          }
+          trainRecord.splice(i, 1);
+          TotalType -= 1;
         }
       }
     }
-    app.globalData.trainingActions = trainingActions;
+
+    // 删除了相应的数据之后，还要对统计数组进行处理
+    for (let i = 0; i < trainRecord.length; i++) {
+      areas1.add(trainRecord[i].actionArea);
+      //修改选择动作的数组
+      selectStatus[trainRecord[i]._id] = true;
+      selectActions.push(trainRecord[i]);
+    }
+    app.globalData.selectActions = selectActions;
+    app.globalData.selectStatus = selectStatus;
+    areas1 = Array.from(areas1);
+    for (let i = 0; i < areas1.length; i++) {
+      let oneArea = {
+        area: areas1[i],
+        // 动作个数
+        areaType: 0,
+        // 动作总容量
+        areaCount: 0,
+      }
+      totalArea.push(oneArea);
+    }
+    for (let i = 0; i < totalArea.length; i++) {
+      for (let j = 0; j < trainRecord.length; j++) {
+        // 获取每个部位的动作的种类数
+        if (trainRecord[j].actionArea === totalArea[i].area) {
+          totalArea[i].areaType += 1;
+          totalArea[i].areaCount += trainRecord[j].trainComplishCount;
+        }
+      }
+    }
+
+
+
+    app.globalData.trainRecord = trainRecord;
     this.setData({
-      trainingActions: trainingActions,
+      totalArea: totalArea,
+      trainRecord: trainRecord,
       delActionsStatus: [],
-      delActions: []
+      delActions: [],
+      TotalType: TotalType,
+      TotalCount: TotalCount,
+      TotalGroup: TotalGroup
     })
   },
   // 每个动作右边的checkbox点击事件
@@ -284,16 +395,16 @@ Page({
     let index = event.currentTarget.dataset.index;
     let delActionsStatus = this.data.delActionsStatus;
     let delActions = this.data.delActions;
-    let trainingActions = this.data.trainingActions;
+    let trainRecord = this.data.trainRecord;
     console.log('训练的动作', index);
     if (!delActionsStatus[index]) {
       delActionsStatus[index] = true;
       // 如果是要删除的数据，则将其加入delActions
-      delActions.push(trainingActions[index]);
+      delActions.push(trainRecord[index]);
     } else {
       delActionsStatus[index] = false;
       // 如果是取消删除的数据，则将其从delActions中删除
-      let delindex = delActions.indexOf(trainingActions[index]);
+      let delindex = delActions.indexOf(trainRecord[index]);
       console.log('要删除的id', delindex)
       // 新建了一个数组，并修改了原数组。所以不用赋值
       delActions.splice(delindex, 1);
@@ -382,12 +493,15 @@ Page({
     const index = event.currentTarget.dataset.index;
     // 动作组数的下标
     const index1 = event.currentTarget.dataset.index1;
-    let trainRecord = this.data.TrainRecord;
+    let trainRecord = this.data.trainRecord;
     let trainGroups = trainRecord[index].trainGroups;
     // 应当点击计时之后同时完成动作,如果动作已经是完成了的，则不作任何操作
     if (!trainGroups[index1].Complish) {
       trainGroups[index1].Complish = true;
       trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
+
+      // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
+      this.countArea();
     }
     trainRecord[index].trainGroups = trainGroups;
     //获取已完成的总组数和总容量
@@ -400,14 +514,7 @@ Page({
       }
     }
     let startRest1 = Date.now();
-    this.setData({
-      TrainRecord: trainRecord,
-      TotalCount: TotalCount,
-      TotalGroup: TotalGroup,
-      startRest: startRest1,
-      showClock: true
-    });
-    // 每次开始倒计时前都重新获取数据中的倒计时事件
+    // 每次开始倒计时前都重新获取数据中的倒计时事件，这个必须在showClock: true前面否则会造成闪退。
     const countDown = this.selectComponent('#control-count-down');
     let time1 = trainRecord[index].trainGroups[index1].trainRestTime;
     console.log(time1);
@@ -416,10 +523,21 @@ Page({
       groupIndex: index1
     });
     countDown.start();
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
+    this.setData({
+      trainRecord: trainRecord,
+      TotalCount: TotalCount,
+      TotalGroup: TotalGroup,
+      startRest: startRest1,
+      showClock: true,
+    });
   },
   // 闹钟弹出层关闭按钮
   onCloseClock() {
     this.countdownFinished();
+    const countDown = this.selectComponent('#control-count-down');
+    countDown.reset();
   },
   // 结束倒计时时触发的事件
   countdownFinished() {
@@ -431,14 +549,12 @@ Page({
     let time = (stopRest - startRest) / 1000;
     let time1 = time.toFixed(0) + 's';
     const icon = this.selectComponent('#resttime' + index1);
-    console.log('#resttime' + index1);
     icon.setData({
       info: time1
     });
     this.setData({
       showClock: false
     });
-    countDown.reset();
   },
   // 添加十秒倒计时事件
   addTenSeconds() {
@@ -530,6 +646,7 @@ Page({
 
   // 添加动作跳转
   addTrain() {
+    // 关闭当前页，直接跳转
     wx.navigateTo({
       url: '../ActionAdd/ActionAdd',
     })
@@ -550,31 +667,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let trainingActions = app.globalData.trainingActions;
-    let length = trainingActions.length || 0;
-    let trainRecord = this.data.TrainRecord;
-    for (let i = 0; i < length; i++) {
-      // 初始化训练记录
-      trainRecord[i] = trainingActions[i];
-      trainRecord[i].trainCount = 0;
-      trainRecord[i].trainComplishCount = 0;
-      trainRecord[i].trainGroups = [{
-        trainWeight: '',
-        trainNumber: '',
-        trainRestTime: 30 * 1000,
-        Complish: false
-      }]
-    }
 
-    console.log('训练记录', trainRecord);
-    this.setData({
-      TotalType: length,
-      TrainRecord: trainRecord,
-    })
-    // 如果训练动作不为空则自动开始计时
-    if (length) {
-      this.onStartClock();
-    }
   },
 
   /**
@@ -588,7 +681,78 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    let trainingActions = app.globalData.trainingActions;
+    console.log('获取到的动作', trainingActions);
+    // 从全局中获取
+    let trainRecord = app.globalData.trainRecord || [];
+    let totalArea = this.data.totalArea;
+    let existAreas = [];
+    let areas = new Set();
+    console.log('获取到的记录', trainRecord);
+    for (let i = 0; i < trainRecord.length; i++) {
+      for (let j = 0; j < trainingActions.length; j++) {
+        // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
+        if (trainRecord[i]._id == trainingActions[j]._id) {
+          trainingActions.splice(j, 1);
+        }
+      }
+    }
+    // 初始化剩下的动作
+    for (let i = 0; i < trainingActions.length; i++) {
+      areas.add(trainingActions[i].actionArea);
+      trainingActions[i].trainCount = 0;
+      trainingActions[i].trainComplishCount = 0;
+      trainingActions[i].trainGroups = [{
+        trainWeight: '',
+        trainNumber: '',
+        trainRestTime: 30 * 1000,
+        Complish: false
+      }]
+    }
 
+    // 获取统计中已经存在的部位
+    for (let i = 0; i < totalArea.length; i++) {
+      existAreas.push(totalArea[i].area);
+    }
+    console.log('已存在的动作部位', existAreas);
+    areas = Array.from(areas);
+    // 原来如果已经存在相同的部位的数据，应当不再进行初始化
+    for (let i = 0; i < areas.length; i++) {
+      if (existAreas.indexOf(areas[i]) == -1) {
+        let oneArea = {
+          area: areas[i],
+          // 动作个数
+          areaType: 0,
+          // 动作总容量
+          areaCount: 0,
+        }
+        totalArea.push(oneArea);
+      }
+
+    }
+    // 将这些动作加入到record
+    trainRecord = trainRecord.concat(trainingActions);
+    for (let i = 0; i < totalArea.length; i++) {
+      totalArea[i].areaType = 0;
+      for (let j = 0; j < trainRecord.length; j++) {
+        // 获取每个部位的动作的种类数
+        if (trainRecord[j].actionArea === totalArea[i].area) {
+          totalArea[i].areaType += 1;
+        }
+      }
+    }
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
+
+    this.setData({
+      TotalType: trainRecord.length,
+      totalArea: totalArea,
+      trainRecord: trainRecord
+    })
+    // 如果训练动作不为空则自动开始计时
+    if (trainRecord.length) {
+      this.onStartClock();
+    }
   },
 
   /**
@@ -602,7 +766,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    //当页面卸载时要保存训练记录，之后也要保存时间
+    app.globalData.trainRecord = this.data.trainRecord;
   },
 
   /**
@@ -615,9 +780,7 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
-
-  },
+  onReachBottom: function () {},
 
   /**
    * 用户点击右上角分享

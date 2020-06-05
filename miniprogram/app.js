@@ -5,7 +5,10 @@ App({
     bodydata: {},
     bodydatas: [],
     date: util.formatDate(new Date()),
-    trainingActions:[]
+    trainingActions: [],
+    trainRecord:[],
+    selectActions: [],
+    selectStatus: []
   },
   // 将数据添加到云端的方法
   async addDataToCloud() {
@@ -44,7 +47,6 @@ App({
       // 云函数名称
       name: 'getPersonalData',
       success: res => {
-        console.log(res.result)
         let length = res.result.data.length;
         if (length === 0) {
           wx.showToast({

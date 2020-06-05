@@ -81,6 +81,7 @@ Page({
       smallleg: event.detail
     })
   },
+
   loadbodydatas() {
     let bodydata = app.globalData.bodydata;
     let date = app.globalData.date;

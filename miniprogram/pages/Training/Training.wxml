@@ -18,7 +18,7 @@
 		<view slot="right-icon">
 			共{{TotalType}}种已完成{{TotalGroup}}组{{TotalCount}}容量
 			<view wx:for="{{totalArea}}">
-				{{item.area}}:{{item.areaType}}种已完成{{item.areaCount}}容量
+				<view>{{item.area}}:{{item.areaType}}种已完成{{item.areaCount}}<text wx:if="{{item.area!=='有氧'}}">容量</text><text wx:else>分钟</text></view>
 			</view>
 		</view>
 	</van-field>
@@ -44,7 +44,11 @@
 			<!-- 名字和最大重量区域 -->
 			<view slot="title" class="titleandweight">
 				<text>{{item.actionName}}</text>
-				<view>
+				<view wx:if="{{item.actionType === '有氧训练'}}">
+					<van-tag plain type="danger"> 消耗卡路里：</van-tag>
+					<van-tag type="danger">350卡</van-tag>
+				</view>
+				<view wx:else>
 					<van-tag plain type="danger">最大重量：</van-tag>
 					<van-tag type="danger">20KG</van-tag>
 					<van-tag plain type="primary"> 最大容量：</van-tag>
@@ -130,7 +134,7 @@
 				</van-popup>
 			</view>
 			<!-- 右边显示容量部分 ~~符号可以实现快速取整-->
-			<view slot="value" class="valueslot">
+			<view slot="value" class="valueslot" wx:if="{{item.actionType !== '有氧训练'}}">
 				<van-circle value="{{ ~~(item.trainComplishCount/item.trainCount*100)}}" color="{{ gradientColor }}" size="50" stroke-width="8" layer-color="#eee" text="{{ ~~(item.trainComplishCount/item.trainCount*100)+'%' ||  0 +'%' }}" />
 				<label class="label">{{item.trainGroups.length}}组 {{item.trainComplishCount}}/{{item.trainCount}} 容量</label>
 			</view>
@@ -142,27 +146,34 @@
 
 			<!-- 有氧运动 -->
 			<view wx:if="{{item.actionType === '有氧训练'}}">
-				<view class="traingroup">
-					<view class="groupnum">1</view>
-					<view class="traindata">
-						用时：
-					</view>
+				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
+					<view class="groupnum">{{index1+1}}</view>
+					<!-- 倒计时和确认模块 -->
 					<view class="traincountdown">
-						<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" bind:click="showClockPopup" />
-						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)">
+						<van-button bind:click="showAerobicClockPopup" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)">开始计时</van-button>
+						<!-- 休息倒计时按钮 -->
+						<van-icon name="underway-o" id="aerobictime{{index}}{{index1}}" size="50rpx" bind:click="showAerobicClockPopup" />
+						<!-- 有氧运动的正计时 -->
+						<van-popup show="{{ showAerobicClock }}" closeable round bind:close="onCloseAerobicClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)" data-index1="{{index1}}" data-index="{{index}}">
 							<view class="resttime">
-								<van-count-down use-slot time="{{ countdowntime }}" format="HH:mm:ss" bind:change="onChangeClock">
-									<text class="item">{{ timeData.hours }}</text>
-									<text class="symbal">:</text>
-									<text class="item">{{ timeData.minutes }}</text>
-									<text class="symbal">:</text>
-									<text class="item">{{ timeData.seconds }}</text>
-								</van-count-down>
+								<view>
+									<text>{{aerohour}}</text>:
+									<text>{{aerominutes}}</text>:
+									<text>{{aeroseconds}}</text>
+								</view>
+
 							</view>
-							<view class="setbutton">
-								<van-button type="info">完成有氧训练</van-button>
+							<view class="setresttime">
+								<view>
+									<van-icon wx:if="{{aerotimer}}" name="pause-circle-o" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onPauseAerobicClock" style="margin:0 10rpx 0 10rpx" />
+									<van-icon wx:else name="play-circle-o" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onStartAerobicClock" style="margin:0 10rpx 0 10rpx" />
+									<van-icon name="replay" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onStopAerobicClock" />
+								</view>
+								<van-button type="primary" custom-style="width:100rpx;height:50rpx;" bind:click="onCloseAerobicClock">结束</van-button>
 							</view>
 						</van-popup>
+						<!-- 删除按钮 -->
+						<van-icon name="cross" wx:if="{{delGroupsTag}}" size="50rpx" catchtap="doDelGroups" data-index1="{{index1}}" data-index="{{index}}" />
 					</view>
 				</view>
 			</view>
@@ -186,7 +197,7 @@
 						<!--如果组数或次数为空，则无法选择完成按钮 -->
 						<van-checkbox value="{{ item.Complish }}" checked-color="#07c160" icon-size="50rpx" bind:change="onComplish" data-index1="{{index1}}" data-index="{{index}}" disabled="{{!(item.trainNumber && item.trainWeight)}}"></van-checkbox>
 						<!-- 休息倒计时按钮 -->
-						<van-icon name="underway-o" id="resttime{{index1}}" size="50rpx" bind:click="showClockPopup" data-index1="{{index1}}" data-index="{{index}}" />
+						<van-icon name="underway-o" id="resttime{{index}}{{index1}}" size="50rpx" bind:click="showClockPopup" data-index1="{{index1}}" data-index="{{index}}" />
 						<!-- 休息倒计时弹出层 -->
 						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)">
 							<view class="resttime">
@@ -213,7 +224,7 @@
 				</view>
 			</view>
 
-			<view class="edit">
+			<view class="edit" wx:if="{{item.actionType !== '有氧训练'}}">
 				<van-icon name="plus" size="40rpx" catchtap="addgroup" data-index="{{index}}" />
 				<vant-button catchtap="onDelGroups" wx:if="{{delGroupsTag}}">完成</vant-button>
 				<vant-button catchtap="onDelGroups" wx:else>编辑</vant-button>

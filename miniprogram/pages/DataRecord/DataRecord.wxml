@@ -36,7 +36,7 @@
 				</view>
 				<!-- 目标体重 -->
 				<van-cell title="目标体重" value="47KG" label="目标日期 2020-10-02 " icon="edit" bind:click="editTargetWeight" />
-					<!-- 点击修改目标体重弹出框 -->
+				<!-- 点击修改目标体重弹出框 -->
 				<van-popup show="{{ TargetWeight }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseTargetWeight">
 					<view class="choosebtntext">
 						<view class="choosetext">
@@ -72,7 +72,7 @@
 					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
 				</van-popup>
 				<!-- 最新体重 -->
-				<van-cell title="最新体重" value="50KG" label="减重第30天 2020-06-02 " bind:click="editNewWeight" />
+				<van-cell title="最新体重" value="50KG" label="减重第30天 2020-06-02 " />
 			</van-collapse-item>
 		</van-collapse>
 		<!-- 体脂记录 -->
@@ -101,9 +101,41 @@
 				</view>
 				<van-cell title="最新体脂" value="20%" label="运动员体质" icon="warning" bind:click="showfatpopup" />
 				<!-- 点击弹出和体脂有关的内容 -->
-				<van-popup show="{{ showfattip }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseFattip">
-					<view class="fattext">
-						身体脂肪含量占身体体重比率简称为“体脂率”
+				<van-popup show="{{ showfattip }}" round closeable custom-style="height:45%; width:90%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseFattip">
+					<!-- 表格 -->
+					<view class='history-table-wrap'>
+						<view class="table">
+							<view class="tr">
+								<view class="th th1">分类</view>
+								<view class="th th2">女性</view>
+								<view class="th th3">男性</view>
+							</view>
+							<view class="tr">
+								<view class="td td1">必要脂肪</view>
+								<view class="td td2">10%-13%</view>
+								<view class="td td3">2%-5%</view>
+							</view>
+							<view class="tr">
+								<view class="td td1">运动员</view>
+								<view class="td td2">14%-20%</view>
+								<view class="td td3">6%-13%</view>
+							</view>
+							<view class="tr">
+								<view class="td td1">健康</view>
+								<view class="td td2">21%-24%</view>
+								<view class="td td3">14%-17%</view>
+							</view>
+							<view class="tr">
+								<view class="td td1">可接受</view>
+								<view class="td td2">25%-31%</view>
+								<view class="td td3">18%-25%</view>
+							</view>
+							<view class="tr">
+								<view class="td td1">肥胖</view>
+								<view class="td td2">32%+</view>
+								<view class="td td3">26%+</view>
+							</view>
+						</view>
 					</view>
 				</van-popup>
 			</van-collapse-item>
@@ -115,7 +147,7 @@
 					<van-button round color="linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))" bind:click="onClickLinebtn">曲线日历</van-button>
 				</view>
 				<!-- 胸围 -->
-				<van-cell title="胸围" value="80cm" label="2020-05-02" icon="edit" bind:click="editChestLine"/>
+				<van-cell title="胸围" value="80cm" label="2020-05-02" icon="edit" bind:click="editChestLine" />
 				<!-- 点击修改胸围弹出框 -->
 				<van-popup show="{{ ChestLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseChestLine">
 					<view class="datechoosbtn">
@@ -149,7 +181,7 @@
 					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
 				</van-popup>
 				<!-- 腰围 -->
-				<van-cell title="腰围" value="60cm" label="2020-05-02 " icon="edit" bind:click="editWaistLine"/>
+				<van-cell title="腰围" value="60cm" label="2020-05-02 " icon="edit" bind:click="editWaistLine" />
 				<!-- 点击修改腰围弹出框 -->
 				<van-popup show="{{ WaistLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseWaistLine">
 					<view class="datechoosbtn">
@@ -183,7 +215,7 @@
 					<van-datetime-picker type="date" value="{{ currentDate }}" bind:input="onInputDate" max-date="{{ maxDate }}" formatter="{{ formatter }}" />
 				</van-popup>
 				<!-- 大腿围 -->
-				<van-cell title="大腿围" value="35cm" label="2020-05-02 " icon="edit" bind:click="editHamLine"/>
+				<van-cell title="大腿围" value="35cm" label="2020-05-02 " icon="edit" bind:click="editHamLine" />
 				<!-- 点击修改大腿围弹出框 -->
 				<van-popup show="{{ HamLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseHamLine">
 					<view class="datechoosbtn">

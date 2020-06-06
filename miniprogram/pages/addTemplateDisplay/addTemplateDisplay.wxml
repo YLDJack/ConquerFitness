@@ -1,0 +1,245 @@
+<!-- 正计时秒表 -->
+<view class="miaobiao">
+	<view class="countbutton">
+		<van-button type="danger" size="small" bind:click="naviToTraining">开始训练</van-button>
+	</view>
+	<view class="countbutton">
+		<van-button type="danger" size="small">完成添加</van-button>
+	</view>
+</view>
+
+<view>
+	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" model:value="{{ TrainMark }}">
+		<text slot="right-icon" >{{TotalType}}种动作已完成{{TotalGroup}}组{{TotalCount}}容量</text>
+	</van-field>
+	<!-- 顶部编辑按钮部分 -->
+	<view>
+		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认</van-button>
+		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
+		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
+		<!-- 顶部训练进度部分 -->
+		<!-- <view class="text_progress">
+			<text>本次训练进度:</text>
+			<van-progress percentage="50" stroke-width="8" />
+		</view> -->
+	</view>
+</view>
+<van-divider />
+
+<!-- 正常情况下显示下拉菜单 -->
+<view wx:if="{{!delTag}}">
+	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{TrainRecord}}" wx:for-index="index" wx:key="_id">
+		<van-collapse-item name="{{index}}">
+
+			<!-- 名字和最大重量区域 -->
+			<view slot="title" class="titleandweight">
+				<text>{{item.actionName}}</text>
+				<view>
+					<van-tag plain type="danger">最大重量：</van-tag>
+					<van-tag type="danger">20KG</van-tag>
+					<van-tag plain type="primary"> 最大容量：</van-tag>
+					<van-tag type="primary">350</van-tag>
+				</view>
+			</view>
+
+			<!-- 使用slot插槽显示图片 -->
+			<view slot="icon" class="icon">
+				<image src="{{item.actionImage}}" style="width:100rpx;height:100rpx;border-radius:50rpx" catchtap="showPopup" data-id="{{item._id}}"></image>
+				<!-- 点击图片的弹出层 -->
+				<!-- 弹出层部分 必须放在点击按钮的下方-->
+				<van-popup show="{{ showPopup }}" bind:close="onPopupClose" closeable custom-style="height:800rpx;width:80%;" wx:for="{{queryActionByName}}" wx:key="_id">
+					<!-- 详情通过弹出层tabs展示 -->
+					<view class="tabtitle">{{item.actionName}}</view>
+					<!-- 弹出层Tabs -->
+					<van-tabs type="card" class="poptabs">
+						<!-- 详情tab -->
+						<van-tab title="详情">
+							<!-- 动作卡片 -->
+							<van-card>
+								<!-- 图片部分 -->
+								<view slot="title">
+									<image src="{{item.actionImage}}" class="actionimage"></image>
+								</view>
+								<!-- 描述部分 -->
+								<view slot="desc">
+									<!-- 根据动作描述数组逐个渲染 -->
+									<view class="subtitle">动作描述：</view>
+									<view wx:for="{{item.actionDesc}}" wx:key="index">
+										{{index+1}}、{{item}}
+									</view>
+								</view>
+								<!-- 卡片底部标签和展示按钮部分 -->
+								<view slot="bottom">
+									<view class="subtitle">
+										<text>训练部位：</text>
+										<van-tag type="primary" size="large">{{item.actionArea}}</van-tag>
+									</view>
+									<!-- 弹出层训练肌群标签 -->
+									<view class="subtitle">
+										<text>训练侧重：</text>
+										<van-tag type="danger" size="large">{{item.actionSub}}</van-tag>
+									</view>
+									<!-- 弹出层训练器材标签 -->
+									<view class="subtitle">
+										<text>训练器材：</text>
+										<van-tag type="success" size="large">{{item.actionEquipment}}</van-tag>
+									</view>
+
+									<view>
+										<view class="subtitle">训练要点：</view>
+										<view wx:for="{{item.actionNote}}" wx:key="index">
+											{{index+1}}、{{item}}
+										</view>
+									</view>
+								</view>
+
+							</van-card>
+						</van-tab>
+						<!-- 趋势折线图 -->
+						<van-tab title="趋势">
+							<cover-view class="container">
+								<!-- 线性表 -->
+								<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
+								</ec-canvas>
+							</cover-view>
+						</van-tab>
+
+						<van-tab title="备注">
+							<!-- 打分 -->
+							<view class="star">
+								<view>对动作进行打分：</view>
+								<van-rate value="{{ starvalue }}" size="{{ 25 }}" allow-half color="#ee0a24" void-color="#eee" void-icon="star" bind:change="onStarChange" />
+							</view>
+
+							<!-- 备注框 -->
+							<van-cell-group>
+								<van-field value="{{ message }}" label="备注" type="textarea" placeholder="请输入备注" autosize border="{{ false }}" />
+							</van-cell-group>
+						</van-tab>
+					</van-tabs>
+				</van-popup>
+			</view>
+			<!-- 右边显示容量部分 ~~符号可以实现快速取整-->
+			<view slot="value" class="valueslot">
+				<van-circle value="{{ ~~(item.trainComplishCount/item.trainCount*100)}}" color="{{ gradientColor }}" size="50" stroke-width="8" layer-color="#eee" text="{{ ~~(item.trainComplishCount/item.trainCount*100)+'%' ||  0 +'%' }}" />
+				<label class="label">{{item.trainGroups.length}}组 {{item.trainComplishCount}}/{{item.trainCount}} 容量</label>
+			</view>
+			<!-- 下拉显示部分 -->
+			<view>
+				<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit">
+				</van-field>
+			</view>
+
+			<!-- 有氧运动 -->
+			<view wx:if="{{item.actionType === '有氧训练'}}">
+				<view class="traingroup">
+					<view class="groupnum">1</view>
+					<view class="traindata">
+						用时：
+					</view>
+					<view class="traincountdown">
+						<van-button icon="clock-o" type="info" plain custom-style="width:100rpx;height:100rpx;border-radius:50rpx" bind:click="showClockPopup" />
+						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)">
+							<view class="resttime">
+								<van-count-down use-slot time="{{ countdowntime }}" format="HH:mm:ss" bind:change="onChangeClock">
+									<text class="item">{{ timeData.hours }}</text>
+									<text class="symbal">:</text>
+									<text class="item">{{ timeData.minutes }}</text>
+									<text class="symbal">:</text>
+									<text class="item">{{ timeData.seconds }}</text>
+								</van-count-down>
+							</view>
+							<view class="setbutton">
+								<van-button type="info">完成有氧训练</van-button>
+							</view>
+						</van-popup>
+					</view>
+				</view>
+			</view>
+
+			<!-- 力量训练 -->
+			<view wx:else>
+				<view class="traingroup" wx:for="{{TrainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
+					<view class="groupnum">{{index1+1}}</view>
+					<view class="traindata">
+						<!-- 输入重量 设定好只能输入数字-->
+						<van-field placeholder="重量(KG)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" model:value="{{item.trainWeight}}" type="number" bind:blur="onWeightConfirm" data-weight="{{item.trainWeight}}" data-index1="{{index1}}" data-index="{{index}}">
+						</van-field>
+					</view>
+					<view class="traindata">
+						<!-- 输入次数 -->
+						<van-field placeholder="数量(次)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" model:value="{{item.trainNumber}}" type="number" bind:blur="onNumberConfirm" data-number="{{item.trainNumber}}" data-index1="{{index1}}" data-index="{{index}}">
+						</van-field>
+					</view>
+					<!-- 倒计时和确认模块 -->
+					<view class="traincountdown">
+						<!--如果组数或次数为空，则无法选择完成按钮 -->
+						<van-checkbox value="{{ item.Complish }}" checked-color="#07c160" icon-size="50rpx" bind:change="onComplish" data-index1="{{index1}}" data-index="{{index}}" disabled="{{!(item.trainNumber && item.trainWeight)}}"></van-checkbox>
+						<!-- 休息倒计时按钮 -->
+						<van-icon name="underway-o" id="resttime{{index1}}" size="50rpx" bind:click="showClockPopup" data-index1="{{index1}}" data-index="{{index}}" />
+						<!-- 休息倒计时弹出层 -->
+						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)">
+							<view class="resttime">
+								<van-count-down use-slot id="control-count-down" time="{{item.trainRestTime}}" format="mm:ss" auto-start="{{ false }}" bind:change="onChangeClock" bind:finish="countdownFinished" data-index1="{{index1}}">
+									<text class="item">{{ timeData.minutes }}</text>
+									<text class="symbal">:</text>
+									<text class="item">{{ timeData.seconds }}</text>
+								</van-count-down>
+							</view>
+							<view class="setresttime">
+								<van-button type="primary" bind:click="subTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">-10s</van-button>
+								<van-button type="primary" bind:click="addTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">+10s</van-button>
+								<van-button type="primary" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">结束</van-button>
+							</view>
+							<view class="inputresttime">
+								<view class="inputtip">输入休息时间(s):</view>
+								<van-field custom-style="padding:2rpx;color:white;width:100rpx;height:50rpx;color:black;font-size:28rpx;border-radius:10rpx;background-color:rgb(180,180,180)" bind:blur="onRestTimeConfirm" placeholder="单位：秒(s)">
+								</van-field>
+							</view>
+						</van-popup>
+						<!-- 删除按钮 -->
+						<van-icon name="cross" wx:if="{{delGroupsTag}}" size="50rpx" catchtap="doDelGroups" data-index1="{{index1}}" data-index="{{index}}" />
+					</view>
+				</view>
+			</view>
+
+			<view class="edit">
+				<van-icon name="plus" size="40rpx" catchtap="addgroup" data-index="{{index}}" />
+				<vant-button catchtap="onDelGroups" wx:if="{{delGroupsTag}}">完成</vant-button>
+				<vant-button catchtap="onDelGroups" wx:else>编辑</vant-button>
+			</view>
+
+		</van-collapse-item>
+	</van-collapse>
+</view>
+
+<!-- 点击编辑按钮之后 -->
+<view wx:else>
+	<van-cell-group wx:for="{{TrainRecord}}">
+		<van-cell use-label-slot>
+			<!-- 标题插槽 -->
+			<view slot="title" class="titleandweight">
+				<text>{{item.actionName}}</text>
+			</view>
+			<!-- label插槽 -->
+			<view slot="label">
+				<van-tag plain type="danger">最大重量：</van-tag>
+				<van-tag type="danger">20KG</van-tag>
+				<van-tag plain type="primary"> 最大容量：</van-tag>
+				<van-tag type="primary">350</van-tag>
+			</view>
+			<!-- 使用slot插槽显示图片 -->
+			<view slot="icon" class="icon">
+				<image src="{{item.actionImage}}" style="width:100rpx;height:100rpx;border-radius:50rpx"></image>
+			</view>
+			<view slot="right-icon">
+				<van-checkbox value="{{ delActionsStatus[index] }}" checked-color="red" bind:change="onDelChange" data-index="{{index}}"></van-checkbox>
+			</view>
+		</van-cell>
+	</van-cell-group>
+</view>
+
+<van-tabbar>
+	<van-tabbar-item icon="add" bind:click="addTrain">添加动作</van-tabbar-item>
+	<van-tabbar-item icon="bars" bind:click="showTem">训练计划</van-tabbar-item>
+</van-tabbar>

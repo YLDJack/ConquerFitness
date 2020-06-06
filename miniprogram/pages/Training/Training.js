@@ -31,11 +31,18 @@ Page({
     delActions: [],
     // del的标志
     delTag: false,
+    // 页面总体的计时时间
     hour: "00",
     minutes: "00",
     seconds: "00",
-    count: 0,
     timer: null,
+    count: 0,
+    // 有氧运动正计时的即使时间
+    aerohour: "00",
+    aerominutes: "00",
+    aeroseconds: "00",
+    aerotimer: null,
+    aerocount: 0,
     value: 5,
     //下拉列表的初始状态
     activeNames: ['1'],
@@ -43,7 +50,10 @@ Page({
       '0%': '#ffd01e',
       '100%': '#ee0a24'
     },
+    // 力量训练休息时间倒计时
     showClock: false,
+    // 有氧运动计时的弹出框
+    showAerobicClock: false,
     countdowntime: 60 * 1000,
     timeData: {},
     isPause: true,
@@ -438,7 +448,7 @@ Page({
   // 页面顶部正计时点击开始按钮
   onStartClock: function () {
     let timer = this.data.timer;
-    console.log(timer);
+    console.log('页面计时器', timer);
     if (timer) {
       return false;
     } else {
@@ -457,12 +467,40 @@ Page({
       });
     }
   },
+  // 有氧运动正计时开始按钮
+  onStartAerobicClock: function () {
+    let timer = this.data.aerotimer;
+    if (timer) {
+      return false;
+    } else {
+      timer = setInterval(
+        () => {
+          var countNew = this.data.aerocount + 1;
+          this.setData({
+            aerocount: countNew,
+            aeroseconds: this.showNum(countNew % 60),
+            aerominutes: this.showNum(parseInt(countNew / 60) % 60),
+            aerohour: this.showNum(parseInt(countNew / 3600))
+          })
+        }, 1000);
+      this.setData({
+        aerotimer: timer
+      });
+    }
+  },
 
   // 顶部暂停按钮
   onPauseClock: function () {
     clearInterval(this.data.timer);
     this.setData({
       timer: null
+    });
+  },
+  // 有氧运动计时暂停按钮
+  onPauseAerobicClock: function () {
+    clearInterval(this.data.aerotimer);
+    this.setData({
+      aerotimer: null
     });
   },
   // 顶部停止按钮
@@ -476,6 +514,17 @@ Page({
         timer: null
       })
   },
+  // 顶部停止按钮
+  onStopAerobicClock: function () {
+    clearInterval(this.data.aerotimer),
+      this.setData({
+        aerocousnt: 0,
+        aeroseconds: "00",
+        aerominutes: "00",
+        aerohour: "00",
+        aerotimer: null
+      })
+  },
 
   onCollChange(event) {
     this.setData({
@@ -483,7 +532,7 @@ Page({
     });
   },
 
-  // 倒计时按钮弹出层
+  // 运动休息时间倒计时按钮弹出层
   showClockPopup(event) {
     // 总容量
     let TotalCount = 0;
@@ -520,6 +569,7 @@ Page({
     console.log(time1);
     countDown.setData({
       time: time1,
+      actionIndex:index,
       groupIndex: index1
     });
     countDown.start();
@@ -533,11 +583,52 @@ Page({
       showClock: true,
     });
   },
-  // 闹钟弹出层关闭按钮
+  // 有氧训练正计时弹出层
+  showAerobicClockPopup(event) {
+    // 展示出页面应该直接开始计时
+    this.onStartAerobicClock();
+    this.setData({
+      showAerobicClock: true,
+    });
+  },
+  // 闹钟弹出层关闭事件
   onCloseClock() {
     this.countdownFinished();
     const countDown = this.selectComponent('#control-count-down');
     countDown.reset();
+  },
+  // 有氧运动正计时弹出层关闭事件
+  onCloseAerobicClock(event) {
+    let index1 = event.currentTarget.dataset.index1;
+    let index = event.currentTarget.dataset.index;
+    let totalArea = this.data.totalArea;
+    let aeroseconds = this.data.aeroseconds;
+    let aerominutes = this.data.aerominutes;
+    let aerohour = parseInt(this.data.aerohour)*60;
+    let time =(aerohour+parseInt(aerominutes))+'分'+aeroseconds+'秒';
+    let name = '#aerobictime' + index +''+ index1;
+    console.log('iconname',name);
+    const icon = this.selectComponent(name);
+    console.log('icon', this)
+    icon.setData({
+      info: time
+    });
+    for (let i = 0; i < totalArea.length; i++) {
+      if(totalArea.area='有氧'){
+        totalArea[i].areaCount +=parseInt(aerominutes);
+      }
+    }
+    // 结束计时的时候要把计时器清空
+    clearInterval(this.data.aerotimer),
+      this.setData({
+        totalArea:totalArea,
+        aerocousnt: 0,
+        aeroseconds: "00",
+        aerominutes: "00",
+        aerohour: "00",
+        aerotimer: null,
+        showAerobicClock: false,
+      });
   },
   // 结束倒计时时触发的事件
   countdownFinished() {
@@ -545,10 +636,11 @@ Page({
     let stopRest = Date.now();
     // 每次开始倒计时前都重新获取数据中的倒计时事件
     const countDown = this.selectComponent('#control-count-down');
+    let index = countDown.data.actionIndex;
     let index1 = countDown.data.groupIndex;
     let time = (stopRest - startRest) / 1000;
     let time1 = time.toFixed(0) + 's';
-    const icon = this.selectComponent('#resttime' + index1);
+    const icon = this.selectComponent('#resttime' + index +''+index1);
     icon.setData({
       info: time1
     });

@@ -8,6 +8,12 @@ Page({
 
   },
 
+  naviToTraining(){
+    wx.navigateTo({
+      url: '../Training/Training',
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */

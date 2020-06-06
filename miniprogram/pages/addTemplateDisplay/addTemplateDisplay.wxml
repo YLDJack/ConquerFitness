@@ -1,7 +1,7 @@
 <!-- 正计时秒表 -->
 <view class="miaobiao">
 	<view class="countbutton">
-		<van-button type="danger" size="small">开始训练</van-button>
+		<van-button type="danger" size="small" bind:click="naviToTraining">开始训练</van-button>
 	</view>
 	<view class="countbutton">
 		<van-button type="danger" size="small">完成添加</van-button>

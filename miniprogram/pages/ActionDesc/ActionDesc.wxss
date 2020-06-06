@@ -1,1 +1,4 @@
 /* pages/ActionDesc/ActionDesc.wxss */
+.discribe{
+  padding: 30rpx;
+}

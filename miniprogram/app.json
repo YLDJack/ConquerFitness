@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/Main/Main",
-    "pages/Training/Training",
     "pages/Train/Train",
     "pages/Training/Training",
     "pages/Personal/Personal",

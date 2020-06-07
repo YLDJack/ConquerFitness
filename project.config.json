@@ -29,7 +29,7 @@
 		"bundle": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.11.0",
+	"libVersion": "2.11.1",
 	"appid": "wx773cae64284e5337",
 	"projectname": "ConquerFitness",
 	"debugOptions": {

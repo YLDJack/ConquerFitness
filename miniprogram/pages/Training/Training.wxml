@@ -249,9 +249,9 @@
 			<!-- label插槽 -->
 			<view slot="label">
 				<van-tag plain type="danger">最大重量：</van-tag>
-				<van-tag type="danger">20KG</van-tag>
+				<van-tag type="danger">{{item.maxWeight}}Kg</van-tag>
 				<van-tag plain type="primary"> 最大容量：</van-tag>
-				<van-tag type="primary">350</van-tag>
+				<van-tag type="primary">{{item.maxCount}}</van-tag>
 			</view>
 			<!-- 使用slot插槽显示图片 -->
 			<view slot="icon" class="icon">

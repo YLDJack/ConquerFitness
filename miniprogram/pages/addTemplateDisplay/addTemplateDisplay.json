@@ -17,7 +17,6 @@
     "van-cell": "@vant/weapp/cell/index",
     "van-checkbox": "@vant/weapp/checkbox/index",
     "van-tab": "@vant/weapp/tab/index",
-    "van-tabs": "@vant/weapp/tabs/index",
-    "van-toast": "@vant/weapp/toast/index"
+    "van-tabs": "@vant/weapp/tabs/index"
   }
 }

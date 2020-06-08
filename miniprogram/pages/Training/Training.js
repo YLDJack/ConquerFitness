@@ -1,3 +1,5 @@
+import Toast from '@vant/weapp/toast/toast';
+const db = wx.cloud.database();
 var utils = require('../../utils/util');
 // pages/Training/Training.js
 const app = getApp();
@@ -31,11 +33,18 @@ Page({
     delActions: [],
     // del的标志
     delTag: false,
+    // 页面总体的计时时间
     hour: "00",
     minutes: "00",
     seconds: "00",
-    count: 0,
     timer: null,
+    count: 0,
+    // 有氧运动正计时的即使时间
+    aerohour: "00",
+    aerominutes: "00",
+    aeroseconds: "00",
+    aerotimer: null,
+    aerocount: 0,
     value: 5,
     //下拉列表的初始状态
     activeNames: ['1'],
@@ -43,7 +52,10 @@ Page({
       '0%': '#ffd01e',
       '100%': '#ee0a24'
     },
+    // 力量训练休息时间倒计时
     showClock: false,
+    // 有氧运动计时的弹出框
+    showAerobicClock: false,
     countdowntime: 60 * 1000,
     timeData: {},
     isPause: true,
@@ -192,7 +204,16 @@ Page({
     trainGroups[index1].Complish = !trainGroups[index1].Complish;
     // 如果动作已完成则添加完成的容量
     if (trainGroups[index1].Complish) {
+
       trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
+      //如果当前动作的训练重量大于历史重量，则将其设置为最大重量
+      if (trainGroups[index1].trainWeight > trainRecord[index].maxWeight) {
+        trainRecord[index].maxWeight = trainGroups[index1].trainWeight;
+      }
+      //如果当前动作的训练容量大于历史容量，则将其设置为最大容量
+      if (trainRecord[index].trainComplishCount > trainRecord[index].maxCount) {
+        trainRecord[index].maxCount = trainRecord[index].trainComplishCount;
+      }
       // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
       this.countArea();
     } else {
@@ -438,7 +459,7 @@ Page({
   // 页面顶部正计时点击开始按钮
   onStartClock: function () {
     let timer = this.data.timer;
-    console.log(timer);
+    console.log('页面计时器', timer);
     if (timer) {
       return false;
     } else {
@@ -457,12 +478,40 @@ Page({
       });
     }
   },
+  // 有氧运动正计时开始按钮
+  onStartAerobicClock: function () {
+    let timer = this.data.aerotimer;
+    if (timer) {
+      return false;
+    } else {
+      timer = setInterval(
+        () => {
+          var countNew = this.data.aerocount + 1;
+          this.setData({
+            aerocount: countNew,
+            aeroseconds: this.showNum(countNew % 60),
+            aerominutes: this.showNum(parseInt(countNew / 60) % 60),
+            aerohour: this.showNum(parseInt(countNew / 3600))
+          })
+        }, 1000);
+      this.setData({
+        aerotimer: timer
+      });
+    }
+  },
 
   // 顶部暂停按钮
   onPauseClock: function () {
     clearInterval(this.data.timer);
     this.setData({
       timer: null
+    });
+  },
+  // 有氧运动计时暂停按钮
+  onPauseAerobicClock: function () {
+    clearInterval(this.data.aerotimer);
+    this.setData({
+      aerotimer: null
     });
   },
   // 顶部停止按钮
@@ -476,6 +525,17 @@ Page({
         timer: null
       })
   },
+  // 顶部停止按钮
+  onStopAerobicClock: function () {
+    clearInterval(this.data.aerotimer),
+      this.setData({
+        aerocousnt: 0,
+        aeroseconds: "00",
+        aerominutes: "00",
+        aerohour: "00",
+        aerotimer: null
+      })
+  },
 
   onCollChange(event) {
     this.setData({
@@ -483,7 +543,7 @@ Page({
     });
   },
 
-  // 倒计时按钮弹出层
+  // 运动休息时间倒计时按钮弹出层
   showClockPopup(event) {
     // 总容量
     let TotalCount = 0;
@@ -520,6 +580,7 @@ Page({
     console.log(time1);
     countDown.setData({
       time: time1,
+      actionIndex: index,
       groupIndex: index1
     });
     countDown.start();
@@ -533,22 +594,78 @@ Page({
       showClock: true,
     });
   },
-  // 闹钟弹出层关闭按钮
-  onCloseClock() {
-    this.countdownFinished();
+  // 有氧训练正计时弹出层
+  showAerobicClockPopup(event) {
+    // 展示出页面应该直接开始计时
+    this.onStartAerobicClock();
+    this.setData({
+      showAerobicClock: true,
+    });
+  },
+  // 闹钟弹出层关闭事件
+  onCloseClock(event) {
+    this.countdownFinished(event);
     const countDown = this.selectComponent('#control-count-down');
     countDown.reset();
   },
+  // 有氧运动正计时弹出层关闭事件
+  onCloseAerobicClock(event) {
+    let index1 = event.currentTarget.dataset.index1;
+    let index = event.currentTarget.dataset.index;
+    let trainRecord = this.data.trainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
+    let totalArea = this.data.totalArea;
+    let aeroseconds = this.data.aeroseconds;
+    let aerominutes = this.data.aerominutes;
+    let aerohour = parseInt(this.data.aerohour) * 60;
+    let time = (aerohour + parseInt(aerominutes)) + '分' + aeroseconds + '秒';
+    let name = '#aerobictime' + index + '' + index1;
+    console.log('iconname', name);
+    const icon = this.selectComponent(name)
+    trainGroups[index1].trainRestTime = (aerohour * 3600 + aerominutes * 60 + aeroseconds) * 1000;
+    icon.setData({
+      info: time
+    });
+    for (let i = 0; i < totalArea.length; i++) {
+      if (totalArea.area = '有氧') {
+        totalArea[i].areaCount += parseInt(aerominutes);
+      }
+    }
+    // 结束计时的时候要把计时器清空
+    clearInterval(this.data.aerotimer),
+      this.setData({
+        totalArea: totalArea,
+        aerocousnt: 0,
+        aeroseconds: "00",
+        aerominutes: "00",
+        aerohour: "00",
+        aerotimer: null,
+        showAerobicClock: false,
+      });
+  },
   // 结束倒计时时触发的事件
-  countdownFinished() {
+  countdownFinished(event) {
+    // 动作的下边index
+    const index = event.currentTarget.dataset.index;
+    // 动作组数的下标
+    const index1 = event.currentTarget.dataset.index1;
+    let trainRecord = this.data.trainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
     let startRest = this.data.startRest;
     let stopRest = Date.now();
     // 每次开始倒计时前都重新获取数据中的倒计时事件
     const countDown = this.selectComponent('#control-count-down');
-    let index1 = countDown.data.groupIndex;
+    let index2 = countDown.data.actionIndex;
+    let index3 = countDown.data.groupIndex;
     let time = (stopRest - startRest) / 1000;
     let time1 = time.toFixed(0) + 's';
-    const icon = this.selectComponent('#resttime' + index1);
+    const icon = this.selectComponent('#resttime' + index2 + '' + index3);
+
+    // 将实际的休息时间传递给动作记录数组
+    if (trainGroups[index1].Complish) {
+      trainGroups[index1].trainRestTime = time * 1000;
+    }
+
     icon.setData({
       info: time1
     });
@@ -663,6 +780,203 @@ Page({
       value: event.detail
     });
   },
+  // 完成训练按钮点击事件
+  onFinishTraining() {
+    let date = utils.formatDate(new Date());
+    let trainRecord = this.data.trainRecord;
+    let totalArea = this.data.totalArea;
+    let TotalType = this.data.TotalType;
+    let TotalGroup = this.data.TotalGroup;
+    let TotalCount = this.data.TotalCount;
+    let TrainMark = this.data.TrainMark;
+    console.log('训练备注',TrainMark);
+
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '上传训练数据中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+
+
+    // 上传每个动作的训练记录尤其是最大重量容量以及总容量
+    for (let i = 0; i < trainRecord.length; i++) {
+      // 查询数据库中当天的记录是否已经存在，若存在则进行更新，否则直接进行添加
+      wx.cloud.callFunction({
+        // 云函数名称
+        name: 'queryActionRecordByDate',
+        // 传给云函数的参数
+        data: {
+          date: date,
+          actionId: trainRecord[i]._id,
+        },
+        success: res => {
+          toast.clear();
+          wx.showToast({
+            title: '查询动作记录成功',
+          })
+          // 代表存在该数据
+          if (res.result.data.length > 0) {
+            // 若已存在当天的记录那么就直接进行更新
+            wx.cloud.callFunction({
+              // 云函数名称
+              name: 'updateActionRecord',
+              // 传给云函数的参数
+              data: {
+                date: date,
+                actionId: trainRecord[i]._id,
+                actionName: trainRecord[i].actionName,
+                maxCount: trainRecord[i].maxCount,
+                maxWeight: trainRecord[i].maxWeight,
+                trainCount: trainRecord[i].trainCount
+              },
+              success: res => {
+                toast.clear();
+                wx.showToast({
+                  title: '更新动作记录成功',
+                })
+              },
+              fail: error => {
+                toast.clear();
+                console.log(error);
+                wx.showToast({
+                  title: '更新动作记录失败',
+                  icon: "none"
+                })
+              }
+            })
+          } else {
+            // 添加动作记录
+            wx.cloud.callFunction({
+              // 云函数名称
+              name: 'addActionRecord',
+              // 传给云函数的参数
+              data: {
+                date: date,
+                actionId: trainRecord[i]._id,
+                actionName: trainRecord[i].actionName,
+                maxCount: trainRecord[i].maxCount,
+                maxWeight: trainRecord[i].maxWeight,
+                trainCount: trainRecord[i].trainCount
+              },
+              success: res => {
+                toast.clear();
+                wx.showToast({
+                  title: '上传动作记录成功',
+                })
+              },
+              fail: error => {
+                toast.clear();
+                console.log(error);
+                wx.showToast({
+                  title: '上传失败',
+                  icon: "none"
+                })
+              }
+            })
+          }
+        },
+        fail: error => {
+          toast.clear();
+          console.log(error);
+          wx.showToast({
+            title: '查询动作记录失败',
+            icon: "none"
+          })
+        }
+      });
+    }
+    // 查询训练记录如果已经存在，当天的记录则进行更新，否则直接添加
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'queryTrainedRecord',
+      // 传给云函数的参数
+      data: {
+        date: date
+      },
+      success: res => {
+        toast.clear();
+        wx.showToast({
+          title: '查询训练记录成功',
+        })
+        // 代表存在该数据
+        if (res.result.data.length > 0) {
+          // 若已存在当天的记录那么就直接进行更新
+          wx.cloud.callFunction({
+            // 云函数名称
+            name: 'updateTrainedRecord',
+            // 传给云函数的参数
+            data: {
+              date: date,
+              trainRecord: trainRecord,
+              TrainMark: TrainMark,
+              TotalType: TotalType,
+              TotalGroup:TotalGroup,
+              TotalCount:TotalCount,
+              totalArea: totalArea,
+              
+            },
+            success: res => {
+              toast.clear();
+              wx.showToast({
+                title: '更新训练记录成功',
+              })
+            },
+            fail: error => {
+              toast.clear();
+              console.log(error);
+              wx.showToast({
+                title: '更新训练记录失败',
+                icon: "none"
+              })
+            }
+          })
+        } else {
+          // 添加整个训练记录
+          wx.cloud.callFunction({
+            // 云函数名称
+            name: 'addTrainedRecord',
+            // 传给云函数的参数
+            data: {
+              date: date,
+              TrainMark: TrainMark,
+              trainRecord: trainRecord,
+              TotalType: TotalType,
+              TotalGroup:TotalGroup,
+              TotalCount:TotalCount,
+              totalArea: totalArea,
+            },
+            success: res => {
+              toast.clear();
+              wx.showToast({
+                title: '上传成功',
+              })
+            },
+            fail: error => {
+              toast.clear();
+              console.log(error);
+              wx.showToast({
+                title: '上传失败',
+                icon: "none"
+              })
+            }
+          })
+        }
+      },
+      fail: error => {
+        toast.clear();
+        console.log(error);
+        wx.showToast({
+          title: '查询训练记录失败',
+          icon: "none"
+        })
+      }
+    });
+
+
+
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -681,14 +995,17 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    let date = utils.formatDate(new Date());
     let trainingActions = app.globalData.trainingActions;
-    console.log('获取到的动作', trainingActions);
     // 从全局中获取
     let trainRecord = app.globalData.trainRecord || [];
     let totalArea = this.data.totalArea;
     let existAreas = [];
     let areas = new Set();
-    console.log('获取到的记录', trainRecord);
+    console.log('1、获取到的记录', trainRecord);
+
+
+
     for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < trainingActions.length; j++) {
         // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
@@ -697,64 +1014,92 @@ Page({
         }
       }
     }
-    // 初始化剩下的动作
-    for (let i = 0; i < trainingActions.length; i++) {
-      areas.add(trainingActions[i].actionArea);
-      trainingActions[i].trainCount = 0;
-      trainingActions[i].trainComplishCount = 0;
-      trainingActions[i].trainGroups = [{
-        trainWeight: '',
-        trainNumber: '',
-        trainRestTime: 30 * 1000,
-        Complish: false
-      }]
-    }
+    console.log('2、需要添加的记录', trainingActions);
 
-    // 获取统计中已经存在的部位
-    for (let i = 0; i < totalArea.length; i++) {
-      existAreas.push(totalArea[i].area);
-    }
-    console.log('已存在的动作部位', existAreas);
-    areas = Array.from(areas);
-    // 原来如果已经存在相同的部位的数据，应当不再进行初始化
-    for (let i = 0; i < areas.length; i++) {
-      if (existAreas.indexOf(areas[i]) == -1) {
-        let oneArea = {
-          area: areas[i],
-          // 动作个数
-          areaType: 0,
-          // 动作总容量
-          areaCount: 0,
+
+
+
+
+
+    // 此时应当对每个动作发起查询，获取其最大容量和和最大重量
+    wx.cloud.callFunction({
+      // 云函数名称，获取本人的所有动作记录
+      name: 'queryActionRecord',
+    }).then(res => {
+      wx.showToast({
+        title: '查询动作记录成功',
+      })
+      console.log('3、res', res.result.data);
+      let actionRecord = res.result.data;
+      for (let i = 0; i < trainingActions.length; i++) {
+        areas.add(trainingActions[i].actionArea);
+        trainingActions[i].trainCount = 0;
+        trainingActions[i].trainComplishCount = 0;
+        trainingActions[i].trainGroups = [{
+          trainReamark:'',
+          trainWeight: '',
+          trainNumber: '',
+          trainRestTime: 30 * 1000,
+          Complish: false
+        }]
+        trainingActions[i].maxCount = 0;
+        trainingActions[i].maxWeight = 0;
+        // 解决每次只能获取最后一个动作的bug
+        for (let j = 0; j < actionRecord.length; j++) {
+          if (actionRecord[j].actionId === trainingActions[i]._id) {
+            trainingActions[i].maxCount = actionRecord[j].maxCount;
+            trainingActions[i].maxWeight = actionRecord[j].maxWeight;
+          }
         }
-        totalArea.push(oneArea);
-      }
 
-    }
-    // 将这些动作加入到record
-    trainRecord = trainRecord.concat(trainingActions);
-    for (let i = 0; i < totalArea.length; i++) {
-      totalArea[i].areaType = 0;
-      for (let j = 0; j < trainRecord.length; j++) {
-        // 获取每个部位的动作的种类数
-        if (trainRecord[j].actionArea === totalArea[i].area) {
-          totalArea[i].areaType += 1;
+      }
+      // 获取统计中已经存在的部位
+      for (let i = 0; i < totalArea.length; i++) {
+        existAreas.push(totalArea[i].area);
+      }
+      console.log('4、已存在的动作部位', existAreas);
+      areas = Array.from(areas);
+      // 原来如果已经存在相同的部位的数据，应当不再进行初始化
+      for (let i = 0; i < areas.length; i++) {
+        if (existAreas.indexOf(areas[i]) == -1) {
+          let oneArea = {
+            area: areas[i],
+            // 动作个数
+            areaType: 0,
+            // 动作总容量
+            areaCount: 0,
+          }
+          totalArea.push(oneArea);
+        }
+
+      }
+      // 将这些动作加入到record
+      trainRecord = trainRecord.concat(trainingActions);
+      for (let i = 0; i < totalArea.length; i++) {
+        totalArea[i].areaType = 0;
+        for (let j = 0; j < trainRecord.length; j++) {
+          // 获取每个部位的动作的种类数
+          if (trainRecord[j].actionArea === totalArea[i].area) {
+            totalArea[i].areaType += 1;
+          }
         }
       }
-    }
-    //设置全局变量的记录
-    app.globalData.trainRecord = trainRecord;
+      //设置全局变量的记录
+      app.globalData.trainRecord = trainRecord;
 
-    this.setData({
-      TotalType: trainRecord.length,
-      totalArea: totalArea,
-      trainRecord: trainRecord
-    })
-    // 如果训练动作不为空则自动开始计时
-    if (trainRecord.length) {
-      this.onStartClock();
-    }
+      this.setData({
+        TotalType: trainRecord.length,
+        totalArea: totalArea,
+        trainRecord: trainRecord
+      });
+      // 如果训练动作不为空则自动开始计时
+      if (trainRecord.length) {
+        this.onStartClock();
+      }
+    }).catch(console.error)
+
+
   },
-
   /**
    * 生命周期函数--监听页面隐藏
    */

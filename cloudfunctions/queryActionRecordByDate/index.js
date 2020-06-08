@@ -13,5 +13,7 @@ exports.main = async (event, context) => {
 
   return db.collection('actionRecords').where({
     openId : openId,
+    date: event.date,
+    actionId:event.actionId
   }).get()
 }

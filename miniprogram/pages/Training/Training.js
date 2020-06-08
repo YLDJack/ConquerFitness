@@ -204,7 +204,16 @@ Page({
     trainGroups[index1].Complish = !trainGroups[index1].Complish;
     // 如果动作已完成则添加完成的容量
     if (trainGroups[index1].Complish) {
+
       trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
+      //如果当前动作的训练重量大于历史重量，则将其设置为最大重量
+      if (trainGroups[index1].trainWeight > trainRecord[index].maxWeight) {
+        trainRecord[index].maxWeight = trainGroups[index1].trainWeight;
+      }
+      //如果当前动作的训练容量大于历史容量，则将其设置为最大容量
+      if (trainRecord[index].trainComplishCount > trainRecord[index].maxCount) {
+        trainRecord[index].maxCount = trainRecord[index].trainComplishCount;
+      }
       // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
       this.countArea();
     } else {
@@ -594,8 +603,8 @@ Page({
     });
   },
   // 闹钟弹出层关闭事件
-  onCloseClock() {
-    this.countdownFinished();
+  onCloseClock(event) {
+    this.countdownFinished(event);
     const countDown = this.selectComponent('#control-count-down');
     countDown.reset();
   },
@@ -603,6 +612,8 @@ Page({
   onCloseAerobicClock(event) {
     let index1 = event.currentTarget.dataset.index1;
     let index = event.currentTarget.dataset.index;
+    let trainRecord = this.data.trainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
     let totalArea = this.data.totalArea;
     let aeroseconds = this.data.aeroseconds;
     let aerominutes = this.data.aerominutes;
@@ -610,8 +621,8 @@ Page({
     let time = (aerohour + parseInt(aerominutes)) + '分' + aeroseconds + '秒';
     let name = '#aerobictime' + index + '' + index1;
     console.log('iconname', name);
-    const icon = this.selectComponent(name);
-    console.log('icon', this)
+    const icon = this.selectComponent(name)
+    trainGroups[index1].trainRestTime = (aerohour * 3600 + aerominutes * 60 + aeroseconds) * 1000;
     icon.setData({
       info: time
     });
@@ -633,16 +644,28 @@ Page({
       });
   },
   // 结束倒计时时触发的事件
-  countdownFinished() {
+  countdownFinished(event) {
+    // 动作的下边index
+    const index = event.currentTarget.dataset.index;
+    // 动作组数的下标
+    const index1 = event.currentTarget.dataset.index1;
+    let trainRecord = this.data.trainRecord;
+    let trainGroups = trainRecord[index].trainGroups;
     let startRest = this.data.startRest;
     let stopRest = Date.now();
     // 每次开始倒计时前都重新获取数据中的倒计时事件
     const countDown = this.selectComponent('#control-count-down');
-    let index = countDown.data.actionIndex;
-    let index1 = countDown.data.groupIndex;
+    let index2 = countDown.data.actionIndex;
+    let index3 = countDown.data.groupIndex;
     let time = (stopRest - startRest) / 1000;
     let time1 = time.toFixed(0) + 's';
-    const icon = this.selectComponent('#resttime' + index + '' + index1);
+    const icon = this.selectComponent('#resttime' + index2 + '' + index3);
+
+    // 将实际的休息时间传递给动作记录数组
+    if (trainGroups[index1].Complish) {
+      trainGroups[index1].trainRestTime = time * 1000;
+    }
+
     icon.setData({
       info: time1
     });
@@ -761,6 +784,12 @@ Page({
   onFinishTraining() {
     let date = utils.formatDate(new Date());
     let trainRecord = this.data.trainRecord;
+    let totalArea = this.data.totalArea;
+    let TotalType = this.data.TotalType;
+    let TotalGroup = this.data.TotalGroup;
+    let TotalCount = this.data.TotalCount;
+    let TrainMark = this.data.TrainMark;
+    console.log('训练备注',TrainMark);
 
     const toast = Toast.loading({
       mask: true,
@@ -776,7 +805,7 @@ Page({
       // 查询数据库中当天的记录是否已经存在，若存在则进行更新，否则直接进行添加
       wx.cloud.callFunction({
         // 云函数名称
-        name: 'queryActionRecord',
+        name: 'queryActionRecordByDate',
         // 传给云函数的参数
         data: {
           date: date,
@@ -880,7 +909,13 @@ Page({
             // 传给云函数的参数
             data: {
               date: date,
-              trainRecord: trainRecord
+              trainRecord: trainRecord,
+              TrainMark: TrainMark,
+              TotalType: TotalType,
+              TotalGroup:TotalGroup,
+              TotalCount:TotalCount,
+              totalArea: totalArea,
+              
             },
             success: res => {
               toast.clear();
@@ -905,7 +940,12 @@ Page({
             // 传给云函数的参数
             data: {
               date: date,
-              trainRecord: trainRecord
+              TrainMark: TrainMark,
+              trainRecord: trainRecord,
+              TotalType: TotalType,
+              TotalGroup:TotalGroup,
+              TotalCount:TotalCount,
+              totalArea: totalArea,
             },
             success: res => {
               toast.clear();
@@ -968,7 +1008,6 @@ Page({
 
     for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < trainingActions.length; j++) {
-        areas.add(trainingActions[j].actionArea);
         // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
         if (trainRecord[i]._id == trainingActions[j]._id) {
           trainingActions.splice(j, 1);
@@ -992,21 +1031,24 @@ Page({
       })
       console.log('3、res', res.result.data);
       let actionRecord = res.result.data;
-      for (let i = 0; i < actionRecord.length; i++) {
-        for (let j = 0; j < trainingActions.length; j++) {
-          trainingActions[j].trainCount = 0;
-          trainingActions[j].trainComplishCount = 0;
-          trainingActions[j].trainGroups = [{
-            trainWeight: '',
-            trainNumber: '',
-            trainRestTime: 30 * 1000,
-            Complish: false
-          }]
-          trainingActions[j].maxCount = 0;
-          trainingActions[j].maxWeight = 0;
-          if (actionRecord[i].actionId === trainingActions[j]._id) {
-            trainingActions[j].maxCount = actionRecord[i].maxCount;
-            trainingActions[j].maxWeight = actionRecord[i].maxWeight;
+      for (let i = 0; i < trainingActions.length; i++) {
+        areas.add(trainingActions[i].actionArea);
+        trainingActions[i].trainCount = 0;
+        trainingActions[i].trainComplishCount = 0;
+        trainingActions[i].trainGroups = [{
+          trainReamark:'',
+          trainWeight: '',
+          trainNumber: '',
+          trainRestTime: 30 * 1000,
+          Complish: false
+        }]
+        trainingActions[i].maxCount = 0;
+        trainingActions[i].maxWeight = 0;
+        // 解决每次只能获取最后一个动作的bug
+        for (let j = 0; j < actionRecord.length; j++) {
+          if (actionRecord[j].actionId === trainingActions[i]._id) {
+            trainingActions[i].maxCount = actionRecord[j].maxCount;
+            trainingActions[i].maxWeight = actionRecord[j].maxWeight;
           }
         }
 
@@ -1056,9 +1098,6 @@ Page({
       }
     }).catch(console.error)
 
-
-  },
-  loadActionRecord() {
 
   },
   /**

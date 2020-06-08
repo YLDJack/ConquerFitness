@@ -16,7 +16,12 @@ exports.main = async (event, context) => {
     data: {
       openId: openId,
       date: event.date,
-      trainRecord: event.trainRecord
+      trainRecord: event.trainRecord,
+      TrainMark: event.TrainMark,
+      TotalType: event.TotalType,
+      TotalGroup: event.TotalGroup,
+      TotalCount: event.TotalCount,
+      totalArea: event.totalArea,
     }
   })
 }

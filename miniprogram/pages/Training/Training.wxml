@@ -1,3 +1,4 @@
+<van-toast id="van-toast" />
 <!-- 正计时秒表 -->
 <view class="miaobiao">
 	<view class="count">
@@ -9,7 +10,7 @@
 		<van-icon name="replay" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onStopClock" />
 	</view>
 	<view class="countbutton">
-		<van-button type="danger" size="small">完成训练</van-button>
+		<van-button type="danger" size="small" bind:click="onFinishTraining">完成训练</van-button>
 	</view>
 </view>
 
@@ -45,14 +46,16 @@
 			<view slot="title" class="titleandweight">
 				<text>{{item.actionName}}</text>
 				<view wx:if="{{item.actionType === '有氧训练'}}">
-					<van-tag plain type="danger"> 消耗卡路里：</van-tag>
-					<van-tag type="danger">350卡</van-tag>
+					<van-tag plain type="danger"> 最大消耗：</van-tag>
+					<van-tag type="danger">{{item.maxCount}}卡</van-tag>
+					<van-tag plain type="primary"> 最长时间：</van-tag>
+					<van-tag type="primary">{{item.maxWeight}}分</van-tag>
 				</view>
 				<view wx:else>
 					<van-tag plain type="danger">最大重量：</van-tag>
-					<van-tag type="danger">20KG</van-tag>
+					<van-tag type="danger">{{item.maxWeight}}Kg</van-tag>
 					<van-tag plain type="primary"> 最大容量：</van-tag>
-					<van-tag type="primary">350</van-tag>
+					<van-tag type="primary">{{item.maxCount}}</van-tag>
 				</view>
 			</view>
 
@@ -146,11 +149,12 @@
 
 			<!-- 有氧运动 -->
 			<view wx:if="{{item.actionType === '有氧训练'}}">
-				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
+				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="{{index1}}">
 					<view class="groupnum">{{index1+1}}</view>
 					<!-- 倒计时和确认模块 -->
 					<view class="traincountdown">
 						<van-button bind:click="showAerobicClockPopup" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)">开始计时</van-button>
+						<view>已消耗卡路里:{{item.trainWeight}}</view>
 						<!-- 休息倒计时按钮 -->
 						<van-icon name="underway-o" id="aerobictime{{index}}{{index1}}" size="50rpx" bind:click="showAerobicClockPopup" />
 						<!-- 有氧运动的正计时 -->
@@ -199,9 +203,9 @@
 						<!-- 休息倒计时按钮 -->
 						<van-icon name="underway-o" id="resttime{{index}}{{index1}}" size="50rpx" bind:click="showClockPopup" data-index1="{{index1}}" data-index="{{index}}" />
 						<!-- 休息倒计时弹出层 -->
-						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)">
+						<van-popup show="{{ showClock }}" closeable round bind:close="onCloseClock" custom-style="width:400rpx;height:450rpx;text-align:center;background-color:rgb(38,38,38)" data-index1="{{index1}}" data-index="{{index}}">
 							<view class="resttime">
-								<van-count-down use-slot id="control-count-down" time="{{item.trainRestTime}}" format="mm:ss" auto-start="{{ false }}" bind:change="onChangeClock" bind:finish="countdownFinished" data-index1="{{index1}}">
+								<van-count-down use-slot id="control-count-down" time="{{item.trainRestTime}}" format="mm:ss" auto-start="{{ false }}" bind:change="onChangeClock" bind:finish="countdownFinished" data-index1="{{index1}}" data-index="{{index}}">
 									<text class="item">{{ timeData.minutes }}</text>
 									<text class="symbal">:</text>
 									<text class="item">{{ timeData.seconds }}</text>
@@ -245,9 +249,9 @@
 			<!-- label插槽 -->
 			<view slot="label">
 				<van-tag plain type="danger">最大重量：</van-tag>
-				<van-tag type="danger">20KG</van-tag>
+				<van-tag type="danger">{{item.maxWeight}}Kg</van-tag>
 				<van-tag plain type="primary"> 最大容量：</van-tag>
-				<van-tag type="primary">350</van-tag>
+				<van-tag type="primary">{{item.maxCount}}</van-tag>
 			</view>
 			<!-- 使用slot插槽显示图片 -->
 			<view slot="icon" class="icon">

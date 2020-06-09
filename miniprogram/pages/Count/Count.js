@@ -50,16 +50,20 @@ Page({
     //tabs的初始选中状态
     active: 0,
     // coll初始选中状态
-    activeNames: ['0'],
+    activeNames: [],
     trainRecord: []
   },
   //跳转动作详情页面
-  showDesc() {
+  showDesc(event) {
+    let actionId = event.currentTarget.dataset.actionid;
+    let actionName = event.currentTarget.dataset.actionname;
+    console.log('点击的id', actionName);
     wx.navigateTo({
-      url: "../ActionDesc/ActionDesc",
+      url: "../ActionDesc/ActionDesc?actionId=" + actionId + "&actionName=" + actionName,
     })
   },
   onCollChange(event) {
+    console.log(event.detail);
     this.setData({
       activeNames: event.detail
     });
@@ -161,6 +165,10 @@ Page({
           pieSeries: pieSeries
         })
         console.log('绘图的data', this.data.pieSeries[0].data);
+        // 此处要与标签的id一致不是canvasid
+        this.echartsComponnet = this.selectComponent('#mychart-dom-pie');
+        this.init_echarts();
+        // 获取下拉列表的数据
       },
       fail: error => {
         console.log(error);
@@ -192,10 +200,6 @@ Page({
       })
     }
     this.getChartData();
-    // 此处要与标签的id一致不是canvasid
-    this.echartsComponnet = this.selectComponent('#mychart-dom-pie');
-    this.init_echarts();
-    // 获取下拉列表的数据
     this.loadTrainedRecords();
   },
 
@@ -254,19 +258,19 @@ Page({
           }
         }
 
-        console.log('合并前的数组',classifiedTrainRecord);
+        console.log('合并前的数组', classifiedTrainRecord);
 
         // 合并两个相同的动作
         for (let i = 0; i < classifiedTrainRecord.length; i++) {
-          for (let j = 0; j < classifiedTrainRecord[i].trainRecord.length-1; j++) {
-            if(classifiedTrainRecord[i].trainRecord[j]._id === classifiedTrainRecord[i].trainRecord[j+1]._id){
-              classifiedTrainRecord[i].trainRecord[j].date = classifiedTrainRecord[i].trainRecord[j].date + ' ' +  classifiedTrainRecord[i].trainRecord[j+1].date;
-              classifiedTrainRecord[i].trainRecord[j].trainComplishCount += classifiedTrainRecord[i].trainRecord[j+1].trainComplishCount;
-              classifiedTrainRecord[i].trainRecord.splice(j+1,1);
+          for (let j = 0; j < classifiedTrainRecord[i].trainRecord.length - 1; j++) {
+            if (classifiedTrainRecord[i].trainRecord[j]._id === classifiedTrainRecord[i].trainRecord[j + 1]._id) {
+              classifiedTrainRecord[i].trainRecord[j].date = classifiedTrainRecord[i].trainRecord[j].date + ' ' + classifiedTrainRecord[i].trainRecord[j + 1].date;
+              classifiedTrainRecord[i].trainRecord[j].trainComplishCount += classifiedTrainRecord[i].trainRecord[j + 1].trainComplishCount;
+              classifiedTrainRecord[i].trainRecord.splice(j + 1, 1);
             }
-            
+
           }
-          
+
         }
 
         console.log('训练记录中的总部位', classifiedTrainRecord);

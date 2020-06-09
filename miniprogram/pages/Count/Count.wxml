@@ -15,12 +15,12 @@
 							<!-- 下方动作详情页 -->
 						</view>
 						<view>
-							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse" accordion>
-								<van-collapse-item title="{{item.area}}" name="{{index}}+1" value="本周{{item.trainRecord.length}}次" wx:for="{{trainRecord}}" wx:key="{{index}}">
+							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">
+								<van-collapse-item title="{{item.area}}" name="{{index}}" value="本周完成{{item.trainRecord.length}}种动作" wx:for="{{trainRecord}}" wx:key="{{index}}">
 									<!-- 详情动作卡片 -->
 									<van-card title="{{record.actionName}}" thumb="{{ record.actionImage }}" wx:for="{{item.trainRecord}}" wx:for-index="recordIndex" wx:for-item="record">
 										<view slot="footer">
-											<van-icon name="arrow" bind:click="showDesc" />							
+											<van-icon name="arrow" bind:click="showDesc" data-actionid="{{record._id}}" data-actionname="{{record.actionName}}"/>
 										</view>
 										<!-- 数据区域 -->
 										<view slot="bottom">

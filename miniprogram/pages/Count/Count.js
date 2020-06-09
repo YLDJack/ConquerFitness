@@ -20,6 +20,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 获取的训练记录
+    trainRecord: [],
     pieec: {
       lazyLoad: true, // 延迟加载
     },
@@ -48,7 +50,7 @@ Page({
     //tabs的初始选中状态
     active: 0,
     // coll初始选中状态
-    activeNames: ['1'],
+    activeNames: ['0'],
     trainRecord: []
   },
   //跳转动作详情页面
@@ -66,7 +68,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
 
   },
   //初始化图表
@@ -93,14 +94,17 @@ Page({
         formatter: '{b}: {c} ({d}%)'
       },
       legend: {
+        type: 'scroll',
         orient: 'vertical',
-        right: 10
+        right: 5,
+        itemWidth: 5, //小圆点的宽度
+        icon: 'rect'
       },
     };
     return option
   },
   // 获取环形图数据
-  getChartData: function () {
+  getChartData: async function () {
     // 获取本周的训练记录
     let dayArray = [];
     let weekNumArray = [];
@@ -115,8 +119,8 @@ Page({
     console.log('日期数', dayArray);
     console.log('星期数', weekNumArray);
 
-   
-    wx.cloud.callFunction({
+
+    await wx.cloud.callFunction({
       // 云函数名称
       name: 'getTotalAreaByDates',
       // 传给云函数的参数
@@ -190,26 +194,29 @@ Page({
     this.getChartData();
     // 此处要与标签的id一致不是canvasid
     this.echartsComponnet = this.selectComponent('#mychart-dom-pie');
-    this.init_echarts()
+    this.init_echarts();
+    // 获取下拉列表的数据
+    this.loadTrainedRecords();
   },
 
   // 获取训练记录渲染下方的下拉列表
-  loadTrainedRecords() {
+  async loadTrainedRecords() {
     // 获取本周的训练记录
     let dayArray = [];
     let weekNumArray = [];
     let areas = new Set();
-    let pieSeries = this.data.pieSeries;
-    let data = [];
+    let classifiedTrainRecord = [];
+    let trainRecord = [];
     // 获取本周的时间
     for (let i = 1; i < 8; i++) {
       dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
       weekNumArray.push(dayjs().day(i).format('dddd'))
     }
     console.log('日期数', dayArray);
-    console.log('星期数', weekNumArray);
 
-    wx.cloud.callFunction({
+
+
+    await wx.cloud.callFunction({
       // 云函数名称
       name: 'getTrainedRecordByDates',
       // 传给云函数的参数
@@ -217,15 +224,61 @@ Page({
         dayArray: dayArray
       },
       success: res => {
+
         wx.showToast({
-          title: '获取图表数据成功',
+          title: '获取训练记录成功',
         })
-       
+        let result = res.result.data;
+        for (let i = 0; i < result.length; i++) {
+          for (let j = 0; j < result[i].trainRecord.length; j++) {
+            areas.add(result[i].trainRecord[j].actionArea);
+            trainRecord.push(result[i].trainRecord[j]);
+          }
+        }
+        areas = Array.from(areas);
+
+        for (let i = 0; i < areas.length; i++) {
+          //  初始化分类好的数组
+          let record = {
+            area: areas[i],
+            trainRecord: []
+          };
+          classifiedTrainRecord.push(record);
+        }
+        //  遍历分类好的数组和训练记录，如果训练记录的area和classifiedTrainRecord的area相等，则将其的动作记录放入到其中
+        for (let j = 0; j < classifiedTrainRecord.length; j++) {
+          for (let i = 0; i < trainRecord.length; i++) {
+            if (trainRecord[i].actionArea === classifiedTrainRecord[j].area) {
+              classifiedTrainRecord[j].trainRecord.push(trainRecord[i]);
+            }
+          }
+        }
+
+        console.log('合并前的数组',classifiedTrainRecord);
+
+        // 合并两个相同的动作
+        for (let i = 0; i < classifiedTrainRecord.length; i++) {
+          for (let j = 0; j < classifiedTrainRecord[i].trainRecord.length-1; j++) {
+            if(classifiedTrainRecord[i].trainRecord[j]._id === classifiedTrainRecord[i].trainRecord[j+1]._id){
+              classifiedTrainRecord[i].trainRecord[j].date = classifiedTrainRecord[i].trainRecord[j].date + ' ' +  classifiedTrainRecord[i].trainRecord[j+1].date;
+              classifiedTrainRecord[i].trainRecord[j].trainComplishCount += classifiedTrainRecord[i].trainRecord[j+1].trainComplishCount;
+              classifiedTrainRecord[i].trainRecord.splice(j+1,1);
+            }
+            
+          }
+          
+        }
+
+        console.log('训练记录中的总部位', classifiedTrainRecord);
+        this.setData({
+          trainRecord: classifiedTrainRecord
+        });
       },
       fail: error => {
+
         console.log(error);
         wx.showToast({
-          title: '获取图表数据失败',
+          title: '获取训练记录失败',
           icon: "none"
         })
       }

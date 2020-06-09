@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/Count/Count",
     "pages/Main/Main",
     "pages/Train/Train",
     "pages/Training/Training",
@@ -7,7 +8,6 @@
     "pages/Feedback/Feedback",
     "pages/setPreferences/setPreferences",
     "pages/Personal_data/Personal_data",
-    "pages/Count/Count",
     "pages/logs/logs",
     "pages/ActionDesc/ActionDesc",
     "pages/ActionAdd/ActionAdd",

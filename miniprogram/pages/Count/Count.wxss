@@ -5,10 +5,10 @@
 }
 ec-canvas {
   width: 100%;
-  height: 300rpx;
+  height: 350rpx;
 }
 .collapse{
-  margin-top: 300rpx;
+  margin-top: 350rpx;
 }
 .container {
   /* position: absolute; */

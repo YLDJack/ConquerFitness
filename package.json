@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/YLDJack/ConquerFitness#readme",
   "dependencies": {
-    "@vant/weapp": "^1.2.2"
+    "@vant/weapp": "^1.2.2",
+    "dayjs": "^1.8.28"
   }
 }

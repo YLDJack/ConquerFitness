@@ -1,114 +1,18 @@
 // pages/Count.js
 import * as echarts from '../../ec-canvas/echarts';
+import Toast from '@vant/weapp/toast/toast';
+// 由于utils里zh-cn的依赖不对，所以要去源码里修改
+require('../../utils/dayjs/locale/zh-cn');
+import dayjs from '../../utils/dayjs/index';
+import weekday from '../../utils/dayjs/plugin/weekday/index';
+import weekOfYear from '../../utils/dayjs/plugin/weekOfYear/index';
+
+// dayjs时间周期处理工具
+dayjs.locale('zh-cn');
+dayjs.extend(weekday);
+dayjs.extend(weekOfYear);
 const app = getApp();
 
-// 初始化饼图的方法
-function initPieChart(canvas, width, height, dpr) {
-  const chart = echarts.init(canvas, null, {
-    width: width,
-    height: height,
-    devicePixelRatio: dpr // new
-  });
-  canvas.setChart(chart);
-
-  const option = {
-    backgroundColor: "#ffffff",
-    color: ["#37A2DA", "#32C5E9", "#67E0E3", "#91F2DE", "#FFDB5C", "#FF9F7F"],
-    series: [{
-      label: {
-        normal: {
-          fontSize: 14
-        }
-      },
-      type: 'pie',
-      center: ['50%', '50%'],
-      radius: ['40%', '60%'],
-      data: [{
-        value: 55,
-        name: '胸部'
-      }, {
-        value: 20,
-        name: '背部'
-      }, {
-        value: 10,
-        name: '手臂'
-      }, {
-        value: 20,
-        name: '腿部'
-      }, {
-        value: 38,
-        name: '肩部'
-      }]
-    }]
-  };
-
-  chart.setOption(option);
-  return chart;
-};
-
-//初始化折线图的方法
-function initlineChart(canvas, width, height, dpr) {
-
-  const chart = echarts.init(canvas, null, {
-    width: width,
-    height: height,
-    devicePixelRatio: dpr // new
-  });
-  canvas.setChart(chart);
-
-  const option = {
-    color: ["#37A2DA", "#67E0E3", "#9FE6B8"],
-    legend: {
-      data: ['胸部', '背部', '腿部'],
-      top: 50,
-      left: 'center',
-      backgroundColor: 'red',
-      z: 100
-    },
-    grid: {
-      containLabel: true
-    },
-    tooltip: {
-      show: true,
-      trigger: 'axis'
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-      // show: false
-    },
-    yAxis: {
-      x: 'center',
-      type: 'value',
-      splitLine: {
-        lineStyle: {
-          type: 'dashed'
-        }
-      }
-      // show: false
-    },
-    series: [{
-      name: '胸部',
-      type: 'line',
-      smooth: true,
-      data: [18, 36, 65, 30, 78, 40, 33]
-    }, {
-      name: '背部',
-      type: 'line',
-      smooth: true,
-      data: [12, 50, 51, 35, 70, 30, 20]
-    }, {
-      name: '腿部',
-      type: 'line',
-      smooth: true,
-      data: [10, 30, 31, 50, 40, 20, 10]
-    }]
-  };
-
-  chart.setOption(option);
-  return chart;
-};
 
 Page({
 
@@ -117,17 +21,35 @@ Page({
    */
   data: {
     pieec: {
-      onInit: initPieChart
+      lazyLoad: true, // 延迟加载
     },
-    lineec: {
-      onInit: initlineChart
-    },
+    //echarts饼图的数据列表
+    pieSeries: [{
+      label: {
+        normal: {
+          fontSize: 14
+        }
+      },
+      type: 'pie',
+      center: ['50%', '50%'],
+      radius: ['40%', '60%'],
+      // 文字标签显示
+      label: {
+        show: true, //开启显示
+        position: 'top', //在上方显示
+        formatter: '{b}\n{c}', //显示数值和百分比
+        fontSize: 14,
+        align: 'center',
+        verticalAlign: 'center'
+      },
+      // 获取的数据
+      data: []
+    }],
     //tabs的初始选中状态
     active: 0,
     // coll初始选中状态
     activeNames: ['1'],
-    imageURL: "http://photocdn.sohu.com/20160305/mp61995258_1457145757198_6.gif",
-    url: "pages/ActionDesc/ActionDesc",
+    trainRecord: []
   },
   //跳转动作详情页面
   showDesc() {
@@ -144,12 +66,107 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // // 设置openid
-    // if (app.globalData.openid) {
-    //   this.setData({
-    //     openid: app.globalData.openid
-    //   })
-    // }
+
+
+  },
+  //初始化图表
+  init_echarts: function () {
+    this.echartsComponnet.init((canvas, width, height, dpr) => {
+      // 初始化图表,init中的第二个参数可以设置主题颜色为亮色
+      const Chart = echarts.init(canvas, 'light', {
+        width: width,
+        height: height,
+        devicePixelRatio: dpr // new
+      });
+      Chart.setOption(this.getOption());
+      // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      return Chart;
+    });
+  },
+  // 获取环形图eharts设置数据
+  getOption: function () {
+    var option = {
+      backgroundColor: "#ffffff",
+      series: this.data.pieSeries,
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b}: {c} ({d}%)'
+      },
+      legend: {
+        orient: 'vertical',
+        right: 10
+      },
+    };
+    return option
+  },
+  // 获取环形图数据
+  getChartData: function () {
+    // 获取本周的训练记录
+    let dayArray = [];
+    let weekNumArray = [];
+    let areas = new Set();
+    let pieSeries = this.data.pieSeries;
+    let data = [];
+    // 获取本周的时间
+    for (let i = 1; i < 8; i++) {
+      dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
+      weekNumArray.push(dayjs().day(i).format('dddd'))
+    }
+    console.log('日期数', dayArray);
+    console.log('星期数', weekNumArray);
+
+   
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getTotalAreaByDates',
+      // 传给云函数的参数
+      data: {
+        dayArray: dayArray
+      },
+      success: res => {
+        wx.showToast({
+          title: '获取图表数据成功',
+        })
+        let result = res.result.data;
+        console.log('result', result);
+        for (let i = 0; i < result.length; i++) {
+          for (let j = 0; j < result[i].totalArea.length; j++) {
+            areas.add(result[i].totalArea[j].area);
+          }
+        }
+        areas = Array.from(areas);
+        console.log('绘图的areas', areas);
+        // 获取所有的部位
+        for (let i = 0; i < areas.length; i++) {
+          data.push({
+            name: areas[i],
+            value: 0
+          });
+          // 获取部位的计数
+          for (let j = 0; j < result.length; j++) {
+            for (let k = 0; k < result[j].totalArea.length; k++) {
+              if (data[i].name === result[j].totalArea[k].area) {
+                data[i].value += result[j].totalArea[k].areaCount;
+              }
+            }
+          }
+        }
+
+        pieSeries[0].data = data;
+        this.setData({
+          pieSeries: pieSeries
+        })
+        console.log('绘图的data', this.data.pieSeries[0].data);
+      },
+      fail: error => {
+        console.log(error);
+        wx.showToast({
+          title: '获取图表数据失败',
+          icon: "none"
+        })
+      }
+    });
+
   },
 
   /**
@@ -165,13 +182,55 @@ Page({
   onShow: function () {
     if (typeof this.getTabBar === 'function' &&
       this.getTabBar()) {
-      console.log('设置选中项 3')
+      console.log('选中页面 3')
       this.getTabBar().setData({
         selected: 3
       })
     }
+    this.getChartData();
+    // 此处要与标签的id一致不是canvasid
+    this.echartsComponnet = this.selectComponent('#mychart-dom-pie');
+    this.init_echarts()
   },
 
+  // 获取训练记录渲染下方的下拉列表
+  loadTrainedRecords() {
+    // 获取本周的训练记录
+    let dayArray = [];
+    let weekNumArray = [];
+    let areas = new Set();
+    let pieSeries = this.data.pieSeries;
+    let data = [];
+    // 获取本周的时间
+    for (let i = 1; i < 8; i++) {
+      dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
+      weekNumArray.push(dayjs().day(i).format('dddd'))
+    }
+    console.log('日期数', dayArray);
+    console.log('星期数', weekNumArray);
+
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getTrainedRecordByDates',
+      // 传给云函数的参数
+      data: {
+        dayArray: dayArray
+      },
+      success: res => {
+        wx.showToast({
+          title: '获取图表数据成功',
+        })
+       
+      },
+      fail: error => {
+        console.log(error);
+        wx.showToast({
+          title: '获取图表数据失败',
+          icon: "none"
+        })
+      }
+    });
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */

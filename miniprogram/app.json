@@ -12,7 +12,8 @@
     "pages/ActionDesc/ActionDesc",
     "pages/ActionAdd/ActionAdd",
     "pages/DataRecord/DataRecord",
-    "pages/addTemplateDisplay/addTemplateDisplay"
+    "pages/addTemplateDisplay/addTemplateDisplay",
+    "pages/ActionDetial/ActionDetial"
   ],
   "tabBar": {
     "custom": true,

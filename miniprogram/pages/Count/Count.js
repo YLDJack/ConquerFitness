@@ -148,7 +148,7 @@ Page({
       Chart.setOption(this.getOption());
       // 注意这里一定要返回 chart 实例，否则会影响事件处理等
       // 添加图标点击事件
-      Chart.on('click', function (e) {
+      Chart.on('mousedown', function (e) {
         console.log('图表点击事件', e.data.name);
         wx.navigateTo({
           url: e.data.url+'?area='+e.data.name,

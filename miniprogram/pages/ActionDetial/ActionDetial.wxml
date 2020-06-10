@@ -1,2 +1,2 @@
 <!--miniprogram/pages/ActionDetial/ActionDetial.wxml-->
-<text>ActionDetial.wxml</text>
+<text>{{area}}</text>

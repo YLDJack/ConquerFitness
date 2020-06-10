@@ -103,7 +103,7 @@
   height: 100%;
   /* background-repeat: no-repeat; */
   /* background-size: cover; */
-  background-image: url('https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/banner.png?sign=df2f69211ddae10723e913097e853910&t=1591517684');
+  background-image: url('https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/banner0608.jpg?sign=5361759316b849819347f2ad43904538&t=1591596282');
   background-position:0rpx -260rpx;
 }
 
@@ -151,7 +151,7 @@
 
 .module-scroll .item-navigator {
   padding: 20rpx;
-  width: 500rpx;
+  width: 460rpx;
   margin-right: 20rpx;
   display: inline-block;
 

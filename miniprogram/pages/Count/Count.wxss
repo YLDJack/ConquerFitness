@@ -3,6 +3,7 @@
   margin: 30px;
   text-align: center;
 }
+
 /* tabs的标签栏 */
 .container {
   /* position: absolute; */
@@ -17,13 +18,30 @@
   box-sizing: border-box;
   height: 550rpx;
 }
+
 ec-canvas {
   width: 100%;
   height: 100%;
 }
 
-.collapse{
+/* 下拉菜单 */
+.collapse {
   margin-top: 550rpx;
+}
+
+/* 动作卡片的整体样式 */
+.actionCard {
+  margin-top: 20rpx;
+}
+
+.cardTitle {
+  font-size: 35rpx;
+  font-weight: bold;
+}
+
+.cardThumb {
+  width: 100rpx;
+  height: 100rpx;
 }
 
 .picker-pos {
@@ -32,6 +50,6 @@ ec-canvas {
   color: blueviolet;
 }
 
-.totaltrain{
+.totaltrain {
   margin: 30rpx;
 }

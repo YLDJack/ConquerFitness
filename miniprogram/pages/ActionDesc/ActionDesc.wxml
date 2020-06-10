@@ -1,11 +1,15 @@
 <!--pages/ActionDesc/ActionDesc.wxml-->
 <!-- 标题 -->
-<van-nav-bar title="杠铃卧推" />
+<van-nav-bar title="{{actionName}}" />
 <!-- 弹出层Tabs -->
-<van-tabs type="card" style="margin-up:20rpx">
+<van-tabs type="card" style="margin-up:20rpx" bind:change="onTabChange">
 	<!-- 详情tab -->
 	<van-tab title="肌容量">
-		<canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" style="height:400rpx;" bindtouchstart="linetouchHandler"></canvas>
+		<view class="container">
+			<!-- 线性表 -->
+			<ec-canvas id="mycountlinechart" canvas-id="mychart-line" ec="{{ lineec }}">
+			</ec-canvas>
+		</view>
 		<view class="discribe">
 			<text>
       肌容量在健身中，是用来衡量你的力量训练的强度的。肌容量=训练次数*训练组数*重量
@@ -15,6 +19,10 @@
 
 	<!-- 详情tab -->
 	<van-tab title="最大重量">
-
+		<view class="container">
+			<!-- 线性表 -->
+			<ec-canvas id="mymaxweightlinechart" canvas-id="mychart-line" ec="{{ lineec1 }}">
+			</ec-canvas>
+		</view>
 	</van-tab>
 </van-tabs>

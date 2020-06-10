@@ -1,5 +1,4 @@
 {
-  "enablePullDownRefresh": true,
   "navigationBarTitleText": "身体数据",
   "usingComponents": {
     "ec-canvas": "../../ec-canvas/ec-canvas",

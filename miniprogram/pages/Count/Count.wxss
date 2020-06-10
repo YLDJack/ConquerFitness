@@ -3,13 +3,8 @@
   margin: 30px;
   text-align: center;
 }
-ec-canvas {
-  width: 100%;
-  height: 300rpx;
-}
-.collapse{
-  margin-top: 300rpx;
-}
+
+/* tabs的标签栏 */
 .container {
   /* position: absolute; */
   top: 0;
@@ -21,13 +16,40 @@ ec-canvas {
   align-items: center;
   /* justify-content: space-between; */
   box-sizing: border-box;
+  height: 550rpx;
 }
+
+ec-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* 下拉菜单 */
+.collapse {
+  margin-top: 550rpx;
+}
+
+/* 动作卡片的整体样式 */
+.actionCard {
+  margin-top: 20rpx;
+}
+
+.cardTitle {
+  font-size: 35rpx;
+  font-weight: bold;
+}
+
+.cardThumb {
+  width: 100rpx;
+  height: 100rpx;
+}
+
 .picker-pos {
   margin-top: -130rpx;
   margin-left: 150rpx;
   color: blueviolet;
 }
 
-.totaltrain{
+.totaltrain {
   margin: 30rpx;
 }

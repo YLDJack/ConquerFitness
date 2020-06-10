@@ -963,6 +963,7 @@ Page({
             }
           })
         }
+        app.globalData.complishTraining = true;
       },
       fail: error => {
         toast.clear();
@@ -1042,6 +1043,7 @@ Page({
           trainRestTime: 30 * 1000,
           Complish: false
         }]
+        trainingActions[i].date = utils.formatDate(new Date());
         trainingActions[i].maxCount = 0;
         trainingActions[i].maxWeight = 0;
         // 解决每次只能获取最后一个动作的bug

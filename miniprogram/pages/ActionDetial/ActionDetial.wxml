@@ -1,0 +1,2 @@
+<!--miniprogram/pages/ActionDetial/ActionDetial.wxml-->
+<text>{{area}}</text>

@@ -25,6 +25,9 @@ Page({
     pieec: {
       lazyLoad: true, // 延迟加载
     },
+    lineec: {
+      lazyLoad: true, // 延迟加载
+    },
     //echarts饼图的数据列表
     pieSeries: [{
       label: {
@@ -47,11 +50,61 @@ Page({
       // 获取的数据
       data: []
     }],
+    //训练量数据
+    countSeries: [{
+      data: [],
+      name: '',
+      smooth: false,
+      // 圆圈的大小
+      symbol: 'circle',
+      symbolSize: 10,
+      type: 'line',
+      // 设置始终显示数据
+      itemStyle: {
+        normal: {
+          label: {
+            color: 'lightred',
+            // 设置单位
+            show: true, //开启显示
+            position: 'top', //在上方显示
+          }
+        }
+      },
+      // 显示最大值最小值以及平均值
+      markPoint: {
+        data: [{
+            type: 'max',
+            name: '最大值',
+            symbolSize: 40,
+
+          },
+          {
+            type: 'min',
+            name: '最小值',
+            symbolSize: 40
+          }
+        ]
+      },
+      // 设置平均值的线
+      markLine: {
+        label: {
+          show: true,
+          position: 'end'
+        },
+        data: [{
+          type: 'average',
+          name: '平均值'
+        }]
+      }
+    }, ],
+    //训练量坐标x轴
+    countAscissaData: [],
     //tabs的初始选中状态
     active: 0,
     // coll初始选中状态
     activeNames: [],
-    trainRecord: []
+    trainRecord: [],
+    trainingDays: 0
   },
   //跳转动作详情页面
   showDesc(event) {
@@ -62,11 +115,19 @@ Page({
       url: "../ActionDesc/ActionDesc?actionId=" + actionId + "&actionName=" + actionName,
     })
   },
+  // 下拉菜单的点击事件
   onCollChange(event) {
     console.log(event.detail);
     this.setData({
       activeNames: event.detail
     });
+  },
+  // tab的切换方法
+  onTabChange(event) {
+    console.log('tab', event.detail.title);
+    if (event.detail.name === 1) {
+      this.getCountChartData();
+    }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -74,7 +135,7 @@ Page({
   onLoad: function (options) {
 
   },
-  //初始化图表
+  //初始化环形图图表
   init_echarts: function () {
     this.echartsComponnet.init((canvas, width, height, dpr) => {
       // 初始化图表,init中的第二个参数可以设置主题颜色为亮色
@@ -104,6 +165,11 @@ Page({
         itemWidth: 5, //小圆点的宽度
         icon: 'rect'
       },
+      title: {
+        show: true,
+        text: '本周训练' + this.data.trainingDays + '次',
+        size: 12
+      }
     };
     return option
   },
@@ -135,15 +201,16 @@ Page({
         wx.showToast({
           title: '获取图表数据成功',
         })
+        // 处理获取来的数据
         let result = res.result.data;
-        console.log('result', result);
+        console.log('获取到data', result);
         for (let i = 0; i < result.length; i++) {
           for (let j = 0; j < result[i].totalArea.length; j++) {
             areas.add(result[i].totalArea[j].area);
           }
         }
         areas = Array.from(areas);
-        console.log('绘图的areas', areas);
+
         // 获取所有的部位
         for (let i = 0; i < areas.length; i++) {
           data.push({
@@ -180,7 +247,233 @@ Page({
     });
 
   },
+  //初始化容量图表
+  init_Countecharts: function () {
+    this.echartsComponnet.init((canvas, width, height, dpr) => {
+      // 初始化图表,init中的第二个参数可以设置主题颜色
+      const Chart = echarts.init(canvas,'light', {
+        width: width,
+        height: height,
+        devicePixelRatio: dpr // new
+      });
+      Chart.setOption(this.getCountOption());
+      // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      return Chart;
+    });
+  },
+  // 获取容量eharts设置数据
+  getCountOption: function () {
+    var that = this;
+    var legendList = []
+    // 将名称放入下方图例中
+    for (var i in that.data.countSeries) {
+      var obj = {
+        name: that.data.countSeries[i].name,
+        icon: 'rect',
+        textStyle: {
+          color: '#000000',
+        }
+      }
+      legendList.push(obj);
 
+      that.data.countSeries[i].data.reverse();
+    }
+    var option = {
+      // 下方的图例折线图的线条代表意义
+      legend: {
+        itemWidth: 5, //小矩形的宽度
+        // itemGap: 25,
+        selectedModel: 'single', //折线可多选
+        inactiveColor: '#ccc', //图例关闭时的颜色
+        data: legendList,
+        bottom:20,
+        // left: 30,
+        z: 100
+      },
+      // 刻度
+      grid: {
+        containLabel: true,
+      },
+      // 指定表的标题
+      title: {
+        show: true,
+        text: '肌容量折线图',
+        left: 'center',
+        subtext: '点击相应的图例可以隐藏数据'
+      },
+      // 悬浮图标
+      tooltip: {
+        show: true,
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross'
+        },
+        position: function (pos, params, dom, rect, size) {
+          var obj = {
+            top: 60
+          };
+          obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 5;
+          return obj;
+        }
+      },
+      xAxis: {
+        //坐标轴名字 name:'日期',
+        // nameLocation:'center',
+        type: 'category',
+        boundaryGap: false,
+        data: that.data.countAscissaData,
+        onZero: true,
+        // show: false
+      },
+      yAxis: {
+        x: 'center',
+        type: 'value',
+        splitLine: {
+          lineStyle: {
+            type: 'dashed'
+          }
+        },
+        axisLine: { //y轴坐标是否显示
+          show: true
+        },
+        axisTick: { //y轴刻度小标是否显示
+          show: true
+        }
+      },
+      series: that.data.countSeries
+    }
+    return option
+  },
+  // 获取容量折线图数据
+  getCountChartData: function () {
+    // 获取本周的训练记录
+    let dayArray = [];
+    let weekNumArray = [];
+    let areas = new Set();
+    let data = [];
+    let countSeries = [];
+    // 处理好的横坐标
+    let countAscissaData = [];
+    // 获取本周的时间
+    for (let i = 1; i < 8; i++) {
+      dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
+      weekNumArray.push(dayjs().day(i).format('dddd'))
+    }
+
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getTotalAreaByDates',
+      // 传给云函数的参数
+      data: {
+        dayArray: dayArray
+      },
+      success: res => {
+        wx.showToast({
+          title: '获取肌容量数据成功',
+        })
+        // 处理获取来的数据
+        let result = res.result.data;
+        console.log('获取到data', result);
+        // 获取数据中的部位
+        for (let i = 0; i < result.length; i++) {
+          // 将日期作为横坐标
+          countAscissaData.push(result[i].date);
+          for (let j = 0; j < result[i].totalArea.length; j++) {
+            areas.add(result[i].totalArea[j].area);
+
+          }
+        }
+        areas = Array.from(areas);
+        // 获取所有的部位
+        for (let i = 0; i < areas.length; i++) {
+          data.push({
+            name: areas[i],
+            value: []
+          });
+          // 获取部位的计数
+          for (let j = 0; j < result.length; j++) {
+            for (let k = 0; k < result[j].totalArea.length; k++) {
+              // 如果部位相同，则将其放入相应部位的value计数中
+              if (data[i].name === result[j].totalArea[k].area) {
+                data[i].value.push(result[j].totalArea[k].areaCount);
+              }
+            }
+          }
+        }
+        console.log('折线图中处理好的data', data);
+
+        for (let j = 0; j < data.length; j++) {
+          countSeries[j] = {
+            data: [],
+            name: '',
+            smooth: false,
+            // 圆圈的大小
+            symbol: 'circle',
+            symbolSize: 10,
+            type: 'line',
+            // 设置始终显示数据
+            itemStyle: {
+              normal: {
+                label: {
+                  color: 'lightred',
+                  // 设置单位
+                  show: true, //开启显示
+                  position: 'top', //在上方显示
+                }
+              }
+            },
+            // 显示最大值最小值以及平均值
+            markPoint: {
+              data: [{
+                  type: 'max',
+                  name: '最大值',
+                  symbolSize: 40,
+
+                },
+                {
+                  type: 'min',
+                  name: '最小值',
+                  symbolSize: 40
+                }
+              ]
+            },
+            // 设置平均值的线
+            markLine: {
+              label: {
+                show: true,
+                position: 'end'
+              },
+              data: [{
+                type: 'average',
+                name: '平均值'
+              }]
+            }
+
+          }
+          countSeries[j].name = data[j].name;
+          countSeries[j].data = data[j].value;
+        }
+
+        console.log('折线图中处理好的data', countSeries);
+
+
+        this.setData({
+          countSeries: countSeries,
+          countAscissaData: countAscissaData
+        });
+        console.log('获取到的动作记录', this.data.countAscissaData);
+        this.echartsComponnet = this.selectComponent('#mychart-dom-line');
+        this.init_Countecharts();
+      },
+      fail: error => {
+        console.log(error);
+        wx.showToast({
+          title: '获取肌容量数据失败',
+          icon: "none"
+        })
+      }
+    });
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -258,8 +551,6 @@ Page({
           }
         }
 
-        console.log('合并前的数组', classifiedTrainRecord);
-
         // 合并两个相同的动作
         for (let i = 0; i < classifiedTrainRecord.length; i++) {
           for (let j = 0; j < classifiedTrainRecord[i].trainRecord.length - 1; j++) {
@@ -275,6 +566,7 @@ Page({
 
         console.log('训练记录中的总部位', classifiedTrainRecord);
         this.setData({
+          trainingDays: result.length,
           trainRecord: classifiedTrainRecord
         });
       },

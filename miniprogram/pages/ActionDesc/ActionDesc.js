@@ -61,10 +61,10 @@ Page({
           name: '平均值'
         }]
       }
-    }, ],
+    },],
     // 肌容量坐标x轴
     countAscissaData: [],
-     // 肌容量图数据
+    // 肌容量图数据
     maxSeries: [{
       data: [],
       smooth: false,
@@ -76,7 +76,7 @@ Page({
       itemStyle: {
         normal: {
           label: {
-             // 设置单位
+            // 设置单位
             formatter: '{c}Kg',
             color: 'lightred',
             // 设置单位
@@ -111,14 +111,14 @@ Page({
           name: '平均值'
         }]
       }
-    }, ],
+    },],
     // 肌容量坐标x轴
     maxAscissaData: []
   },
   // tab的切换方法
-  onTabChange(event){
-    console.log('tab',event.detail.name);
-    if(event.detail.name === 1){
+  onTabChange(event) {
+    console.log('tab', event.detail.name);
+    if (event.detail.name === 1) {
       this.getMaxWeightChartData();
     }
   },
@@ -166,6 +166,10 @@ Page({
       grid: {
         containLabel: true
       },
+      dataZoom: [{
+        type: 'inside',
+        throttle: 50
+      }],
       // 指定表的标题
       title: {
         show: true,
@@ -280,6 +284,10 @@ Page({
       grid: {
         containLabel: true
       },
+      dataZoom: [{
+        type: 'inside',
+        throttle: 20
+      }],
       // 指定表的标题
       title: {
         show: true,

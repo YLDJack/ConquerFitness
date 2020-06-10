@@ -3,13 +3,7 @@
   margin: 30px;
   text-align: center;
 }
-ec-canvas {
-  width: 100%;
-  height: 350rpx;
-}
-.collapse{
-  margin-top: 350rpx;
-}
+/* tabs的标签栏 */
 .container {
   /* position: absolute; */
   top: 0;
@@ -21,7 +15,17 @@ ec-canvas {
   align-items: center;
   /* justify-content: space-between; */
   box-sizing: border-box;
+  height: 550rpx;
 }
+ec-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.collapse{
+  margin-top: 550rpx;
+}
+
 .picker-pos {
   margin-top: -130rpx;
   margin-left: 150rpx;

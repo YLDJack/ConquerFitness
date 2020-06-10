@@ -133,7 +133,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.getChartData();
+    this.loadTrainedRecords();
   },
   //初始化环形图图表
   init_echarts: function () {
@@ -251,7 +252,7 @@ Page({
   init_Countecharts: function () {
     this.echartsComponnet.init((canvas, width, height, dpr) => {
       // 初始化图表,init中的第二个参数可以设置主题颜色
-      const Chart = echarts.init(canvas,'light', {
+      const Chart = echarts.init(canvas, 'light', {
         width: width,
         height: height,
         devicePixelRatio: dpr // new
@@ -286,7 +287,7 @@ Page({
         selectedModel: 'single', //折线可多选
         inactiveColor: '#ccc', //图例关闭时的颜色
         data: legendList,
-        bottom:20,
+        bottom: 20,
         // left: 30,
         z: 100
       },
@@ -492,8 +493,11 @@ Page({
         selected: 3
       })
     }
-    this.getChartData();
-    this.loadTrainedRecords();
+    // 不用每次显示页面都重新加载，应当在完成动作之后再进行重新加载
+    if (app.globalData.complishTraining) {
+      this.getChartData();
+      this.loadTrainedRecords();
+    }
   },
 
   // 获取训练记录渲染下方的下拉列表

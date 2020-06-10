@@ -963,6 +963,7 @@ Page({
             }
           })
         }
+        app.globalData.complishTraining = true;
       },
       fail: error => {
         toast.clear();

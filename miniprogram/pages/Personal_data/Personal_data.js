@@ -9,7 +9,7 @@ Page({
    */
   data: {
     // 默认数据
-    showchart:true,
+    showchart: true,
     // 原本默认的坐标轴数据
     series: [{
         data: [],
@@ -165,6 +165,11 @@ Page({
     },
   },
 
+  // tab的切换方法
+  onTabChange(event) {
+    console.log('tab', event.detail.title);
+  },
+
   tabClick: function (e) {
     this.setData({
       sliderOffset: e.currentTarget.offsetLeft,
@@ -175,10 +180,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getChartData();
-    // 此处要与标签的id一致不是canvasid
-    this.echartsComponnet = this.selectComponent('#mylinechart');
-    this.init_echarts()
+
   },
   //初始化图表
   init_echarts: function () {
@@ -197,8 +199,6 @@ Page({
   // 获取eharts设置数据
   getOption: function () {
     var that = this
-    console.log(that.data.series)
-    console.log(that.data.ascissaData)
     var legendList = []
     // 将名称放入下方图例中
     for (var i in that.data.series) {
@@ -207,7 +207,7 @@ Page({
         icon: 'circle',
         textStyle: {
           color: '#000000',
-        }
+        },
       }
       legendList.push(obj)
 
@@ -221,6 +221,16 @@ Page({
         selectedModel: 'single', //折线可多选
         inactiveColor: '#ccc', //图例关闭时的颜色
         data: legendList,
+        selected: {
+          // 默认显示体重和体脂
+          '体重': true,
+          '体脂': true,
+          '臂围':false,
+          '胸围':false,
+          '臀围':false,
+          '大腿':false,
+          '小腿':false,
+        },
         bottom: 0,
         // left: 30,
         z: 100
@@ -331,7 +341,7 @@ Page({
     for (let i = 0; i < length; i++) {
       res.push(bodydatas[i][item]);
     }
-    console.log(res);
+    console.log('' + item, res);
     return res;
   },
 
@@ -346,7 +356,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.getChartData();
+    // 此处要与标签的id一致不是canvasid
+    this.echartsComponnet = this.selectComponent('#mylinechart');
+    this.init_echarts()
   },
 
   /**

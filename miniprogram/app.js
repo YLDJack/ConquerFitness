@@ -8,6 +8,7 @@ App({
     trainingActions: [],
     trainRecord:[],
     selectActions: [],
+    complishTraining:false,
     selectStatus: []
   },
   // 将数据添加到云端的方法

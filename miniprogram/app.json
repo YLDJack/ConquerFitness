@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/ActionDetial/ActionDetial",
     "pages/Count/Count",
     "pages/Main/Main",
     "pages/Train/Train",
@@ -12,8 +13,7 @@
     "pages/ActionDesc/ActionDesc",
     "pages/ActionAdd/ActionAdd",
     "pages/DataRecord/DataRecord",
-    "pages/addTemplateDisplay/addTemplateDisplay",
-    "pages/ActionDetial/ActionDetial"
+    "pages/addTemplateDisplay/addTemplateDisplay"
   ],
   "tabBar": {
     "custom": true,

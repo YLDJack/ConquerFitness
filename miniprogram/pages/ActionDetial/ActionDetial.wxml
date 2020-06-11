@@ -1,2 +1,104 @@
-<!--miniprogram/pages/ActionDetial/ActionDetial.wxml-->
-<text>{{area}}</text>
+<!-- 顶级时间选项卡 -->
+<van-tabs color="#ffffff" >
+	<van-tab title="{{area}}" animated>
+		<van-tabs type="card" animated>
+			<!-- 第二级时间选项卡 swipeable可滑动的-->
+			<van-tab title="周">
+				<van-tabs swipeable animated color="black" border="true" custom-class="vantabs">
+					<van-tab title="本周">
+						<!-- 饼图表显示区域 -->
+						<view class="container">
+							<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
+							<!-- 下方动作详情页 -->
+						</view>
+						<view>
+							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">
+								<van-collapse-item title="{{item.actionSub}}" name="{{index}}" value="本周完成{{item.trainRecord.length}}种动作" wx:for="{{trainRecord}}" wx:key="{{index}}">
+									<!-- 详情动作卡片 -->
+									<van-card title="{{record.actionName}}" thumb="{{ record.actionImage }}" wx:for="{{item.trainRecord}}" wx:for-index="recordIndex" wx:for-item="record" custom-class="actionCard" title-class="cardTitle" thumb-class="cardThumb">
+
+										<!-- 右侧的箭头 -->
+										<view slot="footer">
+											<van-icon name="arrow" bind:click="showDesc" data-actionid="{{record._id}}" data-actionname="{{record.actionName}}" />
+										</view>
+										<!-- 数据区域 -->
+										<view slot="desc">
+											<view style="margin-top:10rpx">
+												<van-tag type="danger" size="medium"> 最大重量</van-tag>
+												<van-tag size="medium" type="danger" plain>{{record.maxWeight}}Kg</van-tag>
+												<view style="margin-top:10rpx">
+													<van-tag size="medium" type="danger">最大容量</van-tag>
+													<van-tag size="medium" type="danger" plain>{{record.maxCount}}</van-tag>
+												</view>
+
+											</view>
+										</view>
+										<view slot="price-top" style="margin-top:10rpx">
+											<van-tag size="medium" type="primary"> 本周容量</van-tag>
+											<van-tag size="medium" type="primary" plain>{{record.trainComplishCount}}</van-tag>
+
+										</view>
+										<view slot="price" style="margin-top:10rpx">
+											<van-tag size="medium" type="primary">日期</van-tag>
+											<van-tag size="medium" type="primary" plain>{{record.date}}</van-tag>
+										</view>
+									</van-card>
+								</van-collapse-item>
+							</van-collapse>
+						</view>
+					</van-tab>
+					<van-tab title="上周">
+					</van-tab>
+					<van-tab title="16">
+					</van-tab>
+					<van-tab title="15">
+					</van-tab>
+					<van-tab title="14">
+					</van-tab>
+					<van-tab title="13">
+					</van-tab>
+					<van-tab title="12">
+					</van-tab>
+					<van-tab title="11">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
+
+			<van-tab title="月">
+				<van-tabs active="{{ active }}" swipeable animated>
+					<van-tab title="本月">
+					</van-tab>
+					<van-tab title="上月">
+					</van-tab>
+					<van-tab title="3月">
+					</van-tab>
+					<van-tab title="2月">
+					</van-tab>
+					<van-tab title="1月">
+					</van-tab>
+					<van-tab title="">
+					</van-tab>
+					<van-tab title="去年12月">
+					</van-tab>
+					<van-tab title="去年11月">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
+
+			<van-tab title="年">
+				<van-tabs active="{{ active }}" swipeable animated>
+					<van-tab title="今年">
+					</van-tab>
+					<van-tab title="去年">
+					</van-tab>
+					<van-tab title="2018年">
+					</van-tab>
+					<van-tab title="2017年">
+					</van-tab>
+					<van-tab title="2016年">
+					</van-tab>
+				</van-tabs>
+			</van-tab>
+		</van-tabs>
+	</van-tab>
+</van-tabs>

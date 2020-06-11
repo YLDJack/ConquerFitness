@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/ActionDetial/ActionDetial",
-    "pages/Count/Count",
     "pages/Main/Main",
+    "pages/Count/Count",
+    "pages/ActionDetial/ActionDetial",
     "pages/Train/Train",
     "pages/Training/Training",
     "pages/Personal/Personal",

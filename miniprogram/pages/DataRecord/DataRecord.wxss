@@ -1,3 +1,6 @@
+.stateTag{
+  margin-top: 20rpx;
+}
 /* 体重下拉第一栏样式 */
 .weightcard{
   display: flex;
@@ -13,7 +16,7 @@
 }
 
 .targettip{
-  margin-top: 20rpx;
+  margin-bottom: 20rpx;
 }
 
 /* 体重记录弹出框 */
@@ -128,6 +131,7 @@
 
 /* 围度记录 */
 .circbtnfield{
+  margin-top: 30rpx;
   width: 100%;
   text-align: center;
 }

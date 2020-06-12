@@ -57,6 +57,16 @@
 			<view class="confirm" bindtap="onUpdateCloudData">确定</view>
 		</van-popup>
 
+		<van-cell title="腰围" is-link bind:click="showPopup_waist" value="{{ waist }}cm" />
+		<van-popup show="{{ showwaist }}" round closeable custom-style="height: 30%;" bind:close="onClose_waist">
+			<view class="obtaindate">{{date}}</view>
+			<view class="items">
+				<view>胸围(cm)：</view>
+				<van-stepper bind:change="onChange_waist" value="{{ waist }}" step="0.1" decimal-length="{{ 1 }}" />
+			</view>
+			<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+		</van-popup>
+
 
 
 		<van-cell title="臀围" is-link bind:click="showPopup_hip" value="{{ ass }}cm" />
@@ -85,7 +95,7 @@
 	</van-collapse-item>
 </van-collapse>
 
-<van-cell title="锻炼状态" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/status.png?sign=193f7eb93287c5719ce89a6f42903dfb&t=1590113399" is-link value="{{trainState}}" bind:click="showPopup_statu" />
+<van-cell title="训练目标" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/status.png?sign=193f7eb93287c5719ce89a6f42903dfb&t=1590113399" is-link value="{{trainState}}" bind:click="showPopup_statu" />
 <van-popup show="{{ showstatu }}" position="bottom" custom-style="height: 40%;margin-bottom:120rpx;">
 	<van-picker columns="{{ columns }}" default-index="{{ 1 }}" show-toolbar title="锻炼状态" bind:cancel="onpickerCancel" bind:confirm="onpickerConfirm" />
 </van-popup>

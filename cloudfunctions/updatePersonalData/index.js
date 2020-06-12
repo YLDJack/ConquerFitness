@@ -30,23 +30,51 @@ exports.main = async (event, context) => {
 
   for (let i = 0; i < length; i++) {
     if (event.date === personalData[i].date) {
-      // 若已有数据中存在当前日期的数据，则直接进行更新。否则则新添加一条记录。
-      return await db.collection('PersonalData').where({
-        openId: openID,
-        date: event.date
-      }).update({
-        data: {
+      if (!event.targetWeight) {
+        // 若已有数据中存在当前日期的数据，则直接进行更新。否则则新添加一条记录。
+        return await db.collection('PersonalData').where({
           openId: openID,
-          trainState: event.trainState,
-          weight: event.weight,
-          fat: event.fat,
-          ass: event.ass,
-          leg: event.leg,
-          smallleg: event.smallleg,
-          breast: event.breast,
-          arms: event.arms,
-        }
-      })
+          date: event.date
+        }).update({
+          data: {
+            openId: openID,
+            trainState: event.trainState,
+            weight: event.weight,
+            fat: event.fat,
+            ass: event.ass,
+            leg: event.leg,
+            smallleg: event.smallleg,
+            breast: event.breast,
+            arms: event.arms,
+            waist: event.waist
+          }
+        })
+      } else {
+        // 若已有数据中存在当前日期的数据，则直接进行更新。否则则新添加一条记录。
+        return await db.collection('PersonalData').where({
+          openId: openID,
+          date: event.date
+        }).update({
+          data: {
+            openId: openID,
+            trainState: event.trainState,
+            targetWeight:event.targetWeight,
+            targetStartTime: event.targetStartTime,
+            originWeight:event.originWeight,
+            originWeightDate:event.originWeightDate,
+            targetEndTime:event.targetEndTime,
+            weight: event.weight,
+            fat: event.fat,
+            ass: event.ass,
+            leg: event.leg,
+            smallleg: event.smallleg,
+            breast: event.breast,
+            arms: event.arms,
+            waist: event.waist
+          }
+        })
+      }
+
     }
   }
   return await cloud.callFunction({
@@ -56,6 +84,11 @@ exports.main = async (event, context) => {
       openid: openID,
       date: event.date,
       trainState: event.trainState,
+      targetWeight: event.targetWeight || 0,
+      targetStartTime: event.targetStartTime || 0,
+      targetEndTime: event.targetEndTime,
+      originWeight:event.originWeight,
+      originWeightDate:event.originWeightDate,
       weight: event.weight,
       fat: event.fat,
       ass: event.ass,
@@ -63,6 +96,7 @@ exports.main = async (event, context) => {
       smallleg: event.smallleg,
       breast: event.breast,
       arms: event.arms,
+      waist:event.waist
     }
   })
 

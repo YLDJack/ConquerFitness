@@ -1,3 +1,11 @@
+import dayjs from '../../utils/dayjs/index';
+import utils from '../../utils/util'
+import duration from '../../utils/dayjs/plugin/duration/index';
+require('../../utils/dayjs/locale/zh-cn');
+dayjs.locale('zh-cn');
+dayjs.extend(duration);
+
+const app = getApp();
 
 Page({
 
@@ -5,9 +13,36 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 最新的身体数据
+    trainState: "增肌",
+    // 修改前的状态
+    originState: '增肌',
+    weight: 50,
+    fat: 15,
+    ass: 50,
+    leg: 30,
+    smallleg: 20,
+    breast: 20,
+    arms: 20,
+    waist: 32,
+    // 目标体重
+    targetWeight: 45,
+    cutWeight: 0,
+    // 离目标还剩多少体重
+    leaveWeight: 0,
+    // 目标完成百分比
+    circleValue: 0,
+    // 状态开始的第几天
+    targetDay: 0,
+    // 目标体重日期
+    targetDate: '',
+    // 初始体重
+    originWeight: 50,
+    // 记录初始体重的日期
+    originWeightDate: '',
     // 前十年到今天的日期选择器内容
     currentDate: new Date().getTime(),
-    maxDate: new Date().getTime(),
+    miniDate: new Date().getTime(),
     formatter(type, value) {
       if (type === 'year') {
         return `${value}年`;
@@ -21,14 +56,12 @@ Page({
     activeNames: ['0'],
     // 体重下拉面板中数据
     weightcollapse: ['w'],
-    weightcircle: 50,
     gradientColor: {
       '0%': 'rgb(63, 236, 255)',
       '100%': 'rgb(132, 114, 248)',
     },
     showweight: false,
     date: "",
-    weight: 50,
     InitialWeight: false,
     TargetWeight: false,
     // 体脂下拉计算面板
@@ -42,12 +75,113 @@ Page({
     WaistLine: false,
     HitLine: false,
     HamLine: false,
-    CalfLine: false
+    CalfLine: false,
+    // 训练状态的显示
+    showstatu: false,
+    // 训练状态列表
+    columns: ['增肌', '减脂', '塑形']
   },
+  // 更新目标
+  onUpdateTarget() {
+    if (this.data.originState === this.data.trainState) {
+      wx.cloud.callFunction({
+        // 云函数名称
+        name: 'updatePersonalData',
+        // 传给云函数的参数
+        data: {
+          date: this.data.date,
+          trainState: this.data.trainState,
+          weight: this.data.weight,
+          fat: this.data.fat,
+          ass: this.data.ass,
+          leg: this.data.leg,
+          smallleg: this.data.smallleg,
+          breast: this.data.breast,
+          arms: this.data.arms,
+          waist: this.data.waist,
+          targetWeight: this.data.targetWeight,
+          // 目标开始时间
+          targetStartTime: this.data.originWeightDate,
+          // 目标时间
+          targetEndTime: this.data.targetDate,
+          // 训练目标没有改变，则原始体重也不变
+          originWeight: this.data.originWeight,
+          originWeightDate: this.data.originWeightDate
+        },
+        success: async res => {
 
+          wx.showToast({
+            title: '更新成功',
+          })
+          await app.getDataFromCloud();
+          this.setRecordData();
+        },
+        fail: error => {
+
+          console.log(error);
+          wx.showToast({
+            title: '更新失败',
+            icon: "none"
+          })
+        }
+      })
+    } else {
+      // 如果修改了训练状态，则将当天的体重设置为该训练时间段的原始体重,当天的设置为原始时间和目标开始时间
+      wx.cloud.callFunction({
+        // 云函数名称
+        name: 'updatePersonalData',
+        // 传给云函数的参数
+        data: {
+          date: this.data.date,
+          trainState: this.data.trainState,
+          weight: this.data.weight,
+          fat: this.data.fat,
+          ass: this.data.ass,
+          leg: this.data.leg,
+          smallleg: this.data.smallleg,
+          breast: this.data.breast,
+          arms: this.data.arms,
+          waist: this.data.waist,
+          targetWeight: this.data.targetWeight,
+          // 目标开始时间
+          targetStartTime: this.data.date,
+          // 目标时间
+          targetEndTime: this.data.targetDate,
+          // 训练目标改变，则原始体重设置为当天的体重
+          originWeight: this.data.weight,
+          originWeightDate: this.data.date
+        },
+        success: async res => {
+
+          wx.showToast({
+            title: '更新成功',
+          })
+
+          await app.getDataFromCloud();
+          this.setRecordData();
+        },
+        fail: error => {
+
+          console.log(error);
+          wx.showToast({
+            title: '更新失败',
+            icon: "none"
+          })
+        }
+      })
+    }
+
+    this.setData({
+      TargetWeight: false
+    })
+  },
+  // 保存体脂数据
+  saveFat() {
+    onUpdateTarget();
+  },
   onChangeTab(event) {
     wx.showToast({
-      title: `切换到标签 ${event.detail.name}`,
+      title: `切换到${event.detail.title}`,
       icon: 'none',
     });
   },
@@ -77,6 +211,12 @@ Page({
       showweight: false
     });
   },
+  onSureWeight() {
+    this.onUpdateTarget();
+    this.setData({
+      showweight: false
+    });
+  },
   // 目标体重编辑
   editTargetWeight() {
     this.setData({
@@ -84,11 +224,13 @@ Page({
     });
   },
   onCloseTargetWeight() {
-    this.setData({ TargetWeight: false });
+    this.setData({
+      TargetWeight: false
+    });
   },
   onChangeTargetWeight(event) {
     this.setData({
-      TargetWeight: event.detail
+      targetWeight: event.detail
     })
   },
   // 初始体重编辑
@@ -98,7 +240,9 @@ Page({
     });
   },
   onCloseInitialWeight() {
-    this.setData({ InitialWeight: false });
+    this.setData({
+      InitialWeight: false
+    });
   },
   onChangeInitialWeight(event) {
     this.setData({
@@ -118,13 +262,61 @@ Page({
     console.log(event.detail);
   },
 
+  // 选择锻炼状态
+  showPopup_statu() {
+    this.setData({
+      showstatu: true
+    });
+  },
+  onpickerCancel() {
+    this.setData({
+      showstatu: false
+    })
+  },
+  // 确认训练状态
+  onpickerConfirm(event) {
+    const {
+      value
+    } = event.detail;
+    let targetWeight = this.data.targetWeight;
+    let weight = this.data.weight;
+    // 如果目标状态是增肌则目标体重必须大于当前体重,如果是减脂或塑形则目标体重必须小于当前体重
+    if (value === '增肌') {
+
+      if (weight > targetWeight) {
+        wx.showToast({
+          title: '增肌的目标体重应该大于当前体重',
+          icon: 'none'
+        })
+        targetWeight = weight + 1;
+      }
+    } else {
+
+      if (weight < targetWeight) {
+        wx.showToast({
+          title: '目标重量应该小于当前体重',
+          icon: 'none'
+        })
+        targetWeight = weight - 1;
+      }
+    }
+    this.setData({
+      targetWeight: targetWeight,
+      trainState: value,
+      showstatu: false
+    })
+  },
   // 体脂范围提示
   showfatpopup() {
-    this.setData({ showfattip: true });
+    this.setData({
+      showfattip: true
+    });
   },
 
   onCloseFattip() {
-    this.setData({ showfattip: false });
+    this.setData({
+      showfattip: false
+    });
   },
 
   // 围度下拉面板change事件
@@ -135,13 +327,13 @@ Page({
   },
 
   // 胸围编辑
-  editChestLine(){
+  editChestLine() {
     this.setData({
       ChestLine: true
     });
   },
 
-  onCloseChestLine(){
+  onCloseChestLine() {
     this.setData({
       ChestLine: false
     });
@@ -149,18 +341,18 @@ Page({
 
   onChangeChestLine(event) {
     this.setData({
-      ChestLine: event.detail
+      breast: event.detail
     })
   },
 
   // 臂围编辑
-  editArmLine(){
+  editArmLine() {
     this.setData({
       ArmLine: true
     });
   },
 
-  onCloseArmLine(){
+  onCloseArmLine() {
     this.setData({
       ArmLine: false
     });
@@ -168,18 +360,18 @@ Page({
 
   onChangeArmLine(event) {
     this.setData({
-      ArmLine: event.detail
+      arms: event.detail
     })
   },
 
   // 腰围编辑
-  editWaistLine(){
+  editWaistLine() {
     this.setData({
       WaistLine: true
     });
   },
 
-  onCloseWaistLine(){
+  onCloseWaistLine() {
     this.setData({
       WaistLine: false
     });
@@ -187,18 +379,18 @@ Page({
 
   onChangeWaistLine(event) {
     this.setData({
-      WaistLine: event.detail
+      waist: event.detail
     })
   },
 
   // 臀围编辑
-  editHitLine(){
+  editHitLine() {
     this.setData({
       HitLine: true
     });
   },
 
-  onCloseHitLine(){
+  onCloseHitLine() {
     this.setData({
       HitLine: false
     });
@@ -206,18 +398,18 @@ Page({
 
   onChangeHitLine(event) {
     this.setData({
-      HitLine: event.detail
+      ass: event.detail
     })
   },
 
   // 大腿围编辑
-  editHamLine(){
+  editHamLine() {
     this.setData({
       HamLine: true
     });
   },
 
-  onCloseHamLine(){
+  onCloseHamLine() {
     this.setData({
       HamLine: false
     });
@@ -225,18 +417,18 @@ Page({
 
   onChangeHamLine(event) {
     this.setData({
-      HamLine: event.detail
+      leg: event.detail
     })
   },
 
   // 小腿围编辑
-  editCalfLine(){
+  editCalfLine() {
     this.setData({
       CalfLine: true
     });
   },
 
-  onCloseCalfLine(){
+  onCloseCalfLine() {
     this.setData({
       CalfLine: false
     });
@@ -244,24 +436,26 @@ Page({
 
   onChangeCalfLine(event) {
     this.setData({
-      CalfLine: event.detail
+      smallleg: event.detail
     })
   },
 
   // 曲线日历按钮挑战数据图表页面
-  onClickLinebtn(){
-    wx.navigateTo({
-      url: '../Personal_data/Personal_data',
-    })
+  onClickUpload() {
+    this.onUpdateTarget();
   },
 
   // 日期选择器弹出层
   showDatePopup() {
-    this.setData({ showDatePicker: true });
+    this.setData({
+      showDatePicker: true
+    });
   },
 
   onCloseDatePicker() {
-    this.setData({ showDatePicker: false });
+    this.setData({
+      showDatePicker: false
+    });
   },
   // 饮食记录页前十年到今天的日期选择器
   onInputDate(event) {
@@ -276,12 +470,71 @@ Page({
       activeNames: event.detail,
     });
   },
-
+  // 目标日期时间选择器完成触发方法
+  onConfirmTargetDate(event) {
+    let date = utils.formatDate(new Date(event.detail));
+    console.log(date);
+    this.setData({
+      targetDate: date,
+      showDatePicker: false
+    })
+  },
+  // 目标日期时间选择器取消触发方法
+  onCancelTargetDate(event) {
+    this.setData({
+      showDatePicker: false
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.setRecordData();
+  },
+  setRecordData() {
+    let sex = app.globalData.sex;
+    let nowRecord = app.globalData.bodydata;
+    let date = app.globalData.date;
+    let originWeightDate = nowRecord.originWeightDate;
+    // 计算是该状态的第几天
+    let a = dayjs(date, 'YYYY-MM-DD');
+    let b = dayjs(originWeightDate, 'YYYY-MM-DD');
+    let targetDay = dayjs.duration(a.diff(b)).days() + 1;
+    console.log(targetDay);
+    let nowWeight = nowRecord.weight;
+    let targetWeight = nowRecord.targetWeight;
+    let originWeight = nowRecord.originWeight;
+    // 计算离目标还剩多少体重
+    let leaveWeight = Math.abs(nowWeight - targetWeight).toFixed(1);
+    // 计算原始体重和目标体重总共相差多少
+    let totalNeed = Math.abs(targetWeight - originWeight).toFixed(1);
+    let cutWeight = Math.abs(totalNeed - leaveWeight).toFixed(1);
+    // 计算意见减去的体重占全部需要减去的体重的百分比
+    let circleValue = 100 - Math.abs(cutWeight / totalNeed).toFixed(2) * 100;
+    console.log('circleValue', circleValue);
+    this.setData({
+      cutWeight: cutWeight,
+      circleValue: circleValue,
+      totalNeed: totalNeed,
+      leaveWeight: leaveWeight,
+      originState: nowRecord.trainState,
+      targetDay: targetDay,
+      date: date,
+      sexvalue: sex,
+      originWeight: nowRecord.originWeight,
+      originWeightDate: nowRecord.originWeightDate,
+      trainState: nowRecord.trainState,
+      weight: nowRecord.weight,
+      fat: nowRecord.fat,
+      ass: nowRecord.ass,
+      leg: nowRecord.leg,
+      smallleg: nowRecord.smallleg,
+      breast: nowRecord.breast,
+      arms: nowRecord.arms,
+      waist: nowRecord.waist,
+      targetWeight: nowRecord.targetWeight,
+      targetDate: nowRecord.targetEndTime,
+    })
   },
 
   /**

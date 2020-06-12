@@ -17,6 +17,7 @@ Page({
     smallleg: 20,
     breast: 20,
     arms: 20,
+    waist: 32,
     tempFilePaths: '',
     nickName: '',
     userInfoAvatar: '',
@@ -27,6 +28,7 @@ Page({
     showstatu: false,
     showbreast: false,
     showarms: false,
+    showwaist: false,
     columns: ['增肌', '减脂', '塑形']
   },
   // 
@@ -66,6 +68,11 @@ Page({
       breast: event.detail
     })
   },
+  onChange_waist(event) {
+    this.setData({
+      waist: event.detail
+    })
+  },
   onChange_hip(event) {
     this.setData({
       ass: event.detail
@@ -95,36 +102,15 @@ Page({
       smallleg: bodydata.smallleg,
       breast: bodydata.breast,
       arms: bodydata.arms,
+      waist: bodydata.waist
     });
   },
-  onLoad: function () { 
-    this.loadbodydatas(); 
-    this.setData({ 
-      date: app.globalData.date 
-    }) 
-  }, 
-  // 从云端获取数据的方法 
-  async getDataFromCloud() { 
-    await wx.cloud.callFunction({ 
-      // 云函数名称 
-      name: 'getPersonalData', 
-      success: res => { 
-        let length = res.result.data.length; 
-        let bodydata = res.result.data[length - 1]; 
-        this.loadbodydatas(); 
-        wx.showToast({ 
-          title: '获取最新个人数据成功', 
-        }); 
-      }, 
-      fail: error => { 
-        console.log(error); 
-        wx.showToast({ 
-          title: '获取失败', 
-          icon: "none" 
-        }) 
-      } 
-    }) 
-  }, 
+  onLoad: function () {
+    this.loadbodydatas();
+    this.setData({
+      date: app.globalData.date
+    })
+  },
   // 更新数据方法
   updateDataToCloud() {
     const toast = Toast.loading({
@@ -148,6 +134,7 @@ Page({
         smallleg: this.data.smallleg,
         breast: this.data.breast,
         arms: this.data.arms,
+        waist:this.data.waist,
       },
       success: res => {
         toast.clear();
@@ -175,6 +162,12 @@ Page({
   showPopup_breast() {
     this.setData({
       showbreast: true
+    });
+  },
+  // 弹出腰围选择
+  showPopup_waist() {
+    this.setData({
+      showwaist: true
     });
   },
   // 弹出臂围选择
@@ -254,6 +247,11 @@ Page({
   onClose_statu() {
     this.setData({
       showstatu: false
+    });
+  },
+  onClose_waist() {
+    this.setData({
+      showwaist: false
     });
   },
   onChange(event) {

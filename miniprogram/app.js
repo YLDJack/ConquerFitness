@@ -6,10 +6,12 @@ App({
     bodydatas: [],
     date: util.formatDate(new Date()),
     trainingActions: [],
-    trainRecord:[],
+    trainRecord: [],
     selectActions: [],
-    complishTraining:false,
-    selectStatus: []
+    complishTraining: false,
+    selectStatus: [],
+    sex:'',
+    todayStep:0
   },
   // 将数据添加到云端的方法
   async addDataToCloud() {
@@ -27,6 +29,7 @@ App({
         smallleg: 0,
         breast: 0,
         arms: 0,
+        waist: 0
       },
       success: res => {
         wx.showToast({
@@ -83,5 +86,5 @@ App({
       traceUser: true,
     });
     this.getDataFromCloud();
-  }
+  },
 })

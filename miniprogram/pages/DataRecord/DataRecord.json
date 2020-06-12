@@ -15,6 +15,9 @@
     "van-icon": "@vant/weapp/icon/index",
     "van-stepper": "@vant/weapp/stepper/index",
     "van-field": "@vant/weapp/field/index",
-    "van-datetime-picker": "@vant/weapp/datetime-picker/index"
+    "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+    "van-picker": "@vant/weapp/picker/index",
+    "van-tag": "@vant/weapp/tag/index"
+
   }
 }

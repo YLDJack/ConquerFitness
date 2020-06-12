@@ -1,4 +1,4 @@
-.top{
+.top {
   width: 100%;
   height: 120rpx;
   display: flex;
@@ -6,32 +6,33 @@
   align-items: center;
 }
 
-.top .topleft{
+.top .topleft {
   height: 100%;
   width: 450rpx;
   margin-left: 20rpx;
 }
 
-.topleft .sayhello{
+.topleft .sayhello {
   height: 45%;
   width: 500rpx;
   display: flex;
   align-items: center;
-  white-space:nowrap;
+  white-space: nowrap;
 }
 
-.sayhello .image{
+.sayhello .image {
   width: 60rpx;
   height: 60rpx;
   margin-right: 15rpx;
   border-radius: 50%;
 }
-.sayhello .sayhellotext{
+
+.sayhello .sayhellotext {
   color: rgb(107, 105, 105);
   font-weight: bold;
 }
 
-.topleft .calendar-navigator{
+.topleft .calendar-navigator {
   height: 45%;
   width: 300rpx;
   display: flex;
@@ -39,14 +40,14 @@
   margin-top: 10rpx;
 }
 
-.calendar-navigator image{
+.calendar-navigator image {
   width: 50rpx;
   height: 50rpx;
   margin-left: 5rpx;
   margin-right: 15rpx;
 }
 
-.top .topright{
+.top .topright {
   /* height: 100%; */
   height: 100%;
   display: flex;
@@ -57,7 +58,7 @@
   padding-bottom: 3rpx;
 }
 
-.colbutton{
+.colbutton {
   margin-top: 10rpx;
   width: 100%;
   height: 150rpx;
@@ -65,6 +66,7 @@
   justify-content: space-evenly;
   align-items: baseline;
 }
+
 .colbutton .sidebutton{
   width: 150rpx;
   /* height: 100%; */
@@ -72,22 +74,25 @@
   flex-direction: column;
   align-items: center;
 }
-.sidebutton image{
+
+.sidebutton image {
   width: 60rpx;
   height: 60rpx;
 }
-.colbutton .startbutton{
+.colbutton .startbutton {
   width: 300rpx;
   /* height: 100%; */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.startbutton image{
+
+.startbutton image {
   width: 120rpx;
   height: 100rpx;
 }
-.tabtext{
+
+.tabtext {
   font-size: 26rpx;
   color: rgb(107, 107, 107);
 }
@@ -105,7 +110,7 @@
   background-size: cover;
   background-color: black;
   background-image: url('https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/ConquerFitness.png?sign=e4de7caaec5fc6e1d06010960c9936fa&t=1591849358');
-  background-position:-32rpx;
+  background-position: -32rpx;
 }
 
 .data-group .scrollwenzi {
@@ -190,7 +195,8 @@
   width: 100%;
   z-index: -999;
 }
-.eccontainer line{
+
+.eccontainer line {
   height: 800rpx;
   width: 100%;
 }

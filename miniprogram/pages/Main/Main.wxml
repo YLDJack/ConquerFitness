@@ -1,7 +1,7 @@
 <van-toast id="van-toast" />
 <!-- 用户初次登陆，弹出的设置身高体重框 -->
 <van-popup show="{{ SetBody }}" closeable bind:close="onCloseSetBody" custom-style="height: 35%;width:50%">
-{{nickName}},您好,欢迎您使用ConquerFitness
+征服者{{nickName}},您好,欢迎您使用ConquerFitness
 请先让我们了解您的身体数据:
 	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number'/>
 	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number'/>

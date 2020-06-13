@@ -77,7 +77,7 @@
 					</view>
 					<view class="calculate">
 						<view class="fatdisplay">
-							<van-field value="{{ calcuatedFat }}" custom-style="width:150rpx;font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" border="{{ false }}" bind:change="onFatChange" />
+							<van-field model:value="{{ calcuatedFat }}" custom-style="width:150rpx;font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" border="{{ false }}" bind:change="onFatChange" />
 							<text class="unit">%</text>
 						</view>
 						<view class="button">
@@ -90,7 +90,7 @@
 						</view>
 					</view>
 				</view>
-				<van-cell title="最新体脂" value="{{fat}}%" label="运动员体质" icon="warning" bind:click="showfatpopup" />
+				<van-cell title="最新体脂" value="{{fat}}%" label="{{fatStatus}}" icon="warning" bind:click="showfatpopup" />
 				<!-- 点击弹出和体脂有关的内容 -->
 				<van-popup show="{{ showfattip }}" round closeable custom-style="height:45%; width:90%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseFattip">
 					<!-- 表格 -->

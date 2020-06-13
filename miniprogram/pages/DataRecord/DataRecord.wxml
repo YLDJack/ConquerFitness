@@ -3,7 +3,7 @@
 	<van-tab title="身体记录">
 		<view class="stateTag">
 			<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
-			<van-tag type="primary" mark size="large">{{trainState}}</van-tag>
+			<van-tag type="primary" size="large">{{trainState}}</van-tag>
 		</view>
 		<!-- 环形区域和按钮区域 -->
 		<view class="weightcard">
@@ -77,7 +77,7 @@
 					</view>
 					<view class="calculate">
 						<view class="fatdisplay">
-							<van-field value="{{ fatvalue }}" custom-style="width:150rpx;font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" border="{{ false }}" bind:change="onFatChange" />
+							<van-field value="{{ calcuatedFat }}" custom-style="width:150rpx;font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" border="{{ false }}" bind:change="onFatChange" />
 							<text class="unit">%</text>
 						</view>
 						<view class="button">

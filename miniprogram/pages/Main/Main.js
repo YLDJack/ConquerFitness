@@ -237,6 +237,8 @@ Page({
           // 授权微信步数和用户信息
           wx.authorize({
             scope: 'scope.userInfo',
+          }),
+          wx.authorize({
             scope: 'scope.werun',
           })
           this.getUserInfoandRunData();

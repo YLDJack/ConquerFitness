@@ -1,11 +1,10 @@
 {
   "pages": [
-    "pages/Train/Train",
     "pages/Main/Main",
     "pages/DataRecord/DataRecord",
     "pages/Count/Count",
     "pages/ActionDetial/ActionDetial",
-    
+    "pages/Train/Train",
     "pages/Training/Training",
     "pages/Personal/Personal",
     "pages/Feedback/Feedback",

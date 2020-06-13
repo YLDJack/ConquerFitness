@@ -18,7 +18,7 @@
 
 	<view class="mid">
 		<!-- treeselect动作分类选择 -->
-		<van-tree-select items="{{ items }}" main-active-index="{{ mainActiveIndex }}" active-id="{{ activeId }}" bind:click-nav="onClickNav" content-item-class="bg" main-item-class="treenav" height="888rpx">
+		<van-tree-select items="{{ items }}" main-active-index="{{ mainActiveIndex }}" active-id="{{ activeId }}" bind:click-nav="onClickNav" content-item-class="bg" main-item-class="treenav" height="1400rpx">
 			<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
 			<view slot="content" class="content">
 				<!-- 没有搜索动作按分类显示 -->

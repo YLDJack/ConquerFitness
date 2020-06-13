@@ -1,5 +1,7 @@
 .stateTag{
   margin-top: 20rpx;
+  text-align: right;
+  margin-right: 20rpx;
 }
 /* 体重下拉第一栏样式 */
 .weightcard{
@@ -40,9 +42,21 @@
 }
 
 .items{
+  margin-top: 80rpx;
   padding-left: 30rpx;
   width: 90%;
   height: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-size: 28rpx;
+}
+
+.items-target{
+  padding-left: 30rpx;
+  width: 90%;
+  height: 120rpx;
   display: flex;
   justify-content: space-between;
   align-items: center;

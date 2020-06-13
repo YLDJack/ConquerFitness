@@ -11,6 +11,14 @@
 	<open-data type="userNickName"></open-data>
 </view>
 
+<van-popup show="{{ SetBody }}" closeable bind:close="onCloseSetBody" custom-style="height: 35%;width:50%">
+	征服者{{nickName}},您好,欢迎您使用ConquerFitness
+	请先让我们了解您的身体数据:
+	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number' />
+	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number' />
+	<view class="confirm" bindtap="onSetBody">确定</view>
+</van-popup>
+
 <!-- 身体数据图表页面跳转 -->
 <van-cell is-link icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/look.png?sign=6ea05de292d0d1c8920539b7a64214b7&t=1590113337" title="查看健康数据图表" link-type="navigateTo" url="/pages/Personal_data/Personal_data" />
 

@@ -1,3 +1,18 @@
+/* 进入的弹出框 */
+.conductText{
+  margin-top: 50rpx;
+  color: white;
+  font-size: 28rpx;
+}
+
+.confirm{
+  float: right;
+  margin-right: 40rpx;
+  color: white;
+  font-size: 28rpx;
+}
+
+/* 首页 */
 .top {
   width: 100%;
   height: 120rpx;

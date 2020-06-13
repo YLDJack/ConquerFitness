@@ -1,10 +1,10 @@
 <van-toast id="van-toast" />
 <!-- 用户初次登陆，弹出的设置身高体重框 -->
 <van-popup show="{{ SetBody }}" closeable bind:close="onCloseSetBody" custom-style="height: 35%;width:50%">
-征服者{{nickName}},您好,欢迎您使用ConquerFitness
-请先让我们了解您的身体数据:
-	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number'/>
-	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number'/>
+	征服者{{nickName}},您好,欢迎您使用ConquerFitness
+	请先让我们了解您的身体数据:
+	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number' />
+	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number' />
 	<view class="confirm" bindtap="onSetBody">确定</view>
 </van-popup>
 <!-- 第一栏 -->
@@ -26,6 +26,10 @@
 		</view>
 	</view>
 	<view class="topright">
+		<!-- 显示步数 -->
+		<view class="sayhello" wx:if="{{todayStep}}">
+			<view>已走{{todayStep}}步,大约消耗{{calories}}卡</view>
+		</view>
 		<!-- 状态 -->
 		<view class="statetext">
 			<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>

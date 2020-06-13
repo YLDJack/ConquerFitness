@@ -6,6 +6,8 @@ var app = getApp();
 
 Page({
   data: {
+    todayStep:0,
+    calories:0,
     height: '',
     weight: '',
     // 初次设定身体数据的弹出层开关
@@ -129,8 +131,12 @@ Page({
           app.globalData.bodydatas = res.result.data;
           console.log("身体数据:", app.globalData.bodydata);
           let status = res.result.data[length - 1].trainState;
+          let height= res.result.data[length - 1].height;
+          let weight = res.result.data[length - 1].weight
           this.setData({
-            trainStatus: status
+            trainStatus: status,
+            height:height,
+            weight:weight
           });
           return true;
         }
@@ -287,6 +293,15 @@ Page({
           }
         }).then(resData => {
           app.globalData.todayStep = resData.result.event.weRunData.data.stepInfoList[30].step;
+          let calories = 0;
+          /* 
+          卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
+          */
+          calories = (resData.result.event.weRunData.data.stepInfoList[30].step*this.data.height*0.45*0.01/1000*this.data.weight*1.036).toFixed(0);
+          this.setData({
+            todayStep:resData.result.event.weRunData.data.stepInfoList[30].step,
+            calories:calories
+          })
           console.log('今日步数', app.globalData.todayStep) //今天的步数
         })
       }

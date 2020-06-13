@@ -26,6 +26,9 @@ exports.main = async (event, context) => {
         breast: event.breast,
         arms: event.arms,
         waist:event.waist,
+        sex:event.sex,
+        todayStep:event.todayStep,
+        height:event.height
       }
     })
   }else{
@@ -47,6 +50,9 @@ exports.main = async (event, context) => {
         breast: event.breast,
         arms: event.arms,
         waist:event.waist,
+        sex:event.sex,
+        todayStep:event.todayStep,
+        height:event.height
       }
     })
   }

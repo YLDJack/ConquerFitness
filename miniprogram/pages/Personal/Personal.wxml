@@ -16,12 +16,23 @@
 
 <van-collapse value="{{ activeNames }}" bind:change="onChange_collapse">
 	<van-collapse-item title="我的健康数据" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=18913b8606c886d11bc34aa6fb3368d0&t=1590113362" name="1">
+
+		<van-cell title="身高" is-link bind:click="showPopup_height" value="{{ height }}cm" />
+		<van-popup show="{{ showheight }}" round closeable custom-style="height: 30%;" bind:close="onClose_height">
+			<view class="obtaindate">{{date}}</view>
+			<view class="items">
+				<view>身高(cm)：</view>
+				<van-stepper value="{{ height }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChange_height" />
+			</view>
+			<view class="confirm" bindtap="onUpdateCloudData">确定</view>
+		</van-popup>
+
 		<!-- 弹出层 -->
-		<van-cell title="体重" is-link bind:click="showPopup_weight" value="{{ weight }}kg" />
+		<van-cell title="体重" is-link bind:click="showPopup_weight" value="{{ weight }}Kg" />
 		<van-popup show="{{ showweight }}" round closeable custom-style="height: 30%;" bind:close="onClose_weight">
 			<view class="obtaindate">{{date}}</view>
 			<view class="items">
-				<view>体重(kg)：</view>
+				<view>体重(Kg)：</view>
 				<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChange_Weight" />
 			</view>
 			<view class="confirm" bindtap="onUpdateCloudData">确定</view>

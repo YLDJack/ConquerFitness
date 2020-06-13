@@ -10,6 +10,7 @@ Page({
   data: {
     date: "",
     trainState: "增肌",
+    height: 170,
     weight: 50,
     fat: 15,
     ass: 50,
@@ -21,6 +22,7 @@ Page({
     tempFilePaths: '',
     nickName: '',
     userInfoAvatar: '',
+    showheight: false,
     showhipline: false,
     showweight: false,
     showtizhi: false,
@@ -51,6 +53,11 @@ Page({
   onChange_Weight(event) {
     this.setData({
       weight: event.detail
+    })
+  },
+  onChange_height(event) {
+    this.setData({
+      height: event.detail
     })
   },
   onChange_fat(event) {
@@ -92,6 +99,9 @@ Page({
   loadbodydatas() {
     let bodydata = app.globalData.bodydata;
     let date = app.globalData.date;
+    // 获取性别和每日步数
+    let sex = app.globalData.sex;
+    let todayStep = app.globalData.todayStep;
     this.setData({
       date: date,
       trainState: bodydata.trainState,
@@ -102,14 +112,14 @@ Page({
       smallleg: bodydata.smallleg,
       breast: bodydata.breast,
       arms: bodydata.arms,
-      waist: bodydata.waist
+      waist: bodydata.waist,
+      height:bodydata.height,
+      sex: sex,
+      todayStep: todayStep
     });
   },
   onLoad: function () {
     this.loadbodydatas();
-    this.setData({
-      date: app.globalData.date
-    })
   },
   // 更新数据方法
   updateDataToCloud() {
@@ -134,14 +144,17 @@ Page({
         smallleg: this.data.smallleg,
         breast: this.data.breast,
         arms: this.data.arms,
-        waist:this.data.waist,
+        waist: this.data.waist,
+        height: this.data.height,
+        sex: this.data.sex,
+        todayStep: this.data.todayStep
       },
-      success: res => {
+      success: async res => {
         toast.clear();
         wx.showToast({
           title: '更新成功',
         })
-        app.getDataFromCloud();
+        await app.getDataFromCloud();
       },
       fail: error => {
         toast.clear();
@@ -162,6 +175,18 @@ Page({
   showPopup_breast() {
     this.setData({
       showbreast: true
+    });
+  },
+  // 弹出胸围选择
+  showPopup_weight() {
+    this.setData({
+      showweight: true
+    });
+  },
+   // 弹出胸围选择
+   showPopup_height() {
+    this.setData({
+      showheight: true
     });
   },
   // 弹出腰围选择
@@ -204,6 +229,11 @@ Page({
   showPopup_statu() {
     this.setData({
       showstatu: true
+    });
+  },
+  onClose_height() {
+    this.setData({
+      showheight: false
     });
   },
 

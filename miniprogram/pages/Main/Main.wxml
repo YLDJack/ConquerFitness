@@ -1,10 +1,17 @@
 <van-toast id="van-toast" />
+<!-- 用户初次登陆，弹出的设置身高体重框 -->
+<van-popup show="{{ SetBody }}" closeable bind:close="onCloseSetBody" custom-style="height: 35%;width:50%">
+征服者{{nickName}},您好,欢迎您使用ConquerFitness
+请先让我们了解您的身体数据:
+	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number'/>
+	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number'/>
+	<view class="confirm" bindtap="onSetBody">确定</view>
+</van-popup>
 <!-- 第一栏 -->
 <view class="top">
 	<view class="topleft">
 		<!-- 问好 -->
 		<view class="sayhello">
-			<!-- <image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/smile.png?sign=b64df0dccf7fd58628532e4df6ae5508&t=1590111906"></image> -->
 			<open-data type="userAvatarUrl" class="image"></open-data>
 			<view class="sayhellotext">
 				<open-data type="userNickName"></open-data>
@@ -15,7 +22,7 @@
 		<view hover-class='none' class="calendar-navigator">
 			<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/jianshen-.png?sign=e088c2c26e441c8d5d5c511e319aa512&t=1590111939" class="calendar-image" bindtap="showCalendar"></image>
 			<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" />
-			<van-tag type="danger" size="medium" bindtap="showCalendar">{{date}}</van-tag>
+			<van-tag color="#d81e06" size="medium" bindtap="showCalendar">{{date}}</van-tag>
 		</view>
 	</view>
 	<view class="topright">
@@ -34,7 +41,7 @@
 		<!-- <van-button icon="todo-list" color="#f06767" bind:click="showPlan" plain round>训练计划</van-button> -->
 	</view>
 	<view class="startbutton" bindtap="beginTraining">
-		<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=5160107c405b18f699911a5041ddea3f&t=1590112002"></image>
+		<image src="../../image/fit.png"></image>
 		<view class="tabtext">开始训练</view>
 		<!-- <van-button icon="../../../../image/icon_train_selected.png" type="danger" bind:click="beginTraining" plain round size="large">开始训练</van-button> -->
 	</view>
@@ -44,7 +51,7 @@
 	</view>
 </view>
 <!-- <calendar is-calendar-show="{{isCalendarShow}}" mark="{{calendarMark}}" format="1" /> -->
-											
+
 <!-- 数据展示 -->
 <!-- 通告栏 -->
 <van-notice-bar left-icon="bullhorn-o" text="来康康本周的成果吧！" mode="closeable" />

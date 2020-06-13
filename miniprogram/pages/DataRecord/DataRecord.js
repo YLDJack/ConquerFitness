@@ -13,6 +13,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    sex: '男',
+    todayStep: 1000,
     // 最新的身体数据
     trainState: "增肌",
     // 修改前的状态
@@ -82,9 +84,32 @@ Page({
     columns: ['增肌', '减脂', '塑形']
   },
   // 更新目标
-  onUpdateTarget() {
+  async onUpdateTarget() {
+    let trainState = this.data.trainState;
+    let targetWeight = this.data.targetWeight;
+    let weight = this.data.weight;
+    // 如果目标状态是增肌则目标体重必须大于当前体重,如果是减脂或塑形则目标体重必须小于当前体重
+    if (trainState === '增肌') {
+
+      if (weight > targetWeight) {
+        wx.showToast({
+          title: '增肌的目标体重应该大于当前体重',
+          icon: 'none'
+        })
+        targetWeight = weight + 1;
+      }
+    } else {
+
+      if (weight < targetWeight) {
+        wx.showToast({
+          title: '目标重量应该小于当前体重',
+          icon: 'none'
+        })
+        targetWeight = weight - 1;
+      }
+    }
     if (this.data.originState === this.data.trainState) {
-      wx.cloud.callFunction({
+      await wx.cloud.callFunction({
         // 云函数名称
         name: 'updatePersonalData',
         // 传给云函数的参数
@@ -99,22 +124,24 @@ Page({
           breast: this.data.breast,
           arms: this.data.arms,
           waist: this.data.waist,
-          targetWeight: this.data.targetWeight,
+          targetWeight: targetWeight,
           // 目标开始时间
           targetStartTime: this.data.originWeightDate,
           // 目标时间
           targetEndTime: this.data.targetDate,
           // 训练目标没有改变，则原始体重也不变
           originWeight: this.data.originWeight,
-          originWeightDate: this.data.originWeightDate
+          originWeightDate: this.data.originWeightDate,
+          sex: this.data.sex,
+          todayStep: this.data.todayStep
         },
         success: async res => {
 
           wx.showToast({
             title: '更新成功',
           })
-          await app.getDataFromCloud();
-          this.setRecordData();
+          this.getDataFromCloud();
+
         },
         fail: error => {
 
@@ -127,7 +154,7 @@ Page({
       })
     } else {
       // 如果修改了训练状态，则将当天的体重设置为该训练时间段的原始体重,当天的设置为原始时间和目标开始时间
-      wx.cloud.callFunction({
+      await wx.cloud.callFunction({
         // 云函数名称
         name: 'updatePersonalData',
         // 传给云函数的参数
@@ -142,14 +169,16 @@ Page({
           breast: this.data.breast,
           arms: this.data.arms,
           waist: this.data.waist,
-          targetWeight: this.data.targetWeight,
+          targetWeight: targetWeight,
           // 目标开始时间
           targetStartTime: this.data.date,
           // 目标时间
           targetEndTime: this.data.targetDate,
           // 训练目标改变，则原始体重设置为当天的体重
           originWeight: this.data.weight,
-          originWeightDate: this.data.date
+          originWeightDate: this.data.date,
+          sex: this.data.sex,
+          todayStep: this.data.todayStep
         },
         success: async res => {
 
@@ -157,8 +186,7 @@ Page({
             title: '更新成功',
           })
 
-          await app.getDataFromCloud();
-          this.setRecordData();
+          this.getDataFromCloud();
         },
         fail: error => {
 
@@ -173,6 +201,30 @@ Page({
 
     this.setData({
       TargetWeight: false
+    })
+  },
+  // 从云端获取数据的方法
+  async getDataFromCloud() {
+    await wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getPersonalData',
+      success: res => {
+        let length = res.result.data.length;
+        wx.showToast({
+          title: '获取个人数据成功',
+        });
+        app.globalData.bodydata = res.result.data[length - 1];
+        app.globalData.bodydatas = res.result.data;
+        console.log("身体数据:", app.globalData.bodydata);
+        this.setRecordData();
+      },
+      fail: error => {
+        console.log(error);
+        wx.showToast({
+          title: '获取失败',
+          icon: "none"
+        })
+      }
     })
   },
   // 保存体脂数据
@@ -278,30 +330,8 @@ Page({
     const {
       value
     } = event.detail;
-    let targetWeight = this.data.targetWeight;
-    let weight = this.data.weight;
-    // 如果目标状态是增肌则目标体重必须大于当前体重,如果是减脂或塑形则目标体重必须小于当前体重
-    if (value === '增肌') {
 
-      if (weight > targetWeight) {
-        wx.showToast({
-          title: '增肌的目标体重应该大于当前体重',
-          icon: 'none'
-        })
-        targetWeight = weight + 1;
-      }
-    } else {
-
-      if (weight < targetWeight) {
-        wx.showToast({
-          title: '目标重量应该小于当前体重',
-          icon: 'none'
-        })
-        targetWeight = weight - 1;
-      }
-    }
     this.setData({
-      targetWeight: targetWeight,
       trainState: value,
       showstatu: false
     })
@@ -492,6 +522,8 @@ Page({
     this.setRecordData();
   },
   setRecordData() {
+    // 获取性别和每日步数
+    let todayStep = app.globalData.todayStep;
     let sex = app.globalData.sex;
     let nowRecord = app.globalData.bodydata;
     let date = app.globalData.date;
@@ -513,6 +545,8 @@ Page({
     let circleValue = 100 - Math.abs(cutWeight / totalNeed).toFixed(2) * 100;
     console.log('circleValue', circleValue);
     this.setData({
+      sex: sex,
+      todayStep: todayStep,
       cutWeight: cutWeight,
       circleValue: circleValue,
       totalNeed: totalNeed,

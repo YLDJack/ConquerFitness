@@ -26,10 +26,6 @@
 		</view>
 	</view>
 	<view class="topright">
-		<!-- 显示步数 -->
-		<view class="sayhello" wx:if="{{todayStep}}">
-			<view>已走{{todayStep}}步,大约消耗{{calories}}卡</view>
-		</view>
 		<!-- 状态 -->
 		<view class="statetext">
 			<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>

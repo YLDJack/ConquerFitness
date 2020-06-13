@@ -10,10 +10,14 @@ Page({
     gaugeec: {
       lazyLoad: true, // 延迟加载
     },
+    targetWeight: 0,
+    originWeight: 0,
     todayStep: 0,
     calories: 0,
     height: '',
     weight: '',
+    fat:'',
+    maxFat:26,
     // 初次设定身体数据的弹出层开关
     SetBody: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
@@ -136,13 +140,25 @@ Page({
           console.log("身体数据:", app.globalData.bodydata);
           let status = res.result.data[length - 1].trainState;
           let height = res.result.data[length - 1].height;
-          let weight = res.result.data[length - 1].weight
+          let weight = res.result.data[length - 1].weight;
+          let targetWeight = res.result.data[length - 1].targetWeight;
+          let originWeight = res.result.data[length - 1].originWeight;
+          let fat = res.result.data[length - 1].fat;
+          let calories = 0;
+          /* 
+          卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
+          */
+          calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
           this.setData({
             trainStatus: status,
             height: height,
-            weight: weight
+            weight: weight,
+            targetWeight: targetWeight,
+            originWeight: originWeight,
+            fat:fat,
+            calories: calories
           });
-          return true;
+          this.getGaugeChartData();
         }
       },
       fail: error => {
@@ -212,7 +228,23 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
-    this.getDataFromCloud();
+    // 查看是否授权
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo'] && res.authSetting['scope.werun']) {
+          this.getUserInfoandRunData();
+        } else {
+          // 授权微信步数和用户信息
+          wx.authorize({
+            scope: 'scope.userInfo',
+            scope: 'scope.werun',
+          })
+          this.getUserInfoandRunData();
+        }
+      }
+    })
+
+
     let date = app.globalData.date
     // 根据当前时间判断早上下午
     const now = new Date();
@@ -257,17 +289,7 @@ Page({
       hello: hello,
     });
 
-    // 查看是否授权
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo'] && res.authSetting['scope.werun']) {
-          this.getUserInfoandRunData();
-        } else {
-          this.getUserInfoandRunData();
-        }
-      }
-    })
-    this.getGaugeChartData();
+
   },
   //初始化仪表盘
   init_gaugeecharts: function () {
@@ -285,114 +307,307 @@ Page({
   },
   // 获取仪表盘eharts设置数据
   getGaugeOption: function () {
+    let min = this.data.originWeight;
+    let max = this.data.targetWeight;
+    if (max < min) {
+      let temp = max;
+      max = min;
+      min = temp;
+    }
     var option = {
       backgroundColor: 'black',
       tooltip: {
-        formatter: '{a} <br/>{b}'
+        trigger: 'item',
       },
-      series: [{
-        name: '体重',
-        type: 'gauge',
-        min: 60,
-        max: 75,
-        splitNumber: 10,
-        radius: '90%',
-        axisLine: { // 坐标轴线
-          lineStyle: { // 属性lineStyle控制线条样式
-            color: [
-              [0.09, 'lime'],
-              [0.82, '#1e90ff'],
-              [1, '#ff4500']
-            ],
-            width: 3,
-            shadowColor: '#fff', //默认透明
-            shadowBlur: 10
-          }
-        },
-        axisLabel: { // 坐标轴小标记
-          fontWeight: 'bolder',
-          color: '#fff',
-          shadowColor: '#fff', //默认透明
-          shadowBlur: 10
-        },
-        axisTick: { // 坐标轴小标记
-          length: 15, // 属性length控制线长
-          lineStyle: { // 属性lineStyle控制线条样式
-            color: 'auto',
-            shadowColor: '#fff', //默认透明
-            shadowBlur: 10
-          }
-        },
-        splitLine: { // 分隔线
-          length: 25, // 属性length控制线长
-          lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
-            width: 3,
-            color: '#fff',
-            shadowColor: '#fff', //默认透明
-            shadowBlur: 10
-          }
-        },
-        pointer: { // 分隔线
-          shadowColor: '#fff', //默认透明
-          shadowBlur: 5
-        },
-        title: {
-          textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-            fontWeight: 'bolder',
-            fontSize: 10,
-            fontStyle: 'italic',
-            color: '#fff',
-            shadowColor: '#fff', //默认透明
-            shadowBlur: 10
-          }
-        },
-        // 中间显示数据的大小
-        detail: {
-          backgroundColor: 'rgba(30,144,255,0.8)',
-          borderWidth: 1,
-          borderColor: '#fff',
-          shadowColor: '#fff', //默认透明
-          shadowBlur: 5,
-          offsetCenter: [0, '50%'], // x, y，单位px
-          textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+      series: [
+        // 体重表
+        {
+          name: '体重',
+          type: 'gauge',
+          min: min,
+          max: max,
+          splitNumber: 10,
+          radius: '90%',
+          tooltip: {
+            trigger: 'item',
+            formatter: '当前{a}:{c}kg'
+          },
+          axisLine: { // 坐标轴线
+            lineStyle: { // 属性lineStyle控制线条样式
+              color: [
+                [0.09, 'lime'],
+                [0.82, '#1e90ff'],
+                [1, '#ff4500']
+              ],
+              width: 3,
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          axisLabel: { // 坐标轴小标记
             fontWeight: 'bolder',
             color: '#fff',
-            fontSize: 15,
-          }
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 10,
+            fontSize: 12
+          },
+          axisTick: { // 坐标轴小标记
+            length: 15, // 属性length控制线长
+            lineStyle: { // 属性lineStyle控制线条样式
+              color: 'auto',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          splitLine: { // 分隔线
+            length: 25, // 属性length控制线长
+            lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+              width: 3,
+              color: '#fff',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          pointer: { // 分隔线
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 5
+          },
+          title: {
+            offsetCenter:[0,'50%'],
+            textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              fontSize: 15,
+              fontStyle: 'italic',
+              color: '#fff',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          // 中间显示数据的大小
+          detail: {
+            backgroundColor: 'rgba(30,144,255,0.8)',
+            borderWidth: 1,
+            borderColor: '#fff',
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 5,
+            offsetCenter: [0, '80%'], // x, y，单位px
+            formatter: '{value}kg',
+            textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              color: '#fff',
+              fontSize: 15,
+            }
+          },
+          data: [{
+            value: this.data.weight,
+            name: '体重',
+
+          }]
         },
-        data: [{
-          value: 72.5,
-          name: '体重'
-        }]
-      }]
+        // 步数表
+        {
+          name: '步数',
+          type: 'gauge',
+          center: ['20%', '55%'], // 默认全局居中
+          radius: '65%',
+          min: 0,
+          max: 10,
+          endAngle: 60,
+          splitNumber: 5,
+          tooltip: {
+            trigger: 'item',
+            formatter: '当前{a}:{c}k步'
+          },
+          axisLine: { // 坐标轴线
+            lineStyle: { // 属性lineStyle控制线条样式
+              color: [
+                [0.09, 'lime'],
+                [0.82, '#1e90ff'],
+                [1, '#ff4500']
+              ],
+              width: 2,
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          axisLabel: { // 坐标轴小标记
+            fontWeight: 'bolder',
+            color: '#fff',
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 10
+          },
+          axisTick: { // 坐标轴小标记
+            length: 12, // 属性length控制线长
+            lineStyle: { // 属性lineStyle控制线条样式
+              color: 'auto',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          splitLine: { // 分隔线
+            length: 20, // 属性length控制线长
+            lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+              width: 3,
+              color: '#fff',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          pointer: {
+            width: 5,
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 5
+          },
+          title: {
+            offsetCenter: [0, '60%'], // x, y，单位px
+            textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              fontStyle: 'italic',
+              color: '#fff',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          detail: {
+            backgroundColor: 'rgba(30,144,255,0.8)',
+            borderWidth: 1,
+            borderColor: '#fff',
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 5,
+            offsetCenter: [0, '100%'], // x, y，单位px
+            formatter: '{value}千步',
+            textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              color: '#fff',
+              fontSize: 12,
+            }
+          },
+          data: [{
+            value: this.data.todayStep / 1000,
+            name: '步数'
+          }]
+        },
+        // 体脂表
+        {
+          name: '体脂',
+          type: 'gauge',
+          center: ['80%', '55%'], // 默认全局居中
+          radius: '65%',
+          min: 0,
+          max: this.data.maxFat,
+          startAngle:122,
+          endAngle: -58,
+          splitNumber: 5,
+          tooltip: {
+            trigger: 'item',
+            formatter: '当前{a}:{c}%'
+          },
+          axisLine: { // 坐标轴线
+            lineStyle: { // 属性lineStyle控制线条样式
+              color: [
+                [0.09, 'lime'],
+                [0.82, '#1e90ff'],
+                [1, '#ff4500']
+              ],
+              width: 2,
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          axisLabel: { // 坐标轴小标记
+            fontWeight: 'bolder',
+            color: '#fff',
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 10
+          },
+          axisTick: { // 坐标轴小标记
+            length: 12, // 属性length控制线长
+            lineStyle: { // 属性lineStyle控制线条样式
+              color: 'auto',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          splitLine: { // 分隔线
+            length: 20, // 属性length控制线长
+            lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+              width: 3,
+              color: '#fff',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          pointer: {
+            width: 5,
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 5
+          },
+          title: {
+            offsetCenter: ['-20%', '60%'], // x, y，单位px
+            textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              fontStyle: 'italic',
+              color: '#fff',
+              shadowColor: '#fff', //默认透明
+              shadowBlur: 10
+            }
+          },
+          detail: {
+            backgroundColor: 'rgba(30,144,255,0.8)',
+            borderWidth: 1,
+            borderColor: '#fff',
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 5,
+            offsetCenter: ['-20%', '100%'], // x, y，单位px
+            formatter: '{value}%',
+            textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              color: '#fff',
+              fontSize: 12,
+            }
+          },
+          data: [{
+            show:false,
+            value: this.data.fat,
+            name: '体脂'
+          }]
+        }
+      ]
     };
     return option;
   },
   // 获取仪表盘数据
-  getGaugeChartData:function () {
-    this.echartsComponnet = this.selectComponent('#mychart-dom-gauge');
-    this.init_gaugeecharts();
+  getGaugeChartData: async function () {
+    
+      this.echartsComponnet = this.selectComponent('#mychart-dom-gauge');
+      this.init_gaugeecharts();
+
   },
-  getUserInfoandRunData() {
+  async getUserInfoandRunData() {
     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-    wx.getUserInfo({
+    await wx.getUserInfo({
       success: res => {
         console.log(res.userInfo);
         let sex = res.userInfo.gender;
+        // 设定男女最大体脂范围
+        let maxFat = 0;
         if (sex === 1) {
-          app.globalData.sex = '男'
+          app.globalData.sex = '男',
+          maxFat = 26;
         } else {
           app.globalData.sex = '女'
+          maxFat = 32;
         }
         this.setData({
-          nickName: res.userInfo.nickName
+          nickName: res.userInfo.nickName,
+          maxFat:maxFat
         })
         app.globalData.nickName = res.userInfo.nickName;
         console.log('性别是', app.globalData.sex);
       }
     })
     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-    wx.getWeRunData({
+    await wx.getWeRunData({
       success: res => {
         wx.cloud.callFunction({
           name: 'getWxRunData',
@@ -401,15 +616,12 @@ Page({
           }
         }).then(resData => {
           app.globalData.todayStep = resData.result.event.weRunData.data.stepInfoList[30].step;
-          let calories = 0;
-          /* 
-          卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
-          */
-          calories = (resData.result.event.weRunData.data.stepInfoList[30].step * this.data.height * 0.45 * 0.01 / 1000 * this.data.weight * 1.036).toFixed(0);
+          
           this.setData({
             todayStep: resData.result.event.weRunData.data.stepInfoList[30].step,
-            calories: calories
+            
           })
+         this.getDataFromCloud();
           console.log('今日步数', app.globalData.todayStep) //今天的步数
         })
       }

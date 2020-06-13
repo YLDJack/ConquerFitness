@@ -1,10 +1,10 @@
 <van-toast id="van-toast" />
 <!-- 用户初次登陆，弹出的设置身高体重框 -->
 <van-popup show="{{ SetBody }}" closeable bind:close="onCloseSetBody" custom-style="height: 35%;width:50%">
-征服者{{nickName}},您好,欢迎您使用ConquerFitness
-请先让我们了解您的身体数据:
-	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number'/>
-	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number'/>
+	征服者{{nickName}},您好,欢迎您使用ConquerFitness
+	请先让我们了解您的身体数据:
+	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number' />
+	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number' />
 	<view class="confirm" bindtap="onSetBody">确定</view>
 </van-popup>
 <!-- 第一栏 -->
@@ -26,6 +26,10 @@
 		</view>
 	</view>
 	<view class="topright">
+		<!-- 显示步数 -->
+		<view class="sayhello" wx:if="{{todayStep}}">
+			<view>已走{{todayStep}}步,大约消耗{{calories}}卡</view>
+		</view>
 		<!-- 状态 -->
 		<view class="statetext">
 			<van-tag type="primary" plain size="large" style="margin-left:20rpx">状态:</van-tag>
@@ -85,22 +89,14 @@
 </view>
 
 <!-- 数据表轮播 -->
-<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
-	<swiper-item>
-		<!-- echarts画的饼图
+<scroll-view class='data-swiper'  circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+		<!-- echarts画的仪表盘 -->
 		<view class="eccontainer">
-			<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
-		</view> -->
-	</swiper-item>
+			<ec-canvas id="mychart-dom-gauge" canvas-id="mychart-gauge" ec="{{ gaugeec }}"></ec-canvas>
+		</view>
+</scroll-view>
 
-	<swiper-item>
-		<!-- echarts线图 -->
-		<!-- <view class="eccontainer line"> -->
-		<!-- <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
-			</ec-canvas> -->
-		<!-- </view> -->
-	</swiper-item>
-</swiper>
+
 
 <!-- 练习推荐 -->
 <view class="quickitems">

@@ -17,6 +17,7 @@ Page({
     height: '',
     weight: '',
     fat:'',
+    maxFat:26,
     // 初次设定身体数据的弹出层开关
     SetBody: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
@@ -143,13 +144,19 @@ Page({
           let targetWeight = res.result.data[length - 1].targetWeight;
           let originWeight = res.result.data[length - 1].originWeight;
           let fat = res.result.data[length - 1].fat;
+          let calories = 0;
+          /* 
+          卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
+          */
+          calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
           this.setData({
             trainStatus: status,
             height: height,
             weight: weight,
             targetWeight: targetWeight,
             originWeight: originWeight,
-            fat:fat
+            fat:fat,
+            calories: calories
           });
           this.getGaugeChartData();
         }
@@ -366,7 +373,7 @@ Page({
             shadowBlur: 5
           },
           title: {
-            offsetCenter:[0,'20%'],
+            offsetCenter:[0,'50%'],
             textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
               fontWeight: 'bolder',
               fontSize: 15,
@@ -383,7 +390,7 @@ Page({
             borderColor: '#fff',
             shadowColor: '#fff', //默认透明
             shadowBlur: 5,
-            offsetCenter: [0, '50%'], // x, y，单位px
+            offsetCenter: [0, '80%'], // x, y，单位px
             formatter: '{value}kg',
             textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
               fontWeight: 'bolder',
@@ -414,9 +421,9 @@ Page({
           axisLine: { // 坐标轴线
             lineStyle: { // 属性lineStyle控制线条样式
               color: [
-                [0.29, '#ff4500'],
-                [0.86, '#1e90ff'],
-                [1, 'lime']
+                [0.09, 'lime'],
+                [0.82, '#1e90ff'],
+                [1, '#ff4500']
               ],
               width: 2,
               shadowColor: '#fff', //默认透明
@@ -452,7 +459,7 @@ Page({
             shadowBlur: 5
           },
           title: {
-            offsetCenter: [0, '10%'], // x, y，单位px
+            offsetCenter: [0, '60%'], // x, y，单位px
             textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
               fontWeight: 'bolder',
               fontStyle: 'italic',
@@ -467,7 +474,7 @@ Page({
             borderColor: '#fff',
             shadowColor: '#fff', //默认透明
             shadowBlur: 5,
-            offsetCenter: [0, '50%'], // x, y，单位px
+            offsetCenter: [0, '100%'], // x, y，单位px
             formatter: '{value}千步',
             textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
               fontWeight: 'bolder',
@@ -487,7 +494,7 @@ Page({
           center: ['80%', '55%'], // 默认全局居中
           radius: '65%',
           min: 0,
-          max: 30,
+          max: this.data.maxFat,
           startAngle:122,
           endAngle: -58,
           splitNumber: 5,
@@ -498,9 +505,9 @@ Page({
           axisLine: { // 坐标轴线
             lineStyle: { // 属性lineStyle控制线条样式
               color: [
-                [0.29, '#ff4500'],
-                [0.86, '#1e90ff'],
-                [1, 'lime']
+                [0.09, 'lime'],
+                [0.82, '#1e90ff'],
+                [1, '#ff4500']
               ],
               width: 2,
               shadowColor: '#fff', //默认透明
@@ -536,7 +543,7 @@ Page({
             shadowBlur: 5
           },
           title: {
-            offsetCenter: [0, '10%'], // x, y，单位px
+            offsetCenter: ['-20%', '60%'], // x, y，单位px
             textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
               fontWeight: 'bolder',
               fontStyle: 'italic',
@@ -551,7 +558,7 @@ Page({
             borderColor: '#fff',
             shadowColor: '#fff', //默认透明
             shadowBlur: 5,
-            offsetCenter: [0, '50%'], // x, y，单位px
+            offsetCenter: ['-20%', '100%'], // x, y，单位px
             formatter: '{value}%',
             textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
               fontWeight: 'bolder',
@@ -582,13 +589,18 @@ Page({
       success: res => {
         console.log(res.userInfo);
         let sex = res.userInfo.gender;
+        // 设定男女最大体脂范围
+        let maxFat = 0;
         if (sex === 1) {
-          app.globalData.sex = '男'
+          app.globalData.sex = '男',
+          maxFat = 26;
         } else {
           app.globalData.sex = '女'
+          maxFat = 32;
         }
         this.setData({
-          nickName: res.userInfo.nickName
+          nickName: res.userInfo.nickName,
+          maxFat:maxFat
         })
         app.globalData.nickName = res.userInfo.nickName;
         console.log('性别是', app.globalData.sex);
@@ -604,14 +616,10 @@ Page({
           }
         }).then(resData => {
           app.globalData.todayStep = resData.result.event.weRunData.data.stepInfoList[30].step;
-          let calories = 0;
-          /* 
-          卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
-          */
-          calories = (resData.result.event.weRunData.data.stepInfoList[30].step * this.data.height * 0.45 * 0.01 / 1000 * this.data.weight * 1.036).toFixed(0);
+          
           this.setData({
             todayStep: resData.result.event.weRunData.data.stepInfoList[30].step,
-            calories: calories
+            
           })
          this.getDataFromCloud();
           console.log('今日步数', app.globalData.todayStep) //今天的步数

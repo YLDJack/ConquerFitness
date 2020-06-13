@@ -16,8 +16,8 @@ Page({
     calories: 0,
     height: '',
     weight: '',
-    fat:'',
-    maxFat:26,
+    fat: '',
+    maxFat: 26,
     // 初次设定身体数据的弹出层开关
     SetBody: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
@@ -155,7 +155,7 @@ Page({
             weight: weight,
             targetWeight: targetWeight,
             originWeight: originWeight,
-            fat:fat,
+            fat: fat,
             calories: calories
           });
           this.getGaugeChartData();
@@ -228,24 +228,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
-    // 查看是否授权
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo'] && res.authSetting['scope.werun']) {
-          this.getUserInfoandRunData();
-        } else {
-          // 授权微信步数和用户信息
-          wx.authorize({
-            scope: 'scope.userInfo',
-          }),
-          wx.authorize({
-            scope: 'scope.werun',
-          })
-          this.getUserInfoandRunData();
-        }
-      }
-    })
-
 
     let date = app.globalData.date
     // 根据当前时间判断早上下午
@@ -375,7 +357,7 @@ Page({
             shadowBlur: 5
           },
           title: {
-            offsetCenter:[0,'50%'],
+            offsetCenter: [0, '50%'],
             textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
               fontWeight: 'bolder',
               fontSize: 15,
@@ -497,7 +479,7 @@ Page({
           radius: '65%',
           min: 0,
           max: this.data.maxFat,
-          startAngle:122,
+          startAngle: 122,
           endAngle: -58,
           splitNumber: 5,
           tooltip: {
@@ -569,7 +551,7 @@ Page({
             }
           },
           data: [{
-            show:false,
+            show: false,
             value: this.data.fat,
             name: '体脂'
           }]
@@ -580,9 +562,9 @@ Page({
   },
   // 获取仪表盘数据
   getGaugeChartData: async function () {
-    
-      this.echartsComponnet = this.selectComponent('#mychart-dom-gauge');
-      this.init_gaugeecharts();
+
+    this.echartsComponnet = this.selectComponent('#mychart-dom-gauge');
+    this.init_gaugeecharts();
 
   },
   async getUserInfoandRunData() {
@@ -595,14 +577,14 @@ Page({
         let maxFat = 0;
         if (sex === 1) {
           app.globalData.sex = '男',
-          maxFat = 26;
+            maxFat = 26;
         } else {
           app.globalData.sex = '女'
           maxFat = 32;
         }
         this.setData({
           nickName: res.userInfo.nickName,
-          maxFat:maxFat
+          maxFat: maxFat
         })
         app.globalData.nickName = res.userInfo.nickName;
         console.log('性别是', app.globalData.sex);
@@ -618,12 +600,12 @@ Page({
           }
         }).then(resData => {
           app.globalData.todayStep = resData.result.event.weRunData.data.stepInfoList[30].step;
-          
+
           this.setData({
             todayStep: resData.result.event.weRunData.data.stepInfoList[30].step,
-            
+
           })
-         this.getDataFromCloud();
+          this.getDataFromCloud();
           console.log('今日步数', app.globalData.todayStep) //今天的步数
         })
       }
@@ -660,5 +642,22 @@ Page({
         selected: 0
       })
     }
+    // 查看是否授权
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo'] && res.authSetting['scope.werun']) {
+          this.getUserInfoandRunData();
+        } else {
+          // 授权微信步数和用户信息
+          wx.authorize({
+              scope: 'scope.userInfo',
+            }),
+            wx.authorize({
+              scope: 'scope.werun',
+            })
+          this.getUserInfoandRunData();
+        }
+      }
+    })
   }
 })

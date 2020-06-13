@@ -46,7 +46,8 @@ exports.main = async (event, context) => {
             smallleg: event.smallleg,
             breast: event.breast,
             arms: event.arms,
-            waist: event.waist
+            waist: event.waist,
+            height:event.height
           }
         })
       } else {
@@ -58,11 +59,11 @@ exports.main = async (event, context) => {
           data: {
             openId: openID,
             trainState: event.trainState,
-            targetWeight:event.targetWeight,
+            targetWeight: event.targetWeight,
             targetStartTime: event.targetStartTime,
-            originWeight:event.originWeight,
-            originWeightDate:event.originWeightDate,
-            targetEndTime:event.targetEndTime,
+            originWeight: event.originWeight,
+            originWeightDate: event.originWeightDate,
+            targetEndTime: event.targetEndTime,
             weight: event.weight,
             fat: event.fat,
             ass: event.ass,
@@ -70,7 +71,7 @@ exports.main = async (event, context) => {
             smallleg: event.smallleg,
             breast: event.breast,
             arms: event.arms,
-            waist: event.waist
+            waist: event.waist,
           }
         })
       }
@@ -87,8 +88,8 @@ exports.main = async (event, context) => {
       targetWeight: event.targetWeight || 0,
       targetStartTime: event.targetStartTime || 0,
       targetEndTime: event.targetEndTime,
-      originWeight:event.originWeight,
-      originWeightDate:event.originWeightDate,
+      originWeight: event.originWeight,
+      originWeightDate: event.originWeightDate,
       weight: event.weight,
       fat: event.fat,
       ass: event.ass,
@@ -96,7 +97,10 @@ exports.main = async (event, context) => {
       smallleg: event.smallleg,
       breast: event.breast,
       arms: event.arms,
-      waist:event.waist
+      waist: event.waist,
+      sex: event.sex,
+      todayStep: event.todayStep,
+      height:event.height
     }
   })
 

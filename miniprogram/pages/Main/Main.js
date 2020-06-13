@@ -6,6 +6,10 @@ var app = getApp();
 
 Page({
   data: {
+    height: '',
+    weight: '',
+    // 初次设定身体数据的弹出层开关
+    SetBody: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     trainStatus: "增肌",
     // 问候语
@@ -112,25 +116,86 @@ Page({
       // 云函数名称
       name: 'getPersonalData',
       success: res => {
-        wx.showToast({
-          title: '获取训练状态成功',
-          icon: "none"
-        })
         let length = res.result.data.length;
-        let status = res.result.data[length - 1].trainState;
-        this.setData({
-          trainStatus: status
-        });
-        console.log('状态', this.data.trainStatus);
-
+        if (length === 0) {
+          this.setData({
+            SetBody: true
+          })
+        } else {
+          wx.showToast({
+            title: '获取个人数据成功',
+          });
+          app.globalData.bodydata = res.result.data[length - 1];
+          app.globalData.bodydatas = res.result.data;
+          console.log("身体数据:", app.globalData.bodydata);
+          let status = res.result.data[length - 1].trainState;
+          this.setData({
+            trainStatus: status
+          });
+          return true;
+        }
       },
       fail: error => {
         console.log(error);
         wx.showToast({
-          title: '获取状态失败',
+          title: '获取失败',
           icon: "none"
         })
       }
+    })
+  },
+  // 确认设定初始的身体状态，并保存至云端
+  onSetBody() {
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'addPersonalData',
+      // 传给云函数的参数
+      data: {
+        date: app.globalData.date,
+        trainState: "减脂",
+        weight: this.data.weight,
+        height: this.data.height,
+        fat: 0,
+        ass: 0,
+        leg: 0,
+        smallleg: 0,
+        breast: 0,
+        arms: 0,
+        waist: 0,
+        targetWeight: this.data.weight,
+        // 目标开始时间
+        targetStartTime: app.globalData.date,
+        // 目标时间
+        targetEndTime: app.globalData.date,
+        // 训练目标没有改变，则原始体重也不变
+        originWeight: this.data.weight,
+        originWeightDate: app.globalData.date,
+        sex: app.globalData.sex,
+        todayStep: app.globalData.todayStep
+      },
+      success: res => {
+        wx.showToast({
+          title: '上传成功',
+        }),
+        this.setData({
+          SetBody:false
+        })
+        // 添加成功后再去获取数据
+        this.getDataFromCloud();
+      },
+      fail: error => {
+        console.log(error);
+        wx.showToast({
+          title: '上传失败',
+          icon: "none"
+        })
+      }
+    })
+  },
+  // 关闭初次设置体重的页面
+  onCloseSetBody() {
+    this.setData({
+      SetBody: false
     })
   },
   /**
@@ -139,46 +204,48 @@ Page({
   onLoad: function () {
     this.getDataFromCloud();
     let date = app.globalData.date
-    //获取当前时间和身体数据
-    this.setData({
-      date: date,
-    });
     // 根据当前时间判断早上下午
     const now = new Date();
     const hour = now.getHours();
+    let hello = '';
     if (hour < 6) {
-      this.setData({
-        hello: "凌晨好"
-      });
+
+      hello = "凌晨好";
+
     } else if (hour < 9) {
-      this.setData({
-        hello: "早上好"
-      });
+
+      hello = "早上好";
+
     } else if (hour < 12) {
-      this.setData({
-        hello: "上午好"
-      });
+
+      hello = "上午好";
+
     } else if (hour < 14) {
-      this.setData({
-        hello: "中午好"
-      });
+
+      hello = "中午好";
+
     } else if (hour < 17) {
-      this.setData({
-        hello: "下午好"
-      });
+
+      hello = "下午好";
+
     } else if (hour < 19) {
-      this.setData({
-        hello: "傍晚好"
-      });
+
+      hello = "傍晚好";
+
     } else if (hour < 22) {
-      this.setData({
-        hello: "晚上好"
-      });
+
+      hello = "晚上好";
+
     } else {
-      this.setData({
-        hello: "夜里好"
-      });
+
+      hello = "夜里好";
+
     }
+    //获取当前时间和身体数据
+    this.setData({
+      date: date,
+      hello: hello,
+    });
 
     // 查看是否授权
     wx.getSetting({
@@ -195,7 +262,7 @@ Page({
   getUserInfoandRunData() {
     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
     wx.getUserInfo({
-      success: function (res) {
+      success: res => {
         console.log(res.userInfo);
         let sex = res.userInfo.gender;
         if (sex === 1) {
@@ -203,6 +270,10 @@ Page({
         } else {
           app.globalData.sex = '女'
         }
+        this.setData({
+          nickName: res.userInfo.nickName
+        })
+        app.globalData.nickName = res.userInfo.nickName;
         console.log('性别是', app.globalData.sex);
       }
     })
@@ -216,7 +287,7 @@ Page({
           }
         }).then(resData => {
           app.globalData.todayStep = resData.result.event.weRunData.data.stepInfoList[30].step;
-          console.log('今日步数',app.globalData.todayStep) //今天的步数
+          console.log('今日步数', app.globalData.todayStep) //今天的步数
         })
       }
     })

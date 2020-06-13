@@ -1,4 +1,4 @@
-<van-tabs active="{{ active }}" bind:change="onChangeTab">
+<van-tabs active="{{ active }}" bind:change="onChangeTab" color='linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))'>
 	<!-- 身体记录 -->
 	<van-tab title="身体记录">
 		<view class="stateTag">

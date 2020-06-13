@@ -6,8 +6,12 @@ var app = getApp();
 
 Page({
   data: {
-    todayStep:0,
-    calories:0,
+    // 页面中间的仪表盘
+    gaugeec: {
+      lazyLoad: true, // 延迟加载
+    },
+    todayStep: 0,
+    calories: 0,
     height: '',
     weight: '',
     // 初次设定身体数据的弹出层开关
@@ -131,12 +135,12 @@ Page({
           app.globalData.bodydatas = res.result.data;
           console.log("身体数据:", app.globalData.bodydata);
           let status = res.result.data[length - 1].trainState;
-          let height= res.result.data[length - 1].height;
+          let height = res.result.data[length - 1].height;
           let weight = res.result.data[length - 1].weight
           this.setData({
             trainStatus: status,
-            height:height,
-            weight:weight
+            height: height,
+            weight: weight
           });
           return true;
         }
@@ -181,11 +185,11 @@ Page({
       },
       success: res => {
         wx.showToast({
-          title: '上传成功',
-        }),
-        this.setData({
-          SetBody:false
-        })
+            title: '上传成功',
+          }),
+          this.setData({
+            SetBody: false
+          })
         // 添加成功后再去获取数据
         this.getDataFromCloud();
       },
@@ -263,7 +267,111 @@ Page({
         }
       }
     })
-
+    this.getGaugeChartData();
+  },
+  //初始化仪表盘
+  init_gaugeecharts: function () {
+    this.echartsComponnet.init((canvas, width, height, dpr) => {
+      // 初始化图表,init中的第二个参数可以设置主题颜色为亮色
+      const Chart = echarts.init(canvas, null, {
+        width: width,
+        height: height,
+        devicePixelRatio: dpr // new
+      });
+      Chart.setOption(this.getGaugeOption());
+      // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      return Chart;
+    });
+  },
+  // 获取仪表盘eharts设置数据
+  getGaugeOption: function () {
+    var option = {
+      backgroundColor: 'black',
+      tooltip: {
+        formatter: '{a} <br/>{b}'
+      },
+      series: [{
+        name: '体重',
+        type: 'gauge',
+        min: 60,
+        max: 75,
+        splitNumber: 10,
+        radius: '90%',
+        axisLine: { // 坐标轴线
+          lineStyle: { // 属性lineStyle控制线条样式
+            color: [
+              [0.09, 'lime'],
+              [0.82, '#1e90ff'],
+              [1, '#ff4500']
+            ],
+            width: 3,
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 10
+          }
+        },
+        axisLabel: { // 坐标轴小标记
+          fontWeight: 'bolder',
+          color: '#fff',
+          shadowColor: '#fff', //默认透明
+          shadowBlur: 10
+        },
+        axisTick: { // 坐标轴小标记
+          length: 15, // 属性length控制线长
+          lineStyle: { // 属性lineStyle控制线条样式
+            color: 'auto',
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 10
+          }
+        },
+        splitLine: { // 分隔线
+          length: 25, // 属性length控制线长
+          lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+            width: 3,
+            color: '#fff',
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 10
+          }
+        },
+        pointer: { // 分隔线
+          shadowColor: '#fff', //默认透明
+          shadowBlur: 5
+        },
+        title: {
+          textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+            fontWeight: 'bolder',
+            fontSize: 10,
+            fontStyle: 'italic',
+            color: '#fff',
+            shadowColor: '#fff', //默认透明
+            shadowBlur: 10
+          }
+        },
+        // 中间显示数据的大小
+        detail: {
+          backgroundColor: 'rgba(30,144,255,0.8)',
+          borderWidth: 1,
+          borderColor: '#fff',
+          shadowColor: '#fff', //默认透明
+          shadowBlur: 5,
+          offsetCenter: [0, '50%'], // x, y，单位px
+          textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+            fontWeight: 'bolder',
+            color: '#fff',
+            fontSize: 15,
+          }
+        },
+        data: [{
+          value: 72.5,
+          name: '体重'
+        }]
+      }]
+    };
+    return option;
+  },
+  // 获取仪表盘数据
+  getGaugeChartData:function () {
+    this.echartsComponnet = this.selectComponent('#mychart-dom-gauge');
+    this.init_gaugeecharts();
   },
   getUserInfoandRunData() {
     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
@@ -297,10 +405,10 @@ Page({
           /* 
           卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
           */
-          calories = (resData.result.event.weRunData.data.stepInfoList[30].step*this.data.height*0.45*0.01/1000*this.data.weight*1.036).toFixed(0);
+          calories = (resData.result.event.weRunData.data.stepInfoList[30].step * this.data.height * 0.45 * 0.01 / 1000 * this.data.weight * 1.036).toFixed(0);
           this.setData({
-            todayStep:resData.result.event.weRunData.data.stepInfoList[30].step,
-            calories:calories
+            todayStep: resData.result.event.weRunData.data.stepInfoList[30].step,
+            calories: calories
           })
           console.log('今日步数', app.globalData.todayStep) //今天的步数
         })

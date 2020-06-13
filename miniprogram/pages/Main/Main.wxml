@@ -89,22 +89,14 @@
 </view>
 
 <!-- 数据表轮播 -->
-<swiper class='data-swiper' autoplay='true' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
-	<swiper-item>
-		<!-- echarts画的饼图
+<scroll-view class='data-swiper'  circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+		<!-- echarts画的仪表盘 -->
 		<view class="eccontainer">
-			<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
-		</view> -->
-	</swiper-item>
+			<ec-canvas id="mychart-dom-gauge" canvas-id="mychart-gauge" ec="{{ gaugeec }}"></ec-canvas>
+		</view>
+</scroll-view>
 
-	<swiper-item>
-		<!-- echarts线图 -->
-		<!-- <view class="eccontainer line"> -->
-		<!-- <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" style="height:800rpx; width:100%;">
-			</ec-canvas> -->
-		<!-- </view> -->
-	</swiper-item>
-</swiper>
+
 
 <!-- 练习推荐 -->
 <view class="quickitems">

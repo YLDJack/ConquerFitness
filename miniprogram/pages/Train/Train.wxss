@@ -11,7 +11,7 @@ page {
 
 /* top部分 */
 .top {
-  height: 142rpx;
+  height: 150rpx;
   flex-grow: 1;
   width: 100%;
   background-color: white;
@@ -21,16 +21,17 @@ page {
   font-family: Microsoft YaHei;
   font-weight: bold;
   font-size: 36rpx;
-  margin-top: 15rpx;
-  margin-left: 15rpx;
-  height: 40%;
+  /* padding-top: 15rpx; */
+  padding-left: 20rpx;
+  height: 25%;
 }
 
 .top .select-search {
-  height: 60%;
+  height: 75%;
   width: 100%;
   display: flex;
-  margin-top: -10rpx;
+  align-items: center;
+  justify-content: center;
 }
 
 .van-dropdown-menu {
@@ -45,10 +46,11 @@ page {
 
 /* 下方整体 */
 .mid {
-  margin-top: 10rpx;
+  margin-top: 20rpx;
   padding-top: 10rpx;
   flex-grow: 4;
   background-color: #f7f8fa;
+  margin-bottom: 130rpx;
 }
 
 .bg {
@@ -65,16 +67,6 @@ page {
 .content {
   height: 100%;
   background-color: #f7f8fa;
-}
-
-.griditemselected {
-  white-space: nowrap;
-  border-radius: 20rpx;
-  font-size: 40rpx;
-  font-weight: bold;
-  background-color: blue;
-  color: blue;
-  z-index: 100;
 }
 
 .griditem {

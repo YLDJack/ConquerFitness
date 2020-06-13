@@ -38,7 +38,7 @@
 <van-divider />
 
 <!-- 正常情况下显示下拉菜单 -->
-<view wx:if="{{!delTag}}">
+<view class="actionview" wx:if="{{!delTag}}">
 	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{trainRecord}}" wx:for-index="index" wx:key="_id">
 		<van-collapse-item name="{{index}}">
 
@@ -239,7 +239,7 @@
 </view>
 
 <!-- 点击编辑按钮之后 -->
-<view wx:else>
+<view class="actionview" wx:else>
 	<van-cell-group wx:for="{{trainRecord}}">
 		<van-cell use-label-slot>
 			<!-- 标题插槽 -->

@@ -26,7 +26,7 @@
 								<van-button type="danger" bind:click="startDel" size="small" wx:else>编辑</van-button>
 							</view>
 						</view>
-						<van-tree-select items="{{ items }}" main-active-index="{{ addpopActiveIndex }}" active-id="{{ addpopactiveId }}" bind:click-nav="onaddClickNav" content-item-class="bg" main-item-class="treenav" height="888rpx">
+						<van-tree-select items="{{ items }}" main-active-index="{{ addpopActiveIndex }}" active-id="{{ addpopactiveId }}" bind:click-nav="onaddClickNav" content-item-class="bg" main-item-class="treenav" height="1200rpx">
 							<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
 							<view slot="content" class="content">
 								<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index}}" wx:key="index">
@@ -262,11 +262,11 @@
 
 	<view class="mid">
 		<!-- treeselect动作分类选择 -->
-		<van-tree-select items="{{ items }}" main-active-index="{{ mainActiveIndex }}" active-id="{{ activeId }}" bind:click-nav="onClickNav" content-item-class="bg" main-item-class="treenav" height="888rpx">
+		<van-tree-select items="{{ items }}" main-active-index="{{ mainActiveIndex }}" active-id="{{ activeId }}" bind:click-nav="onClickNav" content-item-class="bg" main-item-class="treenav" height="1200rpx">
 			<!-- 中间显示动作部分 根据左侧选中选项卡wx:if="{{mainActiveIndex==?}}"判断-->
 			<view slot="content" class="content">
 				<!-- 没有搜索动作按分类显示 -->
-				<view wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && queryActionBySearch.length==0}}" wx:key="index">
+				<view class="gridview" wx:for="{{items.length}}" wx:if="{{mainActiveIndex== index && queryActionBySearch.length==0}}" wx:key="index">
 					<!-- 获取动作分类，并根据分类进行查询.创建不同grid -->
 					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid" wx:for="{{actionCate}}" wx:key="index">
 						<view>{{item}}</view>

@@ -185,7 +185,7 @@
 
 .item-group .practise-background {
   width: 100%;
-  height: 360rpx;
+  height: 300rpx;
   border-radius: 30rpx;
   float: right;
 }
@@ -217,4 +217,32 @@ ec-canvas {
 .eccontainer line {
   height: 800rpx;
   width: 100%;
+}
+
+/* 文章格式 */
+.textitle{
+  width: 100%;
+  text-align: center;
+  margin-top: 20rpx;
+  font-weight: bold;
+  font-size: 35rpx;
+}
+.contents{
+  white-space:pre-line;
+}
+.subtitle{
+  margin-top: 40rpx;
+  width: 100%;
+  text-align: center;
+  font-size: 30rpx;
+}
+.contentImage{
+  width: 100%;
+  text-align: center;
+}
+.image1{
+  height: 200rpx;
+}
+.image2{
+  height: 400rpx;
 }

@@ -1,14 +1,6 @@
 <van-toast id="van-toast" />
 <!-- 用户初次登陆，弹出的设置身高体重框 -->
-<van-popup show="{{ SetBody }}" closeable bind:close="onCloseSetBody" custom-style="height: 50%;background:linear-gradient(to bottom,rgb(51,36,117), rgb(7,208,208))">
-	<view class="conductText">
-	征服者{{nickName}},欢迎您使用ConquerFitness!
-	为了更好的体验，请先记录您的身体数据:
-	</view>
-	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number' />
-	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number' />
-	<view class="confirm" bindtap="onSetBody">确定</view>
-</van-popup>
+
 <!-- 第一栏 -->
 <view class="top">
 	<view class="topleft">
@@ -87,39 +79,78 @@
 </view>
 
 <!-- 数据表轮播 -->
-<scroll-view class='data-swiper'  circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
-		<!-- echarts画的仪表盘 -->
-		<view class="eccontainer">
-			<ec-canvas id="mychart-dom-gauge" canvas-id="mychart-gauge" ec="{{ gaugeec }}"></ec-canvas>
-		</view>
+<scroll-view class='data-swiper' circular indicator-dots indicator-color="gray" indicator-active-color="pink" current="1">
+	<!-- echarts画的仪表盘 -->
+	<view class="eccontainer">
+		<ec-canvas id="mychart-dom-gauge" canvas-id="mychart-gauge" ec="{{ gaugeec }}"></ec-canvas>
+	</view>
 </scroll-view>
 
 
 
-<!-- 练习推荐 -->
+<!-- 文章推荐 -->
 <view class="quickitems">
 	<view class="text">健身那些事儿</view>
 	<scroll-view class="module-scroll" scroll-x="{{true}}">
-		<navigator class="item-navigator">
-			<view class="item-group">
-				<image class="practise-background" src="cloud://conquercheck-geges.636f-conquercheck-geges-1301732640/recommendImage/pic_1.png"></image>
+		<view class="item-navigator">
+			<view class="item-group" bindtap="showdataFitness">
+				<image class="practise-background" src="cloud://conquercheck-geges.636f-conquercheck-geges-1301732640/recommendImage/fig_1.png"></image>
 				<view class="item-title">数据健身给你不一般的体验</view>
 				<view class="item-discription">新手必读</view>
 			</view>
-		</navigator>
-		<navigator class="item-navigator">
+			<van-popup show="{{ dataFitness }}" position="bottom" round custom-style="height: 80%;margin-bottom:120rpx;padding-left:30rpx;padding-right:30rpx" bind:close="onClosedataFitness">
+				<view class="textitle">数据对健身的重要性</view>
+				<text class="contents" decode="true">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;增肌也好减脂也罢，我们健身都是希望我们的身体能够发生改变，达到自己所希望的样子，我们通常都会通过记录自己在锻炼健身中的数据来观察自己的改变，但数据记录这件事，还有更多你没有意识到的意义。
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;健身数据是什么？单单只是训练记录册上，显示你做了什么动作、负重多少、做了多少次，或某个身体部位围度增减变化的那串数字吗？这未免太单薄了。
+				</text>
+				<view class="contentImage">
+					<image src="cloud://conquercheck-geges.636f-conquercheck-geges-1301732640/recommendImage/datarecommendfig1.jpg" class="image1"></image>
+				</view>
+				<view class="subtitle">对于健身新人</view>
+				<text class="contents" decode="true">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;刚刚开始健身，最重要的是能够有规律地坚持下去，最好的办法就是让他们看到效果，有足够的利益驱动，人才会继续前进。看到效果的前提，就是严格执行计划。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;举个例子，很多人都想减肥10斤。但很多人都只是停留在“想”这一步，不知道怎么去做；有人做了，但不切实际（比如时间太短、采用节食、或运动负荷过大），在预期内无法看到理想结果，于是放弃。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;而一份合理的计划怎么来，就要靠数据来支撑。10斤体重等于多少能量，要在多长时间内减下去最健康，分配到每一天你需要摄入多少能量，又要做多大强度多长时间的运动来制造热量差。这绝不是自己凭空想着每天跑步40分钟，一个月后就能改头换面的事。
+				</text>
+				<view class="contentImage">
+					<image src="cloud://conquercheck-geges.636f-conquercheck-geges-1301732640/recommendImage/datarecommendfig2.jpg" class="image2"></image>
+				</view>
+				<view class="subtitle">对于健身达人</view>
+				<text class="contents" decode="true">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;健身达人的数据记录工作就更重要了，每一个凹凸有致肌力满满的健身达人，背后都是大量数据的支撑。他们的成就感或许来自体脂率、肌肉率、肌肉维度的变化，这种计划更加精细。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;就像要把一块石头雕刻成雕像——新手是要将石头大致刻画出形状，大刀阔斧方向不出错就有成果；而达人则需要用小锤和砂纸仔细雕琢。这时的数据会更精确，在执行过程中也会更仔细。
+				</text>
+				<view class="subtitle">对于健身教练</view>
+				<text class="contents" decode="true">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;健身教练更多的是要管理数据，因为除了自身的学习和进步，他还要对自己的每一位顾客负责。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;他要收集每一位顾客的数据，包括身高体重体脂三维、过往病史、现在身体素质评估值、参加健身训练的目标和预期值，还有顾客每天能在运动上花多长时间、饮食习惯如何等等等等，才能为顾客制定训练计划。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在训练过程中，教练要依靠以上数据引导顾客如何展开训练过程、安排训练顺序、适合做哪些运动类型，并根据顾客的进度及时调整训练进程。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此外教练还要监督顾客如何管控自己，如果一周只有一节教练课程，顾客其余时间自己有做运动吗、是否按照计划打卡、有没有按照要求吃东西、会不会偷懒偷吃找借口。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这些是顾客对一个教练是否认真负责的评判因素，也是一个教练能够自豪地拿出手的成绩。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有数据，健身才能量化结果。成功有原因，失败有解释，数据不撒谎。
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现在就去给制定一份完整的健身计划吧，严格按照计划行事，拒绝对自己撒谎。不久之后，你一定可以遇见更好的自己！
+				</text>
+				<van-tag>转载</van-tag>
+				<van-tag plain>原文链接</van-tag>
+				<text class="contents">
+					https://zhuanlan.zhihu.com/p/52929168
+				</text>
+			</van-popup>
+		</view>
+		<view class="item-navigator">
 			<view class="item-group">
-				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/recommendImage/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200608202840.png?sign=6cc3366fba119b74156f15f7fa0ea828&t=1591619391"></image>
-				<view class="item-title">背部训练</view>
-				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/recommendImage/insist2.png?sign=823c13b2cf3d28c999eb149f9540d509&t=1592103449"></image>
+				<view class="item-title">如何有效增肌？</view>
+				<view class="item-discription">训练+饮食+休息</view>
 			</view>
-		</navigator>
-		<navigator class="item-navigator">
+		</view>
+		<view class="item-navigator">
 			<view class="item-group">
 				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/recommendImage/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200608232553.png?sign=d21feb646e6bc757cbadc5f24b1b30d1&t=1591630044"></image>
-				<view class="item-title">翘臀养成</view>
-				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+				<view class="item-title">科学减脂小妙招</view>
+				<view class="item-discription">饮食+无氧运动</view>
 			</view>
-		</navigator>
+		</view>
 	</scroll-view>
 </view>

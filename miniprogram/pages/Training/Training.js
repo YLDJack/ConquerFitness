@@ -8,6 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    date:'',
     // 开始休息时间
     startRest: 0,
     // 编辑组数的标记
@@ -995,7 +996,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let date = utils.formatDate(new Date());
+    let date = app.globalData.date;
     let trainingActions = app.globalData.trainingActions;
     // 从全局中获取
     let trainRecord = app.globalData.trainRecord || [];
@@ -1042,7 +1043,7 @@ Page({
           trainRestTime: 30 * 1000,
           Complish: false
         }]
-        trainingActions[i].date = utils.formatDate(new Date());
+        trainingActions[i].date = this.data.date;
         trainingActions[i].maxCount = 0;
         trainingActions[i].maxWeight = 0;
         // 解决每次只能获取最后一个动作的bug
@@ -1091,7 +1092,8 @@ Page({
       this.setData({
         TotalType: trainRecord.length,
         totalArea: totalArea,
-        trainRecord: trainRecord
+        trainRecord: trainRecord,
+        date:date
       });
       // 如果训练动作不为空则自动开始计时
       if (trainRecord.length) {

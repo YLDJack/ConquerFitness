@@ -127,7 +127,7 @@ Page({
   init_echarts: function () {
     this.echartsComponnet.init((canvas, width, height, dpr) => {
       // 初始化图表,init中的第二个参数可以设置主题颜色为亮色
-      const Chart = echarts.init(canvas, null, {
+      const Chart = echarts.init(canvas, 'light', {
         width: width,
         height: height,
         devicePixelRatio: dpr // new

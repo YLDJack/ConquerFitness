@@ -83,7 +83,7 @@ Page({
     // 训练状态列表
     columns: ['增肌', '减脂', '塑形']
   },
-  // 更新目标
+  // 更新身体数据
   async onUpdateTarget() {
     let trainState = this.data.trainState;
     let targetWeight = this.data.targetWeight;
@@ -205,17 +205,19 @@ Page({
   },
   // 从云端获取数据的方法
   async getDataFromCloud() {
+    let date = this.data.date;
     await wx.cloud.callFunction({
       // 云函数名称
-      name: 'getPersonalData',
+      name: 'getPersonalDataByDate',
+      data: {
+        date: date
+      },
       success: res => {
-        let length = res.result.data.length;
+        let result = res.result.data;
         wx.showToast({
           title: '获取个人数据成功',
         });
-        app.globalData.bodydata = res.result.data[length - 1];
-        app.globalData.bodydatas = res.result.data;
-        console.log("身体数据:", app.globalData.bodydata);
+        app.globalData.bodydata = result[0];
         this.setRecordData();
       },
       fail: error => {
@@ -229,7 +231,10 @@ Page({
   },
   // 保存体脂数据
   saveFat() {
-    onUpdateTarget();
+    this.setData({
+      fat:this.data.calcuatedFat
+    })
+    this.onUpdateTarget();
   },
   onChangeTab(event) {
     wx.showToast({
@@ -543,8 +548,36 @@ Page({
     let cutWeight = Math.abs(totalNeed - leaveWeight).toFixed(1);
     // 计算意见减去的体重占全部需要减去的体重的百分比
     let circleValue = 100 - Math.abs(cutWeight / totalNeed).toFixed(2) * 100;
-    console.log('circleValue', circleValue);
+    let fat = nowRecord.fat;
+    let fatStaus = '';
+    if (sex === '女') {
+      if (fat < 13) {
+        fatStaus = '必要脂肪';
+      } else if (fat < 20) {
+        fatStaus = '运动员';
+      } else if (fat < 24) {
+        fatStaus = '健康';
+      } else if (fat < 31) {
+        fatStaus = '可接受';
+      } else {
+        fatStaus = '肥胖';
+      }
+    } else {
+      if (fat < 5) {
+        fatStaus = '必要脂肪';
+      } else if (fat < 13) {
+        fatStaus = '运动员';
+      } else if (fat < 17) {
+        fatStaus = '健康';
+      } else if (fat < 25) {
+        fatStaus = '可接受';
+      } else {
+        fatStaus = '肥胖';
+      }
+    }
+    console.log('circleValue', fatStaus);
     this.setData({
+      fatStatus: fatStaus,
       sex: sex,
       todayStep: todayStep,
       cutWeight: cutWeight,
@@ -559,7 +592,7 @@ Page({
       originWeightDate: nowRecord.originWeightDate,
       trainState: nowRecord.trainState,
       weight: nowRecord.weight,
-      fat: nowRecord.fat,
+      fat: fat,
       ass: nowRecord.ass,
       leg: nowRecord.leg,
       smallleg: nowRecord.smallleg,
@@ -568,6 +601,46 @@ Page({
       waist: nowRecord.waist,
       targetWeight: nowRecord.targetWeight,
       targetDate: nowRecord.targetEndTime,
+    })
+  },
+  // 计算体脂
+  calculateFat() {
+    let calcuatedFat = 0;
+    let sex = this.data.sex;
+    let waist = this.data.waist;
+    let weight = this.data.weight;
+    if (waist === 0) {
+      wx.showToast({
+        title: '请先输入腰围,才能自动计算',
+        icon: 'none'
+      })
+      return false;
+    }
+    console.log('体重', weight);
+    console.log('腰围', waist);
+    let a = waist * 0.74;
+    let b = 0;
+    // 男性体脂计算公式
+    if (sex === '女') {
+      b = weight * 0.082 + 34.89;
+    } else {
+      b = weight * 0.082 + 44.74;
+    }
+    console.log('a', a);
+    console.log('b', b);
+
+    calcuatedFat = (((a - b) / weight) * 100).toFixed(2);
+
+    if (calcuatedFat < 0) {
+      wx.showToast({
+        title: '您的腰围或体重输入有误，计算失败！',
+        icon: 'none'
+      })
+      return false;
+    }
+
+    this.setData({
+      calcuatedFat: calcuatedFat
     })
   },
 

@@ -2,69 +2,6 @@ import * as echarts from '../../ec-canvas/echarts';
 import Toast from '@vant/weapp/toast/toast'
 const app = getApp();
 
-//初始化折线图的方法
-function initlineChart(canvas, width, height, dpr) {
-  const chart = echarts.init(canvas, null, {
-    width: width,
-    height: height,
-    devicePixelRatio: dpr // new
-  });
-  canvas.setChart(chart);
-
-  var option = {
-    color: ["#37A2DA", "#67E0E3", "#9FE6B8"],
-    legend: {
-      data: ['胸部', '背部', '腿部'],
-      top: 50,
-      left: 'center',
-      backgroundColor: 'red',
-      z: 100
-    },
-    grid: {
-      containLabel: true
-    },
-    tooltip: {
-      show: true,
-      trigger: 'axis'
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-      // show: false
-    },
-    yAxis: {
-      x: 'center',
-      type: 'value',
-      splitLine: {
-        lineStyle: {
-          type: 'dashed'
-        }
-      }
-      // show: false
-    },
-    series: [{
-      name: '胸部',
-      type: 'line',
-      smooth: true,
-      data: [18, 36, 65, 30, 78, 40, 33]
-    }, {
-      name: '背部',
-      type: 'line',
-      smooth: true,
-      data: [12, 50, 51, 35, 70, 30, 20]
-    }, {
-      name: '腿部',
-      type: 'line',
-      smooth: true,
-      data: [10, 30, 31, 50, 40, 20, 10]
-    }]
-  };
-
-  chart.setOption(option);
-  return chart;
-}
-
 Page({
 
   //页面的初始数据
@@ -360,7 +297,181 @@ Page({
     collactiveNames: ['0'],
     updatecollactiveNames: ['0'],
     lineec: {
-      onInit: initlineChart
+      lazyLoad: true, // 延迟加载
+    },
+        // 肌容量图数据
+        countSeries: [{
+          data: [],
+          smooth: false,
+          // 圆圈的大小
+          symbol: 'circle',
+          symbolSize: 10,
+          type: 'line',
+          // 设置始终显示数据
+          itemStyle: {
+            normal: {
+              label: {
+                color: 'lightred',
+                // 设置单位
+                show: true, //开启显示
+                position: 'top', //在上方显示
+              }
+            }
+          },
+          // 显示最大值最小值以及平均值
+          markPoint: {
+            data: [{
+                type: 'max',
+                name: '最大值',
+                symbolSize: 40,
+    
+              },
+              {
+                type: 'min',
+                name: '最小值',
+                symbolSize: 40
+              }
+            ]
+          },
+          // 设置平均值的线
+          markLine: {
+            label: {
+              show: true,
+              position: 'end'
+            },
+            data: [{
+              type: 'average',
+              name: '平均值'
+            }]
+          }
+        },],
+        // 肌容量坐标x轴
+        countAscissaData: [],
+  },
+  //初始化容量图表
+  init_echarts: function () {
+    this.echartsComponnet.init((canvas, width, height, dpr) => {
+      // 初始化图表,init中的第二个参数可以设置主题颜色
+      const Chart = echarts.init(canvas, 'light', {
+        width: width,
+        height: height,
+        devicePixelRatio: dpr // new
+      });
+      Chart.setOption(this.getOption());
+      // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      return Chart;
+    });
+  },
+  // 获取容量eharts设置数据
+  getOption: function () {
+    var that = this
+    var option = {
+      legend: {
+        data: ['肌容量'],
+        bottom: 0,
+      },
+      tooltip: {
+        trigger: 'item',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        }
+      },
+      // 刻度
+      grid: {
+        containLabel: true
+      },
+      dataZoom: [{
+        type: 'inside',
+        throttle: 50
+      }],
+      // 指定表的标题
+      title: {
+        show: true,
+        text: '容量变化折线图',
+        left: 'center',
+      },
+      xAxis: {
+        //坐标轴名字 name:'日期',
+        // nameLocation:'center',
+        type: 'category',
+        boundaryGap: false,
+        data: that.data.countAscissaData.reverse(),
+        onZero: true,
+        // show: false
+      },
+      yAxis: {
+        x: 'center',
+        type: 'value',
+        splitLine: {
+          lineStyle: {
+            type: 'dashed'
+          }
+        },
+        axisLine: { //y轴坐标是否显示
+          show: true
+        },
+        axisTick: { //y轴刻度小标是否显示
+          show: true
+        }
+      },
+      series: that.data.countSeries
+    }
+    return option
+  },
+  // 获取容量折线图数据
+  getChartData: function (actionId) {
+    console.log('接收到的actionid',actionId);
+    let countSeries = this.data.countSeries;
+    // 处理好的横坐标
+    let countAscissaData = [];
+    // 根据动作id和open_id获取动作记录数据
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getActionRecordById',
+      // 传给云函数的参数
+      data: {
+        actionId: actionId
+      },
+      success: res => {
+        wx.showToast({
+          title: '获取动作数据成功',
+        })
+        let result = res.result.data
+
+        // 容量的数值
+        let ydata = [];
+
+        //将动作记录的时间设置为x轴
+        for (let i = 0; i < result.length; i++) {
+          ydata.push(result[i].trainCount);
+          countAscissaData.push(result[i].date);
+        }
+        countSeries[0].data = ydata.reverse();
+        this.setData({
+          countSeries: countSeries,
+          countAscissaData: countAscissaData
+        });
+        console.log('获取到的动作记录', this.data.countAscissaData);
+        this.echartsComponnet = this.selectComponent('#mychart-dom-line');
+        this.init_echarts();
+      },
+      fail: error => {
+        console.log(error);
+        wx.showToast({
+          title: '获取动作数据失败',
+          icon: "none"
+        })
+      }
+    });
+  },
+   // tab的切换方法
+   onTabChange(event) {
+    console.log('tab', event);
+    if (event.detail.name === 1) {
+      this.getChartData(event.currentTarget.dataset.actionid);
     }
   },
   // 确认删除

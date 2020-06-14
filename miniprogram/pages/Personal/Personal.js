@@ -119,7 +119,7 @@ Page({
     });
   },
   onLoad: function () {
-    this.loadbodydatas();
+    
   },
   // 更新数据方法
   updateDataToCloud() {
@@ -317,6 +317,7 @@ Page({
         selected: 4
       })
     }
+    this.loadbodydatas();
   },
 
   /**

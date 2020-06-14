@@ -9,10 +9,10 @@ import weekOfYear from '../../utils/dayjs/plugin/weekOfYear/index';
 
 // dayjs时间周期处理工具
 dayjs.locale('zh-cn');
+// 根据本地化配置获取星期几
 dayjs.extend(weekday);
 dayjs.extend(weekOfYear);
 const app = getApp();
-
 
 Page({
 
@@ -190,9 +190,9 @@ Page({
     let pieSeries = this.data.pieSeries;
     let data = [];
     // 获取本周的时间
-    for (let i = 1; i < 8; i++) {
-      dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().day(i).format('dddd'))
+    for (let i = 0; i < 7; i++) {
+      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
+      weekNumArray.push(dayjs().weekday(i).format('dddd'))
     }
     console.log('日期数', dayArray);
     console.log('星期数', weekNumArray);
@@ -360,9 +360,9 @@ Page({
     // 处理好的横坐标
     let countAscissaData = [];
     // 获取本周的时间
-    for (let i = 1; i < 8; i++) {
-      dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().day(i).format('dddd'))
+    for (let i = 0; i < 7; i++) {
+      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
+      weekNumArray.push(dayjs().weekday(i).format('dddd'))
     }
 
     wx.cloud.callFunction({
@@ -513,9 +513,9 @@ Page({
     let classifiedTrainRecord = [];
     let trainRecord = [];
     // 获取本周的时间
-    for (let i = 1; i < 8; i++) {
-      dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().day(i).format('dddd'))
+    for (let i = 0; i < 7; i++) {
+      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
+      weekNumArray.push(dayjs().weekday(i).format('dddd'))
     }
     console.log('日期数', dayArray);
 

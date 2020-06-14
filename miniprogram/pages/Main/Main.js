@@ -9,6 +9,8 @@ dayjs.extend(duration);
 var app = getApp();
 Page({
   data: {
+    // 文章推荐部分
+    dataFitness:false,
     // 页面中间的仪表盘
     gaugeec: {
       lazyLoad: true, // 延迟加载
@@ -80,6 +82,13 @@ Page({
       }
       return day;
   },
+  // 文章推荐的弹出层
+  showdataFitness() {
+    this.setData({ dataFitness: true });
+  },
+
+  onClosedataFitness() {
+    this.setData({ dataFitness: false });
   },
 
   //日期确认方法

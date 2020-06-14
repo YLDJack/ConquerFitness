@@ -21,7 +21,7 @@
 						<view class="addtop">
 							<view class="addtoptitle">已添动作</view>
 							<view class="addtopbutton">
-								<van-button type="danger" wx:if="{{delbutton}}" size="small" style="margin-right:20rpx" bind:click="shouldDel">确认</van-button>
+								<van-button type="danger" wx:if="{{delbutton}}" size="small" style="margin-right:20rpx" bind:click="shouldDel">确认删除</van-button>
 								<van-button type="danger" bind:click="startDel" size="small" wx:if="{{delbutton}}">取消</van-button>
 								<van-button type="danger" bind:click="startDel" size="small" wx:else>编辑</van-button>
 							</view>

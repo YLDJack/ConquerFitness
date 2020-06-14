@@ -25,7 +25,7 @@
 		<!-- 日历 -->
 		<view hover-class='none' class="calendar-navigator">
 			<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/jianshen-.png?sign=e088c2c26e441c8d5d5c511e319aa512&t=1590111939" class="calendar-image" bindtap="showCalendar"></image>
-			<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirmCalendar" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" max-date="{{}}"/>
+			<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirmCalendar" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999"/>
 			<van-tag color="#d81e06" size="medium" bindtap="showCalendar">{{date}}</van-tag>
 		</view>
 	</view>
@@ -66,22 +66,22 @@
 			<swiper-item>
 				<view class="wenziframe" style="opacity:0.5">
 					<view class="wenzi">有氧运动时长(分钟)</view>
-					<view class="wenzi">300</view>
+					<view class="wenzi">296</view>
 				</view>
 				<view class="wenziframe" style="opacity:0.5">
 					<view class="wenzi">肌肉容量</view>
-					<view class="wenzi">3000</view>
+					<view class="wenzi">6650</view>
 				</view>
 			</swiper-item>
 
 			<swiper-item>
 				<view class="wenziframe" style="opacity:0.5">
 					<view class="wenzi">消耗(千卡)</view>
-					<view class="wenzi">1500</view>
+					<view class="wenzi">{{calories}}</view>
 				</view>
 				<view class="wenziframe" style="opacity:0.5">
 					<view class="wenzi">体重增长(KG)</view>
-					<view class="wenzi">-1</view>
+					<view class="wenzi">{{cutWeight}}</view>
 				</view>
 			</swiper-item>
 		</swiper>

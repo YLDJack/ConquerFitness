@@ -1,5 +1,4 @@
 import Toast from '@vant/weapp/toast/toast';
-const db = wx.cloud.database();
 var utils = require('../../utils/util');
 // pages/Training/Training.js
 const app = getApp();
@@ -782,7 +781,7 @@ Page({
   },
   // 完成训练按钮点击事件
   onFinishTraining() {
-    let date = utils.formatDate(new Date());
+    let date = app.globalData.date;
     let trainRecord = this.data.trainRecord;
     let totalArea = this.data.totalArea;
     let TotalType = this.data.TotalType;

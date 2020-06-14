@@ -17,6 +17,7 @@ Page({
     originWeight: 0,
     todayStep: 0,
     calories: 0,
+    cutWeight: 0 ,
     height: '',
     weight: '',
     fat: '',
@@ -61,6 +62,24 @@ Page({
         tag: 'red',
       },
     ],
+    formatter(day) {
+      const month = day.date.getMonth() + 1;
+      const date = day.date.getDate();
+
+      if (month === 6) {
+        if (date === 13) {
+          day.topInfo = '5550';
+          day.bottomInfo = '胸'
+        } else if (date === 14) {
+          day.topInfo = '6650';
+          day.bottomInfo = '背 手臂'
+        } else if (date === 12) {
+          day.topInfo = '7750';
+          day.bottomInfo = '肩'
+        }
+      }
+      return day;
+  },
   },
 
   //日期确认方法
@@ -129,11 +148,14 @@ Page({
         let fat = result[0].fat;
         let calories = 0;
         let todayStep = result[0].todayStep;
+        // 增长的体重
+        let cutWeight = (weight - originWeight).toFixed(1); 
         /* 
         卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
         */
         calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
         this.setData({
+          cutWeight:cutWeight,
           trainStatus: status,
           height: height,
           weight: weight,
@@ -213,11 +235,13 @@ Page({
           let originWeight = res.result.data[length - 1].originWeight;
           let fat = res.result.data[length - 1].fat;
           let calories = 0;
+          let cutWeight = (weight - originWeight).toFixed(1);
           /* 
           卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
           */
           calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
           this.setData({
+            cutWeight:cutWeight,
             trainStatus: status,
             height: height,
             weight: weight,
@@ -297,7 +321,8 @@ Page({
    */
   onLoad: function () {
 
-    let date = app.globalData.date
+    let date = app.globalData.date;
+    let maxDate = new Date();
     // 根据当前时间判断早上下午
     const now = new Date();
     const hour = now.getHours();
@@ -337,6 +362,7 @@ Page({
     }
     //获取当前时间和身体数据
     this.setData({
+      maxDate:maxDate,
       date: date,
       hello: hello,
     });

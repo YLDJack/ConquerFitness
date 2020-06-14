@@ -83,7 +83,7 @@ Page({
     // 训练状态列表
     columns: ['增肌', '减脂', '塑形']
   },
-  // 更新目标
+  // 更新身体数据
   async onUpdateTarget() {
     let trainState = this.data.trainState;
     let targetWeight = this.data.targetWeight;
@@ -205,17 +205,19 @@ Page({
   },
   // 从云端获取数据的方法
   async getDataFromCloud() {
+    let date = this.data.date;
     await wx.cloud.callFunction({
       // 云函数名称
-      name: 'getPersonalData',
+      name: 'getPersonalDataByDate',
+      data: {
+        date: date
+      },
       success: res => {
-        let length = res.result.data.length;
+        let result = res.result.data;
         wx.showToast({
           title: '获取个人数据成功',
         });
-        app.globalData.bodydata = res.result.data[length - 1];
-        app.globalData.bodydatas = res.result.data;
-        console.log("身体数据:", app.globalData.bodydata);
+        app.globalData.bodydata = result[0];
         this.setRecordData();
       },
       fail: error => {

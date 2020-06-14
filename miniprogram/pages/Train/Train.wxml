@@ -61,7 +61,7 @@
 											<!-- 详情通过弹出层tabs展示 -->
 											<view class="tabtitle">{{updateActionName}}</view>
 											<!-- 弹出层Tabs -->
-											<van-tabs type="card" class="poptabs">
+											<van-tabs type="card" class="poptabs" bind:change="onTabChange" data-actionid="{{item._id}}">
 												<!-- 详情tab -->
 												<van-tab title="详情">
 													<!-- 动作卡片 -->
@@ -107,11 +107,11 @@
 												</van-tab>
 												<!-- 趋势折线图 -->
 												<van-tab title="趋势">
-													<cover-view class="container">
+													<view class="container">
 														<!-- 线性表 -->
 														<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
 														</ec-canvas>
-													</cover-view>
+													</view>
 												</van-tab>
 
 												<van-tab title="备注">
@@ -280,7 +280,7 @@
 							<view class="tabtitle" wx:if="{{!item.openId}}">{{item.actionName}}</view>
 							<view class="tabtitle" wx:else>{{updateActionName}}</view>
 							<!-- 弹出层Tabs -->
-							<van-tabs type="card" class="poptabs">
+							<van-tabs type="card" class="poptabs" bind:change="onTabChange" data-actionid="{{item._id}}">
 								<!-- 详情tab -->
 								<van-tab title="详情">
 									<!-- 动作卡片 -->
@@ -326,11 +326,11 @@
 								</van-tab>
 								<!-- 趋势折线图 -->
 								<van-tab title="趋势">
-									<cover-view class="container">
+									<view class="container">
 										<!-- 线性表 -->
 										<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
 										</ec-canvas>
-									</cover-view>
+									</view>
 								</van-tab>
 
 								<van-tab title="备注">
@@ -427,7 +427,7 @@
 							<view class="tabtitle" wx:if="{{!item.openId}}">{{item.actionName}}</view>
 							<view class="tabtitle" wx:else>{{updateActionName}}</view>
 							<!-- 弹出层Tabs -->
-							<van-tabs type="card" class="poptabs">
+							<van-tabs type="card" class="poptabs" bind:change="onTabChange" data-actionid="{{item._id}}">
 								<!-- 详情tab -->
 								<van-tab title="详情">
 									<!-- 动作卡片 -->
@@ -473,11 +473,11 @@
 								</van-tab>
 								<!-- 趋势折线图 -->
 								<van-tab title="趋势">
-									<cover-view class="container">
+									<view class="container">
 										<!-- 线性表 -->
 										<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
 										</ec-canvas>
-									</cover-view>
+									</view>
 								</van-tab>
 
 								<van-tab title="备注">

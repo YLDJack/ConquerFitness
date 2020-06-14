@@ -49,9 +49,9 @@ Page({
     let classifiedTrainRecord = [];
     let trainRecord = [];
     // 获取本周的时间
-    for (let i = 1; i < 8; i++) {
-      dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().day(i).format('dddd'))
+    for (let i = 0; i < 7; i++) {
+      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
+      weekNumArray.push(dayjs().weekday(i).format('dddd'))
     }
 
     wx.cloud.callFunction({
@@ -127,7 +127,7 @@ Page({
   init_echarts: function () {
     this.echartsComponnet.init((canvas, width, height, dpr) => {
       // 初始化图表,init中的第二个参数可以设置主题颜色为亮色
-      const Chart = echarts.init(canvas, null, {
+      const Chart = echarts.init(canvas, 'light', {
         width: width,
         height: height,
         devicePixelRatio: dpr // new
@@ -142,7 +142,7 @@ Page({
             series: {
               id: 'pie',
               label: {
-                formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                formatter: '{@[' + dimension + ']} ({d}%)'
               },
               encode: {
                 value: dimension,
@@ -194,9 +194,9 @@ Page({
     // 时间数据
     let trainDate = new Set();
     // 获取本周的时间
-    for (let i = 1; i < 8; i++) {
-      dayArray.push(dayjs().day(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().day(i).format('dddd'))
+    for (let i = 0; i < 7; i++) {
+      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
+      weekNumArray.push(dayjs().weekday(i).format('dddd'))
     }
 
     wx.cloud.callFunction({
@@ -259,7 +259,7 @@ Page({
             radius: '30%',
             center: ['50%', '25%'],
             label: {
-              formatter: '{b}:{@' + sourceData[0][1] + '} ({d}%)'
+              formatter: '{@' + sourceData[0][1] + '} ({d}%)'
             },
             encode: {
               itemName: 'count',

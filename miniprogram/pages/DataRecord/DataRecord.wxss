@@ -114,8 +114,8 @@
   border:1px solid #dadada;
   border-right:0;
   border-bottom: 0;
-  width: 98%;
-  margin-left: 1%;
+  width: 88%;
+  margin-left: 40rpx;
  }
  .tr{
   width:100%;
@@ -134,13 +134,13 @@
  } */
  .th{
   font-weight: 800;
-  background-color: #b66242;
+  background-color:rgb(0,0,0,0);
   font-size: 28rpx;
-  color: #330e0e;
+  color: white;
  }
  .td{
   font-size: 20rpx;
-  color: #ec9480;
+  color: white;
  }
 
 /* 围度记录 */

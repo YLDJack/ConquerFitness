@@ -1,12 +1,14 @@
 <van-toast id="van-toast" />
 <!-- 用户初次登陆，弹出的设置身高体重框 -->
-<van-popup show="{{ SetBody }}" closeable bind:close="onCloseSetBody" custom-style="height: 50%;background:linear-gradient(to bottom,rgb(51,36,117), rgb(7,208,208))">
+<van-popup show="{{ SetBody }}" closeable round bind:close="onCloseSetBody" custom-style="width:80%;height: 40%;background:linear-gradient(to bottom,rgb(51,36,117), rgb(7,208,208))">
 	<view class="conductText">
-	征服者{{nickName}},欢迎您使用ConquerFitness!
-	为了更好的体验，请先记录您的身体数据:
+	征服者{{nickName}},
 	</view>
-	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number' />
-	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number' />
+	<text class="conductText" decode="{{true}}">
+	&nbsp;&nbsp;&nbsp;&nbsp;欢迎您使用ConquerFitness!为了更好的体验，请先记录您的身体数据:
+	</text>
+	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number' custom-style="width:95%;background:rgb(0,0,0,0); font-size:30rpx; color: white" />
+	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number' custom-style="width:95%;background:rgb(0,0,0,0); font-size:30rpx; color: white" />
 	<view class="confirm" bindtap="onSetBody">确定</view>
 </van-popup>
 <!-- 第一栏 -->
@@ -23,7 +25,7 @@
 		<!-- 日历 -->
 		<view hover-class='none' class="calendar-navigator">
 			<image src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/jianshen-.png?sign=e088c2c26e441c8d5d5c511e319aa512&t=1590111939" class="calendar-image" bindtap="showCalendar"></image>
-			<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirm" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" />
+			<van-calendar show="{{ isCalendarShow }}" show-confirm="{{ false }}" min-date="{{ minDate }}" title="健身日历" position="top" bind:close="showCalendar" bind:confirm="onConfirmCalendar" default-date="{{date}}" formatter="{{ formatter }}" style="z-index:999" max-date="{{}}"/>
 			<van-tag color="#d81e06" size="medium" bindtap="showCalendar">{{date}}</van-tag>
 		</view>
 	</view>

@@ -1,15 +1,18 @@
 /* 进入的弹出框 */
 .conductText{
-  margin-top: 50rpx;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  margin-top: 35rpx;
   color: white;
   font-size: 28rpx;
 }
 
 .confirm{
   float: right;
+  margin-top: 30rpx;
   margin-right: 40rpx;
   color: white;
-  font-size: 28rpx;
+  font-size: 30rpx;
 }
 
 /* 首页 */

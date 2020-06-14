@@ -16,7 +16,7 @@
 				<view class="addbutton">
 					<van-button round color="linear-gradient(to right, rgb(63, 236, 255), rgb(132, 114, 248))" bind:click="showPopup_weight">记录体重</van-button>
 					<!-- 添加记录弹出框 -->
-					<van-popup show="{{ showweight }}" round closeable custom-style="height:30%;background:linear-gradient(to bottom,rgb(106,168,228), rgb(245,210,234))" bind:close="onClose_weight">
+					<van-popup show="{{ showweight }}" round closeable custom-style="height:30%;background:linear-gradient(to bottom,rgb(132, 114, 248),rgb(63, 236, 255));" bind:close="onClose_weight">
 						<view class="items">
 							<view>体重(kg)：</view>
 							<van-stepper value="{{ weight }}" step="0.1" decimal-length="{{ 1 }}" bind:change="onChange_Weight" />
@@ -33,7 +33,7 @@
 		<!-- 目标体重 -->
 		<van-cell title="目标体重" value="{{targetWeight}}Kg" label="目标日期{{targetDate}} " icon='edit' bind:click="editTargetWeight" />
 		<!-- 点击修改目标体重弹出框 -->
-		<van-popup show="{{ TargetWeight }}" round closeable custom-style="height:30%;background:linear-gradient(to bottom,rgb(106,168,228), rgb(245,210,234))" bind:close="onCloseTargetWeight">
+		<van-popup show="{{ TargetWeight }}" round closeable custom-style="height:30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseTargetWeight">
 			<view class="choosebtntext">
 				<view class="choosetext">
 					目标日期：
@@ -92,7 +92,7 @@
 				</view>
 				<van-cell title="最新体脂" value="{{fat}}%" label="{{fatStatus}}" icon="warning" bind:click="showfatpopup" />
 				<!-- 点击弹出和体脂有关的内容 -->
-				<van-popup show="{{ showfattip }}" round closeable custom-style="height:45%; width:90%;background:linear-gradient(to right,rgb(245,210,234), rgb(106,168,228))" bind:close="onCloseFattip">
+				<van-popup show="{{ showfattip }}" round closeable custom-style="height:45%; width:90%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseFattip">
 					<!-- 表格 -->
 					<view class='history-table-wrap'>
 						<view class="table">
@@ -139,7 +139,7 @@
 				<!-- 胸围 -->
 				<van-cell title="胸围" model:value="{{breast}}cm" label="{{date}}" icon="edit" bind:click="editChestLine" />
 				<!-- 点击修改胸围弹出框 -->
-				<van-popup show="{{ ChestLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom,rgb(106,168,228), rgb(245,210,234))" bind:close="onCloseChestLine">
+				<van-popup show="{{ ChestLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseChestLine">
 
 					<view class="items">
 						<view>胸围(cm)：</view>
@@ -150,7 +150,7 @@
 				<!-- 臂围 -->
 				<van-cell title="臂围" model:value="{{arms}}cm" label="{{date}} " icon="edit" bind:click="editArmLine" />
 				<!-- 点击修改臂围弹出框 -->
-				<van-popup show="{{ ArmLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom,rgb(106,168,228), rgb(245,210,234))" bind:close="onCloseArmLine">
+				<van-popup show="{{ ArmLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseArmLine">
 
 					<view class="items">
 						<view>臂围(cm)：</view>
@@ -161,7 +161,7 @@
 				<!-- 腰围 -->
 				<van-cell title="腰围" value="{{waist}}cm" label="{{date}} " icon="edit" bind:click="editWaistLine" />
 				<!-- 点击修改腰围弹出框 -->
-				<van-popup show="{{ WaistLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom,rgb(106,168,228), rgb(245,210,234))" bind:close="onCloseWaistLine">
+				<van-popup show="{{ WaistLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseWaistLine">
 
 					<view class="items">
 						<view>腰围(cm)：</view>
@@ -172,7 +172,7 @@
 				<!-- 臀围 -->
 				<van-cell title="臀围" model:value="{{ass}}cm" label="{{date}} " icon="edit" bind:click="editHitLine" />
 				<!-- 点击修改臀围弹出框 -->
-				<van-popup show="{{ HitLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom,rgb(106,168,228), rgb(245,210,234))" bind:close="onCloseHitLine">
+				<van-popup show="{{ HitLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseHitLine">
 
 					<view class="items">
 						<view>臀围(cm)：</view>
@@ -183,7 +183,7 @@
 				<!-- 大腿围 -->
 				<van-cell title="大腿围" model:value="{{leg}}cm" label="{{date}} " icon="edit" bind:click="editHamLine" />
 				<!-- 点击修改大腿围弹出框 -->
-				<van-popup show="{{ HamLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom,rgb(106,168,228), rgb(245,210,234))" bind:close="onCloseHamLine">
+				<van-popup show="{{ HamLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseHamLine">
 
 					<view class="items">
 						<view>大腿围(cm)：</view>
@@ -194,7 +194,7 @@
 				<!-- 小腿围 -->
 				<van-cell title="小腿围" model:value="{{smallleg}}cm" label="{{date}} " icon="edit" bind:click="editCalfLine" />
 				<!-- 点击修改小腿围弹出框 -->
-				<van-popup show="{{ CalfLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom,rgb(106,168,228), rgb(245,210,234))" bind:close="onCloseCalfLine">
+				<van-popup show="{{ CalfLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseCalfLine">
 
 					<view class="items">
 						<view>小腿围(cm)：</view>

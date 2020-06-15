@@ -7,10 +7,12 @@ require('../../utils/dayjs/locale/zh-cn');
 dayjs.locale('zh-cn');
 dayjs.extend(duration);
 var app = getApp();
+console.log(wx.getSystemInfoSync().windowHeight);
+console.log(wx.getSystemInfoSync().windowWidth);
 Page({
   data: {
     // 文章推荐部分
-    dataFitness:false,
+    dataFitness: false,
     // 页面中间的仪表盘
     gaugeec: {
       lazyLoad: true, // 延迟加载
@@ -19,7 +21,7 @@ Page({
     originWeight: 0,
     todayStep: 0,
     calories: 0,
-    cutWeight: 0 ,
+    cutWeight: 0,
     height: '',
     weight: '',
     fat: '',
@@ -81,14 +83,19 @@ Page({
         }
       }
       return day;
+    }
   },
   // 文章推荐的弹出层
-  showdataFitness() {
-    this.setData({ dataFitness: true });
+  showdataFitness(){
+    this.setData({
+      dataFitness: true
+    });
   },
 
   onClosedataFitness() {
-    this.setData({ dataFitness: false });
+    this.setData({
+      dataFitness: false
+    });
   },
 
   //日期确认方法
@@ -158,13 +165,13 @@ Page({
         let calories = 0;
         let todayStep = result[0].todayStep;
         // 增长的体重
-        let cutWeight = (weight - originWeight).toFixed(1); 
+        let cutWeight = (weight - originWeight).toFixed(1);
         /* 
         卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
         */
         calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
         this.setData({
-          cutWeight:cutWeight,
+          cutWeight: cutWeight,
           trainStatus: status,
           height: height,
           weight: weight,
@@ -250,7 +257,7 @@ Page({
           */
           calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
           this.setData({
-            cutWeight:cutWeight,
+            cutWeight: cutWeight,
             trainStatus: status,
             height: height,
             weight: weight,
@@ -371,7 +378,7 @@ Page({
     }
     //获取当前时间和身体数据
     this.setData({
-      maxDate:maxDate,
+      maxDate: maxDate,
       date: date,
       hello: hello,
     });
@@ -769,7 +776,5 @@ Page({
     } else {
       this.getBodyDataByDate();
     }
-
-
   }
 })

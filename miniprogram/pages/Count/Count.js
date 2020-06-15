@@ -20,6 +20,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 没有训练数据时的提示
+    nullInfo:'',
     // 获取的训练记录
     trainRecord: [],
     pieec: {
@@ -212,6 +214,13 @@ Page({
         // 处理获取来的数据
         let result = res.result.data;
         console.log('获取到data', result);
+        // 如果获取到的结果为空，则直接返回并设置提示文字
+        if(result.length === 0 ){
+          this.setData({
+            nullInfo: '没有任何记录！'
+          });
+          return false;
+        }
         for (let i = 0; i < result.length; i++) {
           for (let j = 0; j < result[i].totalArea.length; j++) {
             areas.add(result[i].totalArea[j].area);
@@ -238,6 +247,7 @@ Page({
 
         pieSeries[0].data = data;
         this.setData({
+          nullInfo: '',  // 如果不为空，将提示文字清空
           pieSeries: pieSeries
         })
         console.log('绘图的data', this.data.pieSeries[0].data);

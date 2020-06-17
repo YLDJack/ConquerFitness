@@ -206,14 +206,6 @@ Page({
     if (trainGroups[index1].Complish) {
 
       trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
-      //如果当前动作的训练重量大于历史重量，则将其设置为最大重量
-      if (trainGroups[index1].trainWeight > trainRecord[index].maxWeight) {
-        trainRecord[index].maxWeight = trainGroups[index1].trainWeight;
-      }
-      //如果当前动作的训练容量大于历史容量，则将其设置为最大容量
-      if (trainRecord[index].trainComplishCount > trainRecord[index].maxCount) {
-        trainRecord[index].maxCount = trainRecord[index].trainComplishCount;
-      }
       // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
       this.countArea();
     } else {
@@ -802,6 +794,19 @@ Page({
 
     // 上传每个动作的训练记录尤其是最大重量容量以及总容量
     for (let i = 0; i < trainRecord.length; i++) {
+      let maxWeight = trainRecord[i].maxWeight;
+      let maxCount = trainRecord[i].maxCount;
+      let currentCount = 0;
+      // 对比这次训练和历史最大重量和容量，如果较大则赋值
+      for(let j = 0 ; j<trainRecord[i].trainGroups.length;j++){
+        if(trainRecord[i].trainGroups[j].trainWeight> maxWeight){
+          maxWeight = trainRecord[i].trainGroups[j].trainWeight;
+        }
+        currentCount +=trainRecord[i].trainGroups[j].trainWeight*trainRecord[i].trainGroups[j].trainNumber;
+      }
+      if(currentCount>maxCount){
+        maxCount = currentCount;
+      }
       // 查询数据库中当天的记录是否已经存在，若存在则进行更新，否则直接进行添加
       wx.cloud.callFunction({
         // 云函数名称
@@ -823,8 +828,8 @@ Page({
                 date: date,
                 actionId: trainRecord[i]._id,
                 actionName: trainRecord[i].actionName,
-                maxCount: trainRecord[i].maxCount,
-                maxWeight: trainRecord[i].maxWeight,
+                maxCount: maxCount,
+                maxWeight: maxWeight,
                 trainCount: trainRecord[i].trainCount
               },
               success: res => {

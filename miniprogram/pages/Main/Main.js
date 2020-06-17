@@ -96,7 +96,7 @@ Page({
         app.globalData.bodydata = result[0];
         console.log('当天的数据', result);
         let status = result[0].trainState || '减脂';
-        let height = result[0].height||0;
+        let height = result[0].height || 0;
         let weight = result[0].weight || 0;
         let targetWeight = result[0].targetWeight || 0;
         let originWeight = result[0].originWeight || 0;
@@ -172,7 +172,7 @@ Page({
       name: 'getPersonalData',
       success: res => {
         let length = res.result.data.length;
-        if (length === 0 ) {
+        if (length === 0) {
           this.setData({
             SetBody: true
           })
@@ -186,11 +186,11 @@ Page({
           let status = res.result.data[length - 1].trainState || '减脂';
           let height = res.result.data[length - 1].height || 0;
           let weight = res.result.data[length - 1].weight || 0;
-          let targetWeight = res.result.data[length - 1].targetWeight ||0;
+          let targetWeight = res.result.data[length - 1].targetWeight || 0;
           let originWeight = res.result.data[length - 1].originWeight || 0;
           // 获取减去的体重
           let cutWeight = (weight - originWeight).toFixed(1);
-          let fat = res.result.data[length - 1].fat ||0;
+          let fat = res.result.data[length - 1].fat || 0;
           let calories = 0;
           /* 
           卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
@@ -266,12 +266,36 @@ Page({
       }
     })
   },
+  // 获取用户的用户信息
+  getUserInfo(res) {
+
+    let sex = res.detail.userInfo.gender;
+    if (sex) {
+      // 设定男女最大体脂范围
+      let maxFat = 0;
+      if (sex === 1) {
+        app.globalData.sex = '男',
+          maxFat = 26;
+      } else {
+        app.globalData.sex = '女'
+        maxFat = 32;
+      }
+      this.setData({
+        nickName: res.detail.userInfo.nickName,
+        maxFat: maxFat
+      })
+      app.globalData.nickName = res.detail.userInfo.nickName;
+      console.log('性别是', app.globalData.sex);
+      this.onSetBody();
+    }else{
+      this.onSetBody();
+    }
+  },
   // 关闭初次设置体重的页面
   onCloseSetBody() {
-    
     this.setData({
       SetBody: false,
-      weight:0
+      weight: 0
     })
     this.getGaugeChartData();
   },
@@ -570,28 +594,6 @@ Page({
   },
   async getUserInfoandRunData() {
     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-    await wx.getUserInfo({
-      success: res => {
-        console.log(res.userInfo);
-        let sex = res.userInfo.gender;
-        // 设定男女最大体脂范围
-        let maxFat = 0;
-        if (sex === 1) {
-          app.globalData.sex = '男',
-            maxFat = 26;
-        } else {
-          app.globalData.sex = '女'
-          maxFat = 32;
-        }
-        this.setData({
-          nickName: res.userInfo.nickName,
-          maxFat: maxFat
-        })
-        app.globalData.nickName = res.userInfo.nickName;
-        console.log('性别是', app.globalData.sex);
-      }
-    })
-    // 已经授权，可以直接调用 getUserInfo 获取头像昵称
     await wx.getWeRunData({
       success: res => {
         wx.cloud.callFunction({
@@ -635,7 +637,7 @@ Page({
             if (res.authSetting['scope.userInfo'] && res.authSetting['scope.werun']) {
               this.getUserInfoandRunData();
             } else {
-             this.getDataFromCloud();
+              this.getDataFromCloud();
             }
           },
           fail: error => {
@@ -716,10 +718,10 @@ Page({
               }),
               wx.authorize({
                 scope: 'scope.werun',
-                success:()=>{
+                success: () => {
                   this.getUserInfoandRunData();
                 },
-                fail:()=>{
+                fail: () => {
                   this.getDataFromCloud();
                 }
               })

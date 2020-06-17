@@ -1,4 +1,4 @@
-<van-dialog show="{{ SetBody }}"  use-slot show-cancel-button round bind:close="onCloseSetBody" custom-style="width:80%;height: 40%;">
+<van-dialog show="{{ SetBody }}"  use-slot show-cancel-button round bind:cancel="onCloseSetBody" custom-style="width:80%;height: 40%;" confirm-button-open-type="getUserInfo" bind:getuserinfo="getUserInfo">
 <van-toast id="van-toast" />
 <!-- 用户初次登陆，弹出的设置身高体重框 -->
 	<view class="conductText">

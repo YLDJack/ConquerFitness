@@ -797,13 +797,16 @@ Page({
 
     // 上传每个动作的训练记录尤其是最大重量容量以及总容量
     for (let i = 0; i < trainRecord.length; i++) {
+
       let maxWeight = trainRecord[i].maxWeight;
       let maxCount = trainRecord[i].maxCount;
       let currentCount = 0;
       // 对比这次训练和历史最大重量和容量，如果较大则赋值
       for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
-        if (trainRecord[i].trainGroups[j].trainWeight > maxWeight) {
-          maxWeight = trainRecord[i].trainGroups[j].trainWeight;
+        
+        if (parseInt(trainRecord[i].trainGroups[j].trainWeight) > maxWeight) {
+          maxWeight = parseInt(trainRecord[i].trainGroups[j].trainWeight);
+          console.log('最大重量', maxWeight);
         }
         currentCount += trainRecord[i].trainGroups[j].trainWeight * trainRecord[i].trainGroups[j].trainNumber;
       }
@@ -822,6 +825,7 @@ Page({
         success: res => {
           // 代表存在该数据
           if (res.result.data.length > 0) {
+            console.log('最大重量',maxWeight);
             // 若已存在当天的记录那么就直接进行更新
             wx.cloud.callFunction({
               // 云函数名称
@@ -857,8 +861,8 @@ Page({
                 date: date,
                 actionId: trainRecord[i]._id,
                 actionName: trainRecord[i].actionName,
-                maxCount: trainRecord[i].maxCount,
-                maxWeight: trainRecord[i].maxWeight,
+                maxCount: maxCount,
+                maxWeight: maxWeight,
                 trainCount: trainRecord[i].trainCount
               },
               success: res => {
@@ -991,21 +995,21 @@ Page({
     let date = app.globalData.date;
     let today = utils.formatDate(new Date());
     // 如果是当天，则获取当前全局保存的训练记录
-    if(today === date){
+    if (today === date) {
       this.initTrainRecord();
     }
     // 如果不为当天则从数据库中获取训练记录
-    else{
+    else {
       this.getTrainRecordByDate(date);
     }
-    
+
   },
   // 根据日期去获取训练记录
-  getTrainRecordByDate(date){
+  getTrainRecordByDate(date) {
 
     let dateArray = [];
     dateArray.push(date);
-    
+
     wx.cloud.callFunction({
       // 云函数名称
       name: 'getTrainedRecordByDates',
@@ -1019,14 +1023,14 @@ Page({
           title: '获取训练记录成功',
         })
         let result = res.result.data[0];
-        let trainRecord =result.trainRecord;
+        let trainRecord = result.trainRecord;
         console.log('获取到的训练记录', trainRecord);
         this.setData({
           TotalType: trainRecord.length,
           totalArea: result.totalArea,
           trainRecord: trainRecord,
           date: date
-        });       
+        });
       },
       fail: error => {
 

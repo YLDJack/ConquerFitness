@@ -17,6 +17,7 @@ exports.main = async (event, context) => {
     date: _.in(event.dayArray)
   }).field({
     trainRecord:true,
-    _id:false
+    _id:false,
+    totalArea:true
   }).get()
 }

@@ -1,4 +1,4 @@
-<van-popup show="{{ SetBody }}" closeable round bind:close="onCloseSetBody" custom-style="width:80%;height: 40%;background:linear-gradient(to bottom,rgb(51,36,117), rgb(7,208,208))">
+<van-dialog show="{{ SetBody }}"  use-slot show-cancel-button round bind:close="onCloseSetBody" custom-style="width:80%;height: 40%;">
 <van-toast id="van-toast" />
 <!-- 用户初次登陆，弹出的设置身高体重框 -->
 	<view class="conductText">
@@ -7,10 +7,10 @@
 	<text class="conductText" decode="{{true}}">
 	&nbsp;&nbsp;&nbsp;&nbsp;欢迎您使用ConquerFitness!为了更好的体验，请先记录您的身体数据:
 	</text>
-	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number' custom-style="width:95%;background:rgb(0,0,0,0); font-size:30rpx; color: white" />
-	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number' custom-style="width:95%;background:rgb(0,0,0,0); font-size:30rpx; color: white" />
-	<view class="confirm" bindtap="onSetBody">确定</view>
-</van-popup>
+	<van-field label='体重' model:value='{{weight}}' placeholder="请输入体重(Kg)" type='number' custom-style="width:95%;font-size:30rpx;" />
+	<van-field label='身高' model:value='{{height}}' placeholder="请输入身高(cm)" type='number' custom-style="width:95%;font-size:30rpx;" />
+	<!-- <view class="confirm" bindtap="onSetBody">确定</view> -->
+</van-dialog>
 <!-- 第一栏 -->
 <view class="top">
 	<view class="topleft">

@@ -20,7 +20,7 @@ Page({
     calories: 0,
     height: '',
     weight: '',
-    fat: '',
+    fat: 0,
     maxFat: 26,
     // 初次设定身体数据的弹出层开关
     SetBody: false,
@@ -95,14 +95,14 @@ Page({
         // 将该天的身体数据设置为全局的身体数据
         app.globalData.bodydata = result[0];
         console.log('当天的数据', result);
-        let status = result[0].trainState;
-        let height = result[0].height;
-        let weight = result[0].weight;
-        let targetWeight = result[0].targetWeight;
-        let originWeight = result[0].originWeight;
+        let status = result[0].trainState || '减脂';
+        let height = result[0].height||0;
+        let weight = result[0].weight || 0;
+        let targetWeight = result[0].targetWeight || 0;
+        let originWeight = result[0].originWeight || 0;
         // 获取减去的体重
         let cutWeight = (weight - originWeight).toFixed(1);
-        let fat = result[0].fat;
+        let fat = result[0].fat || 0;
         let calories = 0;
         let todayStep = result[0].todayStep;
         /* 
@@ -172,7 +172,7 @@ Page({
       name: 'getPersonalData',
       success: res => {
         let length = res.result.data.length;
-        if (length === 0) {
+        if (length === 0 ) {
           this.setData({
             SetBody: true
           })
@@ -183,14 +183,14 @@ Page({
           app.globalData.bodydata = res.result.data[length - 1];
           app.globalData.bodydatas = res.result.data;
           console.log("最近的身体数据:", app.globalData.bodydata);
-          let status = res.result.data[length - 1].trainState;
-          let height = res.result.data[length - 1].height;
-          let weight = res.result.data[length - 1].weight;
-          let targetWeight = res.result.data[length - 1].targetWeight;
-          let originWeight = res.result.data[length - 1].originWeight;
+          let status = res.result.data[length - 1].trainState || '减脂';
+          let height = res.result.data[length - 1].height || 0;
+          let weight = res.result.data[length - 1].weight || 0;
+          let targetWeight = res.result.data[length - 1].targetWeight ||0;
+          let originWeight = res.result.data[length - 1].originWeight || 0;
           // 获取减去的体重
           let cutWeight = (weight - originWeight).toFixed(1);
-          let fat = res.result.data[length - 1].fat;
+          let fat = res.result.data[length - 1].fat ||0;
           let calories = 0;
           /* 
           卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
@@ -268,9 +268,12 @@ Page({
   },
   // 关闭初次设置体重的页面
   onCloseSetBody() {
+    
     this.setData({
-      SetBody: false
+      SetBody: false,
+      weight:0
     })
+    this.getGaugeChartData();
   },
 
   //初始化仪表盘

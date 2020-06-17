@@ -20,7 +20,7 @@ Page({
     calories: 0,
     height: '',
     weight: '',
-    fat: 0,
+    fat: '',
     maxFat: 26,
     // 初次设定身体数据的弹出层开关
     SetBody: false,
@@ -34,7 +34,6 @@ Page({
     isCalendarShow: false,
     // 日历显示的最小日期
     minDate: new Date(2020, 0, 1).getTime(),
-    maxDate:new Date().getTime()
   },
 
   //日期确认方法
@@ -100,6 +99,7 @@ Page({
         let weight = result[0].weight;
         let targetWeight = result[0].targetWeight;
         let originWeight = result[0].originWeight;
+        let cutWeight = weight - originWeight;
         let fat = result[0].fat;
         let calories = 0;
         let todayStep = result[0].todayStep;
@@ -108,6 +108,7 @@ Page({
         */
         calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
         this.setData({
+          cutWeight:cutWeight,
           trainStatus: status,
           height: height,
           weight: weight,
@@ -171,9 +172,8 @@ Page({
         let length = res.result.data.length;
         if (length === 0) {
           this.setData({
-            SetBody: true,
+            SetBody: true
           })
-          this.getGaugeChartData();
         } else {
           wx.showToast({
             title: '获取个人数据成功',
@@ -183,25 +183,25 @@ Page({
           console.log("最近的身体数据:", app.globalData.bodydata);
           let status = res.result.data[length - 1].trainState;
           let height = res.result.data[length - 1].height;
-          let weight = res.result.data[length - 1].weight || 0;
+          let weight = res.result.data[length - 1].weight;
           let targetWeight = res.result.data[length - 1].targetWeight;
           let originWeight = res.result.data[length - 1].originWeight;
-          let cutWeight = (weight - originWeight).toFixed(1); 
-          let fat = res.result.data[length - 1].fat || 0;
+          let cutWeight = weight - originWeight;
+          let fat = res.result.data[length - 1].fat;
           let calories = 0;
           /* 
           卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
           */
           calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
           this.setData({
-            cutWeight:cutWeight,
             trainStatus: status,
             height: height,
             weight: weight,
             targetWeight: targetWeight,
             originWeight: originWeight,
             fat: fat,
-            calories: calories
+            calories: calories,
+            cutWeight:cutWeight
           });
           this.getGaugeChartData();
         }
@@ -228,7 +228,6 @@ Page({
         height: this.data.height,
         fat: 0,
         ass: 0,
-        cutWeight:0,
         leg: 0,
         smallleg: 0,
         breast: 0,
@@ -652,9 +651,6 @@ Page({
           this.getDataFromCloud();
           console.log('今日步数', app.globalData.todayStep) //今天的步数
         })
-      },
-      fail: error=>{
-        this.getDataFromCloud();
       }
     })
   },

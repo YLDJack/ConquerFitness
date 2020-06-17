@@ -21,7 +21,7 @@ Page({
    */
   data: {
     // 没有训练数据时的提示
-    nullInfo:'',
+    nullInfo: '',
     // 获取的训练记录
     trainRecord: [],
     pieec: {
@@ -153,7 +153,7 @@ Page({
       Chart.on('mousedown', function (e) {
         console.log('图表点击事件', e.data.name);
         wx.navigateTo({
-          url: e.data.url+'?area='+e.data.name,
+          url: e.data.url + '?area=' + e.data.name,
         })
       })
       return Chart;
@@ -215,7 +215,7 @@ Page({
         let result = res.result.data;
         console.log('获取到data', result);
         // 如果获取到的结果为空，则直接返回并设置提示文字
-        if(result.length === 0 ){
+        if (result.length === 0) {
           this.setData({
             nullInfo: '没有任何记录！'
           });
@@ -247,7 +247,7 @@ Page({
 
         pieSeries[0].data = data;
         this.setData({
-          nullInfo: '',  // 如果不为空，将提示文字清空
+          nullInfo: '', // 如果不为空，将提示文字清空
           pieSeries: pieSeries
         })
         console.log('绘图的data', this.data.pieSeries[0].data);
@@ -509,8 +509,10 @@ Page({
     }
     // 不用每次显示页面都重新加载，应当在完成动作之后再进行重新加载
     if (app.globalData.complishTraining) {
+      app.globalData.complishTraining = false;
       this.getChartData();
       this.loadTrainedRecords();
+
     }
   },
 

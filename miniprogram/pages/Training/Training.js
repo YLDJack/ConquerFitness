@@ -812,10 +812,6 @@ Page({
           actionId: trainRecord[i]._id,
         },
         success: res => {
-          toast.clear();
-          wx.showToast({
-            title: '查询动作记录成功',
-          })
           // 代表存在该数据
           if (res.result.data.length > 0) {
             // 若已存在当天的记录那么就直接进行更新
@@ -832,16 +828,13 @@ Page({
                 trainCount: trainRecord[i].trainCount
               },
               success: res => {
-                toast.clear();
-                wx.showToast({
-                  title: '更新动作记录成功',
-                })
+
               },
               fail: error => {
                 toast.clear();
                 console.log(error);
                 wx.showToast({
-                  title: '更新动作记录失败',
+                  title: '上传动作记录失败',
                   icon: "none"
                 })
               }
@@ -861,10 +854,7 @@ Page({
                 trainCount: trainRecord[i].trainCount
               },
               success: res => {
-                toast.clear();
-                wx.showToast({
-                  title: '上传动作记录成功',
-                })
+               
               },
               fail: error => {
                 toast.clear();
@@ -896,10 +886,6 @@ Page({
         date: date
       },
       success: res => {
-        toast.clear();
-        wx.showToast({
-          title: '查询训练记录成功',
-        })
         // 代表存在该数据
         if (res.result.data.length > 0) {
           // 若已存在当天的记录那么就直接进行更新
@@ -920,7 +906,7 @@ Page({
             success: res => {
               toast.clear();
               wx.showToast({
-                title: '更新训练记录成功',
+                title: '上传成功',
               })
             },
             fail: error => {
@@ -974,9 +960,7 @@ Page({
         })
       }
     });
-
-
-
+   
   },
   /**
    * 生命周期函数--监听页面加载
@@ -1002,6 +986,7 @@ Page({
     let trainRecord = app.globalData.trainRecord || [];
     let totalArea = this.data.totalArea;
     let existAreas = [];
+    let actionId = new Set();
     let areas = new Set();
     console.log('1、获取到的记录', trainRecord);
 
@@ -1017,19 +1002,19 @@ Page({
     }
     console.log('2、需要添加的记录', trainingActions);
 
-
-
-
-
+    for (let i = 0; i < trainingActions.length; i++) {
+      actionId.add(trainingActions[i]._id);
+    }
+    actionId = Array.from(actionId);
 
     // 此时应当对每个动作发起查询，获取其最大容量和和最大重量
     wx.cloud.callFunction({
       // 云函数名称，获取本人的所有动作记录
       name: 'queryActionRecord',
+      data:{
+        actionId:actionId
+      }
     }).then(res => {
-      wx.showToast({
-        title: '查询动作记录成功',
-      })
       console.log('3、res', res.result.data);
       let actionRecord = res.result.data;
       for (let i = 0; i < trainingActions.length; i++) {

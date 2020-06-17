@@ -27,7 +27,7 @@
 					<van-grid gutter="{{ 10 }}" column-num="2" custom-class="bg grid" wx:for="{{actionCate}}" wx:key="index">
 						<view>{{item}}</view>
 						<!-- 动作卡片 -->
-						<van-grid-item wx:for="{{actionByAreaCate[item]}}" wx:key="{{item._id}}" content-class="griditem" bind:click="selsectActions" data-id="{{item._id}}">
+						<van-grid-item wx:for="{{actionByAreaCate[item]}}" wx:key="_id" content-class="griditem" bind:click="selsectActions" data-id="{{item._id}}">
 							<image class="griditemimage" slot="icon" src="{{item.actionImage}}"></image>
 							<view slot="text" class="textslot">
 								<view>{{item.actionName}}</view>

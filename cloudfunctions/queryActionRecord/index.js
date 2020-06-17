@@ -10,8 +10,10 @@ const db = cloud.database();
 exports.main = async (event, context) => {
 
   const openId = cloud.getWXContext().OPENID;
+  const _ = db.command;
 
   return db.collection('actionRecords').where({
     openId : openId,
+    actionId:_.in(event.actionId)
   }).get()
 }

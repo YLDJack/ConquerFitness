@@ -1,6 +1,6 @@
+<van-popup show="{{ SetBody }}" closeable round bind:close="onCloseSetBody" custom-style="width:80%;height: 40%;background:linear-gradient(to bottom,rgb(51,36,117), rgb(7,208,208))">
 <van-toast id="van-toast" />
 <!-- 用户初次登陆，弹出的设置身高体重框 -->
-<van-popup show="{{ SetBody }}" closeable round bind:close="onCloseSetBody" custom-style="width:80%;height: 40%;background:linear-gradient(to bottom,rgb(51,36,117), rgb(7,208,208))">
 	<view class="conductText">
 	征服者{{nickName}},
 	</view>

@@ -137,6 +137,8 @@ Page({
         },
         success: async res => {
 
+          app.globalData.bodydataChanged = true;
+
           wx.showToast({
             title: '更新成功',
           })
@@ -181,6 +183,8 @@ Page({
           todayStep: this.data.todayStep
         },
         success: async res => {
+
+          app.globalData.bodydataChanged = true;
 
           wx.showToast({
             title: '更新成功',

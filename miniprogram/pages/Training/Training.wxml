@@ -10,7 +10,7 @@
 		<van-icon name="replay" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onStopClock" />
 	</view>
 	<view class="countbutton">
-		<van-button type="danger" size="small" bind:click="onFinishTraining">完成训练</van-button>
+		<van-button type="danger" bind:click="onFinishTraining">完成训练</van-button>
 	</view>
 </view>
 
@@ -26,7 +26,7 @@
 	<!-- 顶部编辑按钮部分 -->
 	<view class="topedit">
 		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认删除</van-button>
-		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
+		<van-button type="danger"  bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
 		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
 		<!-- 顶部训练进度部分 -->
 		<!-- <view class="text_progress">
@@ -52,9 +52,9 @@
 					<van-tag type="primary">{{item.maxWeight}}分</van-tag>
 				</view>
 				<view wx:else>
-					<van-tag plain type="danger">最大重量：</van-tag>
+					<van-tag plain type="danger">历史最大重量：</van-tag>
 					<van-tag type="danger">{{item.maxWeight}}Kg</van-tag>
-					<van-tag plain type="primary"> 最大容量：</van-tag>
+					<van-tag plain type="primary"> 历史最大容量：</van-tag>
 					<van-tag type="primary">{{item.maxCount}}</van-tag>
 				</view>
 			</view>

@@ -137,7 +137,7 @@
 		<van-collapse value="{{ circlecollapse }}" bind:change="onChangecircCard">
 			<van-collapse-item title="围度" name="c" label="最近记录了胸围">
 				<!-- 胸围 -->
-				<van-cell title="胸围" model:value="{{breast}}cm" label="{{date}}" icon="edit" bind:click="editChestLine" />
+				<van-cell title="胸围" value="{{breast}}cm" label="{{date}}" icon="edit" bind:click="editChestLine" />
 				<!-- 点击修改胸围弹出框 -->
 				<van-popup show="{{ ChestLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseChestLine">
 
@@ -148,7 +148,7 @@
 					<view class="confirm" bindtap="onCloseChestLine">确定</view>
 				</van-popup>
 				<!-- 臂围 -->
-				<van-cell title="臂围" model:value="{{arms}}cm" label="{{date}} " icon="edit" bind:click="editArmLine" />
+				<van-cell title="臂围" value="{{arms}}cm" label="{{date}} " icon="edit" bind:click="editArmLine" />
 				<!-- 点击修改臂围弹出框 -->
 				<van-popup show="{{ ArmLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseArmLine">
 
@@ -170,7 +170,7 @@
 					<view class="confirm" bindtap="onCloseWaistLine">确定</view>
 				</van-popup>
 				<!-- 臀围 -->
-				<van-cell title="臀围" model:value="{{ass}}cm" label="{{date}} " icon="edit" bind:click="editHitLine" />
+				<van-cell title="臀围" value="{{ass}}cm" label="{{date}} " icon="edit" bind:click="editHitLine" />
 				<!-- 点击修改臀围弹出框 -->
 				<van-popup show="{{ HitLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseHitLine">
 
@@ -181,7 +181,7 @@
 					<view class="confirm" bindtap="onCloseHitLine">确定</view>
 				</van-popup>
 				<!-- 大腿围 -->
-				<van-cell title="大腿围" model:value="{{leg}}cm" label="{{date}} " icon="edit" bind:click="editHamLine" />
+				<van-cell title="大腿围" value="{{leg}}cm" label="{{date}} " icon="edit" bind:click="editHamLine" />
 				<!-- 点击修改大腿围弹出框 -->
 				<van-popup show="{{ HamLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseHamLine">
 
@@ -192,7 +192,7 @@
 					<view class="confirm" bindtap="onCloseHamLine">确定</view>
 				</van-popup>
 				<!-- 小腿围 -->
-				<van-cell title="小腿围" model:value="{{smallleg}}cm" label="{{date}} " icon="edit" bind:click="editCalfLine" />
+				<van-cell title="小腿围" value="{{smallleg}}cm" label="{{date}} " icon="edit" bind:click="editCalfLine" />
 				<!-- 点击修改小腿围弹出框 -->
 				<van-popup show="{{ CalfLine }}" round closeable custom-style="height: 30%;background:linear-gradient(to bottom, rgb(132, 114, 248),rgb(63, 236, 255))" bind:close="onCloseCalfLine">
 

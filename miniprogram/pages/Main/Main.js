@@ -94,6 +94,7 @@ Page({
         }
         // 将该天的身体数据设置为全局的身体数据
         app.globalData.bodydata = result[0];
+        app.globalData.sex =  result[0].sex;
         console.log('当天的数据', result);
         let status = result[0].trainState || '减脂';
         let height = result[0].height || 0;
@@ -182,6 +183,7 @@ Page({
           });
           app.globalData.bodydata = res.result.data[length - 1];
           app.globalData.bodydatas = res.result.data;
+          app.globalData.sex = res.result.data[length - 1].sex;
           console.log("最近的身体数据:", app.globalData.bodydata);
           let status = res.result.data[length - 1].trainState || '减脂';
           let height = res.result.data[length - 1].height || 0;
@@ -629,6 +631,7 @@ Page({
     }
 
     if (app.globalData.bodydataChanged) {
+      app.globalData.bodydataChanged = false;
       // 对比选中时间和当前时间，如果是当前时间则发起授权
       if (date === this.data.date) {
         // 查看是否授权

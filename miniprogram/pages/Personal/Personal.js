@@ -119,7 +119,6 @@ Page({
     });
   },
   onLoad: function () {
-    
   },
   // 更新数据方法
   updateDataToCloud() {
@@ -154,6 +153,7 @@ Page({
         wx.showToast({
           title: '更新成功',
         })
+        app.globalData.bodydataChanged = true;
         await app.getDataFromCloud();
       },
       fail: error => {
@@ -317,7 +317,8 @@ Page({
         selected: 4
       })
     }
-    this.loadbodydatas();
+      this.loadbodydatas();
+   
   },
 
   /**

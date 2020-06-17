@@ -352,9 +352,9 @@ Page({
         if (trainRecord[i] == delActions[j]) {
           // 如果删除的动作已经完成的,应当删除页面中的种类数，已经完成容量和组数
           trainRecord[i].isSelected = false;
+          TotalCount -= trainRecord[i].trainComplishCount;
           for (let k = 0; k < trainRecord[i].trainGroups.length; k++) {
             if (trainRecord[i].trainGroups[k].Complish) {
-              TotalCount -= trainRecord[i].trainComplishCount;
               trainRecord[i].trainComplishCount -= trainRecord[i].trainGroups[k].trainNumber * trainRecord[i].trainGroups[k].trainWeight;
               TotalGroup--;
               // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了

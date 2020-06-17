@@ -613,7 +613,7 @@ Page({
     let sex = this.data.sex;
     let waist = this.data.waist;
     let weight = this.data.weight;
-    if (waist === 0) {
+    if (!waist) {
       wx.showToast({
         title: '请先输入腰围,才能自动计算',
         icon: 'none'

@@ -13,7 +13,7 @@ Page({
     gaugeec: {
       lazyLoad: true, // 延迟加载
     },
-    cutWeight:0,
+    cutWeight: 0,
     targetWeight: 0,
     originWeight: 0,
     todayStep: 0,
@@ -34,6 +34,7 @@ Page({
     isCalendarShow: false,
     // 日历显示的最小日期
     minDate: new Date(2020, 0, 1).getTime(),
+    maxDate: new Date().getTime()
   },
 
   //日期确认方法
@@ -99,7 +100,8 @@ Page({
         let weight = result[0].weight;
         let targetWeight = result[0].targetWeight;
         let originWeight = result[0].originWeight;
-        let cutWeight = weight - originWeight;
+        // 获取减去的体重
+        let cutWeight = (weight - originWeight).toFixed(1);
         let fat = result[0].fat;
         let calories = 0;
         let todayStep = result[0].todayStep;
@@ -108,7 +110,7 @@ Page({
         */
         calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
         this.setData({
-          cutWeight:cutWeight,
+          cutWeight: cutWeight,
           trainStatus: status,
           height: height,
           weight: weight,
@@ -186,7 +188,8 @@ Page({
           let weight = res.result.data[length - 1].weight;
           let targetWeight = res.result.data[length - 1].targetWeight;
           let originWeight = res.result.data[length - 1].originWeight;
-          let cutWeight = weight - originWeight;
+          // 获取减去的体重
+          let cutWeight = (weight - originWeight).toFixed(1);
           let fat = res.result.data[length - 1].fat;
           let calories = 0;
           /* 
@@ -194,14 +197,14 @@ Page({
           */
           calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
           this.setData({
+            cutWeight: cutWeight,
             trainStatus: status,
             height: height,
             weight: weight,
             targetWeight: targetWeight,
             originWeight: originWeight,
             fat: fat,
-            calories: calories,
-            cutWeight:cutWeight
+            calories: calories
           });
           this.getGaugeChartData();
         }
@@ -269,55 +272,7 @@ Page({
       SetBody: false
     })
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function () {
 
-    let date = app.globalData.date
-    // 根据当前时间判断早上下午
-    const now = new Date();
-    const hour = now.getHours();
-    let hello = '';
-    if (hour < 6) {
-
-      hello = "凌晨好";
-
-    } else if (hour < 9) {
-
-      hello = "早上好";
-
-    } else if (hour < 12) {
-
-      hello = "上午好";
-
-    } else if (hour < 14) {
-
-      hello = "中午好";
-
-    } else if (hour < 17) {
-
-      hello = "下午好";
-
-    } else if (hour < 19) {
-
-      hello = "傍晚好";
-
-    } else if (hour < 22) {
-
-      hello = "晚上好";
-
-    } else {
-
-      hello = "夜里好";
-
-    }
-    //获取当前时间和身体数据
-    this.setData({
-      date: date,
-      hello: hello,
-    });
-  },
   //初始化仪表盘
   init_gaugeecharts: function () {
     this.echartsComponnet.init((canvas, width, height, dpr) => {
@@ -668,6 +623,82 @@ Page({
       })
     }
 
+    if (app.globalData.bodydataChanged) {
+      // 对比选中时间和当前时间，如果是当前时间则发起授权
+      if (date === this.data.date) {
+        // 查看是否授权
+        wx.getSetting({
+          success: res => {
+            if (res.authSetting['scope.userInfo'] && res.authSetting['scope.werun']) {
+              this.getUserInfoandRunData();
+            } else {
+             this.getDataFromCloud();
+            }
+          },
+          fail: error => {
+            this.getDataFromCloud();
+            console.log('授权失败', error);
+          }
+        })
+      } else {
+        this.getBodyDataByDate();
+      }
+    }
+
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function () {
+
+    let date = app.globalData.date
+    // 根据当前时间判断早上下午
+    const now = new Date();
+    const hour = now.getHours();
+    let hello = '';
+    if (hour < 6) {
+
+      hello = "凌晨好";
+
+    } else if (hour < 9) {
+
+      hello = "早上好";
+
+    } else if (hour < 12) {
+
+      hello = "上午好";
+
+    } else if (hour < 14) {
+
+      hello = "中午好";
+
+    } else if (hour < 17) {
+
+      hello = "下午好";
+
+    } else if (hour < 19) {
+
+      hello = "傍晚好";
+
+    } else if (hour < 22) {
+
+      hello = "晚上好";
+
+    } else {
+
+      hello = "夜里好";
+
+    }
+
+
+
+    //获取当前时间和身体数据
+    this.setData({
+      date: date,
+      hello: hello,
+    });
+
     // 对比选中时间和当前时间，如果是当前时间则发起授权
     if (date === this.data.date) {
       // 查看是否授权
@@ -682,15 +713,21 @@ Page({
               }),
               wx.authorize({
                 scope: 'scope.werun',
+                success:()=>{
+                  this.getUserInfoandRunData();
+                },
+                fail:()=>{
+                  this.getDataFromCloud();
+                }
               })
-            this.getUserInfoandRunData();
           }
+        },
+        fail: error => {
+          console.log('授权失败', error);
         }
       })
     } else {
       this.getBodyDataByDate();
     }
-
-
-  }
+  },
 })

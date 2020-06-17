@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    date:'',
+    date: '',
     // 开始休息时间
     startRest: 0,
     // 编辑组数的标记
@@ -755,6 +755,9 @@ Page({
 
   // 添加动作跳转
   addTrain() {
+    this.setData({
+      delTag: false
+    })
     // 关闭当前页，直接跳转
     wx.navigateTo({
       url: '../ActionAdd/ActionAdd',
@@ -781,7 +784,7 @@ Page({
     let TotalGroup = this.data.TotalGroup;
     let TotalCount = this.data.TotalCount;
     let TrainMark = this.data.TrainMark;
-    console.log('训练备注',TrainMark);
+    console.log('训练备注', TrainMark);
 
     const toast = Toast.loading({
       mask: true,
@@ -798,13 +801,13 @@ Page({
       let maxCount = trainRecord[i].maxCount;
       let currentCount = 0;
       // 对比这次训练和历史最大重量和容量，如果较大则赋值
-      for(let j = 0 ; j<trainRecord[i].trainGroups.length;j++){
-        if(trainRecord[i].trainGroups[j].trainWeight> maxWeight){
+      for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
+        if (trainRecord[i].trainGroups[j].trainWeight > maxWeight) {
           maxWeight = trainRecord[i].trainGroups[j].trainWeight;
         }
-        currentCount +=trainRecord[i].trainGroups[j].trainWeight*trainRecord[i].trainGroups[j].trainNumber;
+        currentCount += trainRecord[i].trainGroups[j].trainWeight * trainRecord[i].trainGroups[j].trainNumber;
       }
-      if(currentCount>maxCount){
+      if (currentCount > maxCount) {
         maxCount = currentCount;
       }
       // 查询数据库中当天的记录是否已经存在，若存在则进行更新，否则直接进行添加
@@ -859,7 +862,7 @@ Page({
                 trainCount: trainRecord[i].trainCount
               },
               success: res => {
-               
+
               },
               fail: error => {
                 toast.clear();
@@ -903,10 +906,10 @@ Page({
               trainRecord: trainRecord,
               TrainMark: TrainMark,
               TotalType: TotalType,
-              TotalGroup:TotalGroup,
-              TotalCount:TotalCount,
+              TotalGroup: TotalGroup,
+              TotalCount: TotalCount,
               totalArea: totalArea,
-              
+
             },
             success: res => {
               toast.clear();
@@ -934,8 +937,8 @@ Page({
               TrainMark: TrainMark,
               trainRecord: trainRecord,
               TotalType: TotalType,
-              TotalGroup:TotalGroup,
-              TotalCount:TotalCount,
+              TotalGroup: TotalGroup,
+              TotalCount: TotalCount,
               totalArea: totalArea,
             },
             success: res => {
@@ -965,7 +968,7 @@ Page({
         })
       }
     });
-   
+
   },
   /**
    * 生命周期函数--监听页面加载
@@ -985,6 +988,58 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    let date = app.globalData.date;
+    let today = utils.formatDate(new Date());
+    // 如果是当天，则获取当前全局保存的训练记录
+    if(today === date){
+      this.initTrainRecord();
+    }
+    // 如果不为当天则从数据库中获取训练记录
+    else{
+      this.getTrainRecordByDate(date);
+    }
+    
+  },
+  // 根据日期去获取训练记录
+  getTrainRecordByDate(date){
+
+    let dateArray = [];
+    dateArray.push(date);
+    
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getTrainedRecordByDates',
+      // 传给云函数的参数
+      data: {
+        dayArray: dateArray
+      },
+      success: res => {
+
+        wx.showToast({
+          title: '获取训练记录成功',
+        })
+        let result = res.result.data[0];
+        let trainRecord =result.trainRecord;
+        console.log('获取到的训练记录', trainRecord);
+        this.setData({
+          TotalType: trainRecord.length,
+          totalArea: result.totalArea,
+          trainRecord: trainRecord,
+          date: date
+        });       
+      },
+      fail: error => {
+
+        console.log(error);
+        wx.showToast({
+          title: '获取训练记录失败',
+          icon: "none"
+        })
+      }
+    });
+  },
+  // 初始化训练记录
+  initTrainRecord() {
     let date = app.globalData.date;
     let trainingActions = app.globalData.trainingActions;
     // 从全局中获取
@@ -1016,8 +1071,8 @@ Page({
     wx.cloud.callFunction({
       // 云函数名称，获取本人的所有动作记录
       name: 'queryActionRecord',
-      data:{
-        actionId:actionId
+      data: {
+        actionId: actionId
       }
     }).then(res => {
       console.log('3、res', res.result.data);
@@ -1027,7 +1082,7 @@ Page({
         trainingActions[i].trainCount = 0;
         trainingActions[i].trainComplishCount = 0;
         trainingActions[i].trainGroups = [{
-          trainReamark:'',
+          trainReamark: '',
           trainWeight: '',
           trainNumber: '',
           trainRestTime: 30 * 1000,
@@ -1083,14 +1138,13 @@ Page({
         TotalType: trainRecord.length,
         totalArea: totalArea,
         trainRecord: trainRecord,
-        date:date
+        date: date
       });
       // 如果训练动作不为空则自动开始计时
       if (trainRecord.length) {
         this.onStartClock();
       }
     }).catch(console.error)
-
 
   },
   /**

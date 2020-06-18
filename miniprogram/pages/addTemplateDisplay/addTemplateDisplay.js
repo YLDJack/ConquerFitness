@@ -13,12 +13,19 @@ Page({
     TotalType: '',
     // 各个分类的类别数
     totalArea: '',
+    //下拉列表的初始状态
+    activeNames: ['1'],
   },
 
   naviToTraining() {
     wx.navigateTo({
       url: '../Training/Training',
     })
+  },
+  onCollChange(event) {
+    this.setData({
+      activeNames: event.detail
+    });
   },
   // 获取训练计划
   getPlan() {

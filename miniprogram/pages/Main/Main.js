@@ -41,6 +41,8 @@ Page({
   onConfirmCalendar(event) {
     // 最关键的是要改变全局的时间
     app.globalData.date = utils.formatDate(event.detail);
+    app.globalData.trainRecord = [];
+    app.globalData.trainingActions = [];
     this.setData({
       isCalendarShow: false,
       date: utils.formatDate(event.detail)
@@ -50,6 +52,7 @@ Page({
   // 根据日期从云端获取身体数据
   async getBodyDataByDate() {
     let date = this.data.date;
+
     await wx.cloud.callFunction({
       // 云函数名称
       name: 'getPersonalDataByDate',

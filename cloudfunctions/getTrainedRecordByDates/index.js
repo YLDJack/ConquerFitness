@@ -18,6 +18,9 @@ exports.main = async (event, context) => {
   }).field({
     trainRecord:true,
     _id:false,
-    totalArea:true
+    totalArea:true,
+    TotalType:true,
+    TotalGroup:true,
+    TotalCount:true
   }).get()
 }

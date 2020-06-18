@@ -240,7 +240,7 @@
 
 <!-- 点击编辑按钮之后 -->
 <view class="actionview" wx:else>
-	<van-cell-group wx:for="{{trainRecord}}">
+	<van-cell-group wx:for="{{trainRecord}}" wx:key='_id'>
 		<van-cell use-label-slot>
 			<!-- 标题插槽 -->
 			<view slot="title" class="titleandweight">

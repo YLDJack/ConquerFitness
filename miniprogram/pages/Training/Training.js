@@ -341,16 +341,24 @@ Page({
 
     for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < delActions.length; j++) {
-        if (trainRecord[i] == delActions[j]) {
+        if (trainRecord[i]._id === delActions[j]._id) {
+          console.log('删除的记录', trainRecord[i].trainComplishCount);
+          TotalCount -= trainRecord[i].trainComplishCount;
           // 如果删除的动作已经完成的,应当删除页面中的种类数，已经完成容量和组数
           trainRecord[i].isSelected = false;
-          TotalCount -= trainRecord[i].trainComplishCount;
+          console.log('要删除的动作记录', delActions[j]);
           for (let k = 0; k < trainRecord[i].trainGroups.length; k++) {
             if (trainRecord[i].trainGroups[k].Complish) {
+
+              // 要将已经完成的置为空
+              trainRecord[i].trainGroups[k].Complish = false;
               trainRecord[i].trainComplishCount -= trainRecord[i].trainGroups[k].trainNumber * trainRecord[i].trainGroups[k].trainWeight;
+              trainRecord[i].trainGroups[k].trainNumber = 0;
+              trainRecord[i].trainGroups[k].trainWeight = 0;
               TotalGroup--;
               // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
               this.countArea();
+
             }
 
           }
@@ -803,7 +811,7 @@ Page({
       let currentCount = 0;
       // 对比这次训练和历史最大重量和容量，如果较大则赋值
       for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
-        
+
         if (parseInt(trainRecord[i].trainGroups[j].trainWeight) > maxWeight) {
           maxWeight = parseInt(trainRecord[i].trainGroups[j].trainWeight);
           console.log('最大重量', maxWeight);
@@ -825,7 +833,7 @@ Page({
         success: res => {
           // 代表存在该数据
           if (res.result.data.length > 0) {
-            console.log('最大重量',maxWeight);
+            console.log('最大重量', maxWeight);
             // 若已存在当天的记录那么就直接进行更新
             wx.cloud.callFunction({
               // 云函数名称
@@ -1025,8 +1033,13 @@ Page({
         let result = res.result.data[0];
         let trainRecord = result.trainRecord;
         console.log('获取到的训练记录', trainRecord);
+        let TotalType = result.TotalType;
+        let TotalGroup = result.TotalGroup;
+        let TotalCount = result.TotalCount;
         this.setData({
-          TotalType: trainRecord.length,
+          TotalType: TotalType,
+          TotalGroup: TotalGroup,
+          TotalCount: TotalCount,
           totalArea: result.totalArea,
           trainRecord: trainRecord,
           date: date

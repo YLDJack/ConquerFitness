@@ -11,7 +11,7 @@ Page({
     // 添加计划弹出层
     addPlanshow: false,
     // 添加计划中选择动作类型的折叠列表
-    collactiveNames: ['0']
+    collactiveNames: ['0'],
   },
   onCollChange(event) {
     this.setData({
@@ -40,22 +40,23 @@ Page({
   },
 
   // 点击模板跳转到traing页面，但是顶部添加备注位置读取了模板宫格中的text
-  addTemplate(){
+  addTemplate() {
     wx.navigateTo({
       url: '../addTemplateDisplay/addTemplateDisplay',
     })
   },
 
-  templateTraining(){
+  templateTraining() {
     wx.navigateTo({
       url: '../addTemplateDisplay/addTemplateDisplay',
     })
   },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+   
   },
 
   /**

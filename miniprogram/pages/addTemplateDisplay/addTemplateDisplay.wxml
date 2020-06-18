@@ -1,10 +1,13 @@
 <!-- 正计时秒表 -->
 <view class="miaobiao">
 	<view class="countbutton">
-		<van-button type="danger" size="small" bind:click="naviToTraining">开始训练</van-button>
+	<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认</van-button>
+		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
+		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
+
 	</view>
 	<view class="countbutton">
-		<van-button type="danger" size="small">完成添加</van-button>
+	<van-button type="danger">开始训练</van-button>
 	</view>
 </view>
 
@@ -13,22 +16,13 @@
 		<text slot="right-icon" >{{TotalType}}种动作已完成{{TotalGroup}}组{{TotalCount}}容量</text>
 	</van-field>
 	<!-- 顶部编辑按钮部分 -->
-	<view>
-		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认</van-button>
-		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
-		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
-		<!-- 顶部训练进度部分 -->
-		<!-- <view class="text_progress">
-			<text>本次训练进度:</text>
-			<van-progress percentage="50" stroke-width="8" />
-		</view> -->
-	</view>
+
 </view>
 <van-divider />
 
 <!-- 正常情况下显示下拉菜单 -->
 <view wx:if="{{!delTag}}">
-	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{TrainRecord}}" wx:for-index="index" wx:key="_id">
+	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{planActions}}" wx:for-index="index" wx:key="index">
 		<van-collapse-item name="{{index}}">
 
 			<!-- 名字和最大重量区域 -->
@@ -121,7 +115,6 @@
 			</view>
 			<!-- 右边显示容量部分 ~~符号可以实现快速取整-->
 			<view slot="value" class="valueslot">
-				<van-circle value="{{ ~~(item.trainComplishCount/item.trainCount*100)}}" color="{{ gradientColor }}" size="50" stroke-width="8" layer-color="#eee" text="{{ ~~(item.trainComplishCount/item.trainCount*100)+'%' ||  0 +'%' }}" />
 				<label class="label">{{item.trainGroups.length}}组 {{item.trainComplishCount}}/{{item.trainCount}} 容量</label>
 			</view>
 			<!-- 下拉显示部分 -->
@@ -159,7 +152,7 @@
 
 			<!-- 力量训练 -->
 			<view wx:else>
-				<view class="traingroup" wx:for="{{TrainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
+				<view class="traingroup" wx:for="{{planActions[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
 					<view class="groupnum">{{index1+1}}</view>
 					<view class="traindata">
 						<!-- 输入重量 设定好只能输入数字-->
@@ -241,5 +234,4 @@
 
 <van-tabbar>
 	<van-tabbar-item icon="add" bind:click="addTrain">添加动作</van-tabbar-item>
-	<van-tabbar-item icon="bars" bind:click="showTem">训练计划</van-tabbar-item>
 </van-tabbar>

@@ -1205,6 +1205,7 @@ Page({
         trainingActions[i].trainCount = 0;
         trainingActions[i].trainComplishCount = 0;
         trainingActions[i].trainGroups = [{
+          // 训练备注
           trainReamark: '',
           trainWeight: '',
           trainNumber: '',

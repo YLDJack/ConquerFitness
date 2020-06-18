@@ -19,19 +19,27 @@
 </view>
 
 <!-- 中间模板显示页面 -->
-<view class="text">已有模板</view>
+<view class="text">已有计划</view>
 <view class="template">
-	<van-grid column-num="2">
-		<van-grid-item icon="{{imageURL}}" text="胸" wx:for="{{ 1 }}" bind:click="templateTraining" />
-		<van-grid-item icon="edit" text="无部位关键字" wx:for="{{ 2 }}"/>
-	</van-grid>
+<van-card
+  desc="骨盆前倾矫正计划"
+  title="骨盆前倾"
+  thumb="{{ imageURL }}"
+	thumb-link = '../addTemplateDisplay/addTemplateDisplay'
+>
+<view slot="price-top">
+<van-tag type="danger" plain size="large">胸</van-tag>
+    <van-tag type="danger" plain size="large">背</van-tag>
+<van-tag type="danger"  plain size="large">肩</van-tag>
+  </view>
+</van-card>
 </view>
 
 
 
 <!-- 推荐模板 -->
 <view class="quickitems">
-	<view class="text">模板推荐</view>
+	<view class="text">计划推荐</view>
 	<scroll-view class="module-scroll" scroll-x="{{true}}">
 		<navigator class="item-navigator">
 			<view class="item-group">

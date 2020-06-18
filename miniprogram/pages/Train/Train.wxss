@@ -103,8 +103,9 @@ page {
   font-size: 40rpx;
   font-weight: bold;
 }
+
 /* 编辑已添动作的上方按钮和文字样式 */
-.addtop{
+.addtop {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -112,10 +113,12 @@ page {
   font-weight: bold;
   margin: 20rpx 0 10rpx 0;
 }
-.addtopbutton{
+
+.addtopbutton {
   margin-right: 35rpx;
 }
-.addtoptitle{
+
+.addtoptitle {
   margin-left: 35rpx;
 }
 
@@ -180,21 +183,12 @@ page {
   margin: 20rpx 20rpx 20rpx 30rpx;
 }
 
-
-ec-canvas {
-  width: 100%;
-  height: 600rpx;
+.container {
+  width: 550rpx;
+  height: 550rpx;
 }
 
-.container {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  /* display: flex; */
-  /* flex-direction: column; */
-  align-items: center;
-  /* justify-content: space-between; */
-  box-sizing: border-box;
+.container ec-canvas {
+  width: 550rpx;
   height: 550rpx;
 }

@@ -1013,10 +1013,20 @@ Page({
 
   },
   // 根据日期去获取训练记录
-  getTrainRecordByDate(date) {
+  async getTrainRecordByDate(date) {
 
     let dateArray = [];
     dateArray.push(date);
+
+    let trainingActions = app.globalData.trainingActions;
+
+    let totalArea = this.data.totalArea;
+    console.log('获取到的训练记录0', totalArea);
+
+    let actionId = new Set();
+
+    let existAreas = [];
+    let areas = new Set();
 
     wx.cloud.callFunction({
       // 云函数名称
@@ -1025,22 +1035,116 @@ Page({
       data: {
         dayArray: dateArray
       },
-      success: res => {
+      success: async res  => {
 
         wx.showToast({
           title: '获取训练记录成功',
         })
         let result = res.result.data[0];
         let trainRecord = result.trainRecord;
-        console.log('获取到的训练记录', trainRecord);
-        let TotalType = result.TotalType;
+        
+        totalArea = result.totalArea;
+        console.log('获取到的训练记录', totalArea);
         let TotalGroup = result.TotalGroup;
         let TotalCount = result.TotalCount;
+
+        if (trainingActions.length) {
+          for (let i = 0; i < trainRecord.length; i++) {
+            for (let j = 0; j < trainingActions.length; j++) {
+              // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
+              if (trainRecord[i]._id == trainingActions[j]._id) {
+                trainingActions.splice(j, 1);
+              }
+            }
+          }
+
+          for (let i = 0; i < trainingActions.length; i++) {
+            actionId.add(trainingActions[i]._id);
+          }
+          actionId = Array.from(actionId);
+
+
+          // 此时应当对每个动作发起查询，获取其最大容量和和最大重量
+        await wx.cloud.callFunction({
+            // 云函数名称，获取本人的所有动作记录
+            name: 'queryActionRecord',
+            data: {
+              actionId: actionId
+            }
+          }).then(res => {
+            console.log('3、res', res.result.data);
+            let actionRecord = res.result.data;
+            for (let i = 0; i < trainingActions.length; i++) {
+              areas.add(trainingActions[i].actionArea);
+              trainingActions[i].trainCount = 0;
+              trainingActions[i].trainComplishCount = 0;
+              trainingActions[i].trainGroups = [{
+                trainReamark: '',
+                trainWeight: '',
+                trainNumber: '',
+                trainRestTime: 30 * 1000,
+                Complish: false
+              }]
+              trainingActions[i].date = this.data.date;
+              trainingActions[i].maxCount = 0;
+              trainingActions[i].maxWeight = 0;
+              // 解决每次只能获取最后一个动作的bug
+              for (let j = 0; j < actionRecord.length; j++) {
+                if (actionRecord[j].actionId === trainingActions[i]._id) {
+                  trainingActions[i].maxCount = actionRecord[j].maxCount;
+                  trainingActions[i].maxWeight = actionRecord[j].maxWeight;
+                }
+              }
+
+            }
+            // 获取统计中已经存在的部位
+            for (let i = 0; i < totalArea.length; i++) {
+              existAreas.push(totalArea[i].area);
+            }
+            console.log('4、已存在的动作部位', existAreas);
+            areas = Array.from(areas);
+            // 原来如果已经存在相同的部位的数据，应当不再进行初始化
+            for (let i = 0; i < areas.length; i++) {
+              if (existAreas.indexOf(areas[i]) == -1) {
+                let oneArea = {
+                  area: areas[i],
+                  // 动作个数
+                  areaType: 0,
+                  // 动作总容量
+                  areaCount: 0,
+                }
+                totalArea.push(oneArea);
+              }
+
+            }
+            // 将这些动作加入到record
+            trainRecord = trainRecord.concat(trainingActions);
+            for (let i = 0; i < totalArea.length; i++) {
+              totalArea[i].areaType = 0;
+              for (let j = 0; j < trainRecord.length; j++) {
+                // 获取每个部位的动作的种类数
+                if (trainRecord[j].actionArea === totalArea[i].area) {
+                  totalArea[i].areaType += 1;
+                }
+              }
+            }
+            //设置全局变量的记录
+            app.globalData.trainRecord = trainRecord;
+            // 如果训练动作不为空则自动开始计时
+            if (trainRecord.length) {
+              this.onStartClock();
+            }
+          }).catch(console.error)
+        }
+
+
+
+
         this.setData({
-          TotalType: TotalType,
+          TotalType: trainRecord.length,
+          totalArea: totalArea,
           TotalGroup: TotalGroup,
           TotalCount: TotalCount,
-          totalArea: result.totalArea,
           trainRecord: trainRecord,
           date: date
         });
@@ -1054,6 +1158,8 @@ Page({
         })
       }
     });
+
+
   },
   // 初始化训练记录
   initTrainRecord() {

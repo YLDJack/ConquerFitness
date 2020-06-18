@@ -149,7 +149,7 @@
 
 			<!-- 有氧运动 -->
 			<view wx:if="{{item.actionType === '有氧训练'}}">
-				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="{{index1}}">
+				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
 					<view class="groupnum">{{index1+1}}</view>
 					<!-- 倒计时和确认模块 -->
 					<view class="traincountdown">

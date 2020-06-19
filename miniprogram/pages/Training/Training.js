@@ -63,7 +63,7 @@ Page({
     isGray: true,
     isRed: false
   },
-  // 统计每个动作的已完成容量的方法
+  // 统计每个部位的已完成容量的方法
   countArea() {
     // 获取按部位计算的分类数组
     let totalArea = this.data.totalArea;
@@ -135,6 +135,7 @@ Page({
     this.setData({
       trainRecord: trainRecord,
       TotalCount: TotalCount,
+      TotalGroup: TotalGroup
     });
   },
   // 输入次数完成后的监听事件
@@ -181,6 +182,7 @@ Page({
     app.globalData.trainRecord = trainRecord;
     console.log('修改数量完成后的记录', trainRecord[index]);
     this.setData({
+      TotalGroup: TotalGroup,
       trainRecord: trainRecord,
       TotalCount: TotalCount,
     });
@@ -439,7 +441,7 @@ Page({
     console.log('删除的状态', delActionsStatus);
     console.log('删除的数据的id', delActions);
   },
-  // 点击编辑按钮事件
+  // 点击编辑动作按钮事件
   startDel() {
     this.setData({
       delTag: !this.data.delTag,
@@ -1035,14 +1037,14 @@ Page({
       data: {
         dayArray: dateArray
       },
-      success: async res  => {
+      success: async res => {
 
         wx.showToast({
           title: '获取训练记录成功',
         })
         let result = res.result.data[0];
         let trainRecord = result.trainRecord;
-        
+
         totalArea = result.totalArea;
         console.log('获取到的训练记录', totalArea);
         let TotalGroup = result.TotalGroup;
@@ -1065,7 +1067,7 @@ Page({
 
 
           // 此时应当对每个动作发起查询，获取其最大容量和和最大重量
-        await wx.cloud.callFunction({
+          await wx.cloud.callFunction({
             // 云函数名称，获取本人的所有动作记录
             name: 'queryActionRecord',
             data: {
@@ -1174,10 +1176,9 @@ Page({
     console.log('1、获取到的记录', trainRecord);
 
 
-
+    // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
     for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < trainingActions.length; j++) {
-        // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
         if (trainRecord[i]._id == trainingActions[j]._id) {
           trainingActions.splice(j, 1);
         }

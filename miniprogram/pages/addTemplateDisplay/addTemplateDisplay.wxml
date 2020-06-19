@@ -7,13 +7,17 @@
 
 	</view>
 	<view class="countbutton">
-	<van-button type="danger">开始训练</van-button>
+	<van-button type="danger">保存</van-button>
 	</view>
 </view>
 
 <view>
-	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" model:value="{{ TrainMark }}">
-		<text slot="right-icon" >{{TotalType}}种动作已完成{{TotalGroup}}组{{TotalCount}}容量</text>
+	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" model:value="{{ planName }}">
+		<view slot="right-icon" >{{TotalType}}种动作共{{TotalGroup}}组
+			<view wx:for="{{totalArea}}" wx:key="index">
+				{{item.area}}{{item.areaType}}种
+			</view>
+			</view>
 	</van-field>
 	<!-- 顶部编辑按钮部分 -->
 
@@ -29,10 +33,7 @@
 			<view slot="title" class="titleandweight">
 				<text>{{item.actionName}}</text>
 				<view>
-					<van-tag plain type="danger">最大重量：</van-tag>
-					<van-tag type="danger">20KG</van-tag>
-					<van-tag plain type="primary"> 最大容量：</van-tag>
-					<van-tag type="primary">350</van-tag>
+<label class="label">{{item.trainGroups.length}}组</label>
 				</view>
 			</view>
 
@@ -113,10 +114,6 @@
 					</van-tabs>
 				</van-popup>
 			</view>
-			<!-- 右边显示容量部分 ~~符号可以实现快速取整-->
-			<view slot="value" class="valueslot">
-				<label class="label">{{item.trainGroups.length}}组</label>
-			</view>
 			<!-- 下拉显示部分 -->
 			<view>
 				<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit">
@@ -156,14 +153,16 @@
 					<view class="groupnum">{{index1+1}}</view>
 					<view class="traindata">
 						<!-- 输入重量 设定好只能输入数字-->
-						<van-field placeholder="重量(KG)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" model:value="{{item.trainWeight}}" type="number" bind:blur="onWeightConfirm" data-weight="{{item.trainWeight}}" data-index1="{{index1}}" data-index="{{index}}">
+						<van-field placeholder="重量(KG)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" value="{{item.trainWeight}}" type="number" bind:blur="onWeightConfirm" data-weight="{{item.trainWeight}}" data-index1="{{index1}}" data-index="{{index}}">
 						</van-field>
 					</view>
 					<view class="traindata">
 						<!-- 输入次数 -->
-						<van-field placeholder="数量(次)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" model:value="{{item.trainNumber}}" type="number" bind:blur="onNumberConfirm" data-number="{{item.trainNumber}}" data-index1="{{index1}}" data-index="{{index}}">
+						<van-field placeholder="数量(次)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" value="{{item.trainNumber}}" type="number" bind:blur="onNumberConfirm" data-number="{{item.trainNumber}}" data-index1="{{index1}}" data-index="{{index}}">
 						</van-field>
 					</view>
+					<!-- 删除按钮 -->
+						<van-icon name="cross" wx:if="{{delGroupsTag}}" size="50rpx" catchtap="doDelGroups" data-index1="{{index1}}" data-index="{{index}}" />
 				</view>
 			</view>
 
@@ -178,8 +177,8 @@
 </view>
 
 <!-- 点击编辑按钮之后 -->
-<view wx:else>
-	<van-cell-group wx:for="{{TrainRecord}}">
+<view class="actionview" wx:else>
+	<van-cell-group wx:for="{{planActions}}" wx:key='_id'>
 		<van-cell use-label-slot>
 			<!-- 标题插槽 -->
 			<view slot="title" class="titleandweight">
@@ -187,10 +186,7 @@
 			</view>
 			<!-- label插槽 -->
 			<view slot="label">
-				<van-tag plain type="danger">最大重量：</van-tag>
-				<van-tag type="danger">20KG</van-tag>
-				<van-tag plain type="primary"> 最大容量：</van-tag>
-				<van-tag type="primary">350</van-tag>
+			<label class="label">{{item.trainGroups.length}}组</label>
 			</view>
 			<!-- 使用slot插槽显示图片 -->
 			<view slot="icon" class="icon">

@@ -10,8 +10,6 @@
 				<van-cell-group>
 					<van-cell title="添加计划" center="true" clickable="true" bind:click="addTemplate" />
 					<van-cell title="删除计划" center="true" clickable="true" />
-					<van-cell title="搜索计划" center="true" clickable="true" />
-					<van-cell title="分享计划" center="true" clickable="true" />
 				</van-cell-group>
 			</van-popup>
 		</view>

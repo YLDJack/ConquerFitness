@@ -7,7 +7,7 @@
 
 	</view>
 	<view class="countbutton">
-	<van-button type="danger">保存</van-button>
+	<van-button type="danger" bind:click="savePlan">保存</van-button>
 	</view>
 </view>
 
@@ -26,7 +26,7 @@
 
 <!-- 正常情况下显示下拉菜单 -->
 <view wx:if="{{!delTag}}">
-	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{planActions}}" wx:for-index="index" wx:key="index">
+	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{trainRecord}}" wx:for-index="index" wx:key="index">
 		<van-collapse-item name="{{index}}">
 
 			<!-- 名字和最大重量区域 -->
@@ -149,7 +149,7 @@
 
 			<!-- 力量训练 -->
 			<view wx:else>
-				<view class="traingroup" wx:for="{{planActions[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
+				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
 					<view class="groupnum">{{index1+1}}</view>
 					<view class="traindata">
 						<!-- 输入重量 设定好只能输入数字-->
@@ -178,7 +178,7 @@
 
 <!-- 点击编辑按钮之后 -->
 <view class="actionview" wx:else>
-	<van-cell-group wx:for="{{planActions}}" wx:key='_id'>
+	<van-cell-group wx:for="{{trainRecord}}" wx:key='_id'>
 		<van-cell use-label-slot>
 			<!-- 标题插槽 -->
 			<view slot="title" class="titleandweight">
@@ -200,5 +200,6 @@
 </view>
 
 <van-tabbar>
-	<van-tabbar-item icon="add" bind:click="addTrain">添加动作</van-tabbar-item>
+	<van-tabbar-item icon="add" bind:click="addAction">添加动作</van-tabbar-item>
+	<van-tabbar-item icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=d7a1688bba37de2d77ed6ea70869e4e7&t=1592556433" bind:click="beginTrain">开始训练</van-tabbar-item>
 </van-tabbar>

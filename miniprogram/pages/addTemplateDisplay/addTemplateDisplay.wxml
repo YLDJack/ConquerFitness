@@ -12,7 +12,7 @@
 </view>
 
 <view>
-	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" model:value="{{ planName }}">
+	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" value="{{ planName }}" bind:blur='updatePlanName'>
 		<view slot="right-icon" >{{TotalType}}种动作共{{TotalGroup}}组
 			<view wx:for="{{totalArea}}" wx:key="index">
 				{{item.area}}{{item.areaType}}种

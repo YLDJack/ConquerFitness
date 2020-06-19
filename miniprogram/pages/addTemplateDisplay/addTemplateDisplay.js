@@ -6,6 +6,10 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 动作详情弹出层
+    showPopup:false,
+    // 详情动作
+    queryActionByName:[],
     planId: '',
     // 计划名称
     planName: '',
@@ -27,13 +31,40 @@ Page({
     delActions: [],
     delActionsStatus: []
   },
+   // 点击图片弹出动作详情
+   showPopup(event) {
+    const id = event.currentTarget.dataset.id;
+    const data = this.data.trainRecord;
+    let catedata = [];
+    for (let i = 0; i < data.length; i++) {
+      if (id === data[i]._id) {
+        catedata.push(data[i]);
+      }
+    }
+    this.setData({
+      queryActionByName: catedata,
+      showPopup: true
+    })
+    console.log("当前的动作是:", this.data.queryActionByName);
+  },
+  onPopupClose(){
+    this.setData({
+      showPopup:false
+    })
+  },
+  //修改计划名
+  updatePlanName(event){
+    this.setData({
+      planName:event.detail.value
+    })
+  },
   // 保存训练计划
   savePlan() {
     wx.cloud.callFunction({
       name: 'updateTrainPlan',
       data: {
         planId: this.data.planId,
-        planName: this.data.planNamet,
+        planName: this.data.planName,
         trainRecord: this.data.trainRecord,
         TotalGroup: this.data.TotalGroup,
         TotalType: this.data.TotalType,
@@ -273,7 +304,7 @@ Page({
     });
   },
   // 获取训练计划
-  getPlan() {
+  getPlanById(planId) {
     let trainRecord = [];
     let trainingActions = app.globalData.trainingActions;
     let totalArea = [];
@@ -284,13 +315,15 @@ Page({
     // 获取动作计划
     wx.cloud.callFunction({
       // 云函数名称，获取本人的所有动作记录
-      name: 'getTrainPlan',
+      name: 'getTrainPlanById',
+      data:{
+        planId:planId
+      },
       success: res => {
-        let result = res.result.data[0];
-        trainRecord = result.trainRecord;
-        totalArea = result.totalArea;
-        TotalGroup = result.TotalGroup;
-        let planId = result._id;
+        let result = res.result.data[0] || [];
+        trainRecord = result.trainRecord || [];
+        totalArea = result.totalArea || [];
+        TotalGroup = result.TotalGroup || 0;
         // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
         for (let i = 0; i < trainRecord.length; i++) {
           for (let j = 0; j < trainingActions.length; j++) {
@@ -354,7 +387,7 @@ Page({
           TotalType: trainRecord.length,
           totalArea: totalArea,
           planName: result.planName,
-          planId: planId
+          planId:planId
         })
         console.log('获取到的动作计划', this.data.totalArea);
       }
@@ -366,14 +399,15 @@ Page({
    */
   onShow: function () {
     if (app.globalData.trainingActions.length) {
-      this.getPlan();
+      this.getPlanById(this.data.planId);
     }
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getPlan();
+    console.log(options.planId);
+    this.getPlanById(options.planId);
   },
 
   /**
@@ -395,7 +429,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    // 添加计划页面隐藏时应当清空训练动作。
+    app.globalData.trainingActions = [];
   },
 
   /**

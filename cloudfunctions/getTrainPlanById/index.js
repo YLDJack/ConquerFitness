@@ -9,16 +9,8 @@ const db = cloud.database();
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-
+  // 等待其查询完再进行部位查询
   return await db.collection('trainPlan').where({
-    _id: event.planId,
-  }).update({
-    data: {
-      planName: event.planName,
-      trainRecord: event.trainRecord,
-      TotalGroup: event.TotalGroup,
-      TotalType: event.TotalType,
-      totalArea: event.totalArea,
-    }
-  })
+    _id:event.planId
+  }).get()
 }

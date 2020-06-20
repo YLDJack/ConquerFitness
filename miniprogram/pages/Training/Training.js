@@ -8,6 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 动作记录
+    actionRecord: [],
     date: '',
     // 开始休息时间
     startRest: 0,
@@ -25,6 +27,8 @@ Page({
     TrainMark: '',
     // 单个动作
     queryActionByName: [],
+    // 单个动作的动作记录
+    queryActionRecordByName:[],
     // 点击图片显示弹出层的属性
     showPopup: false,
     // 删除的动作状态
@@ -314,15 +318,26 @@ Page({
   showPopup(event) {
     const id = event.currentTarget.dataset.id;
     const data = this.data.trainRecord;
+    const actionRecord = this.data.actionRecord;
     let catedata = [];
+    let cateActionRecord = [];
+    // 获取相应的动作
     for (let i = 0; i < data.length; i++) {
       if (id === data[i]._id) {
         catedata.push(data[i]);
       }
     }
+    // 获取相应的动作记录
+    for (let j = 0; j < actionRecord.length; j++) {
+      if (id === actionRecord[j].actionId) {
+        cateActionRecord.push(actionRecord[j]);
+      }
+    }
+    console.log('获取到的单个动作记录',cateActionRecord)
     this.setData({
       queryActionByName: catedata,
-      showPopup: true
+      showPopup: true,
+      queryActionRecordByName:cateActionRecord
     })
     console.log("当前的动作是:", this.data.queryActionByName);
   },
@@ -1076,6 +1091,8 @@ Page({
           }).then(res => {
             console.log('3、res', res.result.data);
             let actionRecord = res.result.data;
+            actionRecord = this.data.actionRecord.concat(actionRecord);
+           
             for (let i = 0; i < trainingActions.length; i++) {
               areas.add(trainingActions[i].actionArea);
               trainingActions[i].trainCount = 0;
@@ -1148,7 +1165,8 @@ Page({
           TotalGroup: TotalGroup,
           TotalCount: TotalCount,
           trainRecord: trainRecord,
-          date: date
+          date: date,
+          actionRecord: actionRecord
         });
       },
       fail: error => {
@@ -1201,6 +1219,8 @@ Page({
     }).then(res => {
       console.log('3、res', res.result.data);
       let actionRecord = res.result.data;
+      actionRecord = this.data.actionRecord.concat(actionRecord);
+      console.log('获取到的运动记录',actionRecord)
       for (let i = 0; i < trainingActions.length; i++) {
         areas.add(trainingActions[i].actionArea);
         trainingActions[i].trainCount = 0;
@@ -1263,7 +1283,8 @@ Page({
         TotalType: trainRecord.length,
         totalArea: totalArea,
         trainRecord: trainRecord,
-        date: date
+        date: date,
+        actionRecord: actionRecord
       });
       // 如果训练动作不为空则自动开始计时
       if (trainRecord.length) {

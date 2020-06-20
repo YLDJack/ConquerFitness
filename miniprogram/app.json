@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/TrainTemplate/TrainTemplate",
     "pages/Main/Main",
+    "pages/TrainTemplate/TrainTemplate",
     "pages/DataRecord/DataRecord",
     "pages/Count/Count",
     "pages/ActionDetial/ActionDetial",

@@ -167,14 +167,14 @@
 								</view>
 
 							</view>
-							<view class="setresttime">
-								<view>
+							<view class="setresttime-box">
+								<view class="setresttime">
 									<van-icon wx:if="{{aerotimer}}" name="pause-circle-o" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onPauseAerobicClock" style="margin:0 10rpx 0 10rpx" />
 									<van-icon wx:else name="play-circle-o" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onStartAerobicClock" style="margin:0 10rpx 0 10rpx" />
 									<van-icon name="replay" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onStopAerobicClock" />
 								</view>
-								<van-button type="primary" custom-style="width:100rpx;height:50rpx;" bind:click="onCloseAerobicClock">结束</van-button>
 							</view>
+							<van-button type="primary" custom-style="width:140rpx;height:50rpx;margin-top:25rpx;" bind:click="onCloseAerobicClock">结束</van-button>
 						</van-popup>
 						<!-- 删除按钮 -->
 						<van-icon name="cross" wx:if="{{delGroupsTag}}" size="50rpx" catchtap="doDelGroups" data-index1="{{index1}}" data-index="{{index}}" />
@@ -212,14 +212,15 @@
 								</van-count-down>
 							</view>
 							<view class="setresttime">
-								<van-button type="primary" bind:click="subTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">-10s</van-button>
-								<van-button type="primary" bind:click="addTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:20rpx">+10s</van-button>
-								<van-button type="primary" custom-style="width:100rpx;height:50rpx;" bind:click="onCloseClock">结束</van-button>
+								<van-button type="primary" bind:click="subTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:10rpx">-10s</van-button>
+								<van-button type="primary" bind:click="addTenSeconds" custom-style="width:100rpx;height:50rpx;margin-right:10rpx">+10s</van-button>
+								<van-button type="primary" custom-style="width:140rpx;height:50rpx;" bind:click="onCloseClock">结束</van-button>
 							</view>
 							<view class="inputresttime">
 								<view class="inputtip">输入休息时间(s):</view>
-								<van-field custom-style="padding:2rpx;color:white;width:100rpx;height:50rpx;color:black;font-size:28rpx;border-radius:10rpx;background-color:rgb(180,180,180)" bind:blur="onRestTimeConfirm" placeholder="单位：秒(s)">
+								<van-field custom-style="padding:2rpx;color:white;height:50rpx;color:black;font-size:28rpx;border-radius:10rpx;background-color:rgb(180,180,180);" bind:blur="onRestTimeConfirm" placeholder="单位：秒(s)" placeholder-style="text-align:center">
 								</van-field>
+								<view class="inputtip">(输入后按回车确认哦)</view>
 							</view>
 						</van-popup>
 						<!-- 删除按钮 -->

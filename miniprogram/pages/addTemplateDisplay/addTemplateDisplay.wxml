@@ -2,7 +2,7 @@
 <!-- 正计时秒表 -->
 <view class="miaobiao">
 	<view class="countbutton">
-		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认</van-button>
+		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认删除</van-button>
 		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
 		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
 

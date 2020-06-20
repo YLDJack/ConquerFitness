@@ -23,7 +23,7 @@ Page({
     updateActionSub: "",
     updateActionArea: "",
     updateActionImage: "",
-    currentTab:'',
+    currentTab: '',
     // 是否编辑动作标签
     updateTag: false,
     // 上传图片列表
@@ -300,7 +300,7 @@ Page({
     lineec: {
       lazyLoad: true, // 延迟加载
     },
-    showCharts:false,
+    showCharts: false,
     // 肌容量图数据
     countSeries: [{
       data: [],
@@ -455,7 +455,7 @@ Page({
         this.setData({
           countSeries: countSeries,
           countAscissaData: countAscissaData,
-          showCharts:true,
+          showCharts: true,
           currentTab: 1
         });
         console.log('获取到的动作记录', this.data.countSeries);
@@ -464,7 +464,7 @@ Page({
         // this.echartsComponnet.canvasNode._width = 550;
         console.log(this.echartsComponnet);
         this.init_echarts();
-       
+
       },
       fail: error => {
         console.log(error);
@@ -478,7 +478,7 @@ Page({
   // tab的切换方法
   onTabChange(event) {
     if (event.detail.name === 1) {
-      
+
       this.getChartData(event.currentTarget.dataset.actionid);
     }
   },
@@ -643,6 +643,9 @@ Page({
     let addActionImage = "";
     if (this.data.fileList[0]) {
       addActionImage = this.data.fileList[0].url
+    } else {
+      // 若没上传图片，默认上传cfit的图片
+      addActionImage='cloud://conquercheck-geges.636f-conquercheck-geges-1301732640/zwtp.png'
     }
     const toast = Toast.loading({
       mask: true,
@@ -803,6 +806,7 @@ Page({
       updateTag: false
     })
   },
+
   // 添加图片
   uploadImage(event) {
     const toast = Toast.loading({

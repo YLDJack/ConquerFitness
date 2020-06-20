@@ -1,4 +1,5 @@
 // miniprogram/pages/addTemplateDisplay/addTemplateDisplay.js
+import Toast from '@vant/weapp/toast/toast';
 const app = getApp();
 Page({
 
@@ -7,9 +8,9 @@ Page({
    */
   data: {
     // 动作详情弹出层
-    showPopup:false,
+    showPopup: false,
     // 详情动作
-    queryActionByName:[],
+    queryActionByName: [],
     planId: '',
     // 计划名称
     planName: '',
@@ -27,12 +28,119 @@ Page({
     delGroupsTag: false,
     // 编辑动作标记
     delTag: false,
+    updateTag: false,
     // 要删除的动作和动作状态
     delActions: [],
-    delActionsStatus: []
+    delActionsStatus: [],
+    // 头部选中数组
+    activeNames: [],
+    planImage: '',
+    planDesc: '',
+    // 更改的图片列表
+    planImageList: []
   },
-   // 点击图片弹出动作详情
-   showPopup(event) {
+  // 上传图片事件
+  uploadImage(event) {
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '上传中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+    const {
+      file
+    } = event.detail;
+    console.log('图片加载完成', file);
+    const filePath = file.path;
+    const tempFlie = filePath.split('.')
+    const cloudPath = 'planImage/' + 'planImage-' + tempFlie[tempFlie.length - 2] + '.' + tempFlie[tempFlie.length - 1]
+    // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+    // wx.cloud代表传到云开的数据库
+    wx.cloud.uploadFile({
+      filePath: filePath,
+      cloudPath: cloudPath,
+      success: res => {
+        toast.clear();
+        console.log('上传成功', res);
+        // 上传完成需要更新 fileList
+        var {
+          fileList = []
+        } = this.data;
+        fileList.push({
+          file,
+          url: res.fileID
+        });
+        this.setData({
+          planImageList: fileList
+        });
+        console.log(this.data.planImageList);
+      }
+    });
+  },
+  // 开始更新动作
+  startUpdate() {
+    this.setData({
+      updateTag: true
+    })
+  },
+  // 实现更新动作事件
+  UpdatePlan() {
+    // 如果计划名为空提醒其输入用户名
+    if (!this.data.planName) {
+      Toast.fail('请输入计划名');
+      return false;
+    }
+    let planImage = "";
+    if (this.data.planImageList[0]) {
+      planImage = this.data.planImageList[0].url 
+    }else{
+      planImage = this.data.planImage
+    }
+    const toast = Toast.loading({
+      mask: true,
+      forbidClick: true, // 禁用背景点击
+      message: '更新中...',
+      duration: 0,
+      loadingType: "circular"
+    });
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'updatePlan',
+      // 传给云函数的参数
+      data: {
+        planId:this.data.planId,
+        planName: this.data.planName,
+        planDesc: this.data.planDesc,
+        planImage: planImage
+      },
+      success: res => {
+        toast.clear();
+        wx.showToast({
+          title: '更新计划成功',
+        })
+        this.getPlanById(this.data.planId);
+        this.setData({
+         updateTag:false
+        });
+      },
+      fail: error => {
+        toast.clear();
+        console.log(error);
+        wx.showToast({
+          title: '更新计划失败',
+        })
+      }
+    })
+  },
+  // 首部标题点击事件
+  onCollChange(event) {
+    this.setData({
+      activeNames: event.detail,
+    });
+  },
+  // 点击图片弹出动作详情
+  showPopup(event) {
     const id = event.currentTarget.dataset.id;
     const data = this.data.trainRecord;
     let catedata = [];
@@ -47,15 +155,15 @@ Page({
     })
     console.log("当前的动作是:", this.data.queryActionByName);
   },
-  onPopupClose(){
+  onPopupClose() {
     this.setData({
-      showPopup:false
+      showPopup: false
     })
   },
   //修改计划名
-  updatePlanName(event){
+  updatePlanName(event) {
     this.setData({
-      planName:event.detail.value
+      planName: event.detail.value
     })
   },
   // 保存训练计划
@@ -75,17 +183,17 @@ Page({
           title: '保存成功',
         })
       },
-      fail: err =>{
+      fail: err => {
         wx.showToast({
-          title: '保存失败'+err,
-          icon:'none'
+          title: '保存失败' + err,
+          icon: 'none'
         })
         console.log(err);
       }
     })
   },
   //开始训练
-  beginTrain(){
+  beginTrain() {
     // 将训练记录设置为本动作的记录
     app.globalData.trainRecord = this.data.trainRecord;
     // 关闭当前页，直接跳转
@@ -312,12 +420,13 @@ Page({
     let TotalGroup = this.data.TotalGroup;
     let areas = new Set();
 
+
     // 获取动作计划
     wx.cloud.callFunction({
       // 云函数名称，获取本人的所有动作记录
       name: 'getTrainPlanById',
-      data:{
-        planId:planId
+      data: {
+        planId: planId
       },
       success: res => {
         let result = res.result.data[0] || [];
@@ -387,7 +496,9 @@ Page({
           TotalType: trainRecord.length,
           totalArea: totalArea,
           planName: result.planName,
-          planId:planId
+          planImage: result.planImage,
+          planDesc: result.planDesc,
+          planId: planId
         })
         console.log('获取到的动作计划', this.data.totalArea);
       }

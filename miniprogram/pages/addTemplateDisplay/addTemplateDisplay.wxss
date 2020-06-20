@@ -181,3 +181,7 @@
   font-weight: bold;
   margin-top: 20rpx;
 }
+.planImage{
+  width: 100rpx;
+  height: 100rpx;
+}

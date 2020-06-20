@@ -1,20 +1,14 @@
 <!--pages/TrainTemplate/TrainTemplate.wxml-->
 <!-- <text>pages/TrainTemplate/TrainTemplate.wxml</text> -->
-
 <!-- 页面顶部 -->
 <view>
 	<van-cell title="我的计划" label="共{{trainPlans.length}}套计划" border="{{ false }}">
 		<view slot="right-icon">
 			<van-icon name="more" color="red" size="50rpx" bind:click="showPopup" />
-			<van-popup show="{{ showPop }}" bind:close="onClose" position="bottom">
-				<van-cell-group>
-					<van-cell title="添加计划" center="true" clickable="true" bind:click="addTemplate" />
-					<van-cell title="删除计划" center="true" clickable="true" />
-				</van-cell-group>
-			</van-popup>
 		</view>
 	</van-cell>
 </view>
+
 
 <!-- 中间模板显示页面 -->
 <view class="text">已有计划</view>

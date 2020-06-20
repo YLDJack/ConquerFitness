@@ -32,7 +32,7 @@ Page({
     this.setData({
       addPlanshow: false
     });
-  },
+  }, 
   onClose() {
     this.setData({
       showPop: false
@@ -41,9 +41,7 @@ Page({
 
   // 点击模板跳转到traing页面，但是顶部添加备注位置读取了模板宫格中的text
   addTemplate() {
-    wx.navigateTo({
-      url: '../addTemplateDisplay/addTemplateDisplay',
-    })
+
   },
 
   templateTraining() {

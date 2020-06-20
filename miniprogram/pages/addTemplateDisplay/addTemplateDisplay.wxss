@@ -149,3 +149,35 @@
   align-items: flex-end;
   text-align: center;
 }
+/* 弹出层样式 */
+.poptabs {
+  margin: auto;
+}
+.addpop {
+  width: 100%;
+  height: 90%;
+}
+
+
+.tabtitle {
+  margin: 20rpx 20rpx 20rpx 35rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+
+.star {
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+}
+
+.actionimage {
+  height: 400rpx;
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 25rpx;
+  font-weight: bold;
+  margin-top: 20rpx;
+}

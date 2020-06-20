@@ -68,7 +68,7 @@ Page({
     TargetWeight: false,
     // 体脂下拉计算面板
     fatcollapse: ['0'],
-    sexvalue: '',
+    sexvalue: '女',
     showfattip: false,
     // 围度下拉面板
     circlecollapse: ['0'],
@@ -117,6 +117,7 @@ Page({
           date: this.data.date,
           trainState: this.data.trainState,
           weight: this.data.weight,
+          height:this.data.height,
           fat: this.data.fat,
           ass: this.data.ass,
           leg: this.data.leg,
@@ -137,6 +138,8 @@ Page({
         },
         success: async res => {
 
+          app.globalData.bodydataChanged = true;
+
           wx.showToast({
             title: '更新成功',
           })
@@ -152,8 +155,9 @@ Page({
           })
         }
       })
-    } else {
-      // 如果修改了训练状态，则将当天的体重设置为该训练时间段的原始体重,当天的设置为原始时间和目标开始时间
+    }
+    // 如果修改了训练状态，则将当天的体重设置为该训练时间段的原始体重,当天的设置为原始时间和目标开始时间 
+    else {  
       await wx.cloud.callFunction({
         // 云函数名称
         name: 'updatePersonalData',
@@ -181,6 +185,8 @@ Page({
           todayStep: this.data.todayStep
         },
         success: async res => {
+
+          app.globalData.bodydataChanged = true;
 
           wx.showToast({
             title: '更新成功',
@@ -529,15 +535,15 @@ Page({
   setRecordData() {
     // 获取性别和每日步数
     let todayStep = app.globalData.todayStep;
-    let sex = app.globalData.sex;
     let nowRecord = app.globalData.bodydata;
+    console.log('最近的身体数据记录',nowRecord);
     let date = app.globalData.date;
     let originWeightDate = nowRecord.originWeightDate;
     // 计算是该状态的第几天
     let a = dayjs(date, 'YYYY-MM-DD');
     let b = dayjs(originWeightDate, 'YYYY-MM-DD');
     let targetDay = dayjs.duration(a.diff(b)).days() + 1;
-    console.log(targetDay);
+   
     let nowWeight = nowRecord.weight;
     let targetWeight = nowRecord.targetWeight;
     let originWeight = nowRecord.originWeight;
@@ -549,7 +555,9 @@ Page({
     // 计算意见减去的体重占全部需要减去的体重的百分比
     let circleValue = 100 - Math.abs(cutWeight / totalNeed).toFixed(2) * 100;
     let fat = nowRecord.fat;
+    let height = nowRecord.height;
     let fatStaus = '';
+    let sex = nowRecord.sex;
     if (sex === '女') {
       if (fat < 13) {
         fatStaus = '必要脂肪';
@@ -575,8 +583,8 @@ Page({
         fatStaus = '肥胖';
       }
     }
-    console.log('circleValue', fatStaus);
     this.setData({
+      height:height,
       fatStatus: fatStaus,
       sex: sex,
       todayStep: todayStep,
@@ -609,7 +617,7 @@ Page({
     let sex = this.data.sex;
     let waist = this.data.waist;
     let weight = this.data.weight;
-    if (waist === 0) {
+    if (!waist) {
       wx.showToast({
         title: '请先输入腰围,才能自动计算',
         icon: 'none'

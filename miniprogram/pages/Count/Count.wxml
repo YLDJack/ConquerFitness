@@ -9,8 +9,10 @@
 			<van-tab title="周">
 				<van-tabs swipeable animated color="black" border="true" custom-class="vantabs">
 					<van-tab title="本周">
+					<!-- 没有记录时的提示 -->
+					<view wx:if="{{nullInfo}}">{{nullInfo}}</view>
 						<!-- 饼图表显示区域 -->
-						<view class="container">
+						<view class="container" wx:else>
 							<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
 							<!-- 下方动作详情页 -->
 						</view>
@@ -113,11 +115,13 @@
 			<van-tab title="周">
 				<van-tabs swipeable animated color="black" border="true">
 					<van-tab title="本周">
-						<cover-view class="container">
+							<!-- 没有记录时的提示 -->
+					<view wx:if="{{nullInfo}}">{{nullInfo}}</view>
+						<view wx:else  class="container">
 							<!-- 线性表 -->
 							<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
 							</ec-canvas>
-						</cover-view>
+						</view>
 						<view>
 							<!-- 下方的下拉动作详情 -->
 							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">

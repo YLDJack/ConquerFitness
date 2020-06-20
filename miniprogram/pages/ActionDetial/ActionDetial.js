@@ -180,6 +180,15 @@ Page({
     };
     return option
   },
+   //跳转动作详情页面
+   showDesc(event) {
+    let actionId = event.currentTarget.dataset.actionid;
+    let actionName = event.currentTarget.dataset.actionname;
+    console.log('点击的id', actionName);
+    wx.navigateTo({
+      url: "../ActionDesc/ActionDesc?actionId=" + actionId + "&actionName=" + actionName,
+    })
+  },
   // 获取扇形图数据
   getChartData: function () {
     // 获取本周的训练记录

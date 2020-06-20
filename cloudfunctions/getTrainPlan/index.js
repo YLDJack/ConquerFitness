@@ -10,17 +10,8 @@ const db = cloud.database();
 // 云函数入口函数
 exports.main = async (event, context) => {
   const openId = cloud.getWXContext().OPENID;
-  const _ = db.command;
   // 等待其查询完再进行部位查询
-  return await db.collection('trainedRecords').where({
+  return await db.collection('trainPlan').where({
     openId: openId,
-    date: _.in(event.dayArray)
-  }).field({
-    trainRecord:true,
-    _id:false,
-    totalArea:true,
-    TotalType:true,
-    TotalGroup:true,
-    TotalCount:true
   }).get()
 }

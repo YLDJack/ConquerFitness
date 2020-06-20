@@ -10,7 +10,7 @@
 		<van-icon name="replay" size="60rpx" color=" rgb(107, 105, 105)" bind:click="onStopClock" />
 	</view>
 	<view class="countbutton">
-		<van-button type="danger" size="small" bind:click="onFinishTraining">完成训练</van-button>
+		<van-button type="danger" bind:click="onFinishTraining">完成训练</van-button>
 	</view>
 </view>
 
@@ -18,15 +18,15 @@
 	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" model:value="{{ TrainMark }}">
 		<view slot="right-icon">
 			共{{TotalType}}种已完成{{TotalGroup}}组{{TotalCount}}容量
-			<view wx:for="{{totalArea}}">
+			<view wx:for="{{totalArea}}" wx:key="_id">
 				<view>{{item.area}}:{{item.areaType}}种已完成{{item.areaCount}}<text wx:if="{{item.area!=='有氧'}}">容量</text><text wx:else>分钟</text></view>
 			</view>
 		</view>
 	</van-field>
 	<!-- 顶部编辑按钮部分 -->
-	<view class="topedit">
+	<view class="topedit" wx:if="{{trainRecord.length }}">
 		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认删除</van-button>
-		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
+		<van-button type="danger"  bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
 		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
 		<!-- 顶部训练进度部分 -->
 		<!-- <view class="text_progress">
@@ -52,9 +52,9 @@
 					<van-tag type="primary">{{item.maxWeight}}分</van-tag>
 				</view>
 				<view wx:else>
-					<van-tag plain type="danger">最大重量：</van-tag>
+					<van-tag plain type="danger">历史最大重量：</van-tag>
 					<van-tag type="danger">{{item.maxWeight}}Kg</van-tag>
-					<van-tag plain type="primary"> 最大容量：</van-tag>
+					<van-tag plain type="primary"> 历史最大容量：</van-tag>
 					<van-tag type="primary">{{item.maxCount}}</van-tag>
 				</view>
 			</view>
@@ -149,7 +149,7 @@
 
 			<!-- 有氧运动 -->
 			<view wx:if="{{item.actionType === '有氧训练'}}">
-				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="{{index1}}">
+				<view class="traingroup" wx:for="{{trainRecord[index].trainGroups}}" wx:for-index="index1" wx:key="index1">
 					<view class="groupnum">{{index1+1}}</view>
 					<!-- 倒计时和确认模块 -->
 					<view class="traincountdown">
@@ -240,7 +240,7 @@
 
 <!-- 点击编辑按钮之后 -->
 <view class="actionview" wx:else>
-	<van-cell-group wx:for="{{trainRecord}}">
+	<van-cell-group wx:for="{{trainRecord}}" wx:key='_id'>
 		<van-cell use-label-slot>
 			<!-- 标题插槽 -->
 			<view slot="title" class="titleandweight">

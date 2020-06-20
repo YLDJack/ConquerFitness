@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    date:'',
+    date: '',
     // 开始休息时间
     startRest: 0,
     // 编辑组数的标记
@@ -63,7 +63,7 @@ Page({
     isGray: true,
     isRed: false
   },
-  // 统计每个动作的已完成容量的方法
+  // 统计每个部位的已完成容量的方法
   countArea() {
     // 获取按部位计算的分类数组
     let totalArea = this.data.totalArea;
@@ -135,6 +135,7 @@ Page({
     this.setData({
       trainRecord: trainRecord,
       TotalCount: TotalCount,
+      TotalGroup: TotalGroup
     });
   },
   // 输入次数完成后的监听事件
@@ -181,6 +182,7 @@ Page({
     app.globalData.trainRecord = trainRecord;
     console.log('修改数量完成后的记录', trainRecord[index]);
     this.setData({
+      TotalGroup: TotalGroup,
       trainRecord: trainRecord,
       TotalCount: TotalCount,
     });
@@ -206,14 +208,6 @@ Page({
     if (trainGroups[index1].Complish) {
 
       trainRecord[index].trainComplishCount += trainGroups[index1].trainWeight * trainGroups[index1].trainNumber;
-      //如果当前动作的训练重量大于历史重量，则将其设置为最大重量
-      if (trainGroups[index1].trainWeight > trainRecord[index].maxWeight) {
-        trainRecord[index].maxWeight = trainGroups[index1].trainWeight;
-      }
-      //如果当前动作的训练容量大于历史容量，则将其设置为最大容量
-      if (trainRecord[index].trainComplishCount > trainRecord[index].maxCount) {
-        trainRecord[index].maxCount = trainRecord[index].trainComplishCount;
-      }
       // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
       this.countArea();
     } else {
@@ -349,16 +343,24 @@ Page({
 
     for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < delActions.length; j++) {
-        if (trainRecord[i] == delActions[j]) {
+        if (trainRecord[i]._id === delActions[j]._id) {
+          console.log('删除的记录', trainRecord[i].trainComplishCount);
+          TotalCount -= trainRecord[i].trainComplishCount;
           // 如果删除的动作已经完成的,应当删除页面中的种类数，已经完成容量和组数
           trainRecord[i].isSelected = false;
+          console.log('要删除的动作记录', delActions[j]);
           for (let k = 0; k < trainRecord[i].trainGroups.length; k++) {
             if (trainRecord[i].trainGroups[k].Complish) {
-              TotalCount -= trainRecord[i].trainComplishCount;
+
+              // 要将已经完成的置为空
+              trainRecord[i].trainGroups[k].Complish = false;
               trainRecord[i].trainComplishCount -= trainRecord[i].trainGroups[k].trainNumber * trainRecord[i].trainGroups[k].trainWeight;
+              trainRecord[i].trainGroups[k].trainNumber = 0;
+              trainRecord[i].trainGroups[k].trainWeight = 0;
               TotalGroup--;
               // 根据部位去设置已经完成的容量，种数初始化的时候就要去设置了
               this.countArea();
+
             }
 
           }
@@ -439,7 +441,7 @@ Page({
     console.log('删除的状态', delActionsStatus);
     console.log('删除的数据的id', delActions);
   },
-  // 点击编辑按钮事件
+  // 点击编辑动作按钮事件
   startDel() {
     this.setData({
       delTag: !this.data.delTag,
@@ -763,6 +765,9 @@ Page({
 
   // 添加动作跳转
   addTrain() {
+    this.setData({
+      delTag: false
+    })
     // 关闭当前页，直接跳转
     wx.navigateTo({
       url: '../ActionAdd/ActionAdd',
@@ -789,7 +794,7 @@ Page({
     let TotalGroup = this.data.TotalGroup;
     let TotalCount = this.data.TotalCount;
     let TrainMark = this.data.TrainMark;
-    console.log('训练备注',TrainMark);
+    console.log('训练备注', TrainMark);
 
     const toast = Toast.loading({
       mask: true,
@@ -802,6 +807,22 @@ Page({
 
     // 上传每个动作的训练记录尤其是最大重量容量以及总容量
     for (let i = 0; i < trainRecord.length; i++) {
+
+      let maxWeight = trainRecord[i].maxWeight;
+      let maxCount = trainRecord[i].maxCount;
+      let currentCount = 0;
+      // 对比这次训练和历史最大重量和容量，如果较大则赋值
+      for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
+
+        if (parseInt(trainRecord[i].trainGroups[j].trainWeight) > maxWeight) {
+          maxWeight = parseInt(trainRecord[i].trainGroups[j].trainWeight);
+          console.log('最大重量', maxWeight);
+        }
+        currentCount += trainRecord[i].trainGroups[j].trainWeight * trainRecord[i].trainGroups[j].trainNumber;
+      }
+      if (currentCount > maxCount) {
+        maxCount = currentCount;
+      }
       // 查询数据库中当天的记录是否已经存在，若存在则进行更新，否则直接进行添加
       wx.cloud.callFunction({
         // 云函数名称
@@ -812,12 +833,9 @@ Page({
           actionId: trainRecord[i]._id,
         },
         success: res => {
-          toast.clear();
-          wx.showToast({
-            title: '查询动作记录成功',
-          })
           // 代表存在该数据
           if (res.result.data.length > 0) {
+            console.log('最大重量', maxWeight);
             // 若已存在当天的记录那么就直接进行更新
             wx.cloud.callFunction({
               // 云函数名称
@@ -827,21 +845,18 @@ Page({
                 date: date,
                 actionId: trainRecord[i]._id,
                 actionName: trainRecord[i].actionName,
-                maxCount: trainRecord[i].maxCount,
-                maxWeight: trainRecord[i].maxWeight,
+                maxCount: maxCount,
+                maxWeight: maxWeight,
                 trainCount: trainRecord[i].trainCount
               },
               success: res => {
-                toast.clear();
-                wx.showToast({
-                  title: '更新动作记录成功',
-                })
+
               },
               fail: error => {
                 toast.clear();
                 console.log(error);
                 wx.showToast({
-                  title: '更新动作记录失败',
+                  title: '上传动作记录失败',
                   icon: "none"
                 })
               }
@@ -856,15 +871,12 @@ Page({
                 date: date,
                 actionId: trainRecord[i]._id,
                 actionName: trainRecord[i].actionName,
-                maxCount: trainRecord[i].maxCount,
-                maxWeight: trainRecord[i].maxWeight,
+                maxCount: maxCount,
+                maxWeight: maxWeight,
                 trainCount: trainRecord[i].trainCount
               },
               success: res => {
-                toast.clear();
-                wx.showToast({
-                  title: '上传动作记录成功',
-                })
+
               },
               fail: error => {
                 toast.clear();
@@ -896,10 +908,6 @@ Page({
         date: date
       },
       success: res => {
-        toast.clear();
-        wx.showToast({
-          title: '查询训练记录成功',
-        })
         // 代表存在该数据
         if (res.result.data.length > 0) {
           // 若已存在当天的记录那么就直接进行更新
@@ -912,15 +920,15 @@ Page({
               trainRecord: trainRecord,
               TrainMark: TrainMark,
               TotalType: TotalType,
-              TotalGroup:TotalGroup,
-              TotalCount:TotalCount,
+              TotalGroup: TotalGroup,
+              TotalCount: TotalCount,
               totalArea: totalArea,
-              
+
             },
             success: res => {
               toast.clear();
               wx.showToast({
-                title: '更新训练记录成功',
+                title: '上传成功',
               })
             },
             fail: error => {
@@ -943,8 +951,8 @@ Page({
               TrainMark: TrainMark,
               trainRecord: trainRecord,
               TotalType: TotalType,
-              TotalGroup:TotalGroup,
-              TotalCount:TotalCount,
+              TotalGroup: TotalGroup,
+              TotalCount: TotalCount,
               totalArea: totalArea,
             },
             success: res => {
@@ -975,8 +983,6 @@ Page({
       }
     });
 
-
-
   },
   /**
    * 生命周期函数--监听页面加载
@@ -997,19 +1003,182 @@ Page({
    */
   onShow: function () {
     let date = app.globalData.date;
+    let today = utils.formatDate(new Date());
+    // 如果是当天，则获取当前全局保存的训练记录
+    if (today === date) {
+      this.initTrainRecord();
+    }
+    // 如果不为当天则从数据库中获取训练记录
+    else {
+      this.getTrainRecordByDate(date);
+    }
+
+  },
+  // 根据日期去获取训练记录
+  async getTrainRecordByDate(date) {
+
+    let dateArray = [];
+    dateArray.push(date);
+
+    let trainingActions = app.globalData.trainingActions;
+
+    let totalArea = this.data.totalArea;
+    console.log('获取到的训练记录0', totalArea);
+
+    let actionId = new Set();
+
+    let existAreas = [];
+    let areas = new Set();
+
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getTrainedRecordByDates',
+      // 传给云函数的参数
+      data: {
+        dayArray: dateArray
+      },
+      success: async res => {
+
+        wx.showToast({
+          title: '获取训练记录成功',
+        })
+        let result = res.result.data[0];
+        let trainRecord = result.trainRecord;
+
+        totalArea = result.totalArea;
+        console.log('获取到的训练记录', totalArea);
+        let TotalGroup = result.TotalGroup;
+        let TotalCount = result.TotalCount;
+
+        if (trainingActions.length) {
+          for (let i = 0; i < trainRecord.length; i++) {
+            for (let j = 0; j < trainingActions.length; j++) {
+              // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
+              if (trainRecord[i]._id == trainingActions[j]._id) {
+                trainingActions.splice(j, 1);
+              }
+            }
+          }
+
+          for (let i = 0; i < trainingActions.length; i++) {
+            actionId.add(trainingActions[i]._id);
+          }
+          actionId = Array.from(actionId);
+
+
+          // 此时应当对每个动作发起查询，获取其最大容量和和最大重量
+          await wx.cloud.callFunction({
+            // 云函数名称，获取本人的所有动作记录
+            name: 'queryActionRecord',
+            data: {
+              actionId: actionId
+            }
+          }).then(res => {
+            console.log('3、res', res.result.data);
+            let actionRecord = res.result.data;
+            for (let i = 0; i < trainingActions.length; i++) {
+              areas.add(trainingActions[i].actionArea);
+              trainingActions[i].trainCount = 0;
+              trainingActions[i].trainComplishCount = 0;
+              trainingActions[i].trainGroups = [{
+                trainReamark: '',
+                trainWeight: '',
+                trainNumber: '',
+                trainRestTime: 30 * 1000,
+                Complish: false
+              }]
+              trainingActions[i].date = this.data.date;
+              trainingActions[i].maxCount = 0;
+              trainingActions[i].maxWeight = 0;
+              // 解决每次只能获取最后一个动作的bug
+              for (let j = 0; j < actionRecord.length; j++) {
+                if (actionRecord[j].actionId === trainingActions[i]._id) {
+                  trainingActions[i].maxCount = actionRecord[j].maxCount;
+                  trainingActions[i].maxWeight = actionRecord[j].maxWeight;
+                }
+              }
+
+            }
+            // 获取统计中已经存在的部位
+            for (let i = 0; i < totalArea.length; i++) {
+              existAreas.push(totalArea[i].area);
+            }
+            console.log('4、已存在的动作部位', existAreas);
+            areas = Array.from(areas);
+            // 原来如果已经存在相同的部位的数据，应当不再进行初始化
+            for (let i = 0; i < areas.length; i++) {
+              if (existAreas.indexOf(areas[i]) == -1) {
+                let oneArea = {
+                  area: areas[i],
+                  // 动作个数
+                  areaType: 0,
+                  // 动作总容量
+                  areaCount: 0,
+                }
+                totalArea.push(oneArea);
+              }
+
+            }
+            // 将这些动作加入到record
+            trainRecord = trainRecord.concat(trainingActions);
+            for (let i = 0; i < totalArea.length; i++) {
+              totalArea[i].areaType = 0;
+              for (let j = 0; j < trainRecord.length; j++) {
+                // 获取每个部位的动作的种类数
+                if (trainRecord[j].actionArea === totalArea[i].area) {
+                  totalArea[i].areaType += 1;
+                }
+              }
+            }
+            //设置全局变量的记录
+            app.globalData.trainRecord = trainRecord;
+            // 如果训练动作不为空则自动开始计时
+            if (trainRecord.length) {
+              this.onStartClock();
+            }
+          }).catch(console.error)
+        }
+
+
+
+
+        this.setData({
+          TotalType: trainRecord.length,
+          totalArea: totalArea,
+          TotalGroup: TotalGroup,
+          TotalCount: TotalCount,
+          trainRecord: trainRecord,
+          date: date
+        });
+      },
+      fail: error => {
+
+        console.log(error);
+        wx.showToast({
+          title: '获取训练记录失败',
+          icon: "none"
+        })
+      }
+    });
+
+
+  },
+  // 初始化训练记录
+  initTrainRecord() {
+    let date = app.globalData.date;
     let trainingActions = app.globalData.trainingActions;
     // 从全局中获取
     let trainRecord = app.globalData.trainRecord || [];
     let totalArea = this.data.totalArea;
     let existAreas = [];
+    let actionId = new Set();
     let areas = new Set();
     console.log('1、获取到的记录', trainRecord);
 
 
-
+    // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
     for (let i = 0; i < trainRecord.length; i++) {
       for (let j = 0; j < trainingActions.length; j++) {
-        // 如果本页中的trainRecord中已经存在该动作，则不需要再添加了
         if (trainRecord[i]._id == trainingActions[j]._id) {
           trainingActions.splice(j, 1);
         }
@@ -1017,19 +1186,19 @@ Page({
     }
     console.log('2、需要添加的记录', trainingActions);
 
-
-
-
-
+    for (let i = 0; i < trainingActions.length; i++) {
+      actionId.add(trainingActions[i]._id);
+    }
+    actionId = Array.from(actionId);
 
     // 此时应当对每个动作发起查询，获取其最大容量和和最大重量
     wx.cloud.callFunction({
       // 云函数名称，获取本人的所有动作记录
       name: 'queryActionRecord',
+      data: {
+        actionId: actionId
+      }
     }).then(res => {
-      wx.showToast({
-        title: '查询动作记录成功',
-      })
       console.log('3、res', res.result.data);
       let actionRecord = res.result.data;
       for (let i = 0; i < trainingActions.length; i++) {
@@ -1037,7 +1206,8 @@ Page({
         trainingActions[i].trainCount = 0;
         trainingActions[i].trainComplishCount = 0;
         trainingActions[i].trainGroups = [{
-          trainReamark:'',
+          // 训练备注
+          trainReamark: '',
           trainWeight: '',
           trainNumber: '',
           trainRestTime: 30 * 1000,
@@ -1093,14 +1263,13 @@ Page({
         TotalType: trainRecord.length,
         totalArea: totalArea,
         trainRecord: trainRecord,
-        date:date
+        date: date
       });
       // 如果训练动作不为空则自动开始计时
       if (trainRecord.length) {
         this.onStartClock();
       }
     }).catch(console.error)
-
 
   },
   /**

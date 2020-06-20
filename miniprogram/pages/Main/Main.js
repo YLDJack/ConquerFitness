@@ -9,20 +9,18 @@ dayjs.extend(duration);
 var app = getApp();
 Page({
   data: {
-    // 文章推荐部分
-    dataFitness:false,
     // 页面中间的仪表盘
     gaugeec: {
       lazyLoad: true, // 延迟加载
     },
+    cutWeight: 0,
     targetWeight: 0,
     originWeight: 0,
     todayStep: 0,
     calories: 0,
-    cutWeight: 0 ,
     height: '',
     weight: '',
-    fat: '',
+    fat: 0,
     maxFat: 26,
     // 初次设定身体数据的弹出层开关
     SetBody: false,
@@ -36,65 +34,15 @@ Page({
     isCalendarShow: false,
     // 日历显示的最小日期
     minDate: new Date(2020, 0, 1).getTime(),
-    toView: 'yellow',
-    scrollLeft: 0,
-    //滚动的数组
-    scrolls: [{
-        name: '黄色',
-        tag: 'yellow',
-      },
-      {
-        name: '绿色',
-        tag: 'green',
-      },
-      {
-        name: '红色',
-        tag: 'red',
-      },
-      {
-        name: '黄色',
-        tag: 'yellow',
-      },
-      {
-        name: '绿色',
-        tag: 'green',
-      },
-      {
-        name: '红色',
-        tag: 'red',
-      },
-    ],
-    formatter(day) {
-      const month = day.date.getMonth() + 1;
-      const date = day.date.getDate();
-
-      if (month === 6) {
-        if (date === 13) {
-          day.topInfo = '5550';
-          day.bottomInfo = '胸'
-        } else if (date === 14) {
-          day.topInfo = '6650';
-          day.bottomInfo = '背 手臂'
-        } else if (date === 12) {
-          day.topInfo = '7750';
-          day.bottomInfo = '肩'
-        }
-      }
-      return day;
-  },
-  // 文章推荐的弹出层
-  showdataFitness() {
-    this.setData({ dataFitness: true });
-  },
-
-  onClosedataFitness() {
-    this.setData({ dataFitness: false });
+    maxDate: new Date().getTime()
   },
 
   //日期确认方法
   onConfirmCalendar(event) {
     // 最关键的是要改变全局的时间
     app.globalData.date = utils.formatDate(event.detail);
+    app.globalData.trainRecord = [];
+    app.globalData.trainingActions = [];
     this.setData({
       isCalendarShow: false,
       date: utils.formatDate(event.detail)
@@ -104,6 +52,7 @@ Page({
   // 根据日期从云端获取身体数据
   async getBodyDataByDate() {
     let date = this.data.date;
+
     await wx.cloud.callFunction({
       // 云函数名称
       name: 'getPersonalDataByDate',
@@ -148,23 +97,24 @@ Page({
         }
         // 将该天的身体数据设置为全局的身体数据
         app.globalData.bodydata = result[0];
+        app.globalData.sex =  result[0].sex;
         console.log('当天的数据', result);
-        let status = result[0].trainState;
-        let height = result[0].height;
-        let weight = result[0].weight;
-        let targetWeight = result[0].targetWeight;
-        let originWeight = result[0].originWeight;
-        let fat = result[0].fat;
+        let status = result[0].trainState || '减脂';
+        let height = result[0].height || 0;
+        let weight = result[0].weight || 0;
+        let targetWeight = result[0].targetWeight || 0;
+        let originWeight = result[0].originWeight || 0;
+        // 获取减去的体重
+        let cutWeight = (weight - originWeight).toFixed(1);
+        let fat = result[0].fat || 0;
         let calories = 0;
         let todayStep = result[0].todayStep;
-        // 增长的体重
-        let cutWeight = (weight - originWeight).toFixed(1); 
         /* 
         卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
         */
         calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
         this.setData({
-          cutWeight:cutWeight,
+          cutWeight: cutWeight,
           trainStatus: status,
           height: height,
           weight: weight,
@@ -236,21 +186,23 @@ Page({
           });
           app.globalData.bodydata = res.result.data[length - 1];
           app.globalData.bodydatas = res.result.data;
+          app.globalData.sex = res.result.data[length - 1].sex;
           console.log("最近的身体数据:", app.globalData.bodydata);
-          let status = res.result.data[length - 1].trainState;
-          let height = res.result.data[length - 1].height;
-          let weight = res.result.data[length - 1].weight;
-          let targetWeight = res.result.data[length - 1].targetWeight;
-          let originWeight = res.result.data[length - 1].originWeight;
-          let fat = res.result.data[length - 1].fat;
-          let calories = 0;
+          let status = res.result.data[length - 1].trainState || '减脂';
+          let height = res.result.data[length - 1].height || 0;
+          let weight = res.result.data[length - 1].weight || 0;
+          let targetWeight = res.result.data[length - 1].targetWeight || 0;
+          let originWeight = res.result.data[length - 1].originWeight || 0;
+          // 获取减去的体重
           let cutWeight = (weight - originWeight).toFixed(1);
+          let fat = res.result.data[length - 1].fat || 0;
+          let calories = 0;
           /* 
           卡路里数=步数*身高*0.45*0.01/1000*体重*1.036
           */
           calories = (app.globalData.todayStep * height * 0.45 * 0.01 / 1000 * weight * 1.036).toFixed(0);
           this.setData({
-            cutWeight:cutWeight,
+            cutWeight: cutWeight,
             trainStatus: status,
             height: height,
             weight: weight,
@@ -319,63 +271,40 @@ Page({
       }
     })
   },
+  // 获取用户的用户信息
+  getUserInfo(res) {
+
+    let sex = res.detail.userInfo.gender;
+    if (sex) {
+      // 设定男女最大体脂范围
+      let maxFat = 0;
+      if (sex === 1) {
+        app.globalData.sex = '男',
+          maxFat = 26;
+      } else {
+        app.globalData.sex = '女'
+        maxFat = 32;
+      }
+      this.setData({
+        nickName: res.detail.userInfo.nickName,
+        maxFat: maxFat
+      })
+      app.globalData.nickName = res.detail.userInfo.nickName;
+      console.log('性别是', app.globalData.sex);
+      this.onSetBody();
+    }else{
+      this.onSetBody();
+    }
+  },
   // 关闭初次设置体重的页面
   onCloseSetBody() {
     this.setData({
-      SetBody: false
+      SetBody: false,
+      weight: 0
     })
+    this.getGaugeChartData();
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function () {
 
-    let date = app.globalData.date;
-    let maxDate = new Date();
-    // 根据当前时间判断早上下午
-    const now = new Date();
-    const hour = now.getHours();
-    let hello = '';
-    if (hour < 6) {
-
-      hello = "凌晨好";
-
-    } else if (hour < 9) {
-
-      hello = "早上好";
-
-    } else if (hour < 12) {
-
-      hello = "上午好";
-
-    } else if (hour < 14) {
-
-      hello = "中午好";
-
-    } else if (hour < 17) {
-
-      hello = "下午好";
-
-    } else if (hour < 19) {
-
-      hello = "傍晚好";
-
-    } else if (hour < 22) {
-
-      hello = "晚上好";
-
-    } else {
-
-      hello = "夜里好";
-
-    }
-    //获取当前时间和身体数据
-    this.setData({
-      maxDate:maxDate,
-      date: date,
-      hello: hello,
-    });
-  },
   //初始化仪表盘
   init_gaugeecharts: function () {
     this.echartsComponnet.init((canvas, width, height, dpr) => {
@@ -670,28 +599,6 @@ Page({
   },
   async getUserInfoandRunData() {
     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-    await wx.getUserInfo({
-      success: res => {
-        console.log(res.userInfo);
-        let sex = res.userInfo.gender;
-        // 设定男女最大体脂范围
-        let maxFat = 0;
-        if (sex === 1) {
-          app.globalData.sex = '男',
-            maxFat = 26;
-        } else {
-          app.globalData.sex = '女'
-          maxFat = 32;
-        }
-        this.setData({
-          nickName: res.userInfo.nickName,
-          maxFat: maxFat
-        })
-        app.globalData.nickName = res.userInfo.nickName;
-        console.log('性别是', app.globalData.sex);
-      }
-    })
-    // 已经授权，可以直接调用 getUserInfo 获取头像昵称
     await wx.getWeRunData({
       success: res => {
         wx.cloud.callFunction({
@@ -712,27 +619,6 @@ Page({
       }
     })
   },
-
-  scrollToRed: function (e) {
-    this.setData({
-      toView: 'green'
-    })
-  },
-  scrollTo100: function (e) {
-    this.setData({
-      scrollLeft: 100
-    })
-  },
-
-  upper: function (e) {
-    console.log('滚动到顶部')
-  },
-  lower: function (e) {
-    console.log('滚动到底部')
-  },
-  scroll: function (e) {
-    console.log(e)
-  },
   /**
    * 生命周期函数--监听页面显示
    */
@@ -746,6 +632,83 @@ Page({
         selected: 0
       })
     }
+
+    if (app.globalData.bodydataChanged) {
+      app.globalData.bodydataChanged = false;
+      // 对比选中时间和当前时间，如果是当前时间则发起授权
+      if (date === this.data.date) {
+        // 查看是否授权
+        wx.getSetting({
+          success: res => {
+            if (res.authSetting['scope.userInfo'] && res.authSetting['scope.werun']) {
+              this.getUserInfoandRunData();
+            } else {
+              this.getDataFromCloud();
+            }
+          },
+          fail: error => {
+            this.getDataFromCloud();
+            console.log('授权失败', error);
+          }
+        })
+      } else {
+        this.getBodyDataByDate();
+      }
+    }
+
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function () {
+
+    let date = app.globalData.date
+    // 根据当前时间判断早上下午
+    const now = new Date();
+    const hour = now.getHours();
+    let hello = '';
+    if (hour < 6) {
+
+      hello = "凌晨好";
+
+    } else if (hour < 9) {
+
+      hello = "早上好";
+
+    } else if (hour < 12) {
+
+      hello = "上午好";
+
+    } else if (hour < 14) {
+
+      hello = "中午好";
+
+    } else if (hour < 17) {
+
+      hello = "下午好";
+
+    } else if (hour < 19) {
+
+      hello = "傍晚好";
+
+    } else if (hour < 22) {
+
+      hello = "晚上好";
+
+    } else {
+
+      hello = "夜里好";
+
+    }
+
+
+
+    //获取当前时间和身体数据
+    this.setData({
+      date: date,
+      hello: hello,
+    });
 
     // 对比选中时间和当前时间，如果是当前时间则发起授权
     if (date === this.data.date) {
@@ -761,15 +724,21 @@ Page({
               }),
               wx.authorize({
                 scope: 'scope.werun',
+                success: () => {
+                  this.getUserInfoandRunData();
+                },
+                fail: () => {
+                  this.getDataFromCloud();
+                }
               })
-            this.getUserInfoandRunData();
           }
+        },
+        fail: error => {
+          console.log('授权失败', error);
         }
       })
     } else {
       this.getBodyDataByDate();
     }
-
-
-  }
+  },
 })

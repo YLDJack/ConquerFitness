@@ -28,10 +28,11 @@ exports.main = async (event, context) => {
   let length = res.result.data.length;
   console.log('获取到的数据', personalData);
 
+  // 若已有数据中存在当前日期的数据，则直接进行更新。否则则新添加一条记录。
   for (let i = 0; i < length; i++) {
     if (event.date === personalData[i].date) {
       if (!event.targetWeight) {
-        // 若已有数据中存在当前日期的数据，则直接进行更新。否则则新添加一条记录。
+
         return await db.collection('PersonalData').where({
           openId: openID,
           date: event.date
@@ -47,7 +48,7 @@ exports.main = async (event, context) => {
             breast: event.breast,
             arms: event.arms,
             waist: event.waist,
-            height:event.height
+            height: event.height
           }
         })
       } else {
@@ -85,11 +86,12 @@ exports.main = async (event, context) => {
       openid: openID,
       date: event.date,
       trainState: event.trainState,
-      targetWeight: event.targetWeight || 0,
-      targetStartTime: event.targetStartTime || 0,
-      targetEndTime: event.targetEndTime,
-      originWeight: event.originWeight,
-      originWeightDate: event.originWeightDate,
+      // 如果没有传递目标时间和结束时间则自动将原始时间设为目标和原始时间
+      targetWeight: event.targetWeight || event.weight,
+      targetStartTime: event.targetStartTime || event.date,
+      targetEndTime: event.targetEndTime || event.date,
+      originWeight: event.originWeight || event.weight,
+      originWeightDate: event.originWeightDate || event.date,
       weight: event.weight,
       fat: event.fat,
       ass: event.ass,
@@ -100,7 +102,7 @@ exports.main = async (event, context) => {
       waist: event.waist,
       sex: event.sex,
       todayStep: event.todayStep,
-      height:event.height
+      height: event.height
     }
   })
 

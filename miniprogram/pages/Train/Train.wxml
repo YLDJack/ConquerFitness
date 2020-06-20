@@ -107,9 +107,10 @@
 												</van-tab>
 												<!-- 趋势折线图 -->
 												<van-tab title="趋势">
-													<view class="container">
+													<view class="container" wx:if="{{currentTab === 1}}">							
+													12343
 														<!-- 线性表 -->
-														<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
+														<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" type='2d' class="ec-canvas1">
 														</ec-canvas>
 													</view>
 												</van-tab>
@@ -325,10 +326,11 @@
 									</van-card>
 								</van-tab>
 								<!-- 趋势折线图 -->
-								<van-tab title="趋势">
-									<view class="container">
+								<van-tab title="趋势" >
+									<view class="container" wx:if="{{currentTab === 1}}">
+									123
 										<!-- 线性表 -->
-										<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
+										<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" type='2d' class="ec-canvas1">
 										</ec-canvas>
 									</view>
 								</van-tab>
@@ -473,9 +475,10 @@
 								</van-tab>
 								<!-- 趋势折线图 -->
 								<van-tab title="趋势">
-									<view class="container">
+									<view class="container" wx:if="{{currentTab === 1}}">
+									12345
 										<!-- 线性表 -->
-										<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}">
+										<ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ lineec }}" type='2d' class="ec-canvas1">
 										</ec-canvas>
 									</view>
 								</van-tab>

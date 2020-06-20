@@ -23,6 +23,7 @@ Page({
     updateActionSub: "",
     updateActionArea: "",
     updateActionImage: "",
+    currentTab:'',
     // 是否编辑动作标签
     updateTag: false,
     // 上传图片列表
@@ -299,54 +300,55 @@ Page({
     lineec: {
       lazyLoad: true, // 延迟加载
     },
-        // 肌容量图数据
-        countSeries: [{
-          data: [],
-          smooth: false,
-          // 圆圈的大小
-          symbol: 'circle',
-          symbolSize: 10,
-          type: 'line',
-          // 设置始终显示数据
-          itemStyle: {
-            normal: {
-              label: {
-                color: 'lightred',
-                // 设置单位
-                show: true, //开启显示
-                position: 'top', //在上方显示
-              }
-            }
-          },
-          // 显示最大值最小值以及平均值
-          markPoint: {
-            data: [{
-                type: 'max',
-                name: '最大值',
-                symbolSize: 40,
-    
-              },
-              {
-                type: 'min',
-                name: '最小值',
-                symbolSize: 40
-              }
-            ]
-          },
-          // 设置平均值的线
-          markLine: {
-            label: {
-              show: true,
-              position: 'end'
-            },
-            data: [{
-              type: 'average',
-              name: '平均值'
-            }]
+    showCharts:false,
+    // 肌容量图数据
+    countSeries: [{
+      data: [],
+      smooth: false,
+      // 圆圈的大小
+      symbol: 'circle',
+      symbolSize: 10,
+      type: 'line',
+      // 设置始终显示数据
+      itemStyle: {
+        normal: {
+          label: {
+            color: 'lightred',
+            // 设置单位
+            show: true, //开启显示
+            position: 'top', //在上方显示
           }
-        },],
-        // 肌容量坐标x轴
-        countAscissaData: [],
+        }
+      },
+      // 显示最大值最小值以及平均值
+      markPoint: {
+        data: [{
+            type: 'max',
+            name: '最大值',
+            symbolSize: 40,
+
+          },
+          {
+            type: 'min',
+            name: '最小值',
+            symbolSize: 40
+          }
+        ]
+      },
+      // 设置平均值的线
+      markLine: {
+        label: {
+          show: true,
+          position: 'end'
+        },
+        data: [{
+          type: 'average',
+          name: '平均值'
+        }]
+      }
+    }, ],
+    // 肌容量坐标x轴
+    countAscissaData: [],
   },
   //初始化容量图表
   init_echarts: function () {
@@ -423,7 +425,7 @@ Page({
   },
   // 获取容量折线图数据
   getChartData: function (actionId) {
-    console.log('接收到的actionid',actionId);
+    console.log('接收到的actionid', actionId);
     let countSeries = this.data.countSeries;
     // 处理好的横坐标
     let countAscissaData = [];
@@ -452,11 +454,17 @@ Page({
         countSeries[0].data = ydata.reverse();
         this.setData({
           countSeries: countSeries,
-          countAscissaData: countAscissaData
+          countAscissaData: countAscissaData,
+          showCharts:true,
+          currentTab: 1
         });
-        console.log('获取到的动作记录', this.data.countAscissaData);
+        console.log('获取到的动作记录', this.data.countSeries);
         this.echartsComponnet = this.selectComponent('#mychart-dom-line');
+        // this.echartsComponnet.canvasNode._height = 550;
+        // this.echartsComponnet.canvasNode._width = 550;
+        console.log(this.echartsComponnet);
         this.init_echarts();
+       
       },
       fail: error => {
         console.log(error);
@@ -467,10 +475,10 @@ Page({
       }
     });
   },
-   // tab的切换方法
-   onTabChange(event) {
-    console.log('tab', event);
+  // tab的切换方法
+  onTabChange(event) {
     if (event.detail.name === 1) {
+      
       this.getChartData(event.currentTarget.dataset.actionid);
     }
   },
@@ -503,7 +511,7 @@ Page({
           delstatus: []
         });
         // 并且重新要发起查询请求
-       this.onQueryActionByArea();
+        this.onQueryActionByArea();
         // 若查询的获得的数据为空则将编辑按钮退回原来的状态
         if (this.data.queryAddActions.length === 0) {
           this.setData({
@@ -626,9 +634,9 @@ Page({
   },
   // 添加自定义动作事件
   onAddAction() {
-    // 如果用户名为空提醒其输入用户名
+    // 如果动作名为空提醒其输入用户名
     if (!this.data.addActionName) {
-      Toast.fail('请输入用户名');
+      Toast.fail('请输入动作名');
       return false;
     }
     console.log(this.data.addActionName);
@@ -1145,7 +1153,7 @@ Page({
   onAddClose() {
     this.setData({
       showAddPop: false,
-      delbutton:false
+      delbutton: false
     });
   },
   onCollChange(event) {

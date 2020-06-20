@@ -9,6 +9,7 @@ App({
     trainRecord: [],
     selectActions: [],
     complishTraining: false,
+    bodydataChanged:false,
     selectStatus: [],
     sex: '',
     todayStep: 0,

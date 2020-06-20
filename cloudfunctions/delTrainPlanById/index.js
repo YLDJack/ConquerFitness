@@ -6,14 +6,17 @@ cloud.init({
 });
 
 const db = cloud.database();
+
 // 云函数入口函数
 exports.main = async (event, context) => {
 
   const openId = cloud.getWXContext().OPENID;
-  const _ = db.command;
-
-  return db.collection('actionRecords').where({
-    openId : openId,
-    actionId:_.in(event.actionId)
-  }).get()
+  try {
+    return await db.collection('trainPlan').where({
+      openId:openId,
+      _id: event.planid
+    }).remove()
+  } catch (e) {
+    console.error(e)
+  }
 }

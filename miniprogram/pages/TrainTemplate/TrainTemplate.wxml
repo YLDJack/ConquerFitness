@@ -1,58 +1,93 @@
 <!--pages/TrainTemplate/TrainTemplate.wxml-->
-<!-- <text>pages/TrainTemplate/TrainTemplate.wxml</text> -->
+<!-- 动作库、搜索栏 -->
+<van-toast id="van-toast" />
+<view class="body">
+	<!-- 页面顶部 -->
+	<view class="top">
+		<van-cell title="我的计划" label="共{{trainPlans.length}}套计划" border="{{ false }}">
+			<view slot="right-icon">
+				<van-icon name="checked" wx:if="{{delPlanFlag}}" color="red" size="50rpx" bind:click="cancelDel" style="margin-right:20rpx" />
+				<van-icon name="more" color="red" size="50rpx" bind:click="showPopup" />
 
-<!-- 页面顶部 -->
-<view>
-	<van-cell title="我的计划" label="共6套计划" border="{{ false }}">
-		<view slot="right-icon">
-			<van-icon name="more" color="red" size="50rpx" bind:click="showPopup" />
-			<van-popup show="{{ showPop }}" bind:close="onClose" position="bottom">
-				<van-cell-group>
-					<van-cell title="添加计划" center="true" clickable="true" bind:click="addTemplate" />
-					<van-cell title="删除计划" center="true" clickable="true" />
-					<van-cell title="搜索计划" center="true" clickable="true" />
-					<van-cell title="分享计划" center="true" clickable="true" />
-				</van-cell-group>
-			</van-popup>
+			</view>
+		</van-cell>
+	</view>
+
+	<!-- 动作页面弹出层 -->
+	<van-popup show="{{ showPop }}" bind:close="onClose" position="bottom">
+		<van-cell-group title="更多操作">
+			<van-cell title="添加计划" is-link bind:click='startAddPlan'>
+				<van-icon name="add" slot='icon' size="35rpx" />
+			</van-cell>
+			<van-cell title="删除计划" is-link bind:click='startDelPlan'>
+				<van-icon name="clear" slot='icon' size="35rpx" />
+			</van-cell>
+		</van-cell-group>
+	</van-popup>
+
+	<!-- 添加页面弹出层 -->
+	<van-popup show="{{ showAddPop }}" closeable bind:close="onAddClose" custom-class="addpop" position="bottom">
+		<view class="tabtitle">添加计划</view>
+		<!-- 添加动作的tab -->
+		<view>
+			<!-- 添加动作弹出层首部按钮界面 -->
+			<view class="closeandsave">
+				<!-- <van-icon name="cross" /> -->
+				<van-button type="danger" size="normal" icon="add-o" bindtap="doAddPlan">添加</van-button>
+			</view>
+			<!-- 添加动作弹出层中间输入界面 -->
+			<van-field label="计划名称" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=14457ecf67e875745303b33e04d94147&t=1590376044" placeholder="请输入计划名称(必填)" required clickable clearable model:value="{{addPlanName}}" maxlength="9" show-word-limit />
+			<van-field label="计划描述" placeholder="请输入计划描述" clearable model:value="{{addPlanDesc}}" right-icon="info-o" maxlength="50" show-word-limit />
+			<!-- 训练图片 -->
+			<van-cell title="计划图片">
+				<van-uploader file-list="{{ addPlanImageist }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage" deletable />
+			</van-cell>
 		</view>
-	</van-cell>
-</view>
+	</van-popup>
 
-<!-- 中间模板显示页面 -->
-<view class="text">已有模板</view>
-<view class="template">
-	<van-grid column-num="2">
-		<van-grid-item icon="{{imageURL}}" text="胸" wx:for="{{ 1 }}" bind:click="templateTraining" />
-		<van-grid-item icon="edit" text="无部位关键字" wx:for="{{ 2 }}"/>
-	</van-grid>
-</view>
+	<!-- 中间模板显示页面 -->
+	<view class="middle">
+		<view class="text">已有计划</view>
+		<view class="template" wx:for="{{trainPlans}}">
+			<van-card title="{{item.planName}}" desc="{{item.planDesc}}" thumb="{{ item.planImage }}" bindtap='clickPlan' data-planid='{{ item._id }}'>
+				<view slot="price">
+					<van-tag type="danger" size="large" wx:for="{{item.totalArea}}" style='margin-right:15rpx'>{{item.area}}</van-tag>
+				</view>
+				<!-- 底部删除计划按钮 -->
+				<view slot='footer' wx:if="{{delPlanFlag}}" catchtap='doDelPlan' data-planid="{{ item._id }}">
+					<van-icon name="cross" size="50rpx" />
+				</view>
+			</van-card>
+		</view>
+	</view>
 
 
 
-<!-- 推荐模板 -->
-<view class="quickitems">
-	<view class="text">模板推荐</view>
-	<scroll-view class="module-scroll" scroll-x="{{true}}">
-		<navigator class="item-navigator">
-			<view class="item-group">
-				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/quick1.jpg?sign=a5e74ccbdbad40ab569eacd25cd8a688&t=1590113964"></image>
-				<view class="item-title">斩妹腹肌</view>
-				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+	<!-- 推荐模板 -->
+	<view class="quickitems">
+		<view class="text">计划推荐</view>
+		<scroll-view class="module-scroll" scroll-x="{{true}}">
+			<view class="item-navigator" bindtap='clickPlan' data-planid='{{ 1 }}'>
+				<view class="item-group">
+					<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/quick1.jpg?sign=a5e74ccbdbad40ab569eacd25cd8a688&t=1590113964"></image>
+					<view class="item-title">斩妹腹肌</view>
+					<view class="item-discription">每天坚持练习20分钟，六块腹肌在眼前</view>
+				</view>
 			</view>
-		</navigator>
-		<navigator class="item-navigator">
-			<view class="item-group">
-				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/recommendImage/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200608202840.png?sign=6cc3366fba119b74156f15f7fa0ea828&t=1591619391"></image>
-				<view class="item-title">背部训练</view>
-				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			<view class="item-navigator" bindtap='clickPlan' data-planid='{{ 2 }}'>
+				<view class="item-group">
+					<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/recommendImage/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200608202840.png?sign=6cc3366fba119b74156f15f7fa0ea828&t=1591619391"></image>
+					<view class="item-title">倒三角训练</view>
+					<view class="item-discription">每天坚持练习20分钟，倒三角不是梦</view>
+				</view>
 			</view>
-		</navigator>
-		<navigator class="item-navigator">
-			<view class="item-group">
-				<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/recommendImage/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200608232553.png?sign=d21feb646e6bc757cbadc5f24b1b30d1&t=1591630044"></image>
-				<view class="item-title">翘臀养成</view>
-				<view class="item-discription">每天坚持练习20分钟，只需29天</view>
+			<view class="item-navigator" bindtap='clickPlan' data-planid='{{ 3 }}'>
+				<view class="item-group">
+					<image class="practise-background" src="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/recommendImage/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200608232553.png?sign=d21feb646e6bc757cbadc5f24b1b30d1&t=1591630044"></image>
+					<view class="item-title">翘臀养成</view>
+					<view class="item-discription">每天坚持练习20分钟，给你一个蜜桃臀</view>
+				</view>
 			</view>
-		</navigator>
-	</scroll-view>
+		</scroll-view>
+	</view>
 </view>

@@ -37,7 +37,7 @@
 			</view>
 			<!-- 添加动作弹出层中间输入界面 -->
 			<van-field label="计划名称" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/icon_train_selected.png?sign=14457ecf67e875745303b33e04d94147&t=1590376044" placeholder="请输入计划名称(必填)" required clickable clearable model:value="{{addPlanName}}" maxlength="9" show-word-limit />
-			<van-field label="计划描述" placeholder="请输入计划描述" clearable model:value="{{addPlanDesc}}" right-icon="info-o" maxlength="10" show-word-limit />
+			<van-field label="计划描述" placeholder="请输入计划描述" clearable model:value="{{addPlanDesc}}" right-icon="info-o" maxlength="50" show-word-limit />
 			<!-- 训练图片 -->
 			<van-cell title="计划图片">
 				<van-uploader file-list="{{ addPlanImageist }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage" deletable />

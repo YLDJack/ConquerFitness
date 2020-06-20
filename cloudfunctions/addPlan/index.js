@@ -11,10 +11,18 @@ const db = cloud.database();
 exports.main = async (event, context) => {
 
   const openId = cloud.getWXContext().OPENID;
-  return await db.collection('actionsAdd').add({
+  return await db.collection('trainPlan').add({
     data: {
-      openId:openId,
-      
+      openId: openId,
+      planName: event.addPlanName,
+      planDesc: event.addPlanDesc,
+      planImage: event.addPlanImage,
+      TrainMark: '',
+      TotalGroup:0,
+      TotalType:0,
+      TotalCount:0,
+      totalArea:[],
+      trainRecord:[]
     }
   })
 }

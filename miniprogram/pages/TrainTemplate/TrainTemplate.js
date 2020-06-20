@@ -69,7 +69,7 @@ Page({
       return false;
     }
     let addPlanImage = "";
-    if (this.data.fileList[0]) {
+    if (this.data.addPlanImageist[0]) {
       addPlanImage = this.data.addPlanImageist[0].url
     }
     const toast = Toast.loading({

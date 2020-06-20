@@ -15,5 +15,5 @@ exports.main = async (event, context) => {
   return db.collection('actionRecords').where({
     openId : openId,
     actionId:_.in(event.actionId)
-  }).get()
+  }).orderBy('date','asc').get()
 }

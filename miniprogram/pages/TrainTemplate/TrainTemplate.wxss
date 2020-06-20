@@ -1,6 +1,15 @@
-.addpop {
-  width: 100%;
-  height: 90%;
+/* 整体布局 */
+.body{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.top{
+  flex-grow: 1;
+}
+.middle{
+  flex-grow: 2;
 }
 
 .closeandsave{
@@ -9,7 +18,6 @@
 }
 
 .quickitems{
-  
   height: 500rpx;
   width: 100%;
 }
@@ -56,4 +64,24 @@
   font-size: 25rpx;
   color:white;
   text-align: center;
+}
+/* 添加弹出层的样式 */
+/* 编辑已添动作的上方按钮和文字样式 */
+.addtop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30rpx;
+  font-weight: bold;
+  margin: 20rpx 0 10rpx 0;
+}
+.tabtitle {
+  margin: 20rpx 20rpx 20rpx 35rpx;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.closeandsave {
+  padding: 20rpx;
+  display: flex;
+  justify-content: space-between;
 }

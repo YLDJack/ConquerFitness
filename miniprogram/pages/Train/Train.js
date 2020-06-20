@@ -634,9 +634,9 @@ Page({
   },
   // 添加自定义动作事件
   onAddAction() {
-    // 如果用户名为空提醒其输入用户名
+    // 如果动作名为空提醒其输入用户名
     if (!this.data.addActionName) {
-      Toast.fail('请输入用户名');
+      Toast.fail('请输入动作名');
       return false;
     }
     console.log(this.data.addActionName);

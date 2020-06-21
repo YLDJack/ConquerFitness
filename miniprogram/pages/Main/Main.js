@@ -36,7 +36,12 @@ Page({
     minDate: new Date(2020, 0, 1).getTime(),
     maxDate: new Date().getTime()
   },
-
+  // 展示健身文章
+  showdataFitness(event){
+    wx.navigateTo({
+      url: '../Main/Passage/Passage?passageId='+event.currentTarget.dataset.id,
+    })
+  },
   //日期确认方法
   onConfirmCalendar(event) {
     // 最关键的是要改变全局的时间

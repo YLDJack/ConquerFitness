@@ -14,7 +14,8 @@
     "pages/logs/logs",
     "pages/ActionDesc/ActionDesc",
     "pages/ActionAdd/ActionAdd",
-    "pages/addTemplateDisplay/addTemplateDisplay"
+    "pages/addTemplateDisplay/addTemplateDisplay",
+    "pages/Main/Passage/Passage"
   ],
   "tabBar": {
     "custom": true,

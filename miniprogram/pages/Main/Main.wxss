@@ -4,7 +4,6 @@
   padding-right: 20rpx;
   margin-top: 35rpx;
   font-size: 32rpx;
-  color: #eee;
 }
 
 .confirm{

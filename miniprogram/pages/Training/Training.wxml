@@ -124,8 +124,23 @@
 						<van-tab title="历史">
 							<!-- 打分 -->
 							<view class="star">
-							<!-- 应当根据Id发起查询，获取相应id的训练记录 -->
-								<view wx:for="{{queryActionRecordByName}}">{{item.date}}:完成容量{{item.trainCount}}</view>
+								<!-- 应当根据Id发起查询，获取相应id的训练记录 -->
+								<view wx:for="{{queryActionRecordByName}}">
+									<van-panel title="{{item.date}}" status=" 容量{{item.trainCount}}">
+										<view class="trainGroupTittle" wx:if="{{item.trainGroups}}">
+											<text>组数</text>
+											<text>重量</text>
+											<text>次数</text>
+										</view>
+										<view wx:for="{{item.trainGroups}}">
+											<view class="trainGroupValue">
+												<text>{{index+1}}</text>
+												<text>{{item.trainWeight}}Kg </text>
+												<text>{{item.trainNumber}}次</text>
+											</view>
+										</view>
+									</van-panel>
+								</view>
 							</view>
 						</van-tab>
 					</van-tabs>

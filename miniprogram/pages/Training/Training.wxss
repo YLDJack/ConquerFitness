@@ -19,7 +19,7 @@
 
 /* 顶部编辑部分 */
 .topedit {
-  padding:0 20rpx 0 20rpx;
+  padding: 0 20rpx 0 20rpx;
   display: flex;
   justify-content: flex-end;
   font-size: 28rpx;
@@ -71,6 +71,18 @@
   display: flex;
   align-items: center;
   margin-bottom: 10rpx;
+}
+
+.trainGroupTittle {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 20rpx;
+}
+
+.trainGroupValue {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 20rpx;
 }
 
 .groupnum {
@@ -158,6 +170,6 @@
 }
 
 /* 动作底部边距 */
-.actionview{
+.actionview {
   margin-bottom: 105rpx;
 }

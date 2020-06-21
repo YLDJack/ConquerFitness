@@ -22,6 +22,7 @@ exports.main = async (event, context) => {
       actionName: event.actionName,
       maxCount: event.maxCount,
       maxWeight: event.maxWeight,
+      trainGroups:event.trainGroups
     }
   })
 }

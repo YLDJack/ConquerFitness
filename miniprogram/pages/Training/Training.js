@@ -826,6 +826,7 @@ Page({
       let maxWeight = trainRecord[i].maxWeight;
       let maxCount = trainRecord[i].maxCount;
       let currentCount = 0;
+      let trainGroups = trainRecord[i].trainGroups;
       // 对比这次训练和历史最大重量和容量，如果较大则赋值
       for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
 
@@ -862,7 +863,8 @@ Page({
                 actionName: trainRecord[i].actionName,
                 maxCount: maxCount,
                 maxWeight: maxWeight,
-                trainCount: trainRecord[i].trainCount
+                trainCount: trainRecord[i].trainCount,
+                trainGroups:trainGroups
               },
               success: res => {
 
@@ -888,7 +890,8 @@ Page({
                 actionName: trainRecord[i].actionName,
                 maxCount: maxCount,
                 maxWeight: maxWeight,
-                trainCount: trainRecord[i].trainCount
+                trainCount: trainRecord[i].trainCount,
+                trainGroups:trainGroups
               },
               success: res => {
 

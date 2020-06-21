@@ -20,7 +20,8 @@ exports.main = async (event, context) => {
       trainCount:event.trainCount,
       maxCount: event.maxCount,
       maxWeight: event.maxWeight,
-      date: event.date
+      date: event.date,
+      trainGroups:event.trainGroups
     }
   })
 }

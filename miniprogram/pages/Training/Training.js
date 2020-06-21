@@ -1006,7 +1006,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    console.log(options);
+    let planName = options.planName;
+    // 如果存在计划名，说明是从计划页面跳转，则将备注改为计划名
+    if(planName){
+      this.setData({
+        TrainMark:planName
+      })
+    }
   },
 
   /**

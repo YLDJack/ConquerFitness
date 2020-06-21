@@ -198,7 +198,7 @@ Page({
     app.globalData.trainRecord = this.data.trainRecord;
     // 关闭当前页，直接跳转
     wx.navigateTo({
-      url: '../Training/Training',
+      url: '../Training/Training?planName='+this.data.planName,
     })
   },
   // 添加动作跳转

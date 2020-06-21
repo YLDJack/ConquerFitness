@@ -9,11 +9,16 @@ App({
     trainRecord: [],
     selectActions: [],
     complishTraining: false,
-    bodydataChanged:false,
+    bodydataChanged: false,
     selectStatus: [],
     sex: '',
     todayStep: 0,
-    nickname: '亲'
+    nickname: '亲',
+    // 训练页面总体的计时时间
+    hour: "00",
+    minutes: "00",
+    seconds: "00",
+    count: 0,
   },
 
   // 从云端获取数据的方法

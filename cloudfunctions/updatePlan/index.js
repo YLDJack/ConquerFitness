@@ -11,18 +11,14 @@ const db = cloud.database();
 exports.main = async (event, context) => {
 
   const openId = cloud.getWXContext().OPENID;
-
-  return await db.collection('actionRecords').where({
-    date: event.date,
-    actionId: event.actionId,
+  return await db.collection('trainPlan').where({
+    _id: event.planId,
     openId: openId
   }).update({
     data: {
-      trainCount:event.trainCount,
-      actionName: event.actionName,
-      maxCount: event.maxCount,
-      maxWeight: event.maxWeight,
-      trainGroups:event.trainGroups
+      planName: event.planName,
+      planDesc: event.planDesc,
+      planImage: event.planImage
     }
   })
 }

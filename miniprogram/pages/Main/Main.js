@@ -7,6 +7,7 @@ require('../../utils/dayjs/locale/zh-cn');
 dayjs.locale('zh-cn');
 dayjs.extend(duration);
 var app = getApp();
+
 Page({
   data: {
     // 页面中间的仪表盘
@@ -34,9 +35,14 @@ Page({
     isCalendarShow: false,
     // 日历显示的最小日期
     minDate: new Date(2020, 0, 1).getTime(),
-    maxDate: new Date().getTime()
+    maxDate: new Date().getTime(),
   },
-
+  // 展示健身文章
+  showdataFitness(event) {
+    wx.navigateTo({
+      url: '../Main/Passage/Passage?passageId=' + event.currentTarget.dataset.id,
+    })
+  },
   //日期确认方法
   onConfirmCalendar(event) {
     // 最关键的是要改变全局的时间
@@ -97,7 +103,7 @@ Page({
         }
         // 将该天的身体数据设置为全局的身体数据
         app.globalData.bodydata = result[0];
-        app.globalData.sex =  result[0].sex;
+        app.globalData.sex = result[0].sex;
         console.log('当天的数据', result);
         let status = result[0].trainState || '减脂';
         let height = result[0].height || 0;
@@ -273,11 +279,15 @@ Page({
   },
   // 获取用户的用户信息
   getUserInfo(res) {
-
-    let sex = res.detail.userInfo.gender;
-    if (sex) {
-      // 设定男女最大体脂范围
-      let maxFat = 0;
+    // 设定男女最大体脂范围
+    let maxFat = 0;
+    let nickName = '暂无';
+    if (res.detail.errMsg) {
+      app.globalData.sex = '男',
+        maxFat = 26;
+    } else {
+      // 如果获取到用户名，则设置为获取到的用户名
+      nickName = res.detail.userInfo.nickName
       if (sex === 1) {
         app.globalData.sex = '男',
           maxFat = 26;
@@ -285,16 +295,15 @@ Page({
         app.globalData.sex = '女'
         maxFat = 32;
       }
-      this.setData({
-        nickName: res.detail.userInfo.nickName,
-        maxFat: maxFat
-      })
-      app.globalData.nickName = res.detail.userInfo.nickName;
-      console.log('性别是', app.globalData.sex);
-      this.onSetBody();
-    }else{
-      this.onSetBody();
     }
+
+    this.setData({
+      nickName: nickName,
+      maxFat: maxFat
+    })
+    app.globalData.nickName = nickName;
+    console.log('性别是', app.globalData.sex);
+    this.onSetBody();
   },
   // 关闭初次设置体重的页面
   onCloseSetBody() {

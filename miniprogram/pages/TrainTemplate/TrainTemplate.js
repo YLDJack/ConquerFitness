@@ -71,6 +71,9 @@ Page({
     let addPlanImage = "";
     if (this.data.addPlanImageist[0]) {
       addPlanImage = this.data.addPlanImageist[0].url
+    }else{
+      // 若没上传图片，默认上传cfit的图片
+      addPlanImage = 'cloud://conquercheck-geges.636f-conquercheck-geges-1301732640/zwtp.png'
     }
     const toast = Toast.loading({
       mask: true,

@@ -26,7 +26,7 @@
 	<!-- 顶部编辑按钮部分 -->
 	<view class="topedit" wx:if="{{trainRecord.length }}">
 		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认删除</van-button>
-		<van-button type="danger"  bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
+		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
 		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
 		<!-- 顶部训练进度部分 -->
 		<!-- <view class="text_progress">
@@ -121,17 +121,27 @@
 							</cover-view>
 						</van-tab>
 
-						<van-tab title="备注">
+						<van-tab title="历史">
 							<!-- 打分 -->
 							<view class="star">
-								<view>对动作进行打分：</view>
-								<van-rate value="{{ starvalue }}" size="{{ 25 }}" allow-half color="#ee0a24" void-color="#eee" void-icon="star" bind:change="onStarChange" />
+								<!-- 应当根据Id发起查询，获取相应id的训练记录 -->
+								<view wx:for="{{queryActionRecordByName}}">
+									<van-panel title="{{item.date}}" status=" 容量{{item.trainCount}}">
+										<view class="trainGroupTittle" wx:if="{{item.trainGroups}}">
+											<text>组数</text>
+											<text>重量</text>
+											<text>次数</text>
+										</view>
+										<view wx:for="{{item.trainGroups}}">
+											<view class="trainGroupValue">
+												<text>{{index+1}}</text>
+												<text>{{item.trainWeight}}Kg </text>
+												<text>{{item.trainNumber}}次</text>
+											</view>
+										</view>
+									</van-panel>
+								</view>
 							</view>
-
-							<!-- 备注框 -->
-							<van-cell-group>
-								<van-field value="{{ message }}" label="备注" type="textarea" placeholder="请输入备注" autosize border="{{ false }}" />
-							</van-cell-group>
 						</van-tab>
 					</van-tabs>
 				</van-popup>

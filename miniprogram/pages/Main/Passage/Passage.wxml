@@ -1,0 +1,2 @@
+<!--miniprogram/pages/Main/Passage/Passage.wxml-->
+<web-view src="{{passageUrl}}"></web-view>

@@ -8,6 +8,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 动作记录
+    actionRecord: [],
     date: '',
     // 开始休息时间
     startRest: 0,
@@ -25,6 +27,8 @@ Page({
     TrainMark: '',
     // 单个动作
     queryActionByName: [],
+    // 单个动作的动作记录
+    queryActionRecordByName: [],
     // 点击图片显示弹出层的属性
     showPopup: false,
     // 删除的动作状态
@@ -314,15 +318,26 @@ Page({
   showPopup(event) {
     const id = event.currentTarget.dataset.id;
     const data = this.data.trainRecord;
+    const actionRecord = this.data.actionRecord;
     let catedata = [];
+    let cateActionRecord = [];
+    // 获取相应的动作
     for (let i = 0; i < data.length; i++) {
       if (id === data[i]._id) {
         catedata.push(data[i]);
       }
     }
+    // 获取相应的动作记录
+    for (let j = 0; j < actionRecord.length; j++) {
+      if (id === actionRecord[j].actionId) {
+        cateActionRecord.push(actionRecord[j]);
+      }
+    }
+    console.log('获取到的单个动作记录', cateActionRecord)
     this.setData({
       queryActionByName: catedata,
-      showPopup: true
+      showPopup: true,
+      queryActionRecordByName: cateActionRecord
     })
     console.log("当前的动作是:", this.data.queryActionByName);
   },
@@ -811,6 +826,7 @@ Page({
       let maxWeight = trainRecord[i].maxWeight;
       let maxCount = trainRecord[i].maxCount;
       let currentCount = 0;
+      let trainGroups = trainRecord[i].trainGroups;
       // 对比这次训练和历史最大重量和容量，如果较大则赋值
       for (let j = 0; j < trainRecord[i].trainGroups.length; j++) {
 
@@ -847,7 +863,8 @@ Page({
                 actionName: trainRecord[i].actionName,
                 maxCount: maxCount,
                 maxWeight: maxWeight,
-                trainCount: trainRecord[i].trainCount
+                trainCount: trainRecord[i].trainCount,
+                trainGroups: trainGroups
               },
               success: res => {
 
@@ -873,7 +890,8 @@ Page({
                 actionName: trainRecord[i].actionName,
                 maxCount: maxCount,
                 maxWeight: maxWeight,
-                trainCount: trainRecord[i].trainCount
+                trainCount: trainRecord[i].trainCount,
+                trainGroups: trainGroups
               },
               success: res => {
 
@@ -988,7 +1006,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    console.log(options);
+    let planName = options.planName;
+    // 如果存在计划名，说明是从计划页面跳转，则将备注改为计划名
+    if(planName){
+      this.setData({
+        TrainMark:planName
+      })
+    }
   },
 
   /**
@@ -1076,6 +1101,8 @@ Page({
           }).then(res => {
             console.log('3、res', res.result.data);
             let actionRecord = res.result.data;
+            actionRecord = this.data.actionRecord.concat(actionRecord);
+
             for (let i = 0; i < trainingActions.length; i++) {
               areas.add(trainingActions[i].actionArea);
               trainingActions[i].trainCount = 0;
@@ -1148,7 +1175,8 @@ Page({
           TotalGroup: TotalGroup,
           TotalCount: TotalCount,
           trainRecord: trainRecord,
-          date: date
+          date: date,
+          actionRecord: actionRecord
         });
       },
       fail: error => {
@@ -1201,6 +1229,8 @@ Page({
     }).then(res => {
       console.log('3、res', res.result.data);
       let actionRecord = res.result.data;
+      actionRecord = this.data.actionRecord.concat(actionRecord);
+      console.log('获取到的运动记录', actionRecord)
       for (let i = 0; i < trainingActions.length; i++) {
         areas.add(trainingActions[i].actionArea);
         trainingActions[i].trainCount = 0;
@@ -1259,14 +1289,32 @@ Page({
       //设置全局变量的记录
       app.globalData.trainRecord = trainRecord;
 
+      // 如果页面count为空，则加载全局中的计时
+      if (this.data.count === 0) {
+        let hour = app.globalData.hour;
+        let minutes = app.globalData.minutes;
+        let seconds = app.globalData.seconds;
+        let count = app.globalData.count;
+        this.setData({
+          hour: hour,
+          minutes: minutes,
+          seconds: seconds,
+          count: count
+        });
+      }
+
+
+
       this.setData({
         TotalType: trainRecord.length,
         totalArea: totalArea,
         trainRecord: trainRecord,
-        date: date
+        date: date,
+        actionRecord: actionRecord,
       });
       // 如果训练动作不为空则自动开始计时
       if (trainRecord.length) {
+        // 要添加一个判断，如果已经有计时器了则接着计时,没有计时器则重新开始计时
         this.onStartClock();
       }
     }).catch(console.error)
@@ -1285,6 +1333,11 @@ Page({
   onUnload: function () {
     //当页面卸载时要保存训练记录，之后也要保存时间
     app.globalData.trainRecord = this.data.trainRecord;
+    //  保存时分秒
+    app.globalData.hour = this.data.hour;
+    app.globalData.minutes = this.data.minutes;
+    app.globalData.seconds = this.data.seconds;
+    app.globalData.count = this.data.count;
   },
 
   /**

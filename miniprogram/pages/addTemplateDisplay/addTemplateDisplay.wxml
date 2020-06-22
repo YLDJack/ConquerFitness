@@ -1,24 +1,53 @@
+<van-toast id="van-toast" />
 <!-- 正计时秒表 -->
 <view class="miaobiao">
 	<view class="countbutton">
-	<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认</van-button>
+		<van-button type="danger" bind:click="onDel" wx:if="{{delTag}}" style="margin-right:25rpx">确认删除</van-button>
 		<van-button type="danger" bind:click="startDel" wx:if="{{!delTag}}">编辑</van-button>
 		<van-button type="danger" bind:click="startDel" wx:else>取消</van-button>
 
 	</view>
 	<view class="countbutton">
-	<van-button type="danger" bind:click="savePlan">保存</van-button>
+		<van-button type="danger" bind:click="savePlan">保存</van-button>
 	</view>
 </view>
 
 <view>
-	<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" value="{{ planName }}" bind:blur='updatePlanName'>
-		<view slot="right-icon" >{{TotalType}}种动作共{{TotalGroup}}组
-			<view wx:for="{{totalArea}}" wx:key="index">
-				{{item.area}}{{item.areaType}}种
+	<van-collapse value="{{ activeNames }}" bind:change="onCollChange">
+		<van-collapse-item title='{{planName}}' name="planName" icon='edit'>
+			<!-- 编辑动作 -->
+			<van-card wx:if="{{updateTag}}">
+				<view slot='thumb'>
+					<van-uploader file-list="{{ planImageist }}" max-count="1" upload-text="更改图片" bind:after-read="uploadImage" deletable />
+				</view>
+				<view slot='title'>
+					<van-field placeholder="{{planName}}" required clickable clearable model:value="{{planName}}" maxlength="9" show-word-limit />
+				</view>
+				<view slot='desc'>
+					<van-field placeholder="{{planDesc}}" required clickable clearable model:value="{{planDesc}}" maxlength="50" show-word-limit />
+				</view>
+				<view slot='footer'>
+					<van-tag type="danger" size="large" bindtap='UpdatePlan'>更新</van-tag>
+				</view>
+			</van-card>
+			<!-- 普通展示动作 -->
+			<van-card title='{{planName}}' desc="计划描述:{{planDesc}}" thumb="{{ planImage }}" wx:else>
+				<view slot="price">
+					<van-tag type="danger" size="large" wx:for="{{totalArea}}" wx:key="index" style='margin-right:15rpx'>{{item.area}}</van-tag>
+				</view>
+				<view slot='footer'>
+					<van-tag type="danger" size="large" bindtap='startUpdate'>编辑</van-tag>
+				</view>
+			</van-card>
+			<!-- 部位分布显示 -->
+			<view slot='value'>
+				<view wx:for="{{totalArea}}" wx:key="index">
+					{{item.area}}{{item.areaType}}种
+				</view>
 			</view>
-			</view>
-	</van-field>
+		</van-collapse-item>
+	</van-collapse>
+
 	<!-- 顶部编辑按钮部分 -->
 
 </view>
@@ -33,7 +62,7 @@
 			<view slot="title" class="titleandweight">
 				<text>{{item.actionName}}</text>
 				<view>
-<label class="label">{{item.trainGroups.length}}组</label>
+					<label class="label">{{item.trainGroups.length}}组</label>
 				</view>
 			</view>
 
@@ -162,7 +191,7 @@
 						</van-field>
 					</view>
 					<!-- 删除按钮 -->
-						<van-icon name="cross" wx:if="{{delGroupsTag}}" size="50rpx" catchtap="doDelGroups" data-index1="{{index1}}" data-index="{{index}}" />
+					<van-icon name="cross" wx:if="{{delGroupsTag}}" size="50rpx" catchtap="doDelGroups" data-index1="{{index1}}" data-index="{{index}}" />
 				</view>
 			</view>
 
@@ -186,7 +215,7 @@
 			</view>
 			<!-- label插槽 -->
 			<view slot="label">
-			<label class="label">{{item.trainGroups.length}}组</label>
+				<label class="label">{{item.trainGroups.length}}组</label>
 			</view>
 			<!-- 使用slot插槽显示图片 -->
 			<view slot="icon" class="icon">

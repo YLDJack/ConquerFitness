@@ -118,13 +118,17 @@
   font-weight: bold;
 }
 
+.setresttime-box{
+  text-align: center;
+}
+
 .setresttime {
   width: 385rpx;
   /* height: 200rpx; */
   display: flex;
   justify-content: space-evenly;
   margin-top: 25rpx;
-  padding-left: 15rpx;
+  padding-left: 8rpx;
 
 }
 
@@ -146,8 +150,9 @@
 
 .inputresttime {
   display: flex;
+  flex-direction: column;
   margin-top: 20rpx;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 }
 

@@ -33,7 +33,7 @@
 			<!-- 普通展示动作 -->
 			<van-card title='{{planName}}' desc="计划描述:{{planDesc}}" thumb="{{ planImage }}" wx:else>
 				<view slot="price">
-					<van-tag type="danger" size="large" wx:for="{{totalArea}}" style='margin-right:15rpx'>{{item.area}}</van-tag>
+					<van-tag type="danger" size="large" wx:for="{{totalArea}}" wx:key="index" style='margin-right:15rpx'>{{item.area}}</van-tag>
 				</view>
 				<view slot='footer'>
 					<van-tag type="danger" size="large" bindtap='startUpdate'>编辑</van-tag>

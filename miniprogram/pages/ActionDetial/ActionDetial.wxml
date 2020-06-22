@@ -13,9 +13,9 @@
 						</view>
 						<view>
 							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">
-								<van-collapse-item title="{{item.actionSub}}" name="{{index}}" value="本周完成{{item.trainRecord.length}}种动作" wx:for="{{trainRecord}}" wx:key="{{index}}">
+								<van-collapse-item title="{{item.actionSub}}" name="{{index}}" value="本周完成{{item.trainRecord.length}}种动作" wx:for="{{trainRecord}}" wx:key="index">
 									<!-- 详情动作卡片 -->
-									<van-card title="{{record.actionName}}" thumb="{{ record.actionImage }}" wx:for="{{item.trainRecord}}" wx:for-index="recordIndex" wx:for-item="record" custom-class="actionCard" title-class="cardTitle" thumb-class="cardThumb">
+									<van-card title="{{record.actionName}}" thumb="{{ record.actionImage }}" wx:for="{{item.trainRecord}}" wx:for-index="recordIndex" wx:for-item="record" custom-class="actionCard" title-class="cardTitle" thumb-class="cardThumb" wx:key="index">
 
 										<!-- 右侧的箭头 -->
 										<view slot="footer">

@@ -54,7 +54,7 @@
 <van-divider />
 
 <!-- 正常情况下显示下拉菜单 -->
-<view wx:if="{{!delTag}}">
+<view wx:if="{{!delTag}}" class="actionview">
 	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{trainRecord}}" wx:for-index="index" wx:key="index">
 		<van-collapse-item name="{{index}}">
 

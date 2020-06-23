@@ -46,7 +46,7 @@
 	</van-popup>
 
 	<!-- 中间模板显示页面 -->
-	<view class="middle">
+	<scroll-view class="middle" scroll-y='true'>
 		<view class="text">已有计划</view>
 		<view class="template" wx:for="{{trainPlans}}">
 			<van-card title="{{item.planName}}" desc="{{item.planDesc}}" thumb="{{ item.planImage }}" bindtap='clickPlan' data-planid='{{ item._id }}'>
@@ -59,7 +59,7 @@
 				</view>
 			</van-card>
 		</view>
-	</view>
+	</scroll-view>
 
 
 

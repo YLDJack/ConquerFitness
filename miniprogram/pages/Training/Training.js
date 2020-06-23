@@ -294,9 +294,17 @@ Page({
   addgroup(event) {
     const index = event.currentTarget.dataset.index;
     let trainRecord = this.data.trainRecord;
+    // 获取上一组的训练容量和数量
+    let length = trainRecord[index].trainGroups.length;
+    let trainWeight = '';
+    let trainNumber = '';
+    if (length > 0) {
+      trainWeight = trainRecord[index].trainGroups[length - 1].trainWeight;
+      trainNumber = trainRecord[index].trainGroups[length - 1].trainNumber;
+    }
     let addgroup = {
-      trainWeight: '',
-      trainNumber: '',
+      trainWeight: trainWeight,
+      trainNumber: trainNumber,
       trainRestTime: 30 * 1000,
       Complish: false
     };
@@ -1009,9 +1017,9 @@ Page({
     console.log(options);
     let planName = options.planName;
     // 如果存在计划名，说明是从计划页面跳转，则将备注改为计划名
-    if(planName){
+    if (planName) {
       this.setData({
-        TrainMark:planName
+        TrainMark: planName
       })
     }
   },

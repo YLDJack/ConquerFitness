@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "数据记录",
   "usingComponents": {
     "van-tab": "@vant/weapp/tab/index",
     "van-tabs": "@vant/weapp/tabs/index",

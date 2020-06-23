@@ -93,8 +93,8 @@ Page({
     }
     let planImage = "";
     if (this.data.planImageList[0]) {
-      planImage = this.data.planImageList[0].url 
-    }else{
+      planImage = this.data.planImageList[0].url
+    } else {
       planImage = this.data.planImage
     }
     const toast = Toast.loading({
@@ -109,7 +109,7 @@ Page({
       name: 'updatePlan',
       // 传给云函数的参数
       data: {
-        planId:this.data.planId,
+        planId: this.data.planId,
         planName: this.data.planName,
         planDesc: this.data.planDesc,
         planImage: planImage
@@ -121,7 +121,7 @@ Page({
         })
         this.getPlanById(this.data.planId);
         this.setData({
-         updateTag:false
+          updateTag: false
         });
       },
       fail: error => {
@@ -198,7 +198,7 @@ Page({
     app.globalData.trainRecord = this.data.trainRecord;
     // 关闭当前页，直接跳转
     wx.navigateTo({
-      url: '../Training/Training?planName='+this.data.planName,
+      url: '../Training/Training?planName=' + this.data.planName,
     })
   },
   // 添加动作跳转
@@ -321,9 +321,17 @@ Page({
     let TotalGroup = this.data.TotalGroup;
     const index = event.currentTarget.dataset.index;
     let trainRecord = this.data.trainRecord;
+    // 获取上一组的训练容量和数量
+    let length = trainRecord[index].trainGroups.length;
+    let trainWeight = '';
+    let trainNumber = '';
+    if (length > 0) {
+      trainWeight = trainRecord[index].trainGroups[length - 1].trainWeight;
+      trainNumber = trainRecord[index].trainGroups[length - 1].trainNumber;
+    }
     let addgroup = {
-      trainWeight: '',
-      trainNumber: '',
+      trainWeight: trainWeight,
+      trainNumber: trainNumber,
       trainRestTime: 30 * 1000,
     };
     trainRecord[index].trainGroups.push(addgroup);

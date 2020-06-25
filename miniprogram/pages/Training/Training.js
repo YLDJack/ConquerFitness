@@ -997,6 +997,8 @@ Page({
             }
           })
         }
+        // 上传完动作，停止计时
+        this.onPauseClock();
         app.globalData.complishTraining = true;
       },
       fail: error => {

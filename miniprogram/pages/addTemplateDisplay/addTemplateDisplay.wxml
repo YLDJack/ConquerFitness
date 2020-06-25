@@ -18,7 +18,7 @@
 			<!-- 编辑动作 -->
 			<van-card wx:if="{{updateTag}}">
 				<view slot='thumb'>
-					<van-uploader file-list="{{ planImageist }}" max-count="1" upload-text="更改图片" bind:after-read="uploadImage" deletable />
+					<van-uploader file-list="{{ planImageist }}" max-count="1" upload-text="更改图片" bind:after-read="uploadImage" deletable max-size='1024' />
 				</view>
 				<view slot='title'>
 					<van-field placeholder="{{planName}}" required clickable clearable model:value="{{planName}}" maxlength="9" show-word-limit />

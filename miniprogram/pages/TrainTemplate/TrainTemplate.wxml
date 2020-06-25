@@ -40,7 +40,7 @@
 			<van-field label="计划描述" placeholder="请输入计划描述" clearable model:value="{{addPlanDesc}}" right-icon="info-o" maxlength="50" show-word-limit />
 			<!-- 训练图片 -->
 			<van-cell title="计划图片">
-				<van-uploader file-list="{{ addPlanImageist }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage" deletable />
+				<van-uploader file-list="{{ addPlanImageist }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage" deletable max-size='1024' />
 			</van-cell>
 		</view>
 	</van-popup>

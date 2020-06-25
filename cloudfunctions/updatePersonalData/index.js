@@ -48,7 +48,9 @@ exports.main = async (event, context) => {
             breast: event.breast,
             arms: event.arms,
             waist: event.waist,
-            height: event.height
+            height: event.height,
+            // 个人中心界面可以设置性别
+            sex:event.sex
           }
         })
       } else {

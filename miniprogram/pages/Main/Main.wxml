@@ -65,7 +65,7 @@
 		<swiper class='data-swiper' autoplay='true' circular current="0">
 			<swiper-item>
 				<view class="wenziframe" style="opacity:0.5">
-					<view class="wenzi">有氧运动时长(分钟)</view>
+					<view class="wenzi">有氧时长(分钟)</view>
 					<view class="wenzi">296</view>
 				</view>
 				<view class="wenziframe" style="opacity:0.5">

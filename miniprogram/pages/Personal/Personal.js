@@ -19,6 +19,7 @@ Page({
     breast: 20,
     arms: 20,
     waist: 32,
+    sex: '男',
     tempFilePaths: '',
     nickName: '',
     userInfoAvatar: '',
@@ -31,7 +32,9 @@ Page({
     showbreast: false,
     showarms: false,
     showwaist: false,
-    columns: ['增肌', '减脂', '塑形']
+    showsex: false,
+    columns: ['增肌', '减脂', '塑形'],
+    sexColumns: ['男', '女']
   },
   // 
   onpickerConfirm(event) {
@@ -44,9 +47,24 @@ Page({
     })
     this.onUpdateCloudData();
   },
+  onSexpickerConfirm(event) {
+    const {
+      value
+    } = event.detail;
+    this.setData({
+      sex:value,
+      showstatu: false
+    })
+    this.onUpdateCloudData();
+  },
   onpickerCancel() {
     this.setData({
       showstatu: false
+    })
+  },
+  onSexpickerCancel() {
+    this.setData({
+      showsex: false
     })
   },
   // 改变体重时的调用方法
@@ -113,13 +131,12 @@ Page({
       breast: bodydata.breast,
       arms: bodydata.arms,
       waist: bodydata.waist,
-      height:bodydata.height,
+      height: bodydata.height,
       sex: sex,
       todayStep: todayStep
     });
   },
-  onLoad: function () {
-  },
+  onLoad: function () {},
   // 更新数据方法
   updateDataToCloud() {
     const toast = Toast.loading({
@@ -171,6 +188,11 @@ Page({
       activeNames: event.detail,
     });
   },
+  showPopup_sex() {
+    this.setData({
+      showsex: true
+    });
+  },
   // 弹出胸围选择
   showPopup_breast() {
     this.setData({
@@ -183,8 +205,8 @@ Page({
       showweight: true
     });
   },
-   // 弹出胸围选择
-   showPopup_height() {
+  // 弹出胸围选择
+  showPopup_height() {
     this.setData({
       showheight: true
     });
@@ -234,6 +256,11 @@ Page({
   onClose_height() {
     this.setData({
       showheight: false
+    });
+  },
+  onClose_sex() {
+    this.setData({
+      showsex: false
     });
   },
 
@@ -317,8 +344,8 @@ Page({
         selected: 4
       })
     }
-      this.loadbodydatas();
-   
+    this.loadbodydatas();
+
   },
 
   /**

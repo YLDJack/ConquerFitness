@@ -25,6 +25,12 @@
 <van-collapse value="{{ activeNames }}" bind:change="onChange_collapse">
 	<van-collapse-item title="我的健康数据" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/record.png?sign=18913b8606c886d11bc34aa6fb3368d0&t=1590113362" name="1">
 
+		<van-cell title="性别" is-link bind:click="showPopup_sex" value="{{ sex }}" />
+
+		<van-popup show="{{ showsex }}" round custom-style="height: 40%;margin-bottom:120rpx;" bind:close="onClose_sex">
+			<van-picker columns="{{ sexColumns }}" show-toolbar title="性别" bind:cancel="onSexpickerCancel" bind:confirm="onSexpickerConfirm" />
+		</van-popup>
+
 		<van-cell title="身高" is-link bind:click="showPopup_height" value="{{ height }}cm" />
 		<van-popup show="{{ showheight }}" round closeable custom-style="height: 30%;" bind:close="onClose_height">
 			<view class="obtaindate">{{date}}</view>
@@ -116,7 +122,7 @@
 
 <van-cell title="训练目标" icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/status.png?sign=193f7eb93287c5719ce89a6f42903dfb&t=1590113399" is-link value="{{trainState}}" bind:click="showPopup_statu" />
 <van-popup show="{{ showstatu }}" position="bottom" custom-style="height: 40%;margin-bottom:120rpx;">
-	<van-picker columns="{{ columns }}" default-index="{{ 1 }}" show-toolbar title="锻炼状态" bind:cancel="onpickerCancel" bind:confirm="onpickerConfirm" />
+	<van-picker columns="{{ columns }}" show-toolbar title="锻炼状态" bind:cancel="onpickerCancel" bind:confirm="onpickerConfirm" />
 </van-popup>
 
 <van-cell icon="https://636f-conquercheck-geges-1301732640.tcb.qcloud.la/setting.png?sign=8ac92f299f9437afc597a2b32f794d8e&t=1590113414" is-link title="训练设置" link-type="navigateTo" url="/pages/setPreferences/setPreferences" />

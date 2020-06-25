@@ -198,7 +198,7 @@
 					<view class="groupnum">{{index1+1}}</view>
 					<view class="traindata">
 						<!-- 输入重量 设定好只能输入数字-->
-						<van-field placeholder="重量(KG)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" model:value="{{item.trainWeight}}" type="number" bind:blur="onWeightConfirm" data-weight="{{item.trainWeight}}" data-index1="{{index1}}" data-index="{{index}}">
+						<van-field placeholder="重量(KG)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" model:value="{{item.trainWeight}}" type='digit' bind:blur="onWeightConfirm" data-weight="{{item.trainWeight}}" data-index1="{{index1}}" data-index="{{index}}">
 						</van-field>
 					</view>
 					<view class="traindata">

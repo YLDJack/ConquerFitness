@@ -18,7 +18,7 @@
 			<!-- 编辑动作 -->
 			<van-card wx:if="{{updateTag}}">
 				<view slot='thumb'>
-					<van-uploader file-list="{{ planImageist }}" max-count="1" upload-text="更改图片" bind:after-read="uploadImage" deletable />
+					<van-uploader file-list="{{ planImageist }}" max-count="1" upload-text="更改图片" bind:after-read="uploadImage" deletable max-size='1024' />
 				</view>
 				<view slot='title'>
 					<van-field placeholder="{{planName}}" required clickable clearable model:value="{{planName}}" maxlength="9" show-word-limit />
@@ -54,7 +54,7 @@
 <van-divider />
 
 <!-- 正常情况下显示下拉菜单 -->
-<view wx:if="{{!delTag}}">
+<view wx:if="{{!delTag}}" class="actionview">
 	<van-collapse value="{{ activeNames }}" accordion bind:change="onCollChange" wx:for="{{trainRecord}}" wx:for-index="index" wx:key="index">
 		<van-collapse-item name="{{index}}">
 
@@ -182,7 +182,7 @@
 					<view class="groupnum">{{index1+1}}</view>
 					<view class="traindata">
 						<!-- 输入重量 设定好只能输入数字-->
-						<van-field placeholder="重量(KG)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" value="{{item.trainWeight}}" type="number" bind:blur="onWeightConfirm" data-weight="{{item.trainWeight}}" data-index1="{{index1}}" data-index="{{index}}">
+						<van-field placeholder="重量(KG)" custom-style="font-size:28rpx;border-radius:10rpx;background-color:rgb(230,234,237)" value="{{item.trainWeight}}" type="digit" bind:blur="onWeightConfirm" data-weight="{{item.trainWeight}}" data-index1="{{index1}}" data-index="{{index}}">
 						</van-field>
 					</view>
 					<view class="traindata">

@@ -10,6 +10,7 @@
 }
 .middle{
   flex-grow: 2;
+  height: 750rpx;
 }
 
 .closeandsave{

@@ -143,7 +143,7 @@
 															<!-- 训练图片 -->
 															<van-cell title="训练图片" wx:if="{{updateTag}}" use-label-slot>
 																<image src="{{updateActionImage}}" style="height:100rpx;width:100rpx" slot="label"></image>
-																<van-uploader file-list="{{ updatefileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage1" deletable slot="right-icon" />
+																<van-uploader file-list="{{ updatefileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage1" deletable slot="right-icon" max-size='1024' />
 
 															</van-cell>
 															<!-- 不编辑动作时，只显示原本的图片 -->
@@ -211,7 +211,7 @@
 							<van-field label="训练要点" placeholder="多条语句以句号分割" clearable type="textarea" autosize model:value="{{addActionNote}}" right-icon="info-o" maxlength="140" show-word-limit />
 							<!-- 训练图片 -->
 							<van-cell title="训练图片">
-								<van-uploader file-list="{{ fileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage" deletable />
+								<van-uploader file-list="{{ fileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage" deletable max-size='1024' />
 							</van-cell>
 							<!-- 下方选择框 -->
 							<van-collapse value="{{ collactiveNames }}" bind:change="onCollChange">
@@ -363,7 +363,7 @@
 											<!-- 训练图片 -->
 											<van-cell title="训练图片" wx:if="{{updateTag}}" use-label-slot>
 												<image src="{{updateActionImage}}" style="height:100rpx;width:100rpx" slot="label"></image>
-												<van-uploader file-list="{{ updatefileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage1" deletable slot="right-icon" />
+												<van-uploader file-list="{{ updatefileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage1" deletable slot="right-icon" max-size='1024'/>
 
 											</van-cell>
 											<!-- 不编辑动作时，只显示原本的图片 -->
@@ -511,7 +511,7 @@
 											<!-- 训练图片 -->
 											<van-cell title="训练图片" wx:if="{{updateTag}}" use-label-slot>
 												<image src="{{updateActionImage}}" style="height:100rpx;width:100rpx" slot="label"></image>
-												<van-uploader file-list="{{ updatefileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage1" deletable slot="right-icon" />
+												<van-uploader file-list="{{ updatefileList }}" max-count="1" slot="right-icon" upload-text="上传图片" bind:after-read="uploadImage1" deletable slot="right-icon" max-size='1024' />
 
 											</van-cell>
 											<!-- 不编辑动作时，只显示原本的图片 -->

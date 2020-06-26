@@ -40,15 +40,9 @@ exports.main = async (event, context) => {
           data: {
             openId: openID,
             trainState: event.trainState,
-            weight: event.weight,
-            fat: event.fat,
-            ass: event.ass,
-            leg: event.leg,
-            smallleg: event.smallleg,
-            breast: event.breast,
-            arms: event.arms,
-            waist: event.waist,
-            height: event.height
+            height: event.height,
+            sex:event.sex,
+            todayStep: event.todayStep
           }
         })
       } else {
@@ -65,6 +59,7 @@ exports.main = async (event, context) => {
             originWeight: event.originWeight,
             originWeightDate: event.originWeightDate,
             targetEndTime: event.targetEndTime,
+            todayStep: event.todayStep,
             weight: event.weight,
             fat: event.fat,
             ass: event.ass,

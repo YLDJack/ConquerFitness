@@ -11,27 +11,14 @@ Page({
     date: "",
     trainState: "增肌",
     height: 170,
-    weight: 50,
-    fat: 15,
-    ass: 50,
-    leg: 30,
-    smallleg: 20,
-    breast: 20,
-    arms: 20,
-    waist: 32,
+    sex: '男',
     tempFilePaths: '',
     nickName: '',
     userInfoAvatar: '',
     showheight: false,
-    showhipline: false,
-    showweight: false,
-    showtizhi: false,
-    showlegs: false,
-    showstatu: false,
-    showbreast: false,
-    showarms: false,
-    showwaist: false,
-    columns: ['增肌', '减脂', '塑形']
+    showsex: false,
+    columns: ['增肌', '减脂', '塑形'],
+    sexColumns: ['男', '女']
   },
   // 
   onpickerConfirm(event) {
@@ -44,15 +31,24 @@ Page({
     })
     this.onUpdateCloudData();
   },
+  onSexpickerConfirm(event) {
+    const {
+      value
+    } = event.detail;
+    this.setData({
+      sex:value,
+      showstatu: false
+    })
+    this.onUpdateCloudData();
+  },
   onpickerCancel() {
     this.setData({
       showstatu: false
     })
   },
-  // 改变体重时的调用方法
-  onChange_Weight(event) {
+  onSexpickerCancel() {
     this.setData({
-      weight: event.detail
+      showsex: false
     })
   },
   onChange_height(event) {
@@ -60,42 +56,6 @@ Page({
       height: event.detail
     })
   },
-  onChange_fat(event) {
-    this.setData({
-      fat: event.detail
-    })
-  },
-  onChange_arms(event) {
-    this.setData({
-      arms: event.detail
-    })
-  },
-  onChange_breast(event) {
-    this.setData({
-      breast: event.detail
-    })
-  },
-  onChange_waist(event) {
-    this.setData({
-      waist: event.detail
-    })
-  },
-  onChange_hip(event) {
-    this.setData({
-      ass: event.detail
-    })
-  },
-  onChange_legs(event) {
-    this.setData({
-      leg: event.detail
-    })
-  },
-  onChange_smallleg(event) {
-    this.setData({
-      smallleg: event.detail
-    })
-  },
-
   loadbodydatas() {
     let bodydata = app.globalData.bodydata;
     let date = app.globalData.date;
@@ -105,21 +65,12 @@ Page({
     this.setData({
       date: date,
       trainState: bodydata.trainState,
-      weight: bodydata.weight,
-      fat: bodydata.fat,
-      ass: bodydata.ass,
-      leg: bodydata.leg,
-      smallleg: bodydata.smallleg,
-      breast: bodydata.breast,
-      arms: bodydata.arms,
-      waist: bodydata.waist,
-      height:bodydata.height,
+      height: bodydata.height,
       sex: sex,
       todayStep: todayStep
     });
   },
-  onLoad: function () {
-  },
+  onLoad: function () {},
   // 更新数据方法
   updateDataToCloud() {
     const toast = Toast.loading({
@@ -136,14 +87,6 @@ Page({
       data: {
         date: this.data.date,
         trainState: this.data.trainState,
-        weight: this.data.weight,
-        fat: this.data.fat,
-        ass: this.data.ass,
-        leg: this.data.leg,
-        smallleg: this.data.smallleg,
-        breast: this.data.breast,
-        arms: this.data.arms,
-        waist: this.data.waist,
         height: this.data.height,
         sex: this.data.sex,
         todayStep: this.data.todayStep
@@ -171,58 +114,14 @@ Page({
       activeNames: event.detail,
     });
   },
-  // 弹出胸围选择
-  showPopup_breast() {
+  showPopup_sex() {
     this.setData({
-      showbreast: true
+      showsex: true
     });
   },
-  // 弹出胸围选择
-  showPopup_weight() {
-    this.setData({
-      showweight: true
-    });
-  },
-   // 弹出胸围选择
-   showPopup_height() {
+  showPopup_height() {
     this.setData({
       showheight: true
-    });
-  },
-  // 弹出腰围选择
-  showPopup_waist() {
-    this.setData({
-      showwaist: true
-    });
-  },
-  // 弹出臂围选择
-  showPopup_arms() {
-    this.setData({
-      showarms: true
-    });
-  },
-  // 弹出臀围选择
-  showPopup_hip() {
-    this.setData({
-      showhipline: true
-    });
-  },
-  // 弹出体重选择
-  showPopup_weight() {
-    this.setData({
-      showweight: true
-    });
-  },
-  // 弹出体脂选择
-  showPopup_tizhi() {
-    this.setData({
-      showtizhi: true
-    });
-  },
-  // 弹出腿围选择
-  showPopup_legs() {
-    this.setData({
-      showlegs: true
     });
   },
   // 选择锻炼状态
@@ -236,52 +135,15 @@ Page({
       showheight: false
     });
   },
-
-  // 关闭臀围选择器
-  onClose_hip() {
+  onClose_sex() {
     this.setData({
-      showhipline: false
-    });
-  },
-  // 关闭臀围选择器
-  onClose_arms() {
-    this.setData({
-      showarms: false
-    });
-  },
-  // 关闭臀围选择器
-  onClose_breast() {
-    this.setData({
-      showbreast: false
-    });
-  },
-  // 关闭体重选择器
-  onClose_weight() {
-    this.setData({
-      showweight: false
-    });
-  },
-  // 关闭体脂选择器
-  onClose_tizhi() {
-    this.setData({
-      showtizhi: false
-    });
-  },
-  // 关闭腿围选择器
-  onClose_legs() {
-    this.setData({
-      showlegs: false
+      showsex: false
     });
   },
   // 关闭锻炼状态选择器
   onClose_statu() {
     this.setData({
       showstatu: false
-    });
-  },
-  onClose_waist() {
-    this.setData({
-      showwaist: false
     });
   },
   onChange(event) {
@@ -317,8 +179,8 @@ Page({
         selected: 4
       })
     }
-      this.loadbodydatas();
-   
+    this.loadbodydatas();
+
   },
 
   /**

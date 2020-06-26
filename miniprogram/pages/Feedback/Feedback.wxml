@@ -39,6 +39,7 @@
   file-list="{{ fileList }}"
   max-count="6"
   bind:after-read="uploadImage"
+  max-size='1024'
 />
 </view>
 

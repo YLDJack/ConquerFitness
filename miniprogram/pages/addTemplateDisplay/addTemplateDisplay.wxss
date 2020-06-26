@@ -185,3 +185,7 @@
   width: 100rpx;
   height: 100rpx;
 }
+/* 动作底部边距 */
+.actionview {
+  margin-bottom: 105rpx;
+}

@@ -103,23 +103,23 @@
 							</view>
 							<view class="tr">
 								<view class="td td1">必要脂肪</view>
-								<view class="td td2">10%-13%</view>
-								<view class="td td3">2%-5%</view>
+								<view class="td td2">10%-14%</view>
+								<view class="td td3">2%-6%</view>
 							</view>
 							<view class="tr">
 								<view class="td td1">运动员</view>
-								<view class="td td2">14%-20%</view>
-								<view class="td td3">6%-13%</view>
+								<view class="td td2">14%-21%</view>
+								<view class="td td3">6%-14%</view>
 							</view>
 							<view class="tr">
 								<view class="td td1">健康</view>
-								<view class="td td2">21%-24%</view>
-								<view class="td td3">14%-17%</view>
+								<view class="td td2">21%-25%</view>
+								<view class="td td3">14%-18%</view>
 							</view>
 							<view class="tr">
 								<view class="td td1">可接受</view>
-								<view class="td td2">25%-31%</view>
-								<view class="td td3">18%-25%</view>
+								<view class="td td2">25%-32%</view>
+								<view class="td td3">18%-26%</view>
 							</view>
 							<view class="tr">
 								<view class="td td1">肥胖</view>

@@ -288,6 +288,8 @@ Page({
     } else {
       // 如果获取到用户名，则设置为获取到的用户名
       nickName = res.detail.userInfo.nickName
+      sex = res.detail.userInfo.gender;
+      console.log('性别',sex);
       if (sex === 1) {
         app.globalData.sex = '男',
           maxFat = 26;

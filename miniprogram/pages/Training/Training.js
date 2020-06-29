@@ -1071,7 +1071,6 @@ Page({
     let trainingActions = app.globalData.trainingActions;
 
     let totalArea = this.data.totalArea;
-    console.log('获取到的训练记录0', totalArea);
 
     let actionId = new Set();
 
@@ -1092,6 +1091,7 @@ Page({
         })
         let result = res.result.data[0];
         let trainRecord = result.trainRecord;
+        let actionRecord = [];
 
         totalArea = result.totalArea;
         console.log('获取到的训练记录', totalArea);
@@ -1121,9 +1121,13 @@ Page({
             data: {
               actionId: actionId
             }
-          }).then(res => {
+          })
+          .then(
+            res => 
+            {
             console.log('3、res', res.result.data);
-            let actionRecord = res.result.data;
+            actionRecord = res.result.data;
+            console.log('获取到的动作记录',actionRecord);
             actionRecord = this.data.actionRecord.concat(actionRecord);
 
             for (let i = 0; i < trainingActions.length; i++) {
@@ -1188,9 +1192,6 @@ Page({
             }
           }).catch(console.error)
         }
-
-
-
 
         this.setData({
           TotalType: trainRecord.length,

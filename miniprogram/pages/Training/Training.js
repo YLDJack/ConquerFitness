@@ -191,6 +191,19 @@ Page({
       TotalCount: TotalCount,
     });
   },
+  // 输入训练备注完成后的监听事件
+  onNoteConfirm(event) {
+    // 动作的index
+    const index = event.currentTarget.dataset.index;
+    let trainRecord = this.data.trainRecord;
+    trainRecord[index].trainNote = event.detail.value;
+    //设置全局变量的记录
+    app.globalData.trainRecord = trainRecord;
+    console.log('修改备注完成后的记录', trainRecord[index]);
+    this.setData({
+      trainRecord: trainRecord,
+    });
+  },
   // 完成动作
   onComplish(event) {
     // 总容量
@@ -1118,7 +1131,6 @@ Page({
               trainingActions[i].trainCount = 0;
               trainingActions[i].trainComplishCount = 0;
               trainingActions[i].trainGroups = [{
-                trainReamark: '',
                 trainWeight: '',
                 trainNumber: '',
                 trainRestTime: 30 * 1000,
@@ -1127,6 +1139,7 @@ Page({
               trainingActions[i].date = this.data.date;
               trainingActions[i].maxCount = 0;
               trainingActions[i].maxWeight = 0;
+              trainingActions[i].trainNote = '';
               // 解决每次只能获取最后一个动作的bug
               for (let j = 0; j < actionRecord.length; j++) {
                 if (actionRecord[j].actionId === trainingActions[i]._id) {
@@ -1246,8 +1259,6 @@ Page({
         trainingActions[i].trainCount = 0;
         trainingActions[i].trainComplishCount = 0;
         trainingActions[i].trainGroups = [{
-          // 训练备注
-          trainReamark: '',
           trainWeight: '',
           trainNumber: '',
           trainRestTime: 30 * 1000,
@@ -1256,6 +1267,7 @@ Page({
         trainingActions[i].date = this.data.date;
         trainingActions[i].maxCount = 0;
         trainingActions[i].maxWeight = 0;
+        trainingActions[i].trainNote = '';
         // 解决每次只能获取最后一个动作的bug
         for (let j = 0; j < actionRecord.length; j++) {
           if (actionRecord[j].actionId === trainingActions[i]._id) {

@@ -152,8 +152,9 @@
 				<label class="label">{{item.trainGroups.length}}组 {{item.trainComplishCount}}/{{item.trainCount}} 容量</label>
 			</view>
 			<!-- 下拉显示部分 -->
+			<!-- 每组动作的训练备注 -->
 			<view>
-				<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit">
+				<van-field placeholder="点击添加备注" border="{{ false }}" left-icon="edit" value="{{ item.trainNote }}" bind:blur="onNoteConfirm" data-index="{{index}}">
 				</van-field>
 			</view>
 

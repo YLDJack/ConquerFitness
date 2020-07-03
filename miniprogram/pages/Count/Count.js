@@ -20,6 +20,12 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 年份数组
+    yearArray: [],
+    // 月份数组
+    monthArray: [],
+    // 星期数组
+    weekArray: [],
     // 没有训练数据时的提示
     nullInfo: '',
     // 获取的训练记录
@@ -131,10 +137,72 @@ Page({
       this.getCountChartData();
     }
   },
+  // 时间tab的切换方法，更改tabs的显示时间
+  onTimeTabChange(event) {
+    if (event.detail.name === 0) {
+      this.initWeek();
+    } else if (event.detail.name === 1) {
+      this.initMonth();
+    } else {
+      this.initYear();
+    }
+  },
+  // 初始化周数组
+  initWeek() {
+    // 初始化周的数组
+    let thisWeek = dayjs().week();
+    let weekArray = this.data.weekArray;
+    for (let i = thisWeek; i > 0; i--) {
+      if (i === thisWeek) {
+        weekArray.push('本周');
+        continue;
+      } else if (i === thisWeek - 1) {
+        weekArray.push('上周');
+        continue;
+      }
+      weekArray.push(i)
+    };
+    this.setData({
+      weekArray: weekArray
+    });
+  },
+  // 初始化月数组
+  initMonth() {
+    // 初始化月的数组
+    let thismonth = dayjs().month();
+    let monthArray = this.data.monthArray;
+    for (let i = thismonth; i >= 0; i--) {
+      if (i === thismonth) {
+        monthArray.push('本月');
+        continue;
+      }
+      // 月份是从0开始计数的
+      monthArray.push(i + 1 + '月');
+    };
+    this.setData({
+      monthArray: monthArray
+    });
+  },
+  // 初始化年数组
+  initYear() {
+    let thisyear = dayjs().year();
+    let yearArray = this.data.yearArray;
+    for (let i = thisyear; i >= 2018; i--) {
+      if (i === thisyear) {
+        yearArray.push('今年');
+        continue;
+      }
+      yearArray.push(i);
+    };
+    this.setData({
+      yearArray: yearArray
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.initWeek();
     this.getChartData();
     this.loadTrainedRecords();
   },
@@ -178,7 +246,7 @@ Page({
       title: {
         show: true,
         text: '本周训练' + this.data.trainingDays + '次',
-        subtext:'点击部位查看详情',
+        subtext: '点击部位查看详情',
         size: 12
       }
     };
@@ -186,19 +254,14 @@ Page({
   },
   // 获取环形图数据
   getChartData: async function () {
-    // 获取本周的训练记录
-    let dayArray = [];
-    let weekNumArray = [];
+    let dateNow = dayjs().format('YYYY-MM-DD');
     let areas = new Set();
     let pieSeries = this.data.pieSeries;
     let data = [];
-    // 获取本周的时间
-    for (let i = 0; i < 7; i++) {
-      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().weekday(i).format('dddd'))
-    }
-    console.log('日期数', dayArray);
-    console.log('星期数', weekNumArray);
+  
+    let weekEnd = dayjs().weekday(7).format('YYYY-MM-DD');
+   
+    console.log('当前日期', dateNow);
 
 
     await wx.cloud.callFunction({
@@ -206,7 +269,8 @@ Page({
       name: 'getTotalAreaByDates',
       // 传给云函数的参数
       data: {
-        dayArray: dayArray
+        weekEnd:weekEnd,
+        dateNow:dateNow
       },
       success: res => {
         wx.showToast({
@@ -214,7 +278,7 @@ Page({
         })
         // 处理获取来的数据
         let result = res.result.data;
-        console.log('获取到data', result);
+        console.log('获取到训练记录data', result);
         // 如果获取到的结果为空，则直接返回并设置提示文字
         if (result.length === 0) {
           this.setData({

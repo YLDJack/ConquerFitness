@@ -12,32 +12,30 @@ const db = cloud.database();
 exports.main = async (event, context) => {
   const $ = db.command.aggregate;
   // 获取当前时间
-  let dateNow = new Date(event.dateNow);
+  let startDate = event.startDate;
   // 获取本周结束的时间
-  let weekEnd = new Date(event.weekEnd);
-  // 将时间转换为json格式
-  const dateNowJson = dayjs(dateNow).format('YYYY-MM-DD'),
-    weekEndJson = dayjs(weekEnd).format('YYYY-MM-DD')
+  let endDate = event.endDate;
   const openId = cloud.getWXContext().OPENID;
 
   const _ = db.command;
 
   // 等待其查询完再进行部位查询
-  return await db.collection('trainedRecords').where(_.and([
-    {
-      date: _.gte(dateNowJson)
-    },
-    {
-      date: _.lte(weekEndJson)
-    },
-    {
-      openId: openId
-    }
-  ]))
-  .field({
-    _id: '$_id',
-    date: '$date',
-    totalArea: '$totalArea',
-  })
-  .get()
+  return await db.collection('trainedRecords').where(_.and([{
+        // 大于等于开始的时间
+        date: _.gte(startDate)
+      },
+      // 小于等于结束的时间
+      {
+        date: _.lte(endDate)
+      },
+      {
+        openId: openId
+      }
+    ]))
+    .field({
+      _id: '$_id',
+      date: '$date',
+      totalArea: '$totalArea',
+    })
+    .get()
 }

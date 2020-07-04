@@ -7,15 +7,17 @@
 		<van-tabs type="card" animated bind:change="onTimeTabChange">
 			<!-- 第二级时间选项卡 swipeable可滑动的-->
 			<van-tab title="周">
-				<van-tabs swipeable animated color="black" border="true" custom-class="vantabs">
-					<van-tab wx:for="{{weekArray}}" title="{{item}}">
+				<van-tabs swipeable animated color="black" border="true" custom-class="vantabs" bind:change="onWeekTabChange">
+					<van-tab wx:for="{{weekArray}}" title="{{item}}" wx:for-index="index">
 						<!-- 没有记录时的提示 -->
 						<view wx:if="{{nullInfo}}">{{nullInfo}}</view>
+
 						<!-- 饼图表显示区域 -->
 						<view class="container" wx:else>
-							<ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ pieec }}"></ec-canvas>
+							<ec-canvas class="mychart-dom-pie{{index1}}" canvas-id="mychart-pie{{index1}}" ec="{{ pieec }}" style="width: 100%;height: 100%;" wx:for="{{weekArray}}" wx:for-index="index1" wx:if="{{index === index1}}"></ec-canvas>
 							<!-- 下方动作详情页 -->
 						</view>
+
 						<view>
 							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">
 								<van-collapse-item title="{{item.area}}" name="{{index}}" value="本周完成{{item.trainRecord.length}}种动作" wx:for="{{trainRecord}}" wx:key="index">

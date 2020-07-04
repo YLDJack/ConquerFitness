@@ -147,6 +147,27 @@ Page({
       this.initYear();
     }
   },
+  // 周card的切换方法:根据选择不同的周，来传递不同的startDate和EndDate来获取图表数据
+  onWeekTabChange(event) {
+    // 获取当本周开始时间，0代表星期一
+    let startDate = '';
+    // 获取当前一周的结束日期
+    let endDate = '';
+    let timeStap = event.detail.title;
+    if (timeStap === "本周") {
+      // 获取本周开始时间，0代表星期一
+      startDate = dayjs().weekday(0).format('YYYY-MM-DD');
+      // 获取当前一周的结束日期
+      endDate = dayjs().weekday(6).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate,0);
+    } else if (timeStap === "上周") {
+      // 获取当本周开始时间，0代表星期一
+      startDate = dayjs().weekday(-7).format('YYYY-MM-DD');
+      // 获取当前一周的结束日期
+      endDate = dayjs().weekday(-1).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate,1);
+    }
+  },
   // 初始化周数组
   initWeek() {
     // 初始化周的数组
@@ -202,8 +223,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // 获取当本周开始时间，0代表星期一
+    let startDate = dayjs().weekday(0).format('YYYY-MM-DD');
+    // 获取当前一周的结束日期
+    let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
     this.initWeek();
-    this.getChartData();
+    this.getChartData(startDate, endDate,0);
     this.loadTrainedRecords();
   },
   //初始化环形图图表
@@ -253,15 +278,13 @@ Page({
     return option
   },
   // 获取环形图数据
-  getChartData: async function () {
-    let dateNow = dayjs().format('YYYY-MM-DD');
+  getChartData: async function (startDate, endDate,timeStap) {
+
     let areas = new Set();
     let pieSeries = this.data.pieSeries;
     let data = [];
-  
-    let weekEnd = dayjs().weekday(7).format('YYYY-MM-DD');
-   
-    console.log('当前日期', dateNow);
+
+    console.log('当周的最后一天', endDate);
 
 
     await wx.cloud.callFunction({
@@ -269,8 +292,8 @@ Page({
       name: 'getTotalAreaByDates',
       // 传给云函数的参数
       data: {
-        weekEnd:weekEnd,
-        dateNow:dateNow
+        startDate: startDate,
+        endDate: endDate
       },
       success: res => {
         wx.showToast({
@@ -317,10 +340,13 @@ Page({
         })
         console.log('绘图的data', this.data.pieSeries[0].data);
         // 此处要与标签的id一致不是canvasid
-        this.echartsComponnet = this.selectComponent('#mychart-dom-pie');
+        let id = 'mychart-dom-pie'+timeStap;
+        console.log('class名',id);
+        this.echartsComponnet = this.selectComponent('.'+id);
+        console.log('echarts组件',this.echartsComponnet);
         this.init_echarts();
         // 获取下拉列表的数据
-      },
+        },
       fail: error => {
         console.log(error);
         wx.showToast({

@@ -3,7 +3,6 @@
   margin: 30px;
   text-align: center;
 }
-
 /* tabs的标签栏 */
 .container {
   /* position: absolute; */

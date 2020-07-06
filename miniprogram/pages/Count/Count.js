@@ -20,6 +20,12 @@ Page({
    * 页面的初始数据
    */
   data: {
+    // 年份数组
+    yearArray: [],
+    // 月份数组
+    monthArray: [],
+    // 星期数组
+    weekArray: [],
     // 没有训练数据时的提示
     nullInfo: '',
     // 获取的训练记录
@@ -131,11 +137,98 @@ Page({
       this.getCountChartData();
     }
   },
+  // 时间tab的切换方法，更改tabs的显示时间
+  onTimeTabChange(event) {
+    if (event.detail.name === 0) {
+      this.initWeek();
+    } else if (event.detail.name === 1) {
+      this.initMonth();
+    } else {
+      this.initYear();
+    }
+  },
+  // 周card的切换方法:根据选择不同的周，来传递不同的startDate和EndDate来获取图表数据
+  onWeekTabChange(event) {
+    // 获取当本周开始时间，0代表星期一
+    let startDate = '';
+    // 获取当前一周的结束日期
+    let endDate = '';
+    let timeStap = event.detail.title;
+    if (timeStap === "本周") {
+      // 获取本周开始时间，0代表星期一
+      startDate = dayjs().weekday(0).format('YYYY-MM-DD');
+      // 获取当前一周的结束日期
+      endDate = dayjs().weekday(6).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate,0);
+    } else if (timeStap === "上周") {
+      // 获取当本周开始时间，0代表星期一
+      startDate = dayjs().weekday(-7).format('YYYY-MM-DD');
+      // 获取当前一周的结束日期
+      endDate = dayjs().weekday(-1).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate,1);
+    }
+  },
+  // 初始化周数组
+  initWeek() {
+    // 初始化周的数组
+    let thisWeek = dayjs().week();
+    let weekArray = this.data.weekArray;
+    for (let i = thisWeek; i > 0; i--) {
+      if (i === thisWeek) {
+        weekArray.push('本周');
+        continue;
+      } else if (i === thisWeek - 1) {
+        weekArray.push('上周');
+        continue;
+      }
+      weekArray.push(i)
+    };
+    this.setData({
+      weekArray: weekArray
+    });
+  },
+  // 初始化月数组
+  initMonth() {
+    // 初始化月的数组
+    let thismonth = dayjs().month();
+    let monthArray = this.data.monthArray;
+    for (let i = thismonth; i >= 0; i--) {
+      if (i === thismonth) {
+        monthArray.push('本月');
+        continue;
+      }
+      // 月份是从0开始计数的
+      monthArray.push(i + 1 + '月');
+    };
+    this.setData({
+      monthArray: monthArray
+    });
+  },
+  // 初始化年数组
+  initYear() {
+    let thisyear = dayjs().year();
+    let yearArray = this.data.yearArray;
+    for (let i = thisyear; i >= 2018; i--) {
+      if (i === thisyear) {
+        yearArray.push('今年');
+        continue;
+      }
+      yearArray.push(i);
+    };
+    this.setData({
+      yearArray: yearArray
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getChartData();
+    // 获取当本周开始时间，0代表星期一
+    let startDate = dayjs().weekday(0).format('YYYY-MM-DD');
+    // 获取当前一周的结束日期
+    let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
+    this.initWeek();
+    this.getChartData(startDate, endDate,0);
     this.loadTrainedRecords();
   },
   //初始化环形图图表
@@ -178,27 +271,20 @@ Page({
       title: {
         show: true,
         text: '本周训练' + this.data.trainingDays + '次',
-        subtext:'点击部位查看详情',
+        subtext: '点击部位查看详情',
         size: 12
       }
     };
     return option
   },
   // 获取环形图数据
-  getChartData: async function () {
-    // 获取本周的训练记录
-    let dayArray = [];
-    let weekNumArray = [];
+  getChartData: async function (startDate, endDate,timeStap) {
+
     let areas = new Set();
     let pieSeries = this.data.pieSeries;
     let data = [];
-    // 获取本周的时间
-    for (let i = 0; i < 7; i++) {
-      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().weekday(i).format('dddd'))
-    }
-    console.log('日期数', dayArray);
-    console.log('星期数', weekNumArray);
+
+    console.log('当周的最后一天', endDate);
 
 
     await wx.cloud.callFunction({
@@ -206,7 +292,8 @@ Page({
       name: 'getTotalAreaByDates',
       // 传给云函数的参数
       data: {
-        dayArray: dayArray
+        startDate: startDate,
+        endDate: endDate
       },
       success: res => {
         wx.showToast({
@@ -214,7 +301,7 @@ Page({
         })
         // 处理获取来的数据
         let result = res.result.data;
-        console.log('获取到data', result);
+        console.log('获取到训练记录data', result);
         // 如果获取到的结果为空，则直接返回并设置提示文字
         if (result.length === 0) {
           this.setData({
@@ -253,10 +340,13 @@ Page({
         })
         console.log('绘图的data', this.data.pieSeries[0].data);
         // 此处要与标签的id一致不是canvasid
-        this.echartsComponnet = this.selectComponent('#mychart-dom-pie');
+        let id = 'mychart-dom-pie'+timeStap;
+        console.log('class名',id);
+        this.echartsComponnet = this.selectComponent('.'+id);
+        console.log('echarts组件',this.echartsComponnet);
         this.init_echarts();
         // 获取下拉列表的数据
-      },
+        },
       fail: error => {
         console.log(error);
         wx.showToast({

@@ -178,6 +178,7 @@ Page({
       title: {
         show: true,
         text: '本周训练' + this.data.trainingDays + '次',
+        subtext:'点击部位查看详情',
         size: 12
       }
     };

@@ -13,6 +13,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    heatValue:80,
     sex: '男',
     todayStep: 1000,
     // 最新的身体数据

@@ -1,9 +1,9 @@
 {
   "pages": [
+    "pages/Count/Count",
     "pages/Main/Main",
     "pages/TrainTemplate/TrainTemplate",
     "pages/DataRecord/DataRecord",
-    "pages/Count/Count",
     "pages/ActionDetial/ActionDetial",
     "pages/Train/Train",
     "pages/Training/Training",

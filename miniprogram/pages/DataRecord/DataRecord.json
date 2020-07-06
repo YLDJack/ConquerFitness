@@ -18,7 +18,8 @@
     "van-field": "@vant/weapp/field/index",
     "van-datetime-picker": "@vant/weapp/datetime-picker/index",
     "van-picker": "@vant/weapp/picker/index",
-    "van-tag": "@vant/weapp/tag/index"
+    "van-tag": "@vant/weapp/tag/index",
+    "van-progress": "@vant/weapp/progress/index"
 
   }
 }

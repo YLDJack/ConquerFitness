@@ -216,6 +216,34 @@
 		<van-search value="{{ value }}" placeholder="搜索食物和热量" />
 		<!-- 添加记录按钮 -->
 		<van-button icon="plus" type="default" size="small" custom-style="margin-left:25rpx;margin-bottom:20rpx" bind:click="showDatePopup">{{date}}</van-button>
+		<!-- 圆环部分 -->
+		<view class="indextarget">
+			<view class="circle">
+				<van-circle value="{{heatValue}}" color="{{ gradientColor }}" stroke-width="10" size="130" text="还能吃0.5千卡" type='2d'/>
+			</view>
+			<!-- 圆环地下指标目标进度条 -->
+			<view class="progress">
+				<!-- 各指标目标 -->
+				<view class="targetgroup">
+					<text class="targettitle">蛋白质</text>
+					<view class="targetprogress">
+						<van-progress inactive percentage="50" />
+					</view>
+				</view>
+				<view class="targetgroup">
+					<text class="targettitle">脂肪</text>
+					<view class="targetprogress">
+						<van-progress inactive percentage="50" />
+					</view>
+				</view>
+				<view class="targetgroup">
+					<text class="targettitle">碳水化合物</text>
+					<view class="targetprogress">
+						<van-progress inactive percentage="50" />
+					</view>
+				</view>
+			</view>
+		</view>
 		<!-- 记录卡片 -->
 		<van-collapse value="{{ activeNames }}" bind:change="onChange">
 			<van-collapse-item title="2020-05-31" name="1" value="100千卡" label="蛋白质0克">

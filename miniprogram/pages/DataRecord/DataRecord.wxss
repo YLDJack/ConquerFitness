@@ -150,3 +150,28 @@
   text-align: center;
 }
 
+/* 饮食记录顶部进度条部分 */
+.indextarget{
+  text-align: center;
+}
+.progress{
+  display: flex;
+  justify-content: space-between;
+}
+.targetgroup{
+  width: 250rpx;
+  height: 100rpx;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+.targettitle{
+  color: #999898;
+  font-size: 28rpx;
+  height: 50rpx;
+  margin-bottom: 15rpx;
+}
+.targetprogress{
+  height: 30rpx;
+}

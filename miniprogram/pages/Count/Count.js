@@ -165,12 +165,21 @@ Page({
       // 获取当前一周的结束日期
       endDate = dayjs().weekday(6).format('YYYY-MM-DD');
       this.getChartData(startDate, endDate,0);
+      this.loadTrainedRecords(startDate, endDate);
     } else if (timeStap === "上周") {
       // 获取当本周开始时间，0代表星期一
       startDate = dayjs().weekday(-7).format('YYYY-MM-DD');
       // 获取当前一周的结束日期
       endDate = dayjs().weekday(-1).format('YYYY-MM-DD');
       this.getChartData(startDate, endDate,1);
+      this.loadTrainedRecords(startDate, endDate);
+    }else{
+      // 获取当本周开始时间，0代表星期一
+      startDate = dayjs().weekday(-7).format('YYYY-MM-DD');
+      // 获取当前一周的结束日期
+      endDate = dayjs().weekday(-1).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate,1);
+      this.loadTrainedRecords(startDate, endDate);
     }
   },
   // 初始化周数组

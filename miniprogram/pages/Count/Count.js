@@ -139,7 +139,7 @@ Page({
     let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
     this.initWeek();
     if (event.detail.name === 1) {
-      this.getCountChartData(startDate,endDate);
+      this.getCountChartData(startDate, endDate);
     }
   },
   // 时间tab的切换方法，更改tabs的显示时间
@@ -158,27 +158,32 @@ Page({
     let startDate = '';
     // 获取当前一周的结束日期
     let endDate = '';
+    // 获取当前是第几周
     let timeStap = event.detail.title;
+    // 获取当前周数=星期数组中第三个数据加2，因为第一第二周是文字，所以要获取第三周
+    let thisWeek = this.data.weekArray[2] + 2;
     if (timeStap === "本周") {
       // 获取本周开始时间，0代表星期一
       startDate = dayjs().weekday(0).format('YYYY-MM-DD');
       // 获取当前一周的结束日期
       endDate = dayjs().weekday(6).format('YYYY-MM-DD');
-      this.getChartData(startDate, endDate,0);
+      this.getChartData(startDate, endDate, 0);
       this.loadTrainedRecords(startDate, endDate);
     } else if (timeStap === "上周") {
       // 获取当本周开始时间，0代表星期一
       startDate = dayjs().weekday(-7).format('YYYY-MM-DD');
       // 获取当前一周的结束日期
       endDate = dayjs().weekday(-1).format('YYYY-MM-DD');
-      this.getChartData(startDate, endDate,1);
+      this.getChartData(startDate, endDate, 1);
       this.loadTrainedRecords(startDate, endDate);
-    }else{
+    } else {
+      // 获取周数和本周的差值
+      let weekChange = thisWeek - timeStap;
       // 获取当本周开始时间，0代表星期一
-      startDate = dayjs().weekday(-7).format('YYYY-MM-DD');
+      startDate = dayjs().weekday(0-7*weekChange).format('YYYY-MM-DD');
       // 获取当前一周的结束日期
-      endDate = dayjs().weekday(-1).format('YYYY-MM-DD');
-      this.getChartData(startDate, endDate,1);
+      endDate = dayjs().weekday(6-7*weekChange).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate, 1);
       this.loadTrainedRecords(startDate, endDate);
     }
   },
@@ -242,7 +247,7 @@ Page({
     // 获取当前一周的结束日期
     let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
     this.initWeek();
-    this.getChartData(startDate, endDate,0);
+    this.getChartData(startDate, endDate, 0);
     this.loadTrainedRecords(startDate, endDate);
   },
   //初始化环形图图表
@@ -292,7 +297,7 @@ Page({
     return option
   },
   // 获取环形图数据
-  getChartData: async function (startDate, endDate,timeStap) {
+  getChartData: async function (startDate, endDate, timeStap) {
 
     let areas = new Set();
     let pieSeries = this.data.pieSeries;
@@ -354,13 +359,13 @@ Page({
         })
         console.log('绘图的data', this.data.pieSeries[0].data);
         // 此处要与标签的id一致不是canvasid
-        let id = 'mychart-dom-pie'+timeStap;
-        console.log('class名',id);
-        this.echartsComponnet = this.selectComponent('.'+id);
-        console.log('echarts组件',this.echartsComponnet);
+        let id = 'mychart-dom-pie' + timeStap;
+        console.log('class名', id);
+        this.echartsComponnet = this.selectComponent('.' + id);
+        console.log('echarts组件', this.echartsComponnet);
         this.init_echarts();
         // 获取下拉列表的数据
-        },
+      },
       fail: error => {
         console.log(error);
         wx.showToast({
@@ -472,7 +477,7 @@ Page({
     let countSeries = [];
     // 处理好的横坐标
     let countAscissaData = [];
-  
+
     wx.cloud.callFunction({
       // 云函数名称
       name: 'getTotalAreaByDates',
@@ -613,7 +618,7 @@ Page({
     // 不用每次显示页面都重新加载，应当在完成动作之后再进行重新加载
     if (app.globalData.complishTraining) {
       app.globalData.complishTraining = false;
-      this.getChartData(startDate, endDate,0);
+      this.getChartData(startDate, endDate, 0);
       this.loadTrainedRecords(startDate, endDate);
 
     }

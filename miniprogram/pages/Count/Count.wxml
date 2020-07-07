@@ -85,8 +85,8 @@
 		<!-- 顶级时间选项卡 swipeable可滑动的-->
 		<van-tabs type="card" animated bind:change="onTimeTabChange">
 			<!-- 第二级时间选项卡 swipeable可滑动的-->
-			<van-tab title="周">
-				<van-tabs swipeable animated color="black" border="true">
+			<van-tab title="周" >
+				<van-tabs swipeable animated color="black" border="true" bind:change="onWeekTabChange">
 					<van-tab wx:for="{{weekArray}}" title="{{item}}">
 						<!-- 没有记录时的提示 -->
 						<view wx:if="{{nullInfo}}">{{nullInfo}}</view>

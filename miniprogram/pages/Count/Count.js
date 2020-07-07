@@ -20,8 +20,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    tabs: ['首页', '外卖', '商超生鲜', '购物', '美食饮品', '生活服务', '休闲娱乐', '出行'],
-    activeTab: 0,
     // 年份数组
     yearArray: [],
     // 月份数组
@@ -135,8 +133,13 @@ Page({
   // tab的切换方法
   onTabChange(event) {
     console.log('tab', event.detail.title);
+    // 获取当本周开始时间，0代表星期一
+    let startDate = dayjs().weekday(0).format('YYYY-MM-DD');
+    // 获取当前一周的结束日期
+    let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
+    this.initWeek();
     if (event.detail.name === 1) {
-      this.getCountChartData();
+      this.getCountChartData(startDate,endDate);
     }
   },
   // 时间tab的切换方法，更改tabs的显示时间
@@ -231,7 +234,7 @@ Page({
     let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
     this.initWeek();
     this.getChartData(startDate, endDate,0);
-    this.loadTrainedRecords();
+    this.loadTrainedRecords(startDate, endDate);
   },
   //初始化环形图图表
   init_echarts: function () {
@@ -453,27 +456,21 @@ Page({
     return option
   },
   // 获取容量折线图数据
-  getCountChartData: function () {
+  getCountChartData: function (startDate, endDate) {
     // 获取本周的训练记录
-    let dayArray = [];
-    let weekNumArray = [];
     let areas = new Set();
     let data = [];
     let countSeries = [];
     // 处理好的横坐标
     let countAscissaData = [];
-    // 获取本周的时间
-    for (let i = 0; i < 7; i++) {
-      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().weekday(i).format('dddd'))
-    }
-
+  
     wx.cloud.callFunction({
       // 云函数名称
       name: 'getTotalAreaByDates',
       // 传给云函数的参数
       data: {
-        dayArray: dayArray
+        startDate: startDate,
+        endDate: endDate
       },
       success: res => {
         wx.showToast({
@@ -593,6 +590,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    // 获取当本周开始时间，0代表星期一
+    let startDate = dayjs().weekday(0).format('YYYY-MM-DD');
+    // 获取当前一周的结束日期
+    let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
     if (typeof this.getTabBar === 'function' &&
       this.getTabBar()) {
       console.log('选中页面 3')
@@ -603,35 +604,25 @@ Page({
     // 不用每次显示页面都重新加载，应当在完成动作之后再进行重新加载
     if (app.globalData.complishTraining) {
       app.globalData.complishTraining = false;
-      this.getChartData();
-      this.loadTrainedRecords();
+      this.getChartData(startDate, endDate,0);
+      this.loadTrainedRecords(startDate, endDate);
 
     }
   },
 
   // 获取训练记录渲染下方的下拉列表
-  async loadTrainedRecords() {
-    // 获取本周的训练记录
-    let dayArray = [];
-    let weekNumArray = [];
+  async loadTrainedRecords(startDate, endDate) {
     let areas = new Set();
     let classifiedTrainRecord = [];
     let trainRecord = [];
-    // 获取本周的时间
-    for (let i = 0; i < 7; i++) {
-      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().weekday(i).format('dddd'))
-    }
-    console.log('日期数', dayArray);
-
-
 
     await wx.cloud.callFunction({
       // 云函数名称
       name: 'getTrainedRecordByDates',
       // 传给云函数的参数
       data: {
-        dayArray: dayArray
+        startDate: startDate,
+        endDate: endDate
       },
       success: res => {
 

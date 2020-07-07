@@ -1,4 +1,3 @@
-@import '../../components//weui-wxss/dist/style/weui.wxss';
 
 page{
     background-color: #F8F8F8;

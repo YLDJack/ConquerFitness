@@ -211,7 +211,14 @@ Page({
       this.getChartData(startDate, endDate, 0);
       this.loadTrainedRecords(startDate, endDate);
     } else {
-
+       // 获取本周开始时间，0代表星期一
+       startDate = dayjs().month(parseInt(timeStap)-1).date(1).format('YYYY-MM-DD');
+       // 获取当前一周的结束日期
+       endDate = dayjs().month(parseInt(timeStap)-1).date(31).format('YYYY-MM-DD');
+       console.log('开始时间',startDate);
+       console.log('结束时间',endDate);
+       this.getChartData(startDate, endDate, 0);
+       this.loadTrainedRecords(startDate, endDate);
     }
   },
   // 初始化周数组
@@ -388,7 +395,7 @@ Page({
         // 此处要与标签的id一致不是canvasid
         let id = 'mychart-dom-pie' + timeStap;
         console.log('class名', id);
-        this.echartsComponnet = this.selectComponent('#' + id);
+        this.echartsComponnet = this.selectComponent('.' + id);
         console.log('echarts组件', this.echartsComponnet);
         this.init_echarts(this.echartsComponnet);
         // 获取下拉列表的数据

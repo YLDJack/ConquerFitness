@@ -57,5 +57,9 @@
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
-  "cloud": true
+  "cloud": true,
+  "useExtendedLib": {
+    "kbone": true,
+    "weui": true
+  }
 }

@@ -133,16 +133,29 @@ Page({
   // tab的切换方法
   onTabChange(event) {
     console.log('tab', event.detail.title);
+    // 获取当本周开始时间，0代表星期一
+    let startDate = dayjs().weekday(0).format('YYYY-MM-DD');
+    // 获取当前一周的结束日期
+    let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
+    this.initWeek();
     if (event.detail.name === 1) {
-      this.getCountChartData();
+      this.getCountChartData(startDate, endDate);
     }
   },
   // 时间tab的切换方法，更改tabs的显示时间
   onTimeTabChange(event) {
+    let startDate = '';
+    let endDate = '';
     if (event.detail.name === 0) {
       this.initWeek();
     } else if (event.detail.name === 1) {
       this.initMonth();
+      // 获取本周开始时间，0代表星期一
+      startDate = dayjs().date(1).format('YYYY-MM-DD');
+      // 获取当前一周的结束日期
+      endDate = dayjs().date(31).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate, 0);
+      this.loadTrainedRecords(startDate, endDate);
     } else {
       this.initYear();
     }
@@ -153,19 +166,59 @@ Page({
     let startDate = '';
     // 获取当前一周的结束日期
     let endDate = '';
+    // 获取当前是第几周
     let timeStap = event.detail.title;
+    // 获取当前周数=星期数组中第三个数据加2，因为第一第二周是文字，所以要获取第三周
+    let thisWeek = this.data.weekArray[2] + 2;
     if (timeStap === "本周") {
       // 获取本周开始时间，0代表星期一
       startDate = dayjs().weekday(0).format('YYYY-MM-DD');
       // 获取当前一周的结束日期
       endDate = dayjs().weekday(6).format('YYYY-MM-DD');
-      this.getChartData(startDate, endDate,0);
+      this.getChartData(startDate, endDate, 0);
+      this.loadTrainedRecords(startDate, endDate);
     } else if (timeStap === "上周") {
       // 获取当本周开始时间，0代表星期一
       startDate = dayjs().weekday(-7).format('YYYY-MM-DD');
       // 获取当前一周的结束日期
       endDate = dayjs().weekday(-1).format('YYYY-MM-DD');
-      this.getChartData(startDate, endDate,1);
+      this.getChartData(startDate, endDate, 1);
+      this.loadTrainedRecords(startDate, endDate);
+    } else {
+      // 获取周数和本周的差值
+      let weekChange = thisWeek - timeStap;
+      // 获取当本周开始时间，0代表星期一
+      startDate = dayjs().weekday(0 - 7 * weekChange).format('YYYY-MM-DD');
+      // 获取当前一周的结束日期
+      endDate = dayjs().weekday(6 - 7 * weekChange).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate, 1);
+      this.loadTrainedRecords(startDate, endDate);
+    }
+  },
+  // 月card的切换方法:根据选择不同的周，来传递不同的startDate和EndDate来获取图表数据
+  onMonthTabChange(event) {
+    // 获取当本周开始时间，0代表星期一
+    let startDate = '';
+    // 获取当前一周的结束日期
+    let endDate = '';
+    // 获取当前是第几月
+    let timeStap = event.detail.title;
+    if (timeStap == '本月') {
+      // 获取本周开始时间，0代表星期一
+      startDate = dayjs().date(1).format('YYYY-MM-DD');
+      // 获取当前一周的结束日期
+      endDate = dayjs().date(31).format('YYYY-MM-DD');
+      this.getChartData(startDate, endDate, 0);
+      this.loadTrainedRecords(startDate, endDate);
+    } else {
+       // 获取本周开始时间，0代表星期一
+       startDate = dayjs().month(parseInt(timeStap)-1).date(1).format('YYYY-MM-DD');
+       // 获取当前一周的结束日期
+       endDate = dayjs().month(parseInt(timeStap)-1).date(31).format('YYYY-MM-DD');
+       console.log('开始时间',startDate);
+       console.log('结束时间',endDate);
+       this.getChartData(startDate, endDate, 0);
+       this.loadTrainedRecords(startDate, endDate);
     }
   },
   // 初始化周数组
@@ -228,8 +281,8 @@ Page({
     // 获取当前一周的结束日期
     let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
     this.initWeek();
-    this.getChartData(startDate, endDate,0);
-    this.loadTrainedRecords();
+    this.getChartData(startDate, endDate, 0);
+    this.loadTrainedRecords(startDate, endDate);
   },
   //初始化环形图图表
   init_echarts: function () {
@@ -278,7 +331,7 @@ Page({
     return option
   },
   // 获取环形图数据
-  getChartData: async function (startDate, endDate,timeStap) {
+  getChartData: async function (startDate, endDate, timeStap) {
 
     let areas = new Set();
     let pieSeries = this.data.pieSeries;
@@ -340,13 +393,13 @@ Page({
         })
         console.log('绘图的data', this.data.pieSeries[0].data);
         // 此处要与标签的id一致不是canvasid
-        let id = 'mychart-dom-pie'+timeStap;
-        console.log('class名',id);
-        this.echartsComponnet = this.selectComponent('.'+id);
-        console.log('echarts组件',this.echartsComponnet);
-        this.init_echarts();
+        let id = 'mychart-dom-pie' + timeStap;
+        console.log('class名', id);
+        this.echartsComponnet = this.selectComponent('.' + id);
+        console.log('echarts组件', this.echartsComponnet);
+        this.init_echarts(this.echartsComponnet);
         // 获取下拉列表的数据
-        },
+      },
       fail: error => {
         console.log(error);
         wx.showToast({
@@ -451,27 +504,21 @@ Page({
     return option
   },
   // 获取容量折线图数据
-  getCountChartData: function () {
+  getCountChartData: function (startDate, endDate) {
     // 获取本周的训练记录
-    let dayArray = [];
-    let weekNumArray = [];
     let areas = new Set();
     let data = [];
     let countSeries = [];
     // 处理好的横坐标
     let countAscissaData = [];
-    // 获取本周的时间
-    for (let i = 0; i < 7; i++) {
-      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().weekday(i).format('dddd'))
-    }
 
     wx.cloud.callFunction({
       // 云函数名称
       name: 'getTotalAreaByDates',
       // 传给云函数的参数
       data: {
-        dayArray: dayArray
+        startDate: startDate,
+        endDate: endDate
       },
       success: res => {
         wx.showToast({
@@ -591,6 +638,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    // 获取当本周开始时间，0代表星期一
+    let startDate = dayjs().weekday(0).format('YYYY-MM-DD');
+    // 获取当前一周的结束日期
+    let endDate = dayjs().weekday(6).format('YYYY-MM-DD');
     if (typeof this.getTabBar === 'function' &&
       this.getTabBar()) {
       console.log('选中页面 3')
@@ -601,35 +652,25 @@ Page({
     // 不用每次显示页面都重新加载，应当在完成动作之后再进行重新加载
     if (app.globalData.complishTraining) {
       app.globalData.complishTraining = false;
-      this.getChartData();
-      this.loadTrainedRecords();
+      this.getChartData(startDate, endDate, 0);
+      this.loadTrainedRecords(startDate, endDate);
 
     }
   },
 
   // 获取训练记录渲染下方的下拉列表
-  async loadTrainedRecords() {
-    // 获取本周的训练记录
-    let dayArray = [];
-    let weekNumArray = [];
+  async loadTrainedRecords(startDate, endDate) {
     let areas = new Set();
     let classifiedTrainRecord = [];
     let trainRecord = [];
-    // 获取本周的时间
-    for (let i = 0; i < 7; i++) {
-      dayArray.push(dayjs().weekday(i).format('YYYY-MM-DD'));
-      weekNumArray.push(dayjs().weekday(i).format('dddd'))
-    }
-    console.log('日期数', dayArray);
-
-
 
     await wx.cloud.callFunction({
       // 云函数名称
       name: 'getTrainedRecordByDates',
       // 传给云函数的参数
       data: {
-        dayArray: dayArray
+        startDate: startDate,
+        endDate: endDate
       },
       success: res => {
 

@@ -1,4 +1,9 @@
 <!--pages/Count.wxml  统计页面-->
+<!-- <mp-tabs tabs="{{tabs}}" activeTab="{{activeTab}}" swiperClass="weui-tabs-swiper" bindtabclick="onTabCLick" bindchange="onChange" activeClass="tab-bar-title__selected">
+	<block wx:for="{{tabs}}" wx:key="title">
+		<view class="tab-content" slot="tab-content-{{index}}"> {{item.title}} </view>
+	</block>
+</mp-tabs> -->
 <van-toast id="van-toast" />
 <!-- 图标类型选项卡  active默认值为0当前选中标签的标识符-->
 <van-tabs color="black" bind:change="onTabChange">
@@ -9,64 +14,87 @@
 			<van-tab title="周">
 				<van-tabs swipeable animated color="black" border="true" custom-class="vantabs" bind:change="onWeekTabChange">
 					<van-tab wx:for="{{weekArray}}" title="{{item}}" wx:for-index="index">
-						<!-- 没有记录时的提示 -->
-						<view wx:if="{{nullInfo}}">{{nullInfo}}</view>
-
-						<!-- 饼图表显示区域 -->
-						<view class="container" wx:else>
-							<ec-canvas class="mychart-dom-pie{{index1}}" canvas-id="mychart-pie{{index1}}" ec="{{ pieec }}" style="width: 100%;height: 100%;" wx:for="{{weekArray}}" wx:for-index="index1" wx:if="{{index === index1}}"></ec-canvas>
-							<!-- 下方动作详情页 -->
-						</view>
-
 						<view>
-							<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">
-								<van-collapse-item title="{{item.area}}" name="{{index}}" value="本周完成{{item.trainRecord.length}}种动作" wx:for="{{trainRecord}}" wx:key="index">
-									<!-- 详情动作卡片 -->
-									<van-card title="{{record.actionName}}" thumb="{{ record.actionImage }}" wx:for="{{item.trainRecord}}" wx:for-index="recordIndex" wx:for-item="record" custom-class="actionCard" title-class="cardTitle" thumb-class="cardThumb" wx:key="recordIndex">
+							<!-- 没有记录时的提示 -->
+							<view wx:if="{{nullInfo}}">
+								{{nullInfo}}
+							</view>
 
-										<!-- 右侧的箭头 -->
-										<view slot="footer">
-											<van-icon name="arrow" bind:click="showDesc" data-actionid="{{record._id}}" data-actionname="{{record.actionName}}" />
-										</view>
-										<!-- 数据区域 -->
-										<view slot="desc">
-											<view style="margin-top:10rpx">
-												<van-tag type="danger" size="medium"> 最大重量</van-tag>
-												<van-tag size="medium" type="danger" plain>{{record.maxWeight}}Kg</van-tag>
+							<!-- 饼图表显示区域 -->
+							<view class="container" wx:else>
+								<ec-canvas class="mychart-dom-pie{{index}}" canvas-id="mychart-pie{{index}}" ec="{{ pieec }}" style="width: 100%;height: 100%;"></ec-canvas>
+								<!-- 下方动作详情页 -->
+							</view>
+
+							<view>
+								<van-collapse value="{{ activeNames }}" bind:change="onCollChange" custom-class="collapse">
+									<van-collapse-item title="{{item.area}}" name="{{index}}" value="本周完成{{item.trainRecord.length}}种动作" wx:for="{{trainRecord}}" wx:key="index">
+										<!-- 详情动作卡片 -->
+										<van-card title="{{record.actionName}}" thumb="{{ record.actionImage }}" wx:for="{{item.trainRecord}}" wx:for-index="recordIndex" wx:for-item="record" custom-class="actionCard" title-class="cardTitle" thumb-class="cardThumb" wx:key="recordIndex">
+
+											<!-- 右侧的箭头 -->
+											<view slot="footer">
+												<van-icon name="arrow" bind:click="showDesc" data-actionid="{{record._id}}" data-actionname="{{record.actionName}}" />
+											</view>
+											<!-- 数据区域 -->
+											<view slot="desc">
 												<view style="margin-top:10rpx">
-													<van-tag size="medium" type="danger">最大容量</van-tag>
-													<van-tag size="medium" type="danger" plain>{{record.maxCount}}</van-tag>
+													<van-tag type="danger" size="medium"> 最大重量</van-tag>
+													<van-tag size="medium" type="danger" plain>{{record.maxWeight}}Kg</van-tag>
+													<view style="margin-top:10rpx">
+														<van-tag size="medium" type="danger">最大容量</van-tag>
+														<van-tag size="medium" type="danger" plain>{{record.maxCount}}</van-tag>
+													</view>
+
 												</view>
+											</view>
+											<view slot="price-top" style="margin-top:10rpx">
+												<van-tag size="medium" type="primary"> 本周容量</van-tag>
+												<van-tag size="medium" type="primary" plain>{{record.trainComplishCount}}</van-tag>
 
 											</view>
-										</view>
-										<view slot="price-top" style="margin-top:10rpx">
-											<van-tag size="medium" type="primary"> 本周容量</van-tag>
-											<van-tag size="medium" type="primary" plain>{{record.trainComplishCount}}</van-tag>
-
-										</view>
-										<view slot="price" style="margin-top:10rpx">
-											<van-tag size="medium" type="primary">日期</van-tag>
-											<van-tag size="medium" type="primary" plain>{{record.date}}</van-tag>
-										</view>
-									</van-card>
-								</van-collapse-item>
-							</van-collapse>
+											<view slot="price" style="margin-top:10rpx">
+												<van-tag size="medium" type="primary">日期</van-tag>
+												<van-tag size="medium" type="primary" plain>{{record.date}}</van-tag>
+											</view>
+										</van-card>
+									</van-collapse-item>
+								</van-collapse>
+							</view>
 						</view>
 					</van-tab>
 				</van-tabs>
 			</van-tab>
 
 			<van-tab title="月">
-				<van-tabs active="{{ active }}" swipeable animated>
-					<van-tab wx:for="{{monthArray}}" title="{{item}}">
+				<van-tabs swipeable animated color="black" border="true" custom-class="vantabs">
+					<van-tab wx:for="{{monthArray}}" title="{{item}}" wx:for-index="index">
+						<view>
+							<!-- 没有记录时的提示 -->
+							<view wx:if="{{nullInfo}}">
+								{{nullInfo}}
+							</view>
+							<view>
+							</view>
+						</view>
 					</van-tab>
 				</van-tabs>
 			</van-tab>
 
 			<van-tab title="年">
-				<van-tabs active="{{ active }}" swipeable animated>
-					<van-tab wx:for="{{yearArray}}" title="{{item}}">
+				<van-tabs swipeable animated color="black" border="true" custom-class="vantabs" bind:change="onYearTabChange">
+					<van-tab wx:for="{{yearArray}}" title="{{item}}" wx:for-index="index">
+						<view>
+							<!-- 没有记录时的提示 -->
+							<view wx:if="{{nullInfo}}">
+								{{nullInfo}}
+							</view>
+
+						
+
+							<view>
+							</view>
+						</view>
 					</van-tab>
 				</van-tabs>
 			</van-tab>
@@ -79,7 +107,7 @@
 		<van-tabs type="card" animated bind:change="onTimeTabChange">
 			<!-- 第二级时间选项卡 swipeable可滑动的-->
 			<van-tab title="周">
-				<van-tabs swipeable animated color="black" border="true">
+				<van-tabs swipeable animated color="black" border="true" bind:change="onWeekTabChange">
 					<van-tab wx:for="{{weekArray}}" title="{{item}}">
 						<!-- 没有记录时的提示 -->
 						<view wx:if="{{nullInfo}}">{{nullInfo}}</view>
